@@ -4,7 +4,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 public class Demo1SpringInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{Demo1Configuration.class};
+        return new Class[]{AppConfig.class};
     }
 
     protected Class<?>[] getServletConfigClasses() {
