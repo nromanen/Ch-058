@@ -16,9 +16,13 @@ public class Image implements Identifiable<Integer> {
     public static final String ID_COLUMN_NAME = "id";
     public static final String SRC_COLUMN_NAME = "src";
     public static final String HASH_COLUMN_NAME = "hash";
+    public static final int MAX_SRC_LENGTH = 128;
+    public static final int MIN_SRC_LENGTH = 4;
+    public static final int MAX_HASH_LENGTH = 32;
+    public static final int MIN_HASH_LENGTH = MAX_HASH_LENGTH;
 
     private Integer id;
-    private ImageType type = ImageType.USER;
+    private Type type = Type.ISSUE;
     private String src;
     private String hash;
 
@@ -38,17 +42,17 @@ public class Image implements Identifiable<Integer> {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = TYPE_COLUMN_NAME, nullable = false)
-    public ImageType getType() {
+    public Image.Type getType() {
         return type;
     }
 
-    public void setType(ImageType type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
     @NotNull
-    @Size(min = 5, max = 128)
-    @Column(name = SRC_COLUMN_NAME, nullable = false, length = 128)
+    @Size(min = MIN_SRC_LENGTH, max = MAX_SRC_LENGTH)
+    @Column(name = SRC_COLUMN_NAME, nullable = false, length = MAX_SRC_LENGTH)
     public String getSrc() {
         return src;
     }
@@ -58,8 +62,8 @@ public class Image implements Identifiable<Integer> {
     }
 
     @NotNull
-    @Size(min = 32, max = 32)
-    @Column(name = HASH_COLUMN_NAME, nullable = false, length = 32)
+    @Size(min = MIN_HASH_LENGTH, max = MAX_HASH_LENGTH)
+    @Column(name = HASH_COLUMN_NAME, nullable = false, length = MAX_HASH_LENGTH)
     public String getHash() {
         return hash;
     }
@@ -68,7 +72,8 @@ public class Image implements Identifiable<Integer> {
         this.hash = hash;
     }
 
-    public enum ImageType {
-        USER
+    public enum Type {
+        USER,
+        ISSUE
     }
 }
