@@ -12,11 +12,8 @@
 
 package com.shrralis.ssdemo1.repository;
 
-import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.entity.Issue;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UsersRepository extends JpaRepository<User, Integer> {
-    User findByLogin(String login);
-
-    User getByLogin(String login);
+public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 }

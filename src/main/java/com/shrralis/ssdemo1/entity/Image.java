@@ -1,3 +1,15 @@
+/*
+ * The following code have been created by Yaroslav Zhyravov (shrralis).
+ * The code can be used in non-commercial way for everyone.
+ * But for any commercial way it needs a author's agreement.
+ * Please contact the author for that:
+ *  - https://t.me/Shrralis
+ *  - https://twitter.com/Shrralis
+ *  - shrralis@gmail.com
+ *
+ * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
+ */
+
 package com.shrralis.ssdemo1.entity;
 
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
@@ -30,7 +42,7 @@ public class Image implements Identifiable<Integer> {
     @NotNull
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "images_seq_gen")
     @SequenceGenerator(name = "images_seq_gen", sequenceName = "images_id_seq")
-    @Column(name = ID_COLUMN_NAME, nullable = false)
+    @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
     public Integer getId() {
         return id;
     }

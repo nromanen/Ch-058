@@ -1,3 +1,15 @@
+/*
+ * The following code have been created by Yaroslav Zhyravov (shrralis).
+ * The code can be used in non-commercial way for everyone.
+ * But for any commercial way it needs a author's agreement.
+ * Please contact the author for that:
+ *  - https://t.me/Shrralis
+ *  - https://twitter.com/Shrralis
+ *  - shrralis@gmail.com
+ *
+ * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
+ */
+
 package com.shrralis.ssdemo1.entity;
 
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
@@ -32,7 +44,7 @@ public class Issue implements Identifiable<Integer> {
     @NotNull
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issues_seq_gen")
     @SequenceGenerator(name = "issues_seq_gen", sequenceName = "issues_id_seq")
-    @Column(name = ID_COLUMN_NAME, nullable = false)
+    @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
     @Override
     public Integer getId() {
         return id;
@@ -88,7 +100,7 @@ public class Issue implements Identifiable<Integer> {
 
     @Entity
     @Table(name = Type.TABLE_NAME)
-    public static class Type {
+    public static class Type implements Identifiable<Integer> {
         public static final String TABLE_NAME = "issue_types";
         public static final String ID_COLUMN_NAME = "id";
         public static final String NAME_COLUMN_NAME = "name";
@@ -102,7 +114,7 @@ public class Issue implements Identifiable<Integer> {
         @NotNull
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issue_types_seq_gen")
         @SequenceGenerator(name = "issue_types_seq_gen", sequenceName = "issue_types_id_seq")
-        @Column(name = ID_COLUMN_NAME, nullable = false)
+        @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
         public Integer getId() {
             return id;
         }
@@ -113,7 +125,7 @@ public class Issue implements Identifiable<Integer> {
 
         @NotNull
         @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
-        @Column(name = NAME_COLUMN_NAME, nullable = false, length = MAX_NAME_LENGTH)
+        @Column(name = NAME_COLUMN_NAME, nullable = false, unique = true, length = MAX_NAME_LENGTH)
         public String getName() {
             return name;
         }

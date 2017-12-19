@@ -1,3 +1,15 @@
+/*
+ * The following code have been created by Yaroslav Zhyravov (shrralis).
+ * The code can be used in non-commercial way for everyone.
+ * But for any commercial way it needs a author's agreement.
+ * Please contact the author for that:
+ *  - https://t.me/Shrralis
+ *  - https://twitter.com/Shrralis
+ *  - shrralis@gmail.com
+ *
+ * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
+ */
+
 package com.shrralis.ssdemo1.entity;
 
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
@@ -11,7 +23,6 @@ import static com.shrralis.ssdemo1.entity.IssueVote.TABLE_NAME;
 
 @Entity
 @Table(name = TABLE_NAME)
-@IdClass(IssueVote.Id.class)
 public class IssueVote implements Identifiable<IssueVote.Id> {
     public static final String TABLE_NAME = "issues_votes";
     public static final String ISSUE_COLUMN_NAME = "issue_id";
@@ -35,6 +46,7 @@ public class IssueVote implements Identifiable<IssueVote.Id> {
 
     @ManyToOne
     @MapsId("issueId")
+    @JoinColumn(name = ISSUE_COLUMN_NAME)
     public Issue getIssue() {
         return issue;
     }
@@ -45,6 +57,7 @@ public class IssueVote implements Identifiable<IssueVote.Id> {
 
     @ManyToOne
     @MapsId("voterId")
+    @JoinColumn(name = VOTER_COLUMN_NAME)
     public User getVoter() {
         return voter;
     }

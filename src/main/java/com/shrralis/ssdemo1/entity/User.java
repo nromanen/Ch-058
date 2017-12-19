@@ -1,3 +1,15 @@
+/*
+ * The following code have been created by Yaroslav Zhyravov (shrralis).
+ * The code can be used in non-commercial way for everyone.
+ * But for any commercial way it needs a author's agreement.
+ * Please contact the author for that:
+ *  - https://t.me/Shrralis
+ *  - https://twitter.com/Shrralis
+ *  - shrralis@gmail.com
+ *
+ * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
+ */
+
 package com.shrralis.ssdemo1.entity;
 
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
@@ -44,7 +56,7 @@ public class User implements Identifiable<Integer> {
     @NotNull
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq_gen")
     @SequenceGenerator(name = "users_seq_gen", sequenceName = "users_id_seq")
-    @Column(name = ID_COLUMN_NAME, nullable = false)
+    @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
     public Integer getId() {
         return id;
     }
@@ -55,7 +67,7 @@ public class User implements Identifiable<Integer> {
 
     @NotNull
     @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH)
-    @Column(name = LOGIN_COLUMN_NAME, nullable = false, length = MAX_LOGIN_LENGTH)
+    @Column(name = LOGIN_COLUMN_NAME, nullable = false, unique = true, length = MAX_LOGIN_LENGTH)
     public String getLogin() {
         return login;
     }
@@ -77,7 +89,7 @@ public class User implements Identifiable<Integer> {
 
     @NotNull
     @Size(min = MIN_EMAIL_LENGTH, max = MAX_EMAIL_LENGTH)
-    @Column(name = EMAIL_COLUMN_NAME, nullable = false, length = MAX_EMAIL_LENGTH)
+    @Column(name = EMAIL_COLUMN_NAME, nullable = false, unique = true, length = MAX_EMAIL_LENGTH)
     public String getEmail() {
         return email;
     }
