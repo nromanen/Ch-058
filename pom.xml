@@ -30,6 +30,8 @@
         <springframework.version>5.0.2.RELEASE</springframework.version>
         <springframework.data-jpa.version>2.0.2.RELEASE</springframework.data-jpa.version>
         <springframework.security.version>5.0.0.RELEASE</springframework.security.version>
+        <springframework.security.jwt.version>1.0.8.RELEASE</springframework.security.jwt.version>
+        <springframework.security.oauth2.version>2.2.1.RELEASE</springframework.security.oauth2.version>
         <springsecurity.version>4.0.4.RELEASE</springsecurity.version>
         <jjwt.version>0.9.0</jjwt.version>
         <hibernate.version>5.2.12.Final</hibernate.version>
@@ -87,6 +89,12 @@
         <!--Spring Security-->
         <dependency>
             <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${springframework.security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>${springframework.security.version}</version>
         </dependency>
@@ -101,6 +109,18 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
             <version>${springframework.security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>${springframework.security.jwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>${springframework.security.oauth2.version}</version>
         </dependency>
         <!--JWT Tokens-->
         <dependency>
