@@ -147,4 +147,60 @@ public class User implements Identifiable<Integer> {
         ADMIN,
         MASTER
     }
+
+    public static final class Builder {
+        private User user;
+
+        private Builder() {
+            user = new User();
+        }
+
+        public static Builder anUser() {
+            return new Builder();
+        }
+
+        public Builder setId(Integer id) {
+            user.setId(id);
+            return this;
+        }
+
+        public Builder setLogin(String login) {
+            user.setLogin(login);
+            return this;
+        }
+
+        public Builder setType(Type type) {
+            user.setType(type);
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            user.setEmail(email);
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            user.setPassword(password);
+            return this;
+        }
+
+        public Builder setImage(Image image) {
+            user.setImage(image);
+            return this;
+        }
+
+        public Builder setName(String name) {
+            user.setName(name);
+            return this;
+        }
+
+        public Builder setSurname(String surname) {
+            user.setSurname(surname);
+            return this;
+        }
+
+        public User build() {
+            return user;
+        }
+    }
 }

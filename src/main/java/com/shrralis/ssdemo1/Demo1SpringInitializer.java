@@ -10,13 +10,14 @@
  * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
  */
 
-package com.shrralis.ssdemo1.configuration;
+package com.shrralis.ssdemo1;
 
+import com.shrralis.ssdemo1.configuration.AppConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class Demo1SpringInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{AppConfig.class};
+	    return new Class[] { AppConfig.class };
     }
 
     protected Class<?>[] getServletConfigClasses() {
@@ -24,6 +25,6 @@ public class Demo1SpringInitializer extends AbstractAnnotationConfigDispatcherSe
     }
 
     protected String[] getServletMappings() {
-        return new String[]{"/"};
+	    return new String[] { "/" };
     }
 }
