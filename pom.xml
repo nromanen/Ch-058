@@ -30,6 +30,8 @@
         <springframework.version>5.0.2.RELEASE</springframework.version>
         <springframework.data-jpa.version>2.0.2.RELEASE</springframework.data-jpa.version>
         <springframework.security.version>5.0.0.RELEASE</springframework.security.version>
+        <springframework.security.jwt.version>1.0.8.RELEASE</springframework.security.jwt.version>
+        <springframework.security.oauth2.version>2.2.1.RELEASE</springframework.security.oauth2.version>
         <springsecurity.version>4.0.4.RELEASE</springsecurity.version>
         <jjwt.version>0.9.0</jjwt.version>
         <hibernate.version>5.2.12.Final</hibernate.version>
@@ -45,6 +47,10 @@
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <liquibase-hibernate4.version>3.6</liquibase-hibernate4.version>
         <spring-data-jpa.version>2.0.2.RELEASE</spring-data-jpa.version>
+        <junit.version>4.12</junit.version>
+        <dbunit.version>2.5.4</dbunit.version>
+        <springtestdbunit.veriosn>1.3.0</springtestdbunit.veriosn>
+        <assertj.version>3.8.0</assertj.version>
     </properties>
 
     <dependencies>
@@ -65,6 +71,19 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
             <version>${springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${springframework.version}</version>
+            <scope>test</scope>
         </dependency>
         <!--Spring MVC-->
         <dependency>
@@ -87,6 +106,12 @@
         <!--Spring Security-->
         <dependency>
             <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${springframework.security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>${springframework.security.version}</version>
         </dependency>
@@ -101,6 +126,18 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
             <version>${springframework.security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>${springframework.security.jwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>${springframework.security.oauth2.version}</version>
         </dependency>
         <!--JWT Tokens-->
         <dependency>
@@ -218,6 +255,52 @@
             <version>1.1.2.RELEASE</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>${jaxb-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>${jaxb-api.version}</version>
+        </dependency>
+        <!--JUnit-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!--DbUnit-->
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>${dbunit.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>junit</artifactId>
+                    <groupId>junit</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--Spring Test DbUnit-->
+        <dependency>
+            <groupId>com.github.springtestdbunit</groupId>
+            <artifactId>spring-test-dbunit</artifactId>
+            <version>${springtestdbunit.veriosn}</version>
+            <scope>test</scope>
+        </dependency>
+        <!--AssertJ-->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

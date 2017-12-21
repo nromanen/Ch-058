@@ -10,12 +10,18 @@
  * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
  */
 
-package com.shrralis.ssdemo1.repository;
+package com.shrralis.ssdemo1.exception;
 
-import com.shrralis.ssdemo1.entity.Image;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+/**
+ * @author shrralis (https://t.me/Shrralis)
+ * @version 1.0
+ * Created 12/21/17 at 3:47 PM
+ */
+public class EntityNotUniqueException extends Exception {
+    public EntityNotUniqueException() {
+    }
 
-@Repository
-public interface ImagesRepository extends JpaRepository<Image, Integer> {
+    public EntityNotUniqueException(String message) {
+        super(message);
+    }
 }

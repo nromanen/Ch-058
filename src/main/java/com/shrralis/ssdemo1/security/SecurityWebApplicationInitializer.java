@@ -12,28 +12,12 @@
 
 package com.shrralis.ssdemo1.security;
 
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+
 /**
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
- * Created 12/19/17 at 6:21 PM
+ * Created 12/20/17 at 5:52 PM
  */
-public class AccountCredentials {
-    private String login;
-    private String password;
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+public class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer {
 }

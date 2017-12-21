@@ -16,7 +16,7 @@ import com.shrralis.ssdemo1.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsersRepository extends JpaRepository<User, Integer> {
-    User findByLogin(String login);
+	User findByLogin(String login);
 
-    User getByLogin(String login);
+//	User getByLogin(String login);
 }

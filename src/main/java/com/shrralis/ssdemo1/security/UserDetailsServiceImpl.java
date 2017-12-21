@@ -14,37 +14,53 @@ package com.shrralis.ssdemo1.security;
 
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import javax.persistence.NoResultException;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author shrralis (https://t.me/Shrralis)
+ * @version 1.0
+ * Created 12/21/17 at 3:23 PM
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private UsersRepository repository;
-
-    @Autowired
-    public void setRepository(UsersRepository repository) {
-        this.repository = repository;
-    }
+    @Resource
+    private UsersRepository usersRepository;
 
     @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = repository.getByLogin(login);
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        try {
+            User user = usersRepository.findByLogin(username);
 
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getType().name()));
-        return new org.springframework.security.core.userdetails.User(
-                user.getLogin(),
-                user.getPassword(),
-                grantedAuthorities);
+            return new AuthorizedUser(user.getLogin(), user.getPassword(), getAuthorities(user));
+        } catch (NoResultException ex) {
+            throw new UsernameNotFoundException("User not found");
+        }
+    }
+
+    // TODO: delete this
+    /*private AuthorizedUser getAuthorizedUserInstance(User user) {
+        AuthorizedUser authorizedUser = new AuthorizedUser(user.getLogin(), user.getPassword(), getAuthorities(user));
+
+        authorizedUser.setId(user.getId());
+        authorizedUser.setEmail(user.getEmail());
+        authorizedUser.setType(user.getType());
+        return authorizedUser;
+    }*/
+
+    private Set<GrantedAuthority> getAuthorities(User user) {
+        Set<GrantedAuthority> authorities = new HashSet<>();
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getType().toString()));
+        return authorities;
     }
 }

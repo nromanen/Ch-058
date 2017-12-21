@@ -10,12 +10,16 @@
  * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
  */
 
-package com.shrralis.ssdemo1.repository;
+package com.shrralis.ssdemo1.service.interfaces;
 
-import com.shrralis.ssdemo1.entity.Image;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.shrralis.ssdemo1.dto.RegisterUserDTO;
+import com.shrralis.tools.model.JsonResponse;
 
-@Repository
-public interface ImagesRepository extends JpaRepository<Image, Integer> {
+/**
+ * @author shrralis (https://t.me/Shrralis)
+ * @version 1.0
+ * Created 12/21/17 at 5:27 PM
+ */
+public interface IAuthService {
+    JsonResponse signUp(RegisterUserDTO user);
 }
