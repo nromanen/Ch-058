@@ -14,7 +14,6 @@ package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
-import com.shrralis.tools.model.JsonResponse;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,12 +27,4 @@ public class UserService {
     public List<User> getAll() {
         return repository.findAll();
     }
-
-	public JsonResponse signUp(String login, String password) {
-		return new JsonResponse(repository.save(User.Builder
-				.anUser()
-				.setLogin(login)
-				.setPassword(password)
-				.build()));
-	}
 }

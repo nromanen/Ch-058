@@ -16,10 +16,8 @@ import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.service.UserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -30,7 +28,7 @@ public class UsersRestController {
     @Autowired
     private UserService service;
 
-	@RequestMapping(
+    @RequestMapping(
 			value = "test",
 			method = RequestMethod.GET,
             headers = "Accept=application/json",
@@ -40,15 +38,7 @@ public class UsersRestController {
 	}
 
 	@RequestMapping("getAll")
-//    @Secured("ADMIN")
-	@PreAuthorize("hasRole('ADMIN')")
 	public List<User> getAllUsers() {
         return service.getAll();
     }
-
-	@RequestMapping("signUp")
-	public JsonResponse signUp(@RequestParam(name = "login", required = false) String login,
-	                           @RequestParam(name = "login", required = false) String password) {
-		return service.signUp(login, password);
-	}
 }

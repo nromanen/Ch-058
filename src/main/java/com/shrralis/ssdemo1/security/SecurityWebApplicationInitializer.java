@@ -10,13 +10,14 @@
  * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
  */
 
-package com.shrralis.ssdemo1.repository;
+package com.shrralis.ssdemo1.security;
 
-import com.shrralis.ssdemo1.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
-public interface UsersRepository extends JpaRepository<User, Integer> {
-	User findByLogin(String login);
-
-//	User getByLogin(String login);
+/**
+ * @author shrralis (https://t.me/Shrralis)
+ * @version 1.0
+ * Created 12/20/17 at 5:52 PM
+ */
+public class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer {
 }

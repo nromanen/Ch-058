@@ -1,48 +1,102 @@
+/*
+ * The following code have been created by Yaroslav Zhyravov (shrralis).
+ * The code can be used in non-commercial way for everyone.
+ * But for any commercial way it needs a author's agreement.
+ * Please contact the author for that:
+ *  - https://t.me/Shrralis
+ *  - https://twitter.com/Shrralis
+ *  - shrralis@gmail.com
+ *
+ * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
+ */
+
 package com.shrralis.ssdemo1.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shrralis.ssdemo1.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Collection;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
- * @version 1.0 Created 12/20/17 at 1:00 PM
+ * @version 1.0
+ * Created 12/21/17 at 3:15 PM
  */
 @Component
-public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-	private final ObjectMapper mapper;
+public class AuthSuccessHandler implements AuthenticationSuccessHandler {
+    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-	@Autowired
-	public AuthSuccessHandler(MappingJackson2HttpMessageConverter messageConverter) {
-		this.mapper = messageConverter.getObjectMapper();
-	}
+    @Override
+    public void onAuthenticationSuccess(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication
+    ) throws IOException {
+        handle(request, response, authentication);
+        clearAuthenticationAttributes(request);
+    }
 
-	@Override
-	public void onAuthenticationSuccess(
-			HttpServletRequest request,
-			HttpServletResponse response,
-			Authentication authentication
-	) throws IOException, ServletException {
-		response.setStatus(HttpServletResponse.SC_OK);
+    protected void handle(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication
+    ) throws IOException {
+        String targetUrl = determineTargetUrl(authentication);
 
-		RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
-		User user = userDetails.getUser();
+        if (response.isCommitted()) {
+//            logger.info("Response has already been committed. Unable to redirect to {}", targetUrl);
+            return;
+        }
+        redirectStrategy.sendRedirect(request, response, targetUrl);
+    }
 
-		userDetails.setUser(user);
+    protected String determineTargetUrl(Authentication authentication) {
+        boolean isUser = false;
+        boolean isLeader = false;
+        Collection<? extends GrantedAuthority> grantedAuthorities = authentication.getAuthorities();
 
-		PrintWriter writer = response.getWriter();
+        for (GrantedAuthority grantedAuthority : grantedAuthorities) {
+            if ("ROLE_USER".equals(grantedAuthority.getAuthority())) {
+                isUser = true;
+            } else if ("ROLE_LEADER".equals(grantedAuthority.getAuthority())) {
+                isLeader = true;
 
-		mapper.writeValue(writer, user);
-		writer.flush();
-	}
+                break;
+            }
+        }
+
+        if (isLeader) {
+            return "/leader";
+        } else if (isUser) {
+            return "/user/init";
+        } else {
+            return "/admin";
+        }
+    }
+
+    private void clearAuthenticationAttributes(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            return;
+        }
+        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+    }
+
+    public RedirectStrategy getRedirectStrategy() {
+        return redirectStrategy;
+    }
+
+    public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
+        this.redirectStrategy = redirectStrategy;
+    }
 }

@@ -13,6 +13,9 @@
 package com.shrralis.ssdemo1.entity;
 
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
+import com.shrralis.ssdemo1.util.PsqlEnum;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,6 +25,10 @@ import static com.shrralis.ssdemo1.entity.User.TABLE_NAME;
 
 @Entity
 @Table(name = TABLE_NAME)
+@TypeDef(
+        name = "user_type",
+        typeClass = PsqlEnum.class
+)
 public class User implements Identifiable<Integer> {
     public static final String TABLE_NAME = "users";
     public static final String ID_COLUMN_NAME = "id";
@@ -36,8 +43,8 @@ public class User implements Identifiable<Integer> {
     public static final int MIN_LOGIN_LENGTH = 4;
     public static final int MAX_EMAIL_LENGTH = 256;
     public static final int MIN_EMAIL_LENGTH = 6;
-    public static final int MAX_PASSWORD_LENGTH = 32;
-    public static final int MIN_PASSWORD_LENGTH = MAX_PASSWORD_LENGTH;
+    public static final int MAX_PASSWORD_LENGTH = 64;
+    public static final int MIN_PASSWORD_LENGTH = 8;
     public static final int MAX_NAME_LENGTH = 16;
     public static final int MIN_NAME_LENGTH = 1;
     public static final int MAX_SURNAME_LENGTH = 32;
@@ -55,7 +62,7 @@ public class User implements Identifiable<Integer> {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq_gen")
-    @SequenceGenerator(name = "users_seq_gen", sequenceName = "users_id_seq")
+    @SequenceGenerator(name = "users_seq_gen", sequenceName = "users_id_seq", allocationSize = 1)
     @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
     public Integer getId() {
         return id;
@@ -78,6 +85,7 @@ public class User implements Identifiable<Integer> {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @org.hibernate.annotations.Type(type = "user_type")
     @Column(name = TYPE_COLUMN_NAME, nullable = false)
     public Type getType() {
         return type;
@@ -98,6 +106,7 @@ public class User implements Identifiable<Integer> {
         this.email = email;
     }
 
+    @JsonIgnore
     @NotNull
     @Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
     @Column(name = PASS_COLUMN_NAME, nullable = false, length = MAX_PASSWORD_LENGTH)
@@ -139,6 +148,20 @@ public class User implements Identifiable<Integer> {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", type=" + type +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", image=" + image +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
     }
 
     public enum Type {
