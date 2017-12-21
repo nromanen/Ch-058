@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ComponentScan(basePackages = "com.shrralis.ssdemo1")
 @PropertySource("classpath:application.properties")
-@Import(value = {DatabaseConfig.class, SecurityConfig.class})
+@Import(value = DatabaseConfig.class)
 public class AppConfig {
     @Value("${environment.debug}")
     public static Boolean DEBUG;
