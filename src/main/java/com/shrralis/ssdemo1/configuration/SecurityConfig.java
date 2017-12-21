@@ -79,6 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+//				next line should allow passing all unauthorized requests
+                .antMatchers("/**").permitAll()
 				.antMatchers("/", "/auth/login", "/signUp").permitAll()
 				.antMatchers("/auth/logout").authenticated()
 //				.antMatchers("/admin**/**").access("hasRole('ADMIN')")
