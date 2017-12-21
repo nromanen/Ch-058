@@ -10,14 +10,18 @@
  * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
  */
 
-package com.shrralis.ssdemo1.configuration;
-
-import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+package com.shrralis.ssdemo1.exception;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
- * Created 12/19/17 at 5:40 PM
+ * Created 12/21/17 at 3:47 PM
  */
-public class SpringSecurityInitializer extends AbstractSecurityWebApplicationInitializer {
+public class EntityNotUniqueException extends Exception {
+    public EntityNotUniqueException() {
+    }
+
+    public EntityNotUniqueException(String message) {
+        super(message);
+    }
 }

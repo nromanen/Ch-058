@@ -60,9 +60,8 @@ public class DatabaseConfig {
 
         entityManagerFactoryBean.setDataSource(getDataSource());
         entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        entityManagerFactoryBean.setPackagesToScan(env.
-                getRequiredProperty(ENTITY_MANAGER_PACKAGES_TO_SCAN));
-        entityManagerFactoryBean.setJpaProperties(getHibProperties());
+	    entityManagerFactoryBean.setPackagesToScan(env.getRequiredProperty(ENTITY_MANAGER_PACKAGES_TO_SCAN));
+	    entityManagerFactoryBean.setJpaProperties(getHibProperties());
         return entityManagerFactoryBean;
     }
 
