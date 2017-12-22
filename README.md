@@ -1,5 +1,6 @@
-#Ch-958, [project_name]
-###Getting started
+# Ch-958, [project_name]
+### Getting started
+
 To start Vue.js run next commands in _bash_ from
 the directory of the project:
 ``` bash

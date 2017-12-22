@@ -1,3 +1,4 @@
+// @formatter:off
 'use strict';
 require('./check-versions')();
 
