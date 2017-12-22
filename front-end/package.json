@@ -2,7 +2,7 @@
   "name": "front-end",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "shrralis <yaroslavzhyravov@gmail.com>",
+  "author": "shrralis <shrralis@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
