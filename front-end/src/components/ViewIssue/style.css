@@ -1,0 +1,13 @@
+.md-headline {
+  text-align: center;
+}
+.container
+{
+  position: relative;
+}
+
+.container .content
+{
+  position: absolute;
+  bottom: 0px;
+}

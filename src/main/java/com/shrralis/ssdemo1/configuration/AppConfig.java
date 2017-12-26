@@ -29,9 +29,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 		DatabaseConfig.class,
 		SecurityConfig.class,
 })
-public class AppConfig {
+public class AppConfig {/*
     @Value("${environment.debug}")
-    public static Boolean DEBUG;
+    public static Boolean DEBUG;*/
 
 	//	@Bean
 	public PasswordEncoder getPasswordEncoder() {
