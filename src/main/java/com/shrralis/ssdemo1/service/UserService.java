@@ -12,19 +12,20 @@
 
 package com.shrralis.ssdemo1.service;
 
-import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
+import com.shrralis.ssdemo1.service.interfaces.IUserService;
+import com.shrralis.tools.model.JsonResponse;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements IUserService {
     @Resource
     private UsersRepository repository;
 
-    public List<User> getAll() {
-        return repository.findAll();
-    }
+	@Override
+	public JsonResponse getAllUsers() {
+		return new JsonResponse(repository.findAll());
+	}
 }

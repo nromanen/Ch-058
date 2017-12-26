@@ -12,16 +12,57 @@
 
 package com.shrralis.ssdemo1.exception;
 
+import com.shrralis.ssdemo1.exception.interfaces.AbstractShrralisException;
+import com.shrralis.tools.model.JsonError.Error;
+
+import java.util.Map;
+
+import static java.util.Map.entry;
+
 /**
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
  * Created 12/21/17 at 3:47 PM
  */
-public class EntityNotUniqueException extends Exception {
-    public EntityNotUniqueException() {
-    }
+public class EntityNotUniqueException extends AbstractShrralisException {
+	private Entity entity;
 
-    public EntityNotUniqueException(String message) {
-        super(message);
-    }
+	public EntityNotUniqueException(Entity entity) {
+		super(entity.getError().getMessage());
+
+		this.entity = entity;
+	}
+
+	public Entity getEntity() {
+		return entity;
+	}
+
+	@Override
+	public Error getError() {
+		return entity.getError();
+	}
+
+	public enum Entity {
+		IMAGE,
+		MAP_MARKER,
+		USER;
+
+		private static final Map<Entity, Error> entityErrorMap;
+
+		static {
+			entityErrorMap = Map.ofEntries(
+					entry(IMAGE, Error.IMAGE_ALREADY_EXISTS),
+					entry(MAP_MARKER, Error.MAP_MARKER_ALREADY_EXISTS),
+					entry(USER, Error.USER_ALREADY_EXISTS)
+			);
+		}
+
+		public static Error getError(Entity entity) {
+			return entityErrorMap.get(entity);
+		}
+
+		public Error getError() {
+			return entityErrorMap.get(this);
+		}
+	}
 }
