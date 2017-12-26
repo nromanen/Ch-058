@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router/index'
+import 'vue-material/dist/theme/default-dark.css'
 
 Vue.config.productionTip = false
 

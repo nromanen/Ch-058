@@ -3,7 +3,9 @@ import Vue from 'vue';
 import VueMaterial from './../../../node_modules/vue-material'
 import './../../../node_modules/vue-material/dist/vue-material.css'
 import VueResource from 'vue-resource';
+import { VTooltip } from 'v-tooltip'
 
+Vue.directive('my-tooltip', VTooltip)
 Vue.use(VueMaterial)
 Vue.use(VueResource)
 Vue.use(VueGoogleMaps, {
@@ -24,7 +26,8 @@ export default {
       isLiked : false,
       isUnliked : false,
       countLike : 0,
-      countDislike: 0
+      countDislike: 0,
+      clickDisabled : false
     }
   },
 
@@ -56,6 +59,8 @@ export default {
       var isLiked = this.isLiked;
       var isUnliked = this.isUnliked;
       var issueId = this.$route.params.id;
+      if (this.clickDisabled)
+        return;
       if(isLiked) {
         this.$http.get('http://localhost:8181/deleteVote/' + issueId).then(data=>{
           this.calculateVote();
@@ -71,12 +76,18 @@ export default {
         })
       }
       this.isLiked = !isLiked;
+      this.clickDisabled = true;
+      setTimeout(() =>{
+        this.clickDisabled = false
+      }, 2000)
     },
 
     dislike() {
       var isLiked = this.isLiked;
       var isUnliked = this.isUnliked;
       var issueId = this.$route.params.id;
+      if (this.clickDisabled)
+        return;
       if(isUnliked) {
         this.$http.get('http://localhost:8181/deleteVote/' + issueId).then(data=>{
           this.calculateVote();
@@ -92,6 +103,10 @@ export default {
         })
       }
       this.isUnliked = !isUnliked;
+      this.clickDisabled = true;
+      setTimeout(() =>{
+        this.clickDisabled = false
+      }, 2000)
     },
 
     calculateVote() {

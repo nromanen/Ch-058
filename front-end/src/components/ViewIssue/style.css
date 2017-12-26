@@ -1,4 +1,4 @@
-.md-headline {
+.md-display-1 {
   text-align: center;
 }
 .container
@@ -10,4 +10,13 @@
 {
   position: absolute;
   bottom: 0px;
+}
+img {
+  cursor: pointer;
+}
+
+.myMap {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 50px;
 }
