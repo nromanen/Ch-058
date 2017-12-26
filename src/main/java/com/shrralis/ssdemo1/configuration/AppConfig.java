@@ -28,6 +28,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Import(value = {
 		DatabaseConfig.class,
 		SecurityConfig.class,
+		SocialConfig.class
 })
 public class AppConfig {
     @Value("${environment.debug}")
