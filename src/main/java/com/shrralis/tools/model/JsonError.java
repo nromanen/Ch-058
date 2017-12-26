@@ -49,25 +49,26 @@ public class JsonError {
 	}
 
 	public enum Error {
-		NO_ERROR(0, "no error"),
-		UNEXPECTED(1, "unexpected error"),
-		EMPTY_LOGIN(2, "empty login"),
-		EMPTY_PASSWORD(3, "empty password"),
-		USER_DOES_NOT_EXIST(4, "user doesn't exist"),
-		WRONG_PASSWORD(5, "wrong password"),
-		BAD_ACCESS_TOKEN(6, "bad access token"),
-		INACTIVE_ACCESS_TOKEN(7, "inactive access token"),;
+		NO_ERROR(0, "No errors"),
+		UNEXPECTED(1, "Unexpected error"),
+		ACCESS_DENIED(2, "Access denied"),
+		IMAGE_ALREADY_EXISTS(3, "Image already exists"),
+		MAP_MARKER_ALREADY_EXISTS(4, "Map marker already exists"),
+		USER_ALREADY_EXISTS(5, "User already exists"),
+		MISSING_PARAMETER(6, "Some parameter isn't present"),
+		BAD_PARAMETER_FORMAT(7, "Bad login (username) format"),;
 
 		private static final ArrayList<Error> lookup = new ArrayList<>();
 
 		static {
-			for (Error e : EnumSet.allOf(Error.class)) {
-				lookup.add(e.getId(), e);
+			for (Error err : EnumSet.allOf(Error.class)) {
+				lookup.add(err.getId(), err);
 			}
 		}
 
 		private final int id;
 		private final String message;
+		private String paramName;
 
 		Error(int id, String message) {
 			this.id = id;
@@ -83,7 +84,15 @@ public class JsonError {
 		}
 
 		public String getMessage() {
-			return message;
+			return paramName == null ? message : paramName;
+		}
+
+		public Error setParam(String paramName) {
+			if (id == MISSING_PARAMETER.id ||
+					id == BAD_PARAMETER_FORMAT.id) {
+				this.paramName = paramName;
+			}
+			return this;
 		}
 	}
 }

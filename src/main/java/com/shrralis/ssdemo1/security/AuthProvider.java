@@ -12,13 +12,14 @@
 
 package com.shrralis.ssdemo1.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,6 +34,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * Created 12/21/17 at 3:11 PM
  */
 public class AuthProvider implements AuthenticationProvider, InitializingBean {
+    private static final Logger logger = LoggerFactory.getLogger(AuthProvider.class);
     private PasswordEncoder passwordEncoder;
     private UserDetailsService userDetailsService;
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
@@ -50,29 +52,29 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 
     @Override
     public Authentication authenticate(Authentication authentication) {
-        String userName = (authentication.getPrincipal() == null) ? null : authentication.getName();
-        UserDetails user = retrieveUser(userName);
+        String login = (authentication.getPrincipal() == null) ? null : authentication.getName();
+        UserDetails userDetails = retrieveUserDetails(login);
 
-        additionalAuthenticationChecks(user, (UsernamePasswordAuthenticationToken) authentication);
-        return createSuccessAuthentication(authentication, user);
+        additionalAuthenticationChecks(userDetails, (UsernamePasswordAuthenticationToken) authentication);
+        return createSuccessAuthentication(authentication, userDetails);
     }
 
-    private UserDetails retrieveUser(String username) throws AuthenticationException {
-        UserDetails user;
+    private UserDetails retrieveUserDetails(String login) {
+        UserDetails userDetails;
 
         try {
-            user = userDetailsService.loadUserByUsername(username);
+            userDetails = userDetailsService.loadUserByUsername(login);
         } catch (UsernameNotFoundException e) {
             throw e;
         } catch (Exception e) {
             throw new InternalAuthenticationServiceException(e.getMessage(), e);
         }
 
-        if (user == null) {
+        if (userDetails == null) {
             throw new InternalAuthenticationServiceException(
                     "UserDetailsService returned null, which is an interface contract violation");
         }
-        return user;
+        return userDetails;
     }
 
     /**
@@ -85,11 +87,11 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
     private void additionalAuthenticationChecks(
             UserDetails userDetails,
             UsernamePasswordAuthenticationToken authentication
-    ) throws AuthenticationException {
+    ) {
         if (authentication.getCredentials() != null) {
             String password = authentication.getCredentials().toString();
 
-            if (password.length() > 32 || !passwordEncoder.matches(password, userDetails.getPassword())) {
+            if (password.length() < 8 || !passwordEncoder.matches(password, userDetails.getPassword())) {
                 throw new BadCredentialsException("Bad credentials");
             }
         } else {
@@ -99,7 +101,8 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 
     private Authentication createSuccessAuthentication(Authentication authentication, UserDetails user) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                user, authentication.getCredentials(),
+                user,
+                authentication.getCredentials(),
                 authoritiesMapper.mapAuthorities(user.getAuthorities())
         );
 

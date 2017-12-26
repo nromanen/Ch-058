@@ -14,6 +14,8 @@ package com.shrralis.ssdemo1.security;
 
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,29 +35,21 @@ import java.util.Set;
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Resource
-    private UsersRepository usersRepository;
+	private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+
+	@Resource
+	private UsersRepository usersRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         try {
-            User user = usersRepository.findByLogin(username);
+	        User user = usersRepository.findByLogin(login);
 
-            return new AuthorizedUser(user.getLogin(), user.getPassword(), getAuthorities(user));
+	        return new AuthorizedUser(user, getAuthorities(user));
         } catch (NoResultException ex) {
             throw new UsernameNotFoundException("User not found");
         }
     }
-
-    // TODO: delete this
-    /*private AuthorizedUser getAuthorizedUserInstance(User user) {
-        AuthorizedUser authorizedUser = new AuthorizedUser(user.getLogin(), user.getPassword(), getAuthorities(user));
-
-        authorizedUser.setId(user.getId());
-        authorizedUser.setEmail(user.getEmail());
-        authorizedUser.setType(user.getType());
-        return authorizedUser;
-    }*/
 
     private Set<GrantedAuthority> getAuthorities(User user) {
         Set<GrantedAuthority> authorities = new HashSet<>();
