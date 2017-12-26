@@ -27,7 +27,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Created 12/21/17 at 4:16 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {DatabaseConfig.class})
+@ContextConfiguration(classes = { DatabaseConfig.class })
+
 public class UsersRepositoryTest extends TestCase {
     @Autowired
     UsersRepository repository;

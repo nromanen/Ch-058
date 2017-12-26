@@ -14,6 +14,7 @@ package com.shrralis.ssdemo1.configuration;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -29,6 +30,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
+@ComponentScan(basePackages = "com.shrralis.ssdemo1")
 @EnableJpaRepositories("com.shrralis.ssdemo1.repository")
 @PropertySource("classpath:application.properties")
 public class DatabaseConfig {

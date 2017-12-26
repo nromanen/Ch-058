@@ -53,7 +53,7 @@ export default {
 
           if (resp.result === 0) {
             this.$router.push('/')
-            this.$cookie.set('user', JSON.stringify(resp.data[0]), 3650);
+            localStorage.setItem('user', JSON.stringify(resp.data[0]))
           } else if (resp.error) {
             this.errors.push(resp.error.errmsg)
           } else {

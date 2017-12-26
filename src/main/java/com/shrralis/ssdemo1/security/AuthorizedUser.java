@@ -78,6 +78,9 @@ public class AuthorizedUser extends User {
     }
 
 	public static AuthorizedUser getCurrent() {
+		if (SecurityContextHolder.getContext().getAuthentication() == null) {
+			return null;
+		}
 		return (AuthorizedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 }

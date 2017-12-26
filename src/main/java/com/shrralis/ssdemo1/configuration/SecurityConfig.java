@@ -13,6 +13,7 @@
 package com.shrralis.ssdemo1.configuration;
 
 import com.shrralis.ssdemo1.security.AuthProvider;
+import com.shrralis.ssdemo1.security.LogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,7 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 
 	@Autowired
-	private AuthenticationSuccessHandler authenticationSuccessHandler;
+	LogoutSuccessHandler logoutSuccessHandler;
+	@Autowired
+	private AuthenticationSuccessHandler authSuccessHandler;
 
 	@Autowired
 	protected void configureGlobalSecurity(AuthenticationManagerBuilder auth) {
@@ -87,15 +90,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.formLogin()
 				.loginPage("/auth/login")
+				.loginProcessingUrl("/auth/login")
 				.usernameParameter("login")
 				.passwordParameter("password")
-				.loginProcessingUrl("/auth/login")
-				.successHandler(authenticationSuccessHandler)
+				.successHandler(authSuccessHandler)
 				.failureUrl("/auth/login?error=true")
 				.and()
 				.logout()
+				.logoutUrl("/auth/logout")
 				.invalidateHttpSession(true)
-				.logoutSuccessUrl("/logout")
+				.logoutSuccessHandler(logoutSuccessHandler)
 				.deleteCookies("JSESSIONID", "XSRF-TOKEN", "locale-cookie")
 				.and()
 				.exceptionHandling()

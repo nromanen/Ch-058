@@ -64,7 +64,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 	        return;
         }
 //        redirectStrategy.sendRedirect(request, response, targetUrl);
-	    new ObjectMapper().writeValue(response.getWriter(), authRestController.login(null));
+	    new ObjectMapper().writeValue(response.getWriter(), authRestController.checkCurrSession(null));
 	    response.setStatus(200);
     }
 

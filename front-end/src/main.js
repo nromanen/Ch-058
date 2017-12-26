@@ -10,12 +10,14 @@ import 'vue-material/dist/theme/default-dark.css'
 import App from './App'
 import SignInPage from '@/components/page/SignInPage/SignInPage'
 import SignUpPage from '@/components/page/SignUpPage/SignUpPage'
+import AuthPage from '@/components/page/AuthPage/AuthPage'
 import router from './router/index'
 
 Vue.use(VueResource)
 Vue.use(VueCookie)
 Vue.use(Vuelidate)
 Vue.use(VueMaterial)
+Vue.http.options.root = 'http://localhost:8080'
 Vue.http.headers.common['Accept'] = 'application/json;charset=UTF-8'
 Vue.http.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
 // Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
@@ -26,6 +28,7 @@ Vue.http.options.credentials = true
 // Vue.config.productionTip = false
 Vue.component('sign-in-page', SignInPage)
 Vue.component('sign-up-page', SignUpPage)
+Vue.component('auth-page', AuthPage)
 
 /* eslint-disable no-new */
 new Vue({
@@ -34,5 +37,3 @@ new Vue({
   template: '<App/>',
   components: {App}
 })
-
-// Custom validators

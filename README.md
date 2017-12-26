@@ -1,4 +1,4 @@
-# Ch-958, [project_name]
+# Ch-958, Geo Citizen
 ### Getting started
 
 To start Vue.js run next commands in _bash_ from

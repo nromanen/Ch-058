@@ -20,12 +20,17 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 @Service
-public class UserService implements IUserService {
+public class UserServiceImpl implements IUserService {
     @Resource
     private UsersRepository repository;
 
 	@Override
 	public JsonResponse getAllUsers() {
 		return new JsonResponse(repository.findAll());
+	}
+
+	@Override
+	public JsonResponse getUser(Integer id) {
+		return new JsonResponse(repository.getOne(id));
 	}
 }

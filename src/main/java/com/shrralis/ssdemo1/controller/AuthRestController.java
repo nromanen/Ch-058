@@ -49,8 +49,8 @@ public class AuthRestController {
     @Autowired
     private AuthenticationTrustResolver authenticationTrustResolver;
 
-	@RequestMapping("/login")
-	public JsonResponse login(@RequestParam(value = "error", required = false) Boolean isError) {
+	@RequestMapping({ "/login", "/logout" })
+	public JsonResponse checkCurrSession(@RequestParam(value = "error", required = false) Boolean isError) {
 		if (isError != null) {
 			if (isError) {
 				return new JsonResponse(JsonError.Error.UNEXPECTED);
@@ -59,11 +59,12 @@ public class AuthRestController {
 			}
 		}
 
-		if (isCurrentAuthenticationAnonymous()) {
-			return new JsonResponse(Map.ofEntries(entry("logged_in", !isCurrentAuthenticationAnonymous())));
+		AuthorizedUser authorizedUser = AuthorizedUser.getCurrent();
+
+		if (isCurrentAuthenticationAnonymous() || authorizedUser == null) {
+			return new JsonResponse(Map.ofEntries(entry("logged_in", false)));
 		}
 
-		AuthorizedUser authorizedUser = AuthorizedUser.getCurrent();
 
 		return new JsonResponse(Map.ofEntries(
 				entry("id", authorizedUser.getId()),

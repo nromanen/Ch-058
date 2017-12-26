@@ -25,12 +25,21 @@ import static java.util.Map.entry;
  * Created 12/21/17 at 3:47 PM
  */
 public class EntityNotUniqueException extends AbstractShrralisException {
-	private Entity entity;
+	private final Entity entity;
+	private final String additionalInfo;
 
 	public EntityNotUniqueException(Entity entity) {
 		super(entity.getError().getMessage());
 
 		this.entity = entity;
+		this.additionalInfo = null;
+	}
+
+	public EntityNotUniqueException(Entity entity, String additionalInfo) {
+		super(entity.getError().getMessage());
+
+		this.entity = entity;
+		this.additionalInfo = additionalInfo;
 	}
 
 	public Entity getEntity() {
@@ -39,7 +48,7 @@ public class EntityNotUniqueException extends AbstractShrralisException {
 
 	@Override
 	public Error getError() {
-		return entity.getError();
+		return entity.getError().setParam(additionalInfo);
 	}
 
 	public enum Entity {

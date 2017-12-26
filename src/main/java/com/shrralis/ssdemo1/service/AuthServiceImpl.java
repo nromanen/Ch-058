@@ -49,9 +49,12 @@ public class AuthServiceImpl implements IAuthService {
 		    throw new NullPointerException("Passed `User` is null");
 	    }
 
-	    if (repository.getByLogin(user.getLogin()) != null
-			    || repository.getByEmail(user.getEmail()) != null) {
-		    throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER);
+	    if (repository.getByLogin(user.getLogin()) != null) {
+		    throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "login");
+	    }
+
+	    if (repository.getByEmail(user.getEmail()) != null) {
+		    throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "email");
 	    }
 
 	    if (!isLoginValid(user.getLogin())) {

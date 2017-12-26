@@ -1,0 +1,24 @@
+#index {
+}
+
+.md-app {
+  min-height: 100vh;
+  max-height: 100vh;
+  border: 1px solid rgba(#000, .12);
+}
+
+.md-app-content {
+  max-height: calc(100vh);
+}
+
+.md-drawer {
+  width: 230px;
+}
+
+.md-dialog {
+  max-width: 768px;
+}
+
+#auth {
+  margin-top: -100px;
+}
