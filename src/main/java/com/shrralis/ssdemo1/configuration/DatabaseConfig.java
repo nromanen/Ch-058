@@ -70,6 +70,7 @@ public class DatabaseConfig {
 
         properties.put(HIBERNATE_DIALECT, env.getRequiredProperty(HIBERNATE_DIALECT));
         properties.put(HIBERNATE_SHOW_SQL, env.getRequiredProperty(HIBERNATE_SHOW_SQL));
+        properties.put("hibernate.hbm2ddl.auto", env.getRequiredProperty("hbm2ddl.auto"));
         return properties;
     }
 

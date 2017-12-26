@@ -26,7 +26,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>9</java.version>
         <springframework.version>5.0.2.RELEASE</springframework.version>
         <springframework.data-jpa.version>2.0.2.RELEASE</springframework.data-jpa.version>
         <springframework.security.version>5.0.0.RELEASE</springframework.security.version>
@@ -310,8 +310,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>9</source>
+                    <target>9</target>
                 </configuration>
             </plugin>
 
