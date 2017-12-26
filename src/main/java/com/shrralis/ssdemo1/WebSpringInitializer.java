@@ -15,7 +15,7 @@ package com.shrralis.ssdemo1;
 import com.shrralis.ssdemo1.configuration.AppConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class Demo1SpringInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebSpringInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     protected Class<?>[] getRootConfigClasses() {
 	    return new Class[] { AppConfig.class };
     }
