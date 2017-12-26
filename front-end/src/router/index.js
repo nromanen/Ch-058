@@ -4,6 +4,8 @@ import AuthPage from '@/components/page/AuthPage/AuthPage'
 import SignInPage from '@/components/page/SignInPage/SignInPage'
 import SignUpPage from '@/components/page/SignUpPage/SignUpPage'
 
+import Issue from '@/components/ViewIssue/App'
+
 Vue.use(Router)
 
 export default new Router({
@@ -11,8 +13,6 @@ export default new Router({
     {
       path: '/issue/:id',
       component: Issue
-      name: 'Home',
-      component: Home
     },
     {
       path: '/auth**',

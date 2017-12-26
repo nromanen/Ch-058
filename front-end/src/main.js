@@ -11,7 +11,6 @@ import App from './App'
 import SignInPage from '@/components/page/SignInPage/SignInPage'
 import SignUpPage from '@/components/page/SignUpPage/SignUpPage'
 import router from './router/index'
-import 'vue-material/dist/theme/default-dark.css'
 
 Vue.use(VueResource)
 Vue.use(VueCookie)

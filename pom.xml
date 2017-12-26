@@ -313,11 +313,6 @@
 	        <artifactId>javax.mail</artifactId>
             <version>${javax.mail.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>1.11.9.RELEASE</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -329,6 +324,10 @@
                 <configuration>
                     <source>1.${java.version}</source>
                     <target>1.${java.version}</target>
+                    <compilerArgs>
+                        <arg>--add-modules</arg>
+                        <arg>java.xml.bind</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
@@ -339,15 +338,6 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
-
-            <!--<plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${liquibase.version}</version>
-                <configuration>
-                    <propertyFile>src/main/resources/application.properties</propertyFile>
-                </configuration>
-            </plugin>-->
 
             <plugin>
                 <groupId>org.liquibase</groupId>
