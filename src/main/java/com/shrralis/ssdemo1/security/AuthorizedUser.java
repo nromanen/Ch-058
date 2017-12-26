@@ -13,6 +13,7 @@
 package com.shrralis.ssdemo1.security;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
@@ -75,4 +76,8 @@ public class AuthorizedUser extends User {
 		        .append(super.toString());
 	    return sb.toString();
     }
+
+	public static AuthorizedUser getCurrent() {
+		return (AuthorizedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	}
 }

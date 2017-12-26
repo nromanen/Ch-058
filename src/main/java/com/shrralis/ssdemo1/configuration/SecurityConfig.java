@@ -28,8 +28,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
@@ -67,19 +70,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:8081");
-			}
-		};
-	}
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+				.cors()
+				.and()
 				.authorizeRequests()
 //					next line should allow passing all unauthorized requests
 				.antMatchers("/**").permitAll()
@@ -112,6 +107,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //				.csrfTokenRepository(csrfTokenRepository())
 //				.requireCsrfProtectionMatcher(new AndRequestMatcher(new NegatedRequestMatcher(
 //						new AntPathRequestMatcher("/auth/login")), AnyRequestMatcher.INSTANCE));
+	}
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+
+		configuration.setAllowedOrigins(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
+		configuration.setAllowedHeaders(Arrays.asList(
+				"Access-Control-Allow-Credentials",
+				"X-Requested-With",
+				"Origin",
+				"Content-Type",
+				"Accept",
+				"Authorization"));
+		configuration.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 
 	/*private Filter csrfHeaderFilter() {

@@ -65,8 +65,7 @@ public class TextUtils {
 	 * @return true OR false
 	 */
 	public static boolean isEmailValid(String s) {
-		if (!isEmptyTrimmed(s) && s.matches("^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*\n" +
-				"@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$")) {
+		if (!isEmptyTrimmed(s) && s.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
 			try {
 				new InternetAddress(s).validate();
 				return true;

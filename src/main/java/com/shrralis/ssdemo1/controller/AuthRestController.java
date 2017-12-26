@@ -63,8 +63,7 @@ public class AuthRestController {
 			return new JsonResponse(Map.ofEntries(entry("logged_in", !isCurrentAuthenticationAnonymous())));
 		}
 
-		AuthorizedUser authorizedUser = (AuthorizedUser)
-				SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		AuthorizedUser authorizedUser = AuthorizedUser.getCurrent();
 
 		return new JsonResponse(Map.ofEntries(
 				entry("id", authorizedUser.getId()),

@@ -12,8 +12,11 @@
 
 package com.shrralis.ssdemo1.security;
 
+import com.shrralis.ssdemo1.controller.AuthRestController;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -36,6 +39,9 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 	private static final Logger logger = LoggerFactory.getLogger(AuthSuccessHandler.class);
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
+	@Autowired
+	private AuthRestController authRestController;
+
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
@@ -57,7 +63,9 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 	        logger.info("Response has already been committed. Unable to redirect to {}", targetUrl);
 	        return;
         }
-        redirectStrategy.sendRedirect(request, response, targetUrl);
+//        redirectStrategy.sendRedirect(request, response, targetUrl);
+	    new ObjectMapper().writeValue(response.getWriter(), authRestController.login(null));
+	    response.setStatus(200);
     }
 
     protected String determineTargetUrl(Authentication authentication) {

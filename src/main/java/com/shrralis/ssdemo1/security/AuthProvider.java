@@ -20,7 +20,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,7 +59,7 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
         return createSuccessAuthentication(authentication, userDetails);
     }
 
-    private UserDetails retrieveUserDetails(String login) throws AuthenticationException {
+    private UserDetails retrieveUserDetails(String login) {
         UserDetails userDetails;
 
         try {
@@ -88,7 +87,7 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
     private void additionalAuthenticationChecks(
             UserDetails userDetails,
             UsernamePasswordAuthenticationToken authentication
-    ) throws AuthenticationException {
+    ) {
         if (authentication.getCredentials() != null) {
             String password = authentication.getCredentials().toString();
 

@@ -21,6 +21,8 @@ import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import com.shrralis.tools.TextUtils;
 import com.shrralis.tools.model.JsonResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,7 @@ import javax.annotation.Resource;
  */
 @Service
 public class AuthServiceImpl implements IAuthService {
+	private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 	private static final String LOGIN_PATTERN = "^[A-Za-z_\\-.0-9]+$";
 	@Resource
 	private UsersRepository repository;

@@ -41,15 +41,19 @@ export default {
       this.errors = []
       this.sending = true
 
-      this.$http.post('http://localhost:8080/auth/login?login='
-        + this.form.login
-        + '&password=' + this.form.password,
-      ).then(
+      this.$http.post('http://localhost:8080/auth/login', null,
+        {
+          params: {
+            login: this.form.login,
+            password: this.form.password
+          }
+        }).then(
         response => {
           let resp = response.body
 
           if (resp.result === 0) {
-            // TODO: implement some code here
+            this.$router.push('/')
+            this.$cookie.set('user', JSON.stringify(resp.data[0]), 3650);
           } else if (resp.error) {
             this.errors.push(resp.error.errmsg)
           } else {
@@ -58,12 +62,14 @@ export default {
 
           this.sending = false
         }, error => {
-          if (error.status === 400) {
-            let resp = error.body
+          switch (error.status) {
+            case 400:
+              let resp = error.body
 
-            if (resp.error) {
-              this.errors.push(resp.error.errmsg)
-            }
+              if (resp.error) {
+                this.errors.push(resp.error.errmsg)
+              }
+              break;
           }
 
           if (this.errors.length <= 0) {
@@ -73,7 +79,6 @@ export default {
           this.sending = false
         }
       )
-
     },
     validateCredentials() {
       this.$v.$touch()
