@@ -63,10 +63,12 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+// eslint-disable-next-line
 export function getLocalUser() {
   return JSON.parse(localStorage.getItem('user'))
 }
 
+// eslint-disable-next-line
 export function resetLocalUser() {
   localStorage.setItem('user', null)
 }

@@ -7,6 +7,7 @@ export const USER_ALREADY_EXISTS = 5
 export const MISSING_PARAMETER = 6
 export const BAD_PARAMETER_FORMAT = 7
 
+// eslint-disable-next-line
 export function getErrorMessage(error) {
   switch (error.errno) {
     case USER_ALREADY_EXISTS:
