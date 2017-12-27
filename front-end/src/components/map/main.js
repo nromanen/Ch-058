@@ -119,9 +119,9 @@ export default {
             self.loadInfo(lat, lng, infoWindow);
             infoWindow.open(map, marker);
             setTimeout(function(){infoWindow.close()}, 5000);
-            google.maps.event.addListener(self.map, 'click', function(){
-              infoWindow.close();
-            })
+          google.maps.event.addListener(self.map, 'click', function () {
+            infoWindow.close();
+          });
         })
     },
 

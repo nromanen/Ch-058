@@ -11,6 +11,7 @@ import App from './App'
 import SignInPage from '@/components/page/SignInPage/SignInPage'
 import SignUpPage from '@/components/page/SignUpPage/SignUpPage'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
+import GoogleMap from '@/components/map/GoogleMap'
 import router from './router/index'
 
 Vue.use(VueResource)
@@ -29,6 +30,7 @@ Vue.http.options.credentials = true
 Vue.component('sign-in-page', SignInPage)
 Vue.component('sign-up-page', SignUpPage)
 Vue.component('auth-page', AuthPage)
+Vue.component('map-page', GoogleMap)
 
 /* eslint-disable no-new */
 new Vue({
