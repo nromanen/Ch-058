@@ -13,6 +13,7 @@
 package com.shrralis.ssdemo1.security;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
@@ -27,13 +28,16 @@ public class AuthorizedUser extends User {
     private String email;
     private com.shrralis.ssdemo1.entity.User.Type type;
 
-    public AuthorizedUser(
-            String username,
-            String password,
-            Collection<? extends GrantedAuthority> authorities
-    ) {
-        super(username, password, authorities);
-    }
+	public AuthorizedUser(
+			com.shrralis.ssdemo1.entity.User user,
+			Collection<? extends GrantedAuthority> authorities
+	) {
+		super(user.getLogin(), user.getPassword(), authorities);
+
+		id = user.getId();
+		email = user.getEmail();
+		type = user.getType();
+	}
 
     public Integer getId() {
         return id;
@@ -68,7 +72,15 @@ public class AuthorizedUser extends User {
         sb.append("Authorized user: { id: ").append(id).append(", ")
                 .append("login: ").append(getUsername()).append(", ")
                 .append("email: ").append(email).append(", ")
-                .append("type: ").append(type);
-        return sb.toString();
+		        .append("type: ").append(type).append(" }, parent: ")
+		        .append(super.toString());
+	    return sb.toString();
     }
+
+	public static AuthorizedUser getCurrent() {
+		if (SecurityContextHolder.getContext().getAuthentication() == null) {
+			return null;
+		}
+		return (AuthorizedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	}
 }

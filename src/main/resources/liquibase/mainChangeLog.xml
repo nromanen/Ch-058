@@ -27,4 +27,6 @@
     <include file="./0.3/1-structure.sql" relativeToChangelogFile="true"/>
 
     <include file="./0.4/1-structure.sql" relativeToChangelogFile="true"/>
+
+    <include file="./0.5/1-structure.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

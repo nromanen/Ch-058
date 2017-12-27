@@ -17,9 +17,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
@@ -30,12 +30,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 		SecurityConfig.class,
 		SocialConfig.class
 })
-public class AppConfig {
+public class AppConfig implements WebMvcConfigurer {
     @Value("${environment.debug}")
     public static Boolean DEBUG;
 
-	//	@Bean
-	public PasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder();
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+				.allowedOrigins("http://localhost:8081")
+				.allowedMethods("*")
+				.allowCredentials(true);
 	}
 }

@@ -12,9 +12,10 @@
 
 package com.shrralis.ssdemo1.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
 import com.shrralis.ssdemo1.util.PsqlEnum;
-import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ import javax.validation.constraints.Size;
 import static com.shrralis.ssdemo1.entity.User.TABLE_NAME;
 
 @Entity
+@Proxy(lazy = false)
 @Table(name = TABLE_NAME)
 @TypeDef(
         name = "user_type",
@@ -50,20 +52,42 @@ public class User implements Identifiable<Integer> {
     public static final int MAX_SURNAME_LENGTH = 32;
     public static final int MIN_SURNAME_LENGTH = 1;
 
-    private Integer id;
-    private String login;
-    private Type type = Type.USER;
-    private String email;
-    private String password;
-    private Image image;
-    private String name;
-    private String surname;
+	@Id
+	@NotNull
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq_gen")
+	@SequenceGenerator(name = "users_seq_gen", sequenceName = "users_id_seq", allocationSize = 1)
+	@Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
+	private Integer id;
+	@NotNull
+	@Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH)
+	@Column(name = LOGIN_COLUMN_NAME, nullable = false, unique = true, length = MAX_LOGIN_LENGTH)
+	private String login;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@org.hibernate.annotations.Type(type = "user_type")
+	@Column(name = TYPE_COLUMN_NAME, nullable = false)
+	private Type type = Type.USER;
+	@NotNull
+	@Size(min = MIN_EMAIL_LENGTH, max = MAX_EMAIL_LENGTH)
+	@Column(name = EMAIL_COLUMN_NAME, nullable = false, unique = true, length = MAX_EMAIL_LENGTH)
+	private String email;
+	@JsonIgnore
+	@NotNull
+	@Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
+	@Column(name = PASS_COLUMN_NAME, nullable = false, length = MAX_PASSWORD_LENGTH)
+	private String password;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = IMAGE_COLUMN_NAME)
+	private Image image;
+	@NotNull
+	@Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
+	@Column(name = NAME_COLUMN_NAME, nullable = false, length = MAX_NAME_LENGTH)
+	private String name;
+	@NotNull
+	@Size(min = MIN_SURNAME_LENGTH, max = MAX_SURNAME_LENGTH)
+	@Column(name = SURNAME_COLUMN_NAME, nullable = false, length = MAX_SURNAME_LENGTH)
+	private String surname;
 
-    @Id
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq_gen")
-    @SequenceGenerator(name = "users_seq_gen", sequenceName = "users_id_seq", allocationSize = 1)
-    @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
     public Integer getId() {
         return id;
     }
@@ -72,9 +96,6 @@ public class User implements Identifiable<Integer> {
         this.id = id;
     }
 
-    @NotNull
-    @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH)
-    @Column(name = LOGIN_COLUMN_NAME, nullable = false, unique = true, length = MAX_LOGIN_LENGTH)
     public String getLogin() {
         return login;
     }
@@ -83,10 +104,6 @@ public class User implements Identifiable<Integer> {
         this.login = login;
     }
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @org.hibernate.annotations.Type(type = "user_type")
-    @Column(name = TYPE_COLUMN_NAME, nullable = false)
     public Type getType() {
         return type;
     }
@@ -95,9 +112,6 @@ public class User implements Identifiable<Integer> {
         this.type = type;
     }
 
-    @NotNull
-    @Size(min = MIN_EMAIL_LENGTH, max = MAX_EMAIL_LENGTH)
-    @Column(name = EMAIL_COLUMN_NAME, nullable = false, unique = true, length = MAX_EMAIL_LENGTH)
     public String getEmail() {
         return email;
     }
@@ -106,10 +120,6 @@ public class User implements Identifiable<Integer> {
         this.email = email;
     }
 
-    @JsonIgnore
-    @NotNull
-    @Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
-    @Column(name = PASS_COLUMN_NAME, nullable = false, length = MAX_PASSWORD_LENGTH)
     public String getPassword() {
         return password;
     }
@@ -118,8 +128,6 @@ public class User implements Identifiable<Integer> {
         this.password = password;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = IMAGE_COLUMN_NAME)
     public Image getImage() {
         return image;
     }
@@ -128,9 +136,6 @@ public class User implements Identifiable<Integer> {
         this.image = image;
     }
 
-    @NotNull
-    @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
-    @Column(name = NAME_COLUMN_NAME, nullable = false, length = MAX_NAME_LENGTH)
     public String getName() {
         return name;
     }
@@ -139,9 +144,6 @@ public class User implements Identifiable<Integer> {
         this.name = name;
     }
 
-    @NotNull
-    @Size(min = MIN_SURNAME_LENGTH, max = MAX_SURNAME_LENGTH)
-    @Column(name = SURNAME_COLUMN_NAME, nullable = false, length = MAX_SURNAME_LENGTH)
     public String getSurname() {
         return surname;
     }
@@ -157,7 +159,6 @@ public class User implements Identifiable<Integer> {
                 ", login='" + login + '\'' +
                 ", type=" + type +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", image=" + image +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +

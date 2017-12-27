@@ -13,6 +13,9 @@
 package com.shrralis.ssdemo1.dto;
 
 /**
+ * A special container that contains information
+ * that is necessary for creating new account
+ *
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
  * Created 12/21/17 at 5:38 PM
@@ -25,7 +28,7 @@ public class RegisterUserDTO {
     private String surname;
 
     public String getLogin() {
-        return login;
+	    return login.trim();
     }
 
     public void setLogin(String login) {
@@ -33,7 +36,7 @@ public class RegisterUserDTO {
     }
 
     public String getEmail() {
-        return email;
+	    return email.trim();
     }
 
     public void setEmail(String email) {
@@ -41,7 +44,7 @@ public class RegisterUserDTO {
     }
 
     public String getPassword() {
-        return password;
+	    return password.trim();
     }
 
     public void setPassword(String password) {
@@ -49,7 +52,7 @@ public class RegisterUserDTO {
     }
 
     public String getName() {
-        return name;
+	    return name.trim();
     }
 
     public void setName(String name) {
@@ -57,7 +60,7 @@ public class RegisterUserDTO {
     }
 
     public String getSurname() {
-        return surname;
+	    return surname.trim();
     }
 
     public void setSurname(String surname) {
