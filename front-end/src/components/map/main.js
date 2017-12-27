@@ -150,12 +150,23 @@ export default {
                 var infoWindow = new google.maps.InfoWindow();
                 marker.addListener('click', (function(marker, infoWindow, lat, lng){
                     return function() {
-                        self.loadInfo(lat, lng, infoWindow)
+                      var idMarker = 0;
+                      self.$http.get('http://localhost:8080/map/getMarker', /*null,*/ {params:  {lat: lat, lng: lng}}).then((response) => { //TODO
+                        idMarker = response.body.data[0].data[0].id
+                        console.log(idMarker);
+                        /*self.$http.get('http://localhost:8080/issue/' + idMarker).then(response(data=>{
+                          var idIssue = 0;*/
+                          self.$router.push('/issue/' + idMarker);
+                        /*}))*/
+                      })
+                      /*
+                      window.location.href +*/
+                        /*self.loadInfo(lat, lng, infoWindow)
                         infoWindow.open(map, marker)
                         setTimeout(function(){infoWindow.close()}, 5000);
                         google.maps.event.addListener(self.map, 'click', function(){
                           infoWindow.close();
-                        })
+                        })*/
                     };
                 })(marker, infoWindow, lat, lng))
             }

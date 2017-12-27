@@ -62,15 +62,6 @@ public class MapRestController {
 		data.setClosed(false);
 		data.setCreatedAt(LocalDateTime.now());
 
-		System.out.println(data.getTitle());
-		System.out.println(data.getText());
-		System.out.println(data.getTypeId());
-		//System.out.println(data.getImageId());
-		//System.out.println(data.getAuthorId());
-		System.out.println(data.isClosed());
-		System.out.println(data.getCreatedAt());
-		System.out.println(data.getUpdatedAt());
-
 		return service.saveData(data);
 	}
 }
