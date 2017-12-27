@@ -324,17 +324,20 @@
                 <configuration>
                     <source>1.${java.version}</source>
                     <target>1.${java.version}</target>
+                    <compilerArgs>
+                        <arg>--add-modules</arg>
+                        <arg>java.xml.bind</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
-            <!--<plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${liquibase.version}</version>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <propertyFile>src/main/resources/application.properties</propertyFile>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
-            </plugin>-->
+            </plugin>
 
             <plugin>
                 <groupId>org.liquibase</groupId>
