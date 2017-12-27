@@ -1,15 +1,10 @@
 import {email, maxLength, minLength, required, sameAs} from "vuelidate/lib/validators/index";
 import {validationMixin} from "vuelidate";
 import {
-  LoginValidator,
-  MAX_LOGIN_LENGTH,
-  MAX_NAME_LENGTH,
-  MAX_SURNAME_LENGTH,
-  MIN_LOGIN_LENGTH,
-  MIN_NAME_LENGTH,
-  MIN_SURNAME_LENGTH,
-  NameValidator
+  LoginValidator, MAX_LOGIN_LENGTH, MAX_NAME_LENGTH, MAX_SURNAME_LENGTH, MIN_LOGIN_LENGTH, MIN_NAME_LENGTH,
+  MIN_SURNAME_LENGTH, NameValidator
 } from "../../_validator";
+import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
 
 export default {
   name: "SignUpPage",
@@ -84,12 +79,12 @@ export default {
           surname: this.form.surname
         }).then(
         response => {
-          let resp = response.body
+          let json = response.body
 
-          if (resp.result === 0) {
+          if (json.result === 0) {
             this.showSnackBar = true
-          } else if (resp.error) {
-            this.errors.push(resp.error.errmsg)
+          } else if (json.error || json.error.errno !== UNEXPECTED) {
+            this.errors.push(getErrorMessage(json.error))
           } else {
             this.errors.push('We have unexpected error')
           }
@@ -97,10 +92,10 @@ export default {
           this.sending = false
         }, error => {
           if (error.status === 400) {
-            let resp = error.body
+            let json = error.body
 
-            if (resp.error) {
-              this.errors.push(resp.error.errmsg)
+            if (json.error) {
+              this.errors.push(getErrorMessage(json.error))
             }
           }
 

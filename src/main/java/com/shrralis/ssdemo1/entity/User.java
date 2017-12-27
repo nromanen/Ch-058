@@ -15,6 +15,7 @@ package com.shrralis.ssdemo1.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
 import com.shrralis.ssdemo1.util.PsqlEnum;
+import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ import javax.validation.constraints.Size;
 import static com.shrralis.ssdemo1.entity.User.TABLE_NAME;
 
 @Entity
+@Proxy(lazy = false)
 @Table(name = TABLE_NAME)
 @TypeDef(
         name = "user_type",
@@ -157,7 +159,6 @@ public class User implements Identifiable<Integer> {
                 ", login='" + login + '\'' +
                 ", type=" + type +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", image=" + image +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +

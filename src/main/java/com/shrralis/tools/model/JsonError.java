@@ -88,8 +88,9 @@ public class JsonError {
 		}
 
 		public Error setParam(String paramName) {
-			if (id == MISSING_PARAMETER.id ||
-					id == BAD_PARAMETER_FORMAT.id) {
+			if (id == MISSING_PARAMETER.id
+					|| id == BAD_PARAMETER_FORMAT.id
+					|| id == USER_ALREADY_EXISTS.id) {
 				this.paramName = paramName;
 			}
 			return this;
