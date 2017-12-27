@@ -1,13 +1,11 @@
 /*
- * The following code have been created by Yaroslav Zhyravov (shrralis).
- * The code can be used in non-commercial way for everyone.
- * But for any commercial way it needs a author's agreement.
- * Please contact the author for that:
- *  - https://t.me/Shrralis
- *  - https://twitter.com/Shrralis
- *  - shrralis@gmail.com
+ * The following code have been created by Yurii Kiziuk.
+ * The code can be used in non-commercial way.
+ * For any commercial use it needs an author's agreement.
+ * Please contact the author:
+ *  - yurakizyuk@gmail.com
  *
- * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
+ * Copyright (c) 2017 by Yurii Kiziuk.
  */
 
 package com.shrralis.ssdemo1.repository;
@@ -18,4 +16,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MapMarkersRepository extends JpaRepository<MapMarker, Integer> {
+	// custom query that used for getting map marker id
+	MapMarker getByLatAndLng(double lat, double lng);
 }
