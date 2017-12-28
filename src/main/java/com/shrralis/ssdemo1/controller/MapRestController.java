@@ -18,7 +18,6 @@ import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
