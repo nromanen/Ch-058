@@ -40,9 +40,17 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
         return new JsonResponse(repository.getByLatAndLng(lat, lng));
     }
 
+
+
     @Override
     public JsonResponse saveMarker(MapMarker marker) {
         return new JsonResponse(repository.save(marker));
+    }
+
+    @Override
+    public MapMarker deleteMarker(MapMarker marker) {
+        repository.delete(marker);
+        return marker;
     }
 
     // currently not in use

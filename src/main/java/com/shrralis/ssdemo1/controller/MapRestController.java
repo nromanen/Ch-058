@@ -19,9 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-@CrossOrigin
 @RestController
-@RequestMapping("map")
+@RequestMapping("/map")
 public class MapRestController {
 
     @Autowired
@@ -36,7 +35,7 @@ public class MapRestController {
     }
 
 	@GetMapping(
-			value = "getMarker",
+			value = "/getMarker",
 			headers = "Accept=application/json",
 			produces = "application/json")
 	public JsonResponse getMarker(@RequestParam("lat") double lat,
@@ -45,15 +44,23 @@ public class MapRestController {
 	}
 
     @PostMapping(
-            value = "saveMarker",
+            value = "/saveMarker",
             headers = "Accept=application/json",
             produces = "application/json")
     public JsonResponse saveMarker(@RequestBody MapMarker marker) {
         return service.saveMarker(marker);
     }
 
+	/*@PostMapping(
+			value = "/deleteMarker",
+			headers = "Accept=application/json",
+			produces = "application/json")
+	public JsonResponse deleteMarker(@RequestBody MapMarker marker) {
+		return new JsonResponse(service.deleteMarker(marker));
+	}*/
+
 	@PostMapping(
-			value = "saveData",
+			value = "/saveData",
 			headers = "Accept=application/json",
 			produces = "application/json")
 	public JsonResponse saveData(@RequestBody MapDataDTO data) {

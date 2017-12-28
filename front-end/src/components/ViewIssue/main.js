@@ -1,4 +1,3 @@
-import * as VueGoogleMaps from 'vue2-google-maps';
 import Vue from 'vue';
 import VueMaterial from './../../../node_modules/vue-material'
 import './../../../node_modules/vue-material/dist/vue-material.css'
@@ -8,11 +7,6 @@ import { VTooltip } from 'v-tooltip'
 Vue.directive('my-tooltip', VTooltip)
 Vue.use(VueMaterial)
 Vue.use(VueResource)
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: 'AIzaSyCSfmbaMZpr_QgS0jvkLYDaMdluFga9J-4'
-  }
-});
 
 export default {
   data () {

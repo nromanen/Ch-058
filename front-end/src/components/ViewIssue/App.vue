@@ -23,25 +23,6 @@
         {{countDislike}}
       </div>
     </div>
-
-    <div class="md-layout-item md-size-30">
-      <div class="myMap">
-        <gmap-map
-          :center="center"
-          :zoom="12"
-          map-type-id="roadmap"
-          style="width: 100%; height: 300px"
-        >
-          <gmap-marker
-            :key="index"
-            v-for="(m, index) in markers"
-            :position="m.position"
-            :clickable="true"
-            @click="center=m.position"
-          ></gmap-marker>
-        </gmap-map>
-      </div>
-    </div>
     <div class="md-layout-item md-size-7"></div>
   </div>
 </template>

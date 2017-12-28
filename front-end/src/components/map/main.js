@@ -4,9 +4,9 @@ export default {
   name: 'Map',
   data: ()=> ({
     form: {
-      title: null,
-      desc: null,
-      type: null,
+      title: '',
+      desc: '',
+      type: '',
     },
     sending: false
   }),
@@ -43,37 +43,35 @@ export default {
     },
 
     initMap() {
-        let self = this;
+        let self = this
         self.map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 48.29149, lng: 25.94034},
-          zoom: 13,
+          zoom: 14,
           maxZoom: 19,
-          minZoom: 13,
+          minZoom: 14,
           disableDefaultUI: true,
           disableDoubleClickZoom: true,
+          zoomControl: true,
           mapTypeControl: true,
-          mapTypeControlOptions: {
-            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-            position: google.maps.ControlPosition.TOP_CENTER
-          }
         })
         this.addYourLocationButton(this.map)
 
         this.map.addListener('dblclick', function(e) {
-            self.callPopup()
-            self.lat = e.latLng.lat()
-            self.lng = e.latLng.lng()
+            self.createIssue(e.latLng.lat(), e.latLng.lng())
         })
         self.loadAllMarkers();
     },
 
-    callPopup() {
-        var modal = document.getElementById('myModal');
-        var span = document.getElementsByClassName("close")[0];
-        modal.style.display = "block"
-        span.onclick = function() {
-            modal.style.display = "none"
-        };
+    createIssue(lat, lng) {
+      let self = this;
+      this.addMarker(lat, lng)
+      var modal = document.getElementById('myModal');
+      var span = document.getElementsByClassName("close")[0];
+      modal.style.display = "block"
+      span.onclick = function() {
+        modal.style.display = "none"
+        //self.deleteMarker(lat, lng)
+      };
     },
 
     reset () {
@@ -88,11 +86,11 @@ export default {
 
         this.addMarker(this.lat, this.lng)
 
-        this.$http.post(/*'auth/logout'*/ 'http://localhost:8080/map/saveData', { // TODO
-          mapMarkerId: 1,
-          title: title,
-          text: desc,
-          typeId: 1
+        this.$http.post('map/saveData',{ // TODO
+            mapMarkerId: 1,
+            title: title,
+            text: desc,
+            typeId: 1
         }).then((response) => {console.log(response.body)
         })
         document.getElementById('myModal').style.display = "none"
@@ -109,35 +107,28 @@ export default {
             },
             animation: google.maps.Animation.DROP
         })
-        this.$http.post(/*'auth/logout'*/ 'http://localhost:8080/map/saveMarker', { // TODO
+        this.$http.post('map/saveMarker', {
             lat: lat,
             lng: lng
           }).then((response) => {console.log(response.body)
         })
-        var infoWindow = new google.maps.InfoWindow();
-        marker.addListener('click', function() {
-            self.loadInfo(lat, lng, infoWindow);
-            infoWindow.open(map, marker);
-            setTimeout(function(){infoWindow.close()}, 5000);
-          google.maps.event.addListener(self.map, 'click', function () {
-            infoWindow.close();
-          });
-        })
     },
 
-    loadInfo(lat, lng, infoWindow) {
-      this.$http.get('http://localhost:8080/map/getMarker', /*null,*/ {params:  {lat: lat, lng: lng}}).then((response) => { //TODO
-        infoWindow.setContent(response.body.data[0].data[0].id.toString())
+    /*deleteMarker(lat, lng) {
+      this.$http.post('map/deleteMarker', {
+        lat: lat,
+        lng: lng
+      }).then((response) => {console.log(response.body)
       })
-      //TODO
-    },
+    },*/
 
     loadAllMarkers() {
         let self = this
-        this.$http.get('http://localhost:8080/map').then((response) => {
+        this.$http.get('map').then((response) => {
             for (var i = 0; i < response.body.data[0].data.length; i++) {
                 var lat = parseFloat(response.body.data[0].data[i].lat)
                 var lng = parseFloat(response.body.data[0].data[i].lng)
+                var id = parseFloat(response.body.data[0].data[i].id)
                 var marker = new google.maps.Marker({
                     map: self.map,
                     position: {
@@ -148,27 +139,15 @@ export default {
                 })
 
                 var infoWindow = new google.maps.InfoWindow();
-                marker.addListener('click', (function(marker, infoWindow, lat, lng){
+                marker.addListener('click', (function(marker, infoWindow, id){
                     return function() {
-                      var idMarker = 0;
-                      self.$http.get('http://localhost:8080/map/getMarker', /*null,*/ {params:  {lat: lat, lng: lng}}).then((response) => { //TODO
-                        idMarker = response.body.data[0].data[0].id
-                        console.log(idMarker);
-                        /*self.$http.get('http://localhost:8080/issue/' + idMarker).then(response(data=>{
-                          var idIssue = 0;*/
-                          self.$router.push('/issue/' + idMarker);
-                        /*}))*/
-                      })
-                      /*
-                      window.location.href +*/
-                        /*self.loadInfo(lat, lng, infoWindow)
+                        infoWindow.setContent(id.toString())
                         infoWindow.open(map, marker)
-                        setTimeout(function(){infoWindow.close()}, 5000);
                         google.maps.event.addListener(self.map, 'click', function(){
                           infoWindow.close();
-                        })*/
+                        })
                     };
-                })(marker, infoWindow, lat, lng))
+                })(marker, infoWindow, id))
             }
         });
     },
@@ -186,7 +165,7 @@ export default {
         firstChild.style.borderRadius = '2px'
         firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)'
         firstChild.style.cursor = 'pointer'
-        firstChild.style.marginTop = '10px'
+        firstChild.style.marginRight = '10px'
         firstChild.style.padding = '0px'
         firstChild.title = 'Find your location'
         controlDiv.appendChild(firstChild)
@@ -220,11 +199,11 @@ export default {
                     setTimeout(function() { infoWindow.close(); }, 2000)
 
                     self.map.setCenter(pos)
-                    self.map.setZoom(16)
+                    self.map.setZoom(19)
                 })
             }
         })
-        map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv)
+        map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
       },
   },
 

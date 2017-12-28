@@ -19,5 +19,6 @@ public interface IMapMarkersService {
     MapMarker findByLatAndLng(Double lat, Double lng);
     JsonResponse getMarker(double lat, double lng);
     JsonResponse saveMarker(MapMarker marker);
+    MapMarker deleteMarker(MapMarker marker);
     JsonResponse saveData(MapDataDTO data);
 }
