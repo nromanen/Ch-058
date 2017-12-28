@@ -18,6 +18,7 @@ import com.shrralis.tools.model.JsonResponse;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class MapMarkersServiceImpl implements IMapMarkersService {
@@ -26,25 +27,18 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
     private MapMarkersRepository repository;
 
     @Override
-    public MapMarker findByLatAndLng(Double lat, Double lng) {
+    public List<MapMarker> loadAllMarkers() {
+        return repository.findAll();
+    }
+
+    @Override
+    public MapMarker getMarker(double lat, double lng) {
         return repository.findByLatAndLng(lat, lng);
     }
 
     @Override
-    public JsonResponse loadAllMarkers() {
-        return new JsonResponse(repository.findAll());
-    }
-
-    @Override
-    public JsonResponse getMarker(double lat, double lng) {
-        return new JsonResponse(repository.getByLatAndLng(lat, lng));
-    }
-
-
-
-    @Override
-    public JsonResponse saveMarker(MapMarker marker) {
-        return new JsonResponse(repository.save(marker));
+    public MapMarker saveMarker(MapMarker marker) {
+        return repository.save(marker);
     }
 
     @Override
@@ -53,9 +47,4 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
         return marker;
     }
 
-    // currently not in use
-    @Override
-    public JsonResponse saveData(MapDataDTO data) {
-        return null;
-    }
 }

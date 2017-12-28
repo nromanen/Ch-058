@@ -16,10 +16,6 @@ export default new Router({
       component: IndexPage
     },
     {
-      path: '/issue/:id',
-      component: Issue
-    },
-    {
       path: '/auth**',
       name: 'AuthPage',
       component: AuthPage

@@ -86,7 +86,7 @@ export default {
 
         this.addMarker(this.lat, this.lng)
 
-        this.$http.post('map/saveData',{ // TODO
+        this.$http.post('map/saveIssue',{ // TODO
             mapMarkerId: 1,
             title: title,
             text: desc,
