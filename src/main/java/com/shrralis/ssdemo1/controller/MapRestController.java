@@ -26,11 +26,14 @@ import java.time.LocalDateTime;
 @RequestMapping(value = "/map", consumes = MediaType.APPLICATION_JSON_VALUE)
 public class MapRestController {
 
-    @Autowired
 	IMapMarkersService markerService;
+	IIssueService issueService;
 
     @Autowired
-	IIssueService issueService;
+	public MapRestController(IMapMarkersService markerService, IIssueService issueService) {
+    	this.markerService = markerService;
+    	this.issueService = issueService;
+	}
 
     @GetMapping
     public JsonResponse loadAllMarkers() {
@@ -48,19 +51,11 @@ public class MapRestController {
         return new JsonResponse(markerService.saveMarker(marker));
     }
 
-	/*@PostMapping(
-			value = "/deleteMarker",
-			headers = "Accept=application/json",
-			produces = "application/json")
-	public JsonResponse deleteMarker(@RequestBody MapMarker marker) {
-		return new JsonResponse(service.deleteMarker(marker));
-	}*/
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@PostMapping(value = "/saveIssue")
 	public JsonResponse saveData(@RequestBody MapDataDTO data) {
 
-		//data.setAuthorId(AuthorizedUser.getCurrent().getId());
 		data.setClosed(false);
 		data.setCreatedAt(LocalDateTime.now());
 
