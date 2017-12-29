@@ -1,13 +1,14 @@
-import {minLength, required} from 'vuelidate/lib/validators'
+import {minLength, required, } from 'vuelidate/lib/validators'
 
 export default {
   name: 'Map',
   data: ()=> ({
     form: {
-      title: '',
-      desc: '',
-      type: '',
+      title: null,
+      desc: null,
+      type: null,
     },
+    id: 0,
     sending: false,
   }),
   validations: {
@@ -17,6 +18,7 @@ export default {
         minLength: minLength(3)
       },
       desc: {
+        required,
         minLength: minLength(10)
       },
       type: {
@@ -26,16 +28,25 @@ export default {
   },
   methods: {
     getValidationClass (fieldName) {
-      const field = this.$v.form[fieldName]
-
+      const field = this.$v.form[fieldName];
       if (field) {
         return {
           'md-invalid': field.$invalid && field.$dirty
         }
       }
     },
+
+    // calling when exit popup window
+    clearForm() {
+      this.$v.$reset();
+      this.form.title = null;
+      this.form.desc = null;
+      this.form.type = null
+    },
+
+    // calling when submit input form
     validateData () {
-      this.$v.$touch()
+      this.$v.$touch();
 
       if (!this.$v.$invalid) {
         this.saveIssue()
@@ -54,17 +65,16 @@ export default {
           zoomControl: true,
           mapTypeControl: true,
         })
-        this.addYourLocationButton()
-        this.getUserLocation()
+        this.addYourLocationButton();
+        this.getUserLocation();
 
         this.map.addListener('dblclick', function(e) {
           self.addMarker(e.latLng.lat(), e.latLng.lng())
         })
-        //self.loadAllMarkers();
     },
 
     getUserLocation() {
-      var self = this
+      var self = this;
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
           var pos = {
@@ -73,9 +83,9 @@ export default {
           }
           self.map.setCenter(pos);
           self.map.setZoom(19);
-          var infoWindow = new google.maps.InfoWindow({map: self.map})
+          var infoWindow = new google.maps.InfoWindow({map: self.map});
           infoWindow.setPosition(pos);
-          infoWindow.setContent('<b>Your location</b>')
+          infoWindow.setContent('<b>Your location</b>');
           setTimeout(function() { infoWindow.close(); }, 2000)
         }, function() {
           self.handleLocationError(true)
@@ -93,35 +103,35 @@ export default {
     },
 
     addYourLocationButton() {
-      var self = this
-      var controlDiv = document.createElement('div')
+      var self = this;
+      var controlDiv = document.createElement('div');
 
-      var firstChild = document.createElement('button')
-      firstChild.style.backgroundColor = '#fff'
-      firstChild.style.border = 'none'
-      firstChild.style.outline = 'none'
-      firstChild.style.width = '28px'
-      firstChild.style.height = '28px'
-      firstChild.style.borderRadius = '2px'
-      firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)'
-      firstChild.style.cursor = 'pointer'
-      firstChild.style.marginRight = '10px'
-      firstChild.style.padding = '0px'
-      firstChild.title = 'Find your location'
-      controlDiv.appendChild(firstChild)
+      var firstChild = document.createElement('button');
+      firstChild.style.backgroundColor = '#fff';
+      firstChild.style.border = 'none';
+      firstChild.style.outline = 'none';
+      firstChild.style.width = '28px';
+      firstChild.style.height = '28px';
+      firstChild.style.borderRadius = '2px';
+      firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
+      firstChild.style.cursor = 'pointer';
+      firstChild.style.marginRight = '10px';
+      firstChild.style.padding = '0px';
+      firstChild.title = 'Find your location';
+      controlDiv.appendChild(firstChild);
 
-      var secondChild = document.createElement('div')
-      secondChild.style.margin = '5px'
-      secondChild.style.width = '18px'
-      secondChild.style.height = '18px'
-      secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)'
-      secondChild.style.backgroundSize = '180px 18px'
-      secondChild.style.backgroundPosition = '0px 0px'
-      firstChild.appendChild(secondChild)
+      var secondChild = document.createElement('div');
+      secondChild.style.margin = '5px';
+      secondChild.style.width = '18px';
+      secondChild.style.height = '18px';
+      secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)';
+      secondChild.style.backgroundSize = '180px 18px';
+      secondChild.style.backgroundPosition = '0px 0px';
+      firstChild.appendChild(secondChild);
 
       firstChild.addEventListener('click', function() {
         self.getUserLocation()
-      })
+      });
       this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
     },
 
@@ -130,44 +140,68 @@ export default {
         lat: lat,
         lng: lng
       }).then((response) => {
-        console.log(response.body.data[0].id)
+        console.log(response.body.data[0].id);
+        window.id = response.body.data[0].id;
+        this.openPopup()
       })
     },
 
-    createIssue(lat, lng) {
-      let self = this;
+    deleteMarker(id) {
+      this.$http.post('map/deleteMarker', null, {
+        params: {
+          id: id
+        }
+      }).then((response) => {
+        console.log(response.body.result)
+      })
+    },
+
+    openPopup() {
+      var self = this;
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
-      modal.style.display = "block"
+      modal.style.display = "block";
       span.onclick = function() {
-        modal.style.display = "none"
+        modal.style.display = "none";
+        self.deleteMarker(window.id)
       };
     },
 
-    reset () {
-      Object.assign(this.$data, this.$options.data.call(this));
-    },
-
-    // calling on submit popup form
-    /*saveIssue() {
-        var self = this
-        var title = document.getElementById("title").value
-        var desc = document.getElementById("desc").value
-
-        this.addMarker(this.lat, this.lng)
-
-        this.$http.post('map/saveIssue',{ // TODO
-            mapMarkerId: 1,
-            title: title,
-            text: desc,
-            typeId: 1
+    saveIssue() {
+      /*this.$http.post('map/saveIssue',{
+            mapMarkerId: window.id,
+            title: this.form.title,
+            text: this.form.desc,
+            typeId: this.form.type
         }).then((response) => {console.log(response.body)
-        })
-        document.getElementById('myModal').style.display = "none"
-        self.reset()
+        });*/
+        document.getElementById('myModal').style.display = "none";
+        this.clearForm();
+        this.placeMarker(window.id); // + type
     },
 
-    addMarker(lat, lng) {
+    placeMarker(id) {
+      this.$http.post('map/getMarker', null, {
+        params: {
+          id: id
+        }
+      }).then((response) => {
+        var lat = parseFloat(response.body.data[0].lat);
+        var lng = parseFloat(response.body.data[0].lng);
+        var id = window.id;
+        console.log(lat + " " + lng + " " + id);
+        var marker = new google.maps.Marker({
+          map: this.map,
+          position: {
+            lat: lat,
+            lng: lng
+          },
+          animation: google.maps.Animation.DROP
+        })
+      })
+    },
+
+    /*addMarker(lat, lng) {
         let self = this
         var marker = new google.maps.Marker({
             map: self.map,
@@ -211,10 +245,9 @@ export default {
                     };
                 })(marker, infoWindow, id))
             }
-        });
+        }
+        );
     },*/
-
-
   },
 
   mounted: function () {

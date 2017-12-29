@@ -47,7 +47,7 @@ public class Issue implements Identifiable<Integer> {
     private String title;
     private String text;
     private Image image;
-    private String type;
+    private Integer typeId;
     private boolean closed;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -121,11 +121,11 @@ public class Issue implements Identifiable<Integer> {
 
     @NotNull
     @Column(name = TYPE_COLUMN_NAME)
-    public String getType() {
-        return type;
+    public Integer getTypeId() {
+        return typeId;
     }
-    public void setType(String type) {
-        this.type = type;
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
     }
 
     @NotNull

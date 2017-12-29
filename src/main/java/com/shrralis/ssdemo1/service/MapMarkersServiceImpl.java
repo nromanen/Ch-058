@@ -33,20 +33,17 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
     }
 
     @Override
-    public MapMarker getMarker(double lat, double lng) {
-        return repository.findByLatAndLng(lat, lng);
+    public MapMarker getMarker(int id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public MapMarker saveMarker(MapMarker marker) {
-        marker =  repository.saveAndFlush(marker);
-        return marker;
+        return repository.save(marker);
     }
 
     @Override
-    public MapMarker deleteMarker(MapMarker marker) {
-        repository.delete(marker);
-        return marker;
+    public void deleteMarker(int id) {
+        repository.deleteById(id);
     }
-
 }

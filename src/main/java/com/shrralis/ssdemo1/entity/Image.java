@@ -41,7 +41,7 @@ public class Image implements Identifiable<Integer> {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "images_seq_gen")
-    @SequenceGenerator(name = "images_seq_gen", sequenceName = "images_id_seq")
+    @SequenceGenerator(name = "images_seq_gen", sequenceName = "images_id_seq", allocationSize = 1)
     @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
     public Integer getId() {
         return id;

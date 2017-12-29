@@ -16,11 +16,8 @@ public class MapDataDTO {
 	private Integer authorId;
 	private String title;
 	private String text;
-	private String type;
+	private Integer typeId;
 	private Integer imageId;
-	private boolean isClosed;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
 
 	public Integer getMapMarkerId() {
 		return mapMarkerId;
@@ -54,12 +51,12 @@ public class MapDataDTO {
 		this.text = text;
 	}
 
-	public String getType() {
-		return type;
+	public Integer getTypeId() {
+		return typeId;
 	}
 
-	public void setType(Integer typeId) {
-		this.type = type;
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
 	}
 
 	public Integer getImageId() {
@@ -68,29 +65,5 @@ public class MapDataDTO {
 
 	public void setImageId(Integer imageId) {
 		this.imageId = imageId;
-	}
-
-	public boolean isClosed() {
-		return isClosed;
-	}
-
-	public void setClosed(boolean closed) {
-		isClosed = closed;
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
 	}
 }

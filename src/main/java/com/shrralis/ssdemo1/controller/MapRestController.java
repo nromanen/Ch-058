@@ -40,10 +40,9 @@ public class MapRestController {
         return new JsonResponse(markerService.loadAllMarkers());
     }
 
-	@GetMapping("/getMarker")
-	public JsonResponse getMarker(@RequestParam("lat") double lat,
-								  @RequestParam("lng") double lng) {
-		return new JsonResponse(markerService.getMarker(lat, lng));
+	@PostMapping("/getMarker")
+	public JsonResponse getMarker(@RequestParam("id") int id) {
+		return new JsonResponse(markerService.getMarker(id));
 	}
 
     @PostMapping(value = "/saveMarker")
@@ -51,12 +50,15 @@ public class MapRestController {
         return new JsonResponse(markerService.saveMarker(marker));
     }
 
+	@PostMapping(value = "/deleteMarker")
+	public JsonResponse deleteMarker(@RequestParam("id") int id) {
+		markerService.deleteMarker(id);
+		return new JsonResponse(id);
+	}
+
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@PostMapping(value = "/saveIssue")
 	public JsonResponse saveData(@RequestBody MapDataDTO data) {
-
-		data.setClosed(false);
-		data.setCreatedAt(LocalDateTime.now());
 
 		return new JsonResponse(issueService.saveIssue(data));
 	}

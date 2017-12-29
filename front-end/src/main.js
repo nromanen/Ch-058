@@ -21,12 +21,8 @@ Vue.use(VueMaterial)
 Vue.http.options.root = 'http://localhost:8080'
 Vue.http.headers.common['Accept'] = 'application/json;charset=UTF-8'
 Vue.http.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
-// Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
-// Vue.http.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE'
 Vue.http.headers.common['Access-Control-Allow-Credentials'] = 'true'
-// Vue.http.options.crossOrigin = true
 Vue.http.options.credentials = true
-// Vue.config.productionTip = false
 Vue.component('sign-in-page', SignInPage)
 Vue.component('sign-up-page', SignUpPage)
 Vue.component('auth-page', AuthPage)

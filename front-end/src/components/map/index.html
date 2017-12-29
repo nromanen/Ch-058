@@ -8,7 +8,7 @@
       <form id="myForm" novalidate class="md-layout-row md-gutter" @submit.prevent="validateData">
         <md-card class="md-flex-50 md-flex-small-100">
 
-          <span class="close" @click="reset">&times;</span>
+          <span class="close" @click="clearForm">&times;</span>
 
           <md-card-header>
             <div class="md-title">Create new issue</div>
@@ -18,30 +18,27 @@
 
             <md-field :class="getValidationClass('title')">
               <label for="title">Title</label>
-              <md-input name="title" id="title" :disabled="sending"  v-model="form.title"/>
+              <md-input name="title" id="title" :disabled="sending"  v-model.trim="form.title"/>
               <span class="md-error" v-if="!$v.form.title.required">Title is required</span>
               <span class="md-error" v-else-if="!$v.form.title.minLength">Title is too short</span>
             </md-field>
 
-
-
             <md-field :class="getValidationClass('desc')">
                 <label>Description</label>
-                <md-textarea id="desc" v-model="form.desc"></md-textarea>
+                <md-textarea id="desc" v-model.trim="form.desc"></md-textarea>
+                <span class="md-error" v-if="!$v.form.desc.required">Description is required</span>
                 <span class="md-error" v-if="!$v.form.desc.minLength">Description is too short</span>
             </md-field>
-
 
             <md-field :class="getValidationClass('type')">
                 <label for="type">Type</label>
                   <md-select id="type" name="type" v-model="form.type">
-                    <md-option value="Problem">Problem</md-option>
-                    <md-option value="Info">Info</md-option>
-                    <md-option value="Feedback">Feedback</md-option>
+                    <md-option value="1">Problem</md-option>
+                    <md-option value="2">Info</md-option>
+                    <md-option value="3">Feedback</md-option>
                   </md-select>
                 <span class="md-error" v-if="!$v.form.type.required">Please, choose the type</span>
             </md-field>
-
 
             <md-field>
                 <label>Add an image</label>

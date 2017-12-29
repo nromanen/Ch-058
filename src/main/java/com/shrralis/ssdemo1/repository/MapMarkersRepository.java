@@ -18,5 +18,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MapMarkersRepository extends JpaRepository<MapMarker, Integer> {
-    MapMarker findByLatAndLng(double lat, double lng);
 }

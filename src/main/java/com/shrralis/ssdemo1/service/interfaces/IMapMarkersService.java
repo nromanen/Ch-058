@@ -18,7 +18,7 @@ import java.util.List;
 
 public interface IMapMarkersService {
     List<MapMarker> loadAllMarkers();
-    MapMarker getMarker(double lat, double lng);
+    MapMarker getMarker(int id);
     MapMarker saveMarker(MapMarker marker);
-    MapMarker deleteMarker(MapMarker marker);
+    void deleteMarker(int id);
 }
