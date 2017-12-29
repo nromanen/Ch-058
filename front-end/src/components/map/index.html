@@ -35,9 +35,9 @@
             <md-field :class="getValidationClass('type')">
                 <label for="type">Type</label>
                   <md-select id="type" name="type" v-model="form.type">
-                    <md-option value="1">Problem</md-option>
-                    <md-option value="2">Info</md-option>
-                    <md-option value="3">Feedback</md-option>
+                    <md-option value="Problem">Problem</md-option>
+                    <md-option value="Info">Info</md-option>
+                    <md-option value="Feedback">Feedback</md-option>
                   </md-select>
                 <span class="md-error" v-if="!$v.form.type.required">Please, choose the type</span>
             </md-field>

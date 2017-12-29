@@ -55,7 +55,7 @@ public class Issue implements Identifiable<Integer> {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issues_seq_gen")
-    @SequenceGenerator(name = "issues_seq_gen", sequenceName = "issues_id_seq")
+    @SequenceGenerator(name = "issues_seq_gen", sequenceName = "issues_id_seq", allocationSize = 1)
     @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
     @Override
     public Integer getId() {

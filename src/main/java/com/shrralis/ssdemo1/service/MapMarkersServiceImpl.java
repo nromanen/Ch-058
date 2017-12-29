@@ -15,6 +15,7 @@ import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IMapMarkersService;
 import com.shrralis.tools.model.JsonResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,7 +24,7 @@ import java.util.List;
 @Service
 public class MapMarkersServiceImpl implements IMapMarkersService {
 
-    @Resource
+    @Autowired
     private MapMarkersRepository repository;
 
     @Override
@@ -38,7 +39,8 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 
     @Override
     public MapMarker saveMarker(MapMarker marker) {
-        return repository.save(marker);
+        marker =  repository.saveAndFlush(marker);
+        return marker;
     }
 
     @Override

@@ -26,8 +26,8 @@ import java.time.LocalDateTime;
 @RequestMapping(value = "/map", consumes = MediaType.APPLICATION_JSON_VALUE)
 public class MapRestController {
 
-	IMapMarkersService markerService;
-	IIssueService issueService;
+	private final IMapMarkersService markerService;
+	private final IIssueService issueService;
 
     @Autowired
 	public MapRestController(IMapMarkersService markerService, IIssueService issueService) {
@@ -50,7 +50,6 @@ public class MapRestController {
     public JsonResponse saveMarker(@RequestBody MapMarker marker) {
         return new JsonResponse(markerService.saveMarker(marker));
     }
-
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@PostMapping(value = "/saveIssue")

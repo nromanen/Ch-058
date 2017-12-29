@@ -8,7 +8,7 @@ export default {
       desc: '',
       type: '',
     },
-    sending: false
+    sending: false,
   }),
   validations: {
     form: {
@@ -43,8 +43,8 @@ export default {
     },
 
     initMap() {
-        let self = this
-        self.map = new google.maps.Map(document.getElementById('map'), {
+      var self = this
+        this.map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 48.29149, lng: 25.94034},
           zoom: 14,
           maxZoom: 19,
@@ -54,23 +54,93 @@ export default {
           zoomControl: true,
           mapTypeControl: true,
         })
-        this.addYourLocationButton(this.map)
+        this.addYourLocationButton()
+        this.getUserLocation()
 
         this.map.addListener('dblclick', function(e) {
-            self.createIssue(e.latLng.lat(), e.latLng.lng())
+          self.addMarker(e.latLng.lat(), e.latLng.lng())
         })
-        self.loadAllMarkers();
+        //self.loadAllMarkers();
+    },
+
+    getUserLocation() {
+      var self = this
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+          self.map.setCenter(pos);
+          self.map.setZoom(19);
+          var infoWindow = new google.maps.InfoWindow({map: self.map})
+          infoWindow.setPosition(pos);
+          infoWindow.setContent('<b>Your location</b>')
+          setTimeout(function() { infoWindow.close(); }, 2000)
+        }, function() {
+          self.handleLocationError(true)
+        })
+      }
+      else {
+        self.handleLocationError(false)
+      }
+    },
+
+    handleLocationError(browserHasGeolocation) {
+      alert(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+    },
+
+    addYourLocationButton() {
+      var self = this
+      var controlDiv = document.createElement('div')
+
+      var firstChild = document.createElement('button')
+      firstChild.style.backgroundColor = '#fff'
+      firstChild.style.border = 'none'
+      firstChild.style.outline = 'none'
+      firstChild.style.width = '28px'
+      firstChild.style.height = '28px'
+      firstChild.style.borderRadius = '2px'
+      firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)'
+      firstChild.style.cursor = 'pointer'
+      firstChild.style.marginRight = '10px'
+      firstChild.style.padding = '0px'
+      firstChild.title = 'Find your location'
+      controlDiv.appendChild(firstChild)
+
+      var secondChild = document.createElement('div')
+      secondChild.style.margin = '5px'
+      secondChild.style.width = '18px'
+      secondChild.style.height = '18px'
+      secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)'
+      secondChild.style.backgroundSize = '180px 18px'
+      secondChild.style.backgroundPosition = '0px 0px'
+      firstChild.appendChild(secondChild)
+
+      firstChild.addEventListener('click', function() {
+        self.getUserLocation()
+      })
+      this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
+    },
+
+    addMarker(lat, lng) {
+      this.$http.post('map/saveMarker', {
+        lat: lat,
+        lng: lng
+      }).then((response) => {
+        console.log(response.body.data[0].id)
+      })
     },
 
     createIssue(lat, lng) {
       let self = this;
-      this.addMarker(lat, lng)
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
       modal.style.display = "block"
       span.onclick = function() {
         modal.style.display = "none"
-        //self.deleteMarker(lat, lng)
       };
     },
 
@@ -79,7 +149,7 @@ export default {
     },
 
     // calling on submit popup form
-    saveIssue() {
+    /*saveIssue() {
         var self = this
         var title = document.getElementById("title").value
         var desc = document.getElementById("desc").value
@@ -112,23 +182,15 @@ export default {
             lng: lng
           }).then((response) => {console.log(response.body)
         })
-    },
-
-    /*deleteMarker(lat, lng) {
-      this.$http.post('map/deleteMarker', {
-        lat: lat,
-        lng: lng
-      }).then((response) => {console.log(response.body)
-      })
     },*/
 
-    loadAllMarkers() {
+    /*loadAllMarkers() {
         let self = this
         this.$http.get('map').then((response) => {
-            for (var i = 0; i < response.body.data[0].data.length; i++) {
-                var lat = parseFloat(response.body.data[0].data[i].lat)
-                var lng = parseFloat(response.body.data[0].data[i].lng)
-                var id = parseFloat(response.body.data[0].data[i].id)
+            for (var i = 0; i < response.body.data.length; i++) {
+                var lat = parseFloat(response.body.data[i].lat)
+                var lng = parseFloat(response.body.data[i].lng)
+                var id = parseFloat(response.body.data[i].id)
                 var marker = new google.maps.Marker({
                     map: self.map,
                     position: {
@@ -150,61 +212,9 @@ export default {
                 })(marker, infoWindow, id))
             }
         });
-    },
+    },*/
 
-    addYourLocationButton(map) {
-        let self = this
-        var controlDiv = document.createElement('div')
 
-        var firstChild = document.createElement('button')
-        firstChild.style.backgroundColor = '#fff'
-        firstChild.style.border = 'none'
-        firstChild.style.outline = 'none'
-        firstChild.style.width = '28px'
-        firstChild.style.height = '28px'
-        firstChild.style.borderRadius = '2px'
-        firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)'
-        firstChild.style.cursor = 'pointer'
-        firstChild.style.marginRight = '10px'
-        firstChild.style.padding = '0px'
-        firstChild.title = 'Find your location'
-        controlDiv.appendChild(firstChild)
-
-        var secondChild = document.createElement('div')
-        secondChild.style.margin = '5px'
-        secondChild.style.width = '18px'
-        secondChild.style.height = '18px'
-        secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)'
-        secondChild.style.backgroundSize = '180px 18px'
-        secondChild.style.backgroundPosition = '0px 0px'
-        firstChild.appendChild(secondChild)
-
-        // set user location
-        firstChild.addEventListener('click', function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var pos = {
-                      lat: position.coords.latitude,
-                      lng: position.coords.longitude
-                    }
-                    var userMarker = new google.maps.Marker({
-                      map: self.map,
-                      position: pos,
-                    })
-                    userMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
-
-                    var infoWindow = new google.maps.InfoWindow
-                    infoWindow.setContent('Your location')
-                    infoWindow.open(map, userMarker)
-                    setTimeout(function() { infoWindow.close(); }, 2000)
-
-                    self.map.setCenter(pos)
-                    self.map.setZoom(19)
-                })
-            }
-        })
-        map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
-      },
   },
 
   mounted: function () {
