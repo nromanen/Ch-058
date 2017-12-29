@@ -36,7 +36,8 @@ import java.util.Set;
 import static java.util.Map.entry;
 
 /**
- * @author shrralis (https://t.me/Shrralis)
+ * @author sh
+ * rralis (https://t.me/Shrralis)
  * @version 1.0
  * Created 12/20/17 at 5:59 PM
  */
@@ -72,6 +73,9 @@ public class AuthRestController {
 				entry("type", authorizedUser.getType())
 		));
 	}
+
+//	@RequestMapping(value = "fbSignUp", method = RequestMethod.POST)
+//	public JsonResponse fbSignUp(@RequestBody)
 
     @RequestMapping(
             value = "signUp",
