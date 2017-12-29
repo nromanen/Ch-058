@@ -4,8 +4,6 @@ import IndexPage from '@/components/page/IndexPage/IndexPage'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
 import SignInPage from '@/components/page/SignInPage/SignInPage'
 import SignUpPage from '@/components/page/SignUpPage/SignUpPage'
-import Map from '@/components/map/GoogleMap'
-import Issue from '@/components/ViewIssue/App'
 
 Vue.use(Router)
 
@@ -15,10 +13,6 @@ export default new Router({
       path: '/',
       name: 'IndexPage',
       component: IndexPage
-    },
-    {
-      path: '/issue/:id',
-      component: Issue
     },
     {
       path: '/auth**',
@@ -34,11 +28,6 @@ export default new Router({
       path: '/signUp',
       name: 'SignUpPage',
       component: SignUpPage
-    },
-    {
-      path: '/map',
-      name: 'Map',
-      component: Map
     }
   ]
 })

@@ -16,7 +16,7 @@ public class MapDataDTO {
 	private Integer authorId;
 	private String title;
 	private String text;
-	private Integer typeId;
+	private String type;
 	private Integer imageId;
 	private boolean isClosed;
 	private LocalDateTime createdAt;
@@ -54,12 +54,12 @@ public class MapDataDTO {
 		this.text = text;
 	}
 
-	public Integer getTypeId() {
-		return typeId;
+	public String getType() {
+		return type;
 	}
 
-	public void setTypeId(Integer typeId) {
-		this.typeId = typeId;
+	public void setType(Integer typeId) {
+		this.type = type;
 	}
 
 	public Integer getImageId() {

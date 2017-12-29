@@ -18,6 +18,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import java.time.LocalDateTime;
+
 import static com.shrralis.ssdemo1.entity.Issue.TABLE_NAME;
 
 @Entity
@@ -27,8 +29,13 @@ public class Issue implements Identifiable<Integer> {
     public static final String ID_COLUMN_NAME = "id";
     public static final String MAP_MARKER_COLUMN_NAME = "map_marker_id";
     public static final String AUTHOR_COLUMN_NAME = "author_id";
+    public static final String IMG_COLUMN_NAME = "image_id";
     public static final String TITLE_COLUMN_NAME = "title";
     public static final String TEXT_COLUMN_NAME = "text";
+    public static final String TYPE_COLUMN_NAME = "type";
+    public static final String CLOSED_COLUMN_NAME = "closed";
+    public static final String CREATED_AT_COLUMN_NAME = "created_at";
+    public static final String UPDATED_AT_COLUMN_NAME = "updated_at";
     public static final int MAX_TITLE_LENGTH = 32;
     public static final int MIN_TITLE_LENGTH = 4;
     public static final int MAX_TEXT_LENGTH = 2048;
@@ -39,11 +46,16 @@ public class Issue implements Identifiable<Integer> {
     private User author;
     private String title;
     private String text;
+    private Image image;
+    private String type;
+    private boolean closed;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issues_seq_gen")
-    @SequenceGenerator(name = "issues_seq_gen", sequenceName = "issues_id_seq")
+    @SequenceGenerator(name = "issues_seq_gen", sequenceName = "issues_id_seq", allocationSize = 1)
     @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
     @Override
     public Integer getId() {
@@ -71,9 +83,18 @@ public class Issue implements Identifiable<Integer> {
     public User getAuthor() {
         return author;
     }
-
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = IMG_COLUMN_NAME)
+    public Image getImage() {
+        return image;
+    }
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     @NotNull
@@ -96,6 +117,42 @@ public class Issue implements Identifiable<Integer> {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    @NotNull
+    @Column(name = TYPE_COLUMN_NAME)
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @NotNull
+    @Column(name = CLOSED_COLUMN_NAME, nullable = false)
+    public boolean isClosed() {
+        return closed;
+    }
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
+    @NotNull
+    @Column(name = CREATED_AT_COLUMN_NAME, nullable = false)
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @NotNull
+    @Column(name = UPDATED_AT_COLUMN_NAME, nullable = false)
+    LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Entity
