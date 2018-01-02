@@ -16,25 +16,25 @@ import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UsersRestController {
     @Autowired
     private IUserService service;
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping("getAll")
+	@RequestMapping("/getAll")
 	public JsonResponse getAllUsers() {
 		return service.getAllUsers();
 	}
 
 	@Secured({ "ROLE_USER", "ROLE_ADMIN" })
-	@RequestMapping("get")
-	public JsonResponse getUserInfo(@RequestParam("id") Integer id) {
+	@RequestMapping("/get/{id}")
+	public JsonResponse getUserInfo(@PathVariable int id) {
 		return service.getUser(id);
 	}
 }

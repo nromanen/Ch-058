@@ -12,8 +12,7 @@
 
 package com.shrralis.ssdemo1.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.shrralis.ssdemo1.entity.User;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,8 +23,6 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -34,16 +31,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * Created 12/21/17 at 3:11 PM
  */
 public class AuthProvider implements AuthenticationProvider, InitializingBean {
-    private static final Logger logger = LoggerFactory.getLogger(AuthProvider.class);
+
     private PasswordEncoder passwordEncoder;
     private UserDetailsService userDetailsService;
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
-    public AuthProvider() {
-        setPasswordEncoder(new BCryptPasswordEncoder());
-    }
-
-    @Override
+	@Override
     public void afterPropertiesSet() {
         if (userDetailsService == null) {
             throw new IllegalArgumentException("A UserDetailsService must be set");
@@ -60,15 +53,7 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
     }
 
     private UserDetails retrieveUserDetails(String login) {
-        UserDetails userDetails;
-
-        try {
-            userDetails = userDetailsService.loadUserByUsername(login);
-        } catch (UsernameNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new InternalAuthenticationServiceException(e.getMessage(), e);
-        }
+	    UserDetails userDetails = userDetailsService.loadUserByUsername(login);
 
         if (userDetails == null) {
             throw new InternalAuthenticationServiceException(
@@ -85,13 +70,13 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
      * @throws BadCredentialsException if invalid password was entered
      */
     private void additionalAuthenticationChecks(
-            UserDetails userDetails,
-            UsernamePasswordAuthenticationToken authentication
-    ) {
+		    UserDetails userDetails,
+		    UsernamePasswordAuthenticationToken authentication) {
         if (authentication.getCredentials() != null) {
             String password = authentication.getCredentials().toString();
 
-            if (password.length() < 8 || !passwordEncoder.matches(password, userDetails.getPassword())) {
+	        if (password.length() < User.MIN_PASSWORD_LENGTH
+			        || !passwordEncoder.matches(password, userDetails.getPassword())) {
                 throw new BadCredentialsException("Bad credentials");
             }
         } else {
@@ -99,39 +84,26 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
         }
     }
 
-    private Authentication createSuccessAuthentication(Authentication authentication, UserDetails user) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                user,
-                authentication.getCredentials(),
-                authoritiesMapper.mapAuthorities(user.getAuthorities())
-        );
+	@Override
+	public boolean supports(Class<?> authentication) {
+		return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+	}
 
-        authenticationToken.setDetails(authentication.getDetails());
-        return authenticationToken;
-    }
+	private Authentication createSuccessAuthentication(Authentication authentication, UserDetails user) {
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+				user,
+				authentication.getCredentials(),
+				authoritiesMapper.mapAuthorities(user.getAuthorities()));
 
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
-    }
+		authenticationToken.setDetails(authentication.getDetails());
+		return authenticationToken;
+	}
 
-    protected PasswordEncoder getPasswordEncoder() {
-        return passwordEncoder;
-    }
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
 
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        if (passwordEncoder == null) {
-            throw new IllegalArgumentException("passwordEncoder cannot be null");
-        }
-
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    protected UserDetailsService getUserDetailsService() {
-        return userDetailsService;
-    }
-
-    public void setUserDetailsService(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+	public void setUserDetailsService(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
 }

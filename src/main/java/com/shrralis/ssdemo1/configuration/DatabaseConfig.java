@@ -34,7 +34,8 @@ import java.util.Properties;
 @EnableJpaRepositories("com.shrralis.ssdemo1.repository")
 @PropertySource("classpath:application.properties")
 public class DatabaseConfig {
-    private static final String DATABASE_DRIVER = "db.driver";
+
+	private static final String DATABASE_DRIVER = "db.driver";
     private static final String DATABASE_PASS = "db.password";
     private static final String DATABASE_URL = "db.url";
     private static final String DATABASE_USERNAME = "db.username";

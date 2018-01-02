@@ -1,5 +1,5 @@
 <div id="authorization">
-  <form novalidate class="md-layout-row md-gutter" @submit.prevent="validateCredentials">
+  <form novalidate class="md-layout-row md-gutter" @submit.prevent="validateCredentials()">
     <md-card class="md-flex50 md-flex-small-100">
       <md-card-header>
         <div class="md-title">Sign in</div>
@@ -11,7 +11,7 @@
             <md-field :class="getValidationClass('login')">
               <label for="a-login">Login</label>
 
-              <md-input name="login" id="a-login" v-model="form.login" :disabled="sending"/>
+              <md-input name="login" id="a-login" v-model.trim="form.login" :disabled="sending"/>
 
               <span class="md-error" v-if="!$v.form.login.required">Login is required</span>
 
@@ -29,7 +29,8 @@
             <md-field :class="getValidationClass('password')">
               <label for="a-password">Password</label>
 
-              <md-input name="password" id="a-password" type="password" v-model="form.password" :disabled="sending"/>
+              <md-input name="password" id="a-password" type="password" v-model.trim="form.password"
+                        :disabled="sending"/>
 
               <span class="md-error" v-if="!$v.form.password.required">The password is required</span>
 

@@ -16,17 +16,19 @@ import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IMapMarkersService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
 @Service
+@Transactional
 public class MapMarkersServiceImpl implements IMapMarkersService {
 
     @Resource
     private MapMarkersRepository repository;
 
     @Override
-    public MapMarker findByLatAndLng(Double lat, Double lng) {
+    public MapMarker findByLatAndLng(double lat, double lng) {
         return repository.findByLatAndLng(lat, lng);
     }
 

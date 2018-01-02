@@ -12,12 +12,15 @@
 
 package com.shrralis.ssdemo1.security;
 
-import com.shrralis.ssdemo1.controller.AuthRestController;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shrralis.ssdemo1.service.interfaces.IAuthService;
+import com.shrralis.tools.model.JsonResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
@@ -36,13 +39,23 @@ import java.io.IOException;
  */
 @Component
 public class AuthSuccessHandler implements AuthenticationSuccessHandler {
+
 	private static final Logger logger = LoggerFactory.getLogger(AuthSuccessHandler.class);
-	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+	private static final String POST_SUCCESS_AUTH_URL = "/auth/login";
+
+	private RedirectStrategy redirectStrategy;
+	private IAuthService authService;
+	private AuthenticationTrustResolver authTrustResolver;
 
 	@Autowired
-	private AuthRestController authRestController;
+	public AuthSuccessHandler(IAuthService authService,
+	                          AuthenticationTrustResolver authTrustResolver) {
+		this.authService = authService;
+		this.authTrustResolver = authTrustResolver;
+		redirectStrategy = new DefaultRedirectStrategy();
+	}
 
-    @Override
+	@Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
             HttpServletResponse response,
@@ -57,40 +70,21 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
             HttpServletResponse response,
             Authentication authentication
     ) throws IOException {
-        String targetUrl = determineTargetUrl(authentication);
+	    String targetUrl = determineTargetUrl();
 
         if (response.isCommitted()) {
 	        logger.info("Response has already been committed. Unable to redirect to {}", targetUrl);
 	        return;
         }
-//        redirectStrategy.sendRedirect(request, response, targetUrl);
-	    new ObjectMapper().writeValue(response.getWriter(), authRestController.checkCurrSession(null));
-	    response.setStatus(200);
+	    new ObjectMapper().writeValue(response.getWriter(), new JsonResponse(
+			    authService.getCurrentSession(SecurityContextHolder.getContext().getAuthentication(),
+					    authTrustResolver)
+	    ));
+	    response.setStatus(HttpServletResponse.SC_OK);
     }
 
-    protected String determineTargetUrl(Authentication authentication) {
-        /*boolean isUser = false;
-        boolean isLeader = false;
-        Collection<? extends GrantedAuthority> grantedAuthorities = authentication.getAuthorities();
-
-        for (GrantedAuthority grantedAuthority : grantedAuthorities) {
-            if ("ROLE_USER".equals(grantedAuthority.getAuthority())) {
-                isUser = true;
-            } else if ("ROLE_LEADER".equals(grantedAuthority.getAuthority())) {
-                isLeader = true;
-
-                break;
-            }
-        }
-
-        if (isLeader) {
-            return "/leader";
-        } else if (isUser) {
-            return "/user/init";
-        } else {
-            return "/admin";
-        }*/
-	    return "/auth/login";
+	protected String determineTargetUrl() {
+		return POST_SUCCESS_AUTH_URL;
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request) {

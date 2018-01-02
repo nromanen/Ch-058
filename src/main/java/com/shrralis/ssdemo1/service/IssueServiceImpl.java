@@ -17,7 +17,7 @@ public class IssueServiceImpl implements IIssueService {
     private IssuesRepository issuesRepository;
 
     @Override
-    public Optional<Issue> getById(Integer id) {
+    public Optional<Issue> getById(int id) {
         return issuesRepository.findById(id);
     }
 }

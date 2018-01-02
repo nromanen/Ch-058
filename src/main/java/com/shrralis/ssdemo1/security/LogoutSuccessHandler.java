@@ -1,9 +1,11 @@
 package com.shrralis.ssdemo1.security;
 
-import com.shrralis.ssdemo1.controller.AuthRestController;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -20,15 +22,26 @@ import java.io.IOException;
 @Component
 public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler
 		implements org.springframework.security.web.authentication.logout.LogoutSuccessHandler {
+
+	private IAuthService authService;
+	private AuthenticationTrustResolver authTrustResolver;
+
 	@Autowired
-	private AuthRestController authRestController;
+	public LogoutSuccessHandler(IAuthService authService, AuthenticationTrustResolver authTrustResolver) {
+		this.authService = authService;
+		this.authTrustResolver = authTrustResolver;
+	}
 
 	@Override
 	public void onLogoutSuccess(
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse,
 			Authentication authentication) throws IOException, ServletException {
-		new ObjectMapper().writeValue(httpServletResponse.getWriter(), authRestController.checkCurrSession(null));
+		new ObjectMapper().writeValue(
+				httpServletResponse.getWriter(),
+				authService.getCurrentSession(
+						SecurityContextHolder.getContext().getAuthentication(),
+						authTrustResolver));
 		httpServletResponse.setStatus(200);
 	}
 }

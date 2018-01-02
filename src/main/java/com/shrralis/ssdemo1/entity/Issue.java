@@ -34,19 +34,35 @@ public class Issue implements Identifiable<Integer> {
     public static final int MAX_TEXT_LENGTH = 2048;
     public static final int MIN_TEXT_LENGTH = 64;
 
-    private Integer id;
-    private MapMarker mapMarker;
-    private User author;
-    private String title;
-    private String text;
+	@Id
+	@NotNull
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issues_seq_gen")
+	@SequenceGenerator(name = "issues_seq_gen", sequenceName = "issues_id_seq")
+	@Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
+	private Integer id;
 
-    @Id
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issues_seq_gen")
-    @SequenceGenerator(name = "issues_seq_gen", sequenceName = "issues_id_seq")
-    @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
-    @Override
-    public Integer getId() {
+	@NotNull
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = MAP_MARKER_COLUMN_NAME)
+	private MapMarker mapMarker;
+
+	@NotNull
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = AUTHOR_COLUMN_NAME)
+	private User author;
+
+	@NotNull
+	@Size(min = MIN_TITLE_LENGTH, max = MAX_TITLE_LENGTH)
+	@Column(name = TITLE_COLUMN_NAME, nullable = false, length = MAX_TITLE_LENGTH)
+	private String title;
+
+	@NotNull
+	@Size(min = MIN_TEXT_LENGTH, max = MIN_TEXT_LENGTH)
+	@Column(name = TEXT_COLUMN_NAME, nullable = false, length = MAX_TEXT_LENGTH)
+	private String text;
+
+	@Override
+	public Integer getId() {
         return id;
     }
 
@@ -54,9 +70,6 @@ public class Issue implements Identifiable<Integer> {
         this.id = id;
     }
 
-    @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = MAP_MARKER_COLUMN_NAME)
     public MapMarker getMapMarker() {
         return mapMarker;
     }
@@ -65,9 +78,6 @@ public class Issue implements Identifiable<Integer> {
         this.mapMarker = mapMarker;
     }
 
-    @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = AUTHOR_COLUMN_NAME)
     public User getAuthor() {
         return author;
     }
@@ -76,9 +86,6 @@ public class Issue implements Identifiable<Integer> {
         this.author = author;
     }
 
-    @NotNull
-    @Size(min = MIN_TITLE_LENGTH, max = MAX_TITLE_LENGTH)
-    @Column(name = TITLE_COLUMN_NAME, nullable = false, length = MAX_TITLE_LENGTH)
     public String getTitle() {
         return title;
     }
@@ -87,9 +94,6 @@ public class Issue implements Identifiable<Integer> {
         this.title = title;
     }
 
-    @NotNull
-    @Size(min = MIN_TEXT_LENGTH, max = MIN_TEXT_LENGTH)
-    @Column(name = TEXT_COLUMN_NAME, nullable = false, length = MAX_TEXT_LENGTH)
     public String getText() {
         return text;
     }

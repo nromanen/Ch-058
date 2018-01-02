@@ -16,8 +16,12 @@ import com.shrralis.tools.model.JsonResponse;
 
 public interface IMapMarkersService {
     JsonResponse loadAllMarkers();
-    MapMarker findByLatAndLng(Double lat, Double lng);
-    JsonResponse getMarker(double lat, double lng);
-    JsonResponse saveMarker(MapMarker marker);
+
+	MapMarker findByLatAndLng(double lat, double lng);
+
+	JsonResponse getMarker(double lat, double lng);
+
+	JsonResponse saveMarker(MapMarker marker);
+
     JsonResponse saveData(MapDataDTO data);
 }

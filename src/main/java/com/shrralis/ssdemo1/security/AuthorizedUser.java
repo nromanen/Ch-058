@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
@@ -24,14 +25,14 @@ import java.util.Collection;
  * Created 12/21/17 at 3:26 PM
  */
 public class AuthorizedUser extends User {
+
     private Integer id;
     private String email;
     private com.shrralis.ssdemo1.entity.User.Type type;
 
 	public AuthorizedUser(
 			com.shrralis.ssdemo1.entity.User user,
-			Collection<? extends GrantedAuthority> authorities
-	) {
+			Collection<? extends GrantedAuthority> authorities) {
 		super(user.getLogin(), user.getPassword(), authorities);
 
 		id = user.getId();
@@ -77,10 +78,24 @@ public class AuthorizedUser extends User {
 	    return sb.toString();
     }
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		AuthorizedUser that = (AuthorizedUser) o;
+		return Objects.equals(id, that.id) &&
+				Objects.equals(email, that.email) &&
+				type == that.type;
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(super.hashCode(), id, email, type);
+	}
+
 	public static AuthorizedUser getCurrent() {
-		if (SecurityContextHolder.getContext().getAuthentication() == null) {
-			return null;
-		}
 		return (AuthorizedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 }
