@@ -1,4 +1,5 @@
-import {minLength, maxLength, required,} from 'vuelidate/lib/validators'
+import {minLength, maxLength, required} from 'vuelidate/lib/validators'
+import {getLocalUser} from "../../router/index";
 
 export default {
   name: 'Map',
@@ -12,7 +13,9 @@ export default {
     id: 0,
     isPlaced: false,
     marker: null,
-    sending: false
+    sending: false,
+    lat: 0,
+    lng: 0
   }),
   validations: {
     form: {
@@ -77,7 +80,9 @@ export default {
         this.addSearchField();
         this.getUserLocation();
         this.map.addListener('dblclick', function(e) {
-          self.addMarker(e.latLng.lat(), e.latLng.lng())
+          if(getLocalUser()) {
+            self.saveCoords(e.latLng.lat(), e.latLng.lng())
+          }
         });
     },
 
@@ -117,7 +122,7 @@ export default {
              if(response.body.data[0] == null) {
                self.map.setCenter(place.geometry.location);
                self.map.setZoom(19);
-               self.addMarker(place.geometry.location.lat(), place.geometry.location.lng())
+               self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng())
              }
              else {
                self.map.setCenter(place.geometry.location);
@@ -211,82 +216,68 @@ export default {
       this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
     },
 
-    addMarker(lat, lng) {
-      this.$http.post('map/saveMarker', {
-        lat: lat,
-        lng: lng
-      }).then((response) => {
-        console.log(response.body.data[0].id);
-        window.id = response.body.data[0].id;
-        this.openPopup()
-      })
+    saveCoords(lat, lng) {
+      window.lat = lat;
+      window.lng = lng;
+      this.openPopup()
     },
 
-    deleteMarker(id) {
-      this.$http.post('map/deleteMarker', null, {
-        params: {
-          id: id
-        }
-      }).then((response) => {
-        console.log(response.body.result)
-      })
-    },
 
     openPopup() {
-      var self = this;
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
       modal.style.display = "block";
       span.onclick = function() {
         modal.style.display = "none";
-        self.deleteMarker(window.id);
         document.getElementById('pac-input').value = '';
         document.getElementById("preview").hidden = true;
+        window.lat = 0;
+        window.lng = 0;
       };
     },
 
     saveIssue() {
-      /*this.$http.post('map/saveIssue',{
-            markerId: window.id,
-            title: this.form.title,
-            text: this.form.desc,
-            typeId: this.form.type
-            //image: TODO
-        }).then((response) => {console.log(response.body)
-        });*/
-        document.getElementById('myModal').style.display = "none";
-        if(window.isPlaced) {
-          this.setMarkerType(window.marker, this.form.type)
-        }
-        else {
-          this.placeMarker(window.id, this.form.type);
-        }
-        this.clearForm();
-        window.isPlaced = false;
-        window.marker = null;
-        document.getElementById('pac-input').value = '';
-        document.getElementById("preview").hidden = true;
-    },
+      if(window.isPlaced) {
+        this.setMarkerType(window.marker, this.form.type)
+      } else {
+          var marker = new google.maps.Marker({
+            map: this.map,
+            position: {
+              lat: window.lat,
+              lng: window.lng
+            },
+            animation: google.maps.Animation.DROP
+          });
 
-    placeMarker(id, type) {
-      this.$http.post('map/getMarker', null, {
-        params: {
-          id: id
-        }
-      }).then((response) => {
-        var lat = parseFloat(response.body.data[0].lat);
-        var lng = parseFloat(response.body.data[0].lng);
-        var marker = new google.maps.Marker({
-          map: this.map,
-          position: {
-            lat: lat,
-            lng: lng,
-          },
-          animation: google.maps.Animation.DROP
-        });
-        this.setMarkerType(marker, type);
-        this.setListeners(marker);
-      })
+          var title = this.form.title;
+          var desc = this.form.desc;
+          var type = this.form.type;
+
+          this.setMarkerType(marker, this.form.type);
+          this.setListeners(marker);
+          this.$http.post('map/saveMarker', {
+            lat: window.lat,
+            lng: window.lng
+          }).then((response) => {
+            this.$http.post('map/saveIssue',{
+              markerId: response.body.data[0].id,
+              title: title,
+              text: desc,
+              typeId: type
+              //image: TODO
+            }).then((response) => {console.log(response.body)
+            });
+          });
+      }
+
+      document.getElementById('myModal').style.display = "none";
+      this.clearForm();
+      window.isPlaced = false;
+      window.marker = null;
+      window.lat = 0;
+      window.lng = 0;
+      document.getElementById('pac-input').value = '';
+      document.getElementById("preview").hidden = true;
     },
 
     setMarkerType(marker, type) {
@@ -303,7 +294,7 @@ export default {
       var icon = {
         url: url,
         scaledSize: new google.maps.Size(260, 260),
-        anchor: new google.maps.Point(130, 140)
+        anchor: new google.maps.Point(130, 150)
     };
       marker.setIcon(icon);
     },
@@ -317,7 +308,7 @@ export default {
       marker.addListener('click', function() {
         timer = setTimeout(function() {
           if (!prevent) {
-            console.log('click');
+
           }
           prevent = false;
         }, delay);
@@ -358,13 +349,16 @@ export default {
         document.getElementById("preview").hidden = false;
       };
     },
+
+
+
     /*google.maps.event.addListener('dblclick', function() {
         map.setCenter(marker.getPosition());
         marker.setAnimation(google.maps.Animation.BOUNCE);
       });*/
     tornOffBounce(marker) {
       marker.setAnimation(null);
-    }
+    },
 
     /*addMarker(lat, lng) {
         let self = this

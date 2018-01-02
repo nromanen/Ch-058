@@ -43,7 +43,7 @@ public class Issue implements Identifiable<Integer> {
 
     private Integer id;
     private MapMarker mapMarker;
-    private Integer authorId;
+    private User author;
     private String title;
     private String text;
     private Image image;
@@ -78,12 +78,13 @@ public class Issue implements Identifiable<Integer> {
     }
 
     @NotNull
-    @Column(name = AUTHOR_COLUMN_NAME, nullable = false)
-    public Integer getAuthorId() {
-        return authorId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = AUTHOR_COLUMN_NAME)
+    public User getAuthor() {
+        return author;
     }
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     @NotNull

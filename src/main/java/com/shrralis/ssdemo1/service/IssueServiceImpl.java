@@ -7,6 +7,7 @@ import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.IssuesRepository;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
+import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,15 @@ public class IssueServiceImpl implements IIssueService {
 
     private final IssuesRepository issuesRepository;
     private final MapMarkersRepository mapMarkersRepository;
+    private final UsersRepository usersRepository;
 
 	@Autowired
-	public IssueServiceImpl(IssuesRepository issuesRepository, MapMarkersRepository mapMarkersRepository) {
+	public IssueServiceImpl(IssuesRepository issuesRepository,
+	                        MapMarkersRepository mapMarkersRepository,
+	                        UsersRepository usersRepository) {
 		this.issuesRepository = issuesRepository;
 		this.mapMarkersRepository = mapMarkersRepository;
+		this.usersRepository = usersRepository;
 	}
 
     @Override
@@ -54,10 +59,13 @@ public class IssueServiceImpl implements IIssueService {
 	    image.setSrc("/path/ta/image");
 	    image.setHash("hashhbshhashhashnashhxshhashhash");
 
-
 	    Issue issue = new Issue();
         issue.setMapMarker(marker);
-        issue.setAuthorId(1);
+
+
+	    User user = usersRepository.findById(getCurrent().getId()).orElse(null);
+
+        issue.setAuthor(user);
         //issue.setAuthorId(getCurrent().getId());
         issue.setTitle(data.getTitle());
         issue.setText(data.getText());
