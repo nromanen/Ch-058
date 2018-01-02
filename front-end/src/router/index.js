@@ -7,7 +7,7 @@ import Issue from '@/components/ViewIssue/App'
 
 Vue.use(Router)
 
-const router = new Router({
+export default new Router({
   routes: [
     {
       path: '/',
@@ -22,11 +22,6 @@ const router = new Router({
       path: '/auth**',
       name: 'AuthPage',
       component: AuthPage
-    },
-    {
-      path: '/map',
-      name: 'Map',
-      component: Map
     }
   ]
 })
@@ -58,6 +53,7 @@ router.beforeEach((to, from, next) => {
 export function getLocalUser() {
   return JSON.parse(localStorage.getItem('user'))
 }
+
 // eslint-disable-next-line
 export function resetLocalUser() {
   localStorage.setItem('user', null)

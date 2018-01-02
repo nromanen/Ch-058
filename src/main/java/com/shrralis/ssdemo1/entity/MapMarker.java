@@ -34,7 +34,7 @@ public class MapMarker implements Identifiable<Integer> {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "map_markers_seq_gen")
-    @SequenceGenerator(name = "map_markers_seq_gen", sequenceName = "map_markers_id_seq")
+    @SequenceGenerator(name = "map_markers_seq_gen", sequenceName = "map_markers_id_seq", allocationSize = 1)
     @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
     public Integer getId() {
         return id;
