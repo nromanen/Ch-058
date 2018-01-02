@@ -9,30 +9,21 @@
  */
 
 package com.shrralis.ssdemo1.dto;
-import java.time.LocalDateTime;
+import com.shrralis.ssdemo1.entity.Image;
 
 public class MapDataDTO {
-	private Integer mapMarkerId;
-	private Integer authorId;
+	private Integer markerId;
 	private String title;
 	private String text;
 	private Integer typeId;
-	private Integer imageId;
+	private Image image;
 
-	public Integer getMapMarkerId() {
-		return mapMarkerId;
+	public Integer getMarkerId() {
+		return markerId;
 	}
 
-	public void setMapMarkerId(Integer mapMarkerId) {
-		this.mapMarkerId = mapMarkerId;
-	}
-
-	public Integer getAuthorId() {
-		return authorId;
-	}
-
-	public void setAuthorId(Integer authorId) {
-		this.authorId = authorId;
+	public void setMarkerId(Integer markerId) {
+		this.markerId = markerId;
 	}
 
 	public String getTitle() {
@@ -59,11 +50,11 @@ public class MapDataDTO {
 		this.typeId = typeId;
 	}
 
-	public Integer getImageId() {
-		return imageId;
+	public Image getImage() {
+		return image;
 	}
 
-	public void setImageId(Integer imageId) {
-		this.imageId = imageId;
+	public void setImage(Image image) {
+		this.image = image;
 	}
 }

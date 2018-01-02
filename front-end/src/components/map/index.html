@@ -1,6 +1,8 @@
 <div id="root">
 
-  <div id="map"></div>
+  <div id="map">
+
+  </div>
 
   <div id="myModal" class="modal">
 
@@ -21,6 +23,7 @@
               <md-input name="title" id="title" :disabled="sending"  v-model.trim="form.title"/>
               <span class="md-error" v-if="!$v.form.title.required">Title is required</span>
               <span class="md-error" v-else-if="!$v.form.title.minLength">Title is too short</span>
+              <span class="md-error" v-else-if="!$v.form.title.maxLength">Title is too long</span>
             </md-field>
 
             <md-field :class="getValidationClass('desc')">
@@ -40,10 +43,13 @@
                 <span class="md-error" v-if="!$v.form.type.required">Please, choose the type</span>
             </md-field>
 
-            <md-field>
+            <md-field :class="getValidationClass('image')">
                 <label>Add an image</label>
-                <md-file accept="image/*" />
+                <md-file v-model="form.image" accept="image/*" id="uploadImage" @change="previewImage"/>
+                <span class="md-error" v-if="!$v.form.image.required">Please, attach an image</span>
             </md-field>
+
+              <img src = "" id="preview" hidden>
 
           </md-card-content>
 

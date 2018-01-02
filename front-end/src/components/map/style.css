@@ -8,6 +8,7 @@
   height: 100%;
 }
 .modal {
+  margin: 9% auto;
   display: none;
   position: fixed;
   z-index: 1;
@@ -19,7 +20,7 @@
 }
 
 .modal-content {
-  margin: 5% auto;
+  margin: 0 auto;
   width: 25%;
 }
 
@@ -40,4 +41,9 @@
 
 #desc {
   resize: none;
+}
+
+#preview {
+  max-height: 200px;
+  min-height: 200px;
 }

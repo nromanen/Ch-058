@@ -32,18 +32,18 @@ public class Issue implements Identifiable<Integer> {
     public static final String IMG_COLUMN_NAME = "image_id";
     public static final String TITLE_COLUMN_NAME = "title";
     public static final String TEXT_COLUMN_NAME = "text";
-    public static final String TYPE_COLUMN_NAME = "type";
+    public static final String TYPE_COLUMN_NAME = "type_id";
     public static final String CLOSED_COLUMN_NAME = "closed";
     public static final String CREATED_AT_COLUMN_NAME = "created_at";
     public static final String UPDATED_AT_COLUMN_NAME = "updated_at";
     public static final int MAX_TITLE_LENGTH = 32;
     public static final int MIN_TITLE_LENGTH = 4;
     public static final int MAX_TEXT_LENGTH = 2048;
-    public static final int MIN_TEXT_LENGTH = 64;
+    public static final int MIN_TEXT_LENGTH = 8;
 
     private Integer id;
     private MapMarker mapMarker;
-    private User author;
+    private Integer authorId;
     private String title;
     private String text;
     private Image image;
@@ -78,13 +78,12 @@ public class Issue implements Identifiable<Integer> {
     }
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = AUTHOR_COLUMN_NAME)
-    public User getAuthor() {
-        return author;
+    @Column(name = AUTHOR_COLUMN_NAME, nullable = false)
+    public Integer getAuthorId() {
+        return authorId;
     }
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
     }
 
     @NotNull
@@ -109,7 +108,7 @@ public class Issue implements Identifiable<Integer> {
     }
 
     @NotNull
-    @Size(min = MIN_TEXT_LENGTH, max = MIN_TEXT_LENGTH)
+    @Size(min = MIN_TEXT_LENGTH, max = MAX_TEXT_LENGTH)
     @Column(name = TEXT_COLUMN_NAME, nullable = false, length = MAX_TEXT_LENGTH)
     public String getText() {
         return text;
@@ -170,7 +169,7 @@ public class Issue implements Identifiable<Integer> {
         @Id
         @NotNull
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issue_types_seq_gen")
-        @SequenceGenerator(name = "issue_types_seq_gen", sequenceName = "issue_types_id_seq")
+        @SequenceGenerator(name = "issue_types_seq_gen", sequenceName = "issue_types_id_seq", allocationSize = 1)
         @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
         public Integer getId() {
             return id;

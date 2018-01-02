@@ -24,8 +24,13 @@ import java.util.List;
 @Service
 public class MapMarkersServiceImpl implements IMapMarkersService {
 
-    @Autowired
-    private MapMarkersRepository repository;
+
+    private final MapMarkersRepository repository;
+
+	@Autowired
+	public MapMarkersServiceImpl(MapMarkersRepository repository) {
+		this.repository = repository;
+	}
 
     @Override
     public List<MapMarker> loadAllMarkers() {
@@ -37,7 +42,12 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
         return repository.findById(id).orElse(null);
     }
 
-    @Override
+	@Override
+	public MapMarker getMarker(double lat, double lng) {
+		return repository.getByLatAndLng(lat, lng);
+	}
+
+	@Override
     public MapMarker saveMarker(MapMarker marker) {
         return repository.save(marker);
     }

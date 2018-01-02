@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface IIssueService {
     Optional<Issue> getById(Integer id);
-    MapDataDTO saveIssue(MapDataDTO data);
+
+    Issue createIssue(MapDataDTO data);
 }
