@@ -1,7 +1,7 @@
 package com.shrralis.ssdemo1.security;
 
-import com.shrralis.ssdemo1.controller.AuthRestController;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
@@ -20,15 +20,23 @@ import java.io.IOException;
 @Component
 public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler
 		implements org.springframework.security.web.authentication.logout.LogoutSuccessHandler {
+
+	private static final ObjectMapper MAPPER = new ObjectMapper();
+
+	private IAuthService authService;
+
 	@Autowired
-	private AuthRestController authRestController;
+	public LogoutSuccessHandler(
+			IAuthService authService) {
+		this.authService = authService;
+	}
 
 	@Override
 	public void onLogoutSuccess(
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse,
 			Authentication authentication) throws IOException, ServletException {
-		new ObjectMapper().writeValue(httpServletResponse.getWriter(), authRestController.checkCurrSession(null));
-		httpServletResponse.setStatus(200);
+		MAPPER.writeValue(httpServletResponse.getWriter(), authService.getCurrentSession());
+		httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 	}
 }

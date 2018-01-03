@@ -17,8 +17,12 @@ import com.shrralis.tools.model.JsonResponse;
 import java.util.List;
 
 public interface IMapMarkersService {
-    List<MapMarker> loadAllMarkers();
-    MapMarker getMarker(double lat, double lng);
-    MapMarker saveMarker(MapMarker marker);
-    MapMarker deleteMarker(MapMarker marker);
+
+	List<MapMarker> loadAllMarkers();
+
+	MapMarker getMarker(double lat, double lng);
+
+	MapMarker saveMarker(MapMarker marker);
+
+	MapMarker deleteMarker(MapMarker marker);
 }

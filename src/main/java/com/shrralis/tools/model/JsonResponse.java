@@ -12,23 +12,18 @@
 
 package com.shrralis.tools.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0 Created 12/20/17 at 1:10 AM
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JsonResponse {
-	public static final int OK = 0;
-	public static final int ERROR = -1;
 
-	private Integer result;
-	private JsonError error;
-	private ArrayList<Object> data;
+	private List<JsonError> errors;
+	private List<Object> data;
 	private Integer count = 0;
 
 	private JsonResponse() {
@@ -48,37 +43,47 @@ public class JsonResponse {
 		}
 
 		count = this.data.size();
-		result = OK;
-	}
-
-	public JsonResponse(int result) {
-		setResult(result);
-	}
-
-	public Integer getResult() {
-		return result;
-	}
-
-	private void setResult(int result) {
-		this.result = result;
-	}
-
-	public JsonError getError() {
-		return error;
 	}
 
 	public JsonResponse(JsonError.Error error) {
-		setError(error);
+
+		addError(error);
 	}
 
-	public ArrayList<Object> getData() {
-		return data;
-	}
+	private void addError(JsonError.Error error) {
+		if (errors == null) {
+			errors = new ArrayList<>();
+		}
+		this.errors.add(new JsonError(error));
 
-	private void setError(JsonError.Error error) {
-		this.error = new JsonError(error);
 		count = null;
-		result = ERROR;
+	}
+
+	public JsonResponse(JsonError jsonError) {
+		errors = new ArrayList<>();
+
+		errors.add(jsonError);
+
+		count = null;
+	}
+
+	public JsonResponse(List<JsonError> errors) {
+		setErrors(errors);
+	}
+
+	public List<JsonError> getErrors() {
+		return errors;
+	}
+
+	private void setErrors(List<JsonError> errors) {
+		this.errors = new ArrayList<>();
+		count = null;
+
+		this.errors.addAll(errors);
+	}
+
+	public List<Object> getData() {
+		return data;
 	}
 
 	public Integer getCount() {
@@ -92,8 +97,7 @@ public class JsonResponse {
 	@Override
 	public String toString() {
 		return "JsonResponse{" +
-				"result=" + result +
-				", error=" + error +
+				"errors=" + errors +
 				", data=" + data +
 				", count=" + count +
 				'}';
@@ -115,13 +119,13 @@ public class JsonResponse {
 			return this;
 		}
 
-		public Builder setResult(int result) {
-			jsonResponse.setResult(result);
+		public Builder withError(JsonError.Error error) {
+			jsonResponse.addError(error);
 			return this;
 		}
 
-		public Builder setError(JsonError.Error error) {
-			jsonResponse.setError(error);
+		public Builder setErrors(List<JsonError> errors) {
+			jsonResponse.setErrors(errors);
 			return this;
 		}
 

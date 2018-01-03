@@ -19,8 +19,7 @@ import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import static com.shrralis.ssdemo1.entity.User.TABLE_NAME;
 
@@ -32,6 +31,9 @@ import static com.shrralis.ssdemo1.entity.User.TABLE_NAME;
         typeClass = PsqlEnum.class
 )
 public class User implements Identifiable<Integer> {
+
+	public static final String LOGIN_PATTERN = "^[A-Za-z_\\-.0-9]+$";
+	public static final String NAME_PATTERN = "^[A-ZА-Я]['a-zа-я]+$";
     public static final String TABLE_NAME = "users";
     public static final String ID_COLUMN_NAME = "id";
     public static final String LOGIN_COLUMN_NAME = "login";
@@ -58,32 +60,48 @@ public class User implements Identifiable<Integer> {
 	@SequenceGenerator(name = "users_seq_gen", sequenceName = "users_id_seq", allocationSize = 1)
 	@Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
 	private Integer id;
+
 	@NotNull
+	@NotBlank
+	@Pattern(regexp = User.LOGIN_PATTERN)
 	@Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH)
 	@Column(name = LOGIN_COLUMN_NAME, nullable = false, unique = true, length = MAX_LOGIN_LENGTH)
 	private String login;
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	@org.hibernate.annotations.Type(type = "user_type")
 	@Column(name = TYPE_COLUMN_NAME, nullable = false)
 	private Type type = Type.USER;
+
 	@NotNull
+	@NotBlank
+	@Email
 	@Size(min = MIN_EMAIL_LENGTH, max = MAX_EMAIL_LENGTH)
 	@Column(name = EMAIL_COLUMN_NAME, nullable = false, unique = true, length = MAX_EMAIL_LENGTH)
 	private String email;
+
 	@JsonIgnore
 	@NotNull
+	@NotBlank
 	@Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
 	@Column(name = PASS_COLUMN_NAME, nullable = false, length = MAX_PASSWORD_LENGTH)
 	private String password;
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = IMAGE_COLUMN_NAME)
 	private Image image;
+
 	@NotNull
+	@NotBlank
+	@Pattern(regexp = NAME_PATTERN)
 	@Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
 	@Column(name = NAME_COLUMN_NAME, nullable = false, length = MAX_NAME_LENGTH)
 	private String name;
+
 	@NotNull
+	@NotBlank
+	@Pattern(regexp = NAME_PATTERN)
 	@Size(min = MIN_SURNAME_LENGTH, max = MAX_SURNAME_LENGTH)
 	@Column(name = SURNAME_COLUMN_NAME, nullable = false, length = MAX_SURNAME_LENGTH)
 	private String surname;

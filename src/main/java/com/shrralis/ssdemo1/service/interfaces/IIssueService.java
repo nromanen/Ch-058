@@ -6,6 +6,8 @@ import com.shrralis.ssdemo1.entity.Issue;
 import java.util.Optional;
 
 public interface IIssueService {
-    Optional<Issue> getById(Integer id);
+
+	Optional<Issue> getById(Integer id);
+
     MapDataDTO saveIssue(MapDataDTO data);
 }
