@@ -24,8 +24,23 @@
 }
 .modal-content {
   margin: 0 auto;
-  width: 30%;
-  min-width: 300px;
+  width: 90%;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+@media (min-width: 40em) {
+  .modal-content {
+    margin: 0 auto;
+    width: 50%;
+  }
+}
+
+@media (min-width: 75em) {
+  .modal-content {
+    margin: 0 auto;
+    width: 25%;
+  }
 }
 
 .close {

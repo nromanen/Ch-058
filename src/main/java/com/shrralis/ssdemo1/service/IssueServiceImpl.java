@@ -9,6 +9,7 @@ import com.shrralis.ssdemo1.repository.IssuesRepository;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,31 +47,20 @@ public class IssueServiceImpl implements IIssueService {
 
 		MapMarker marker = mapMarkersRepository.findById(data.getMarkerId()).orElse(null);
 
-		// test author
-	    User author = new User();
-	    author.setLogin("Login");
-	    author.setEmail("author@gmail.com");
-	    author.setPassword("Password");
-	    author.setName("Name");
-	    author.setSurname("Surname");
-
-	    // test Image
-	    Image image = new Image();
-	    image.setSrc("/path/ta/image");
-	    image.setHash("hashhbshhashhashnashhxshhashhash");
-
 	    Issue issue = new Issue();
         issue.setMapMarker(marker);
-
+	    issue.setTitle(data.getTitle());
+	    issue.setText(data.getText());
 
 	    User user = usersRepository.findById(getCurrent().getId()).orElse(null);
-
         issue.setAuthor(user);
-        //issue.setAuthorId(getCurrent().getId());
-        issue.setTitle(data.getTitle());
-        issue.setText(data.getText());
-        issue.setImage(image);
-        //issue.setImage(data.getImage());
+
+	    Image image = new Image();
+	    String imgPath = DigestUtils.md5Hex(data.getImage());
+	    image.setSrc(imgPath);
+	    image.setHash("hashhbshhashhashnashhxshhashhash");
+	    issue.setImage(image);
+
         issue.setTypeId(data.getTypeId());
         boolean isClosed = data.getTypeId() != 1;
         issue.setClosed(isClosed);

@@ -21,7 +21,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/map", consumes = MediaType.APPLICATION_JSON_VALUE)
 public class MapRestController {
 
 	private final IMapMarkersService markerService;
@@ -44,6 +43,7 @@ public class MapRestController {
 		return new JsonResponse(markerService.getMarker(lat, lng));
 	}
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PostMapping(value = "/saveMarker")
     public JsonResponse saveMarker(@RequestBody MapMarker marker) {
         return new JsonResponse(markerService.saveMarker(marker));

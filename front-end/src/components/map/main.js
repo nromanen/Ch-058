@@ -116,7 +116,7 @@ export default {
            return;
          }
          else {
-           self.$http.post('map/getMarkerByCoords', null, {
+           self.$http.post('getMarkerByCoords', null, {
              params: {
                lat: place.geometry.location.lat(),
                lng: place.geometry.location.lng()
@@ -180,7 +180,6 @@ export default {
       input.style.border = '1px solid transparent';
       input.style.borderRadius = '2px 0 0 2px';
       input.style.height = '29px';
-      input.style.outline = 'none';
       input.style.boxShadow = '0 1px 4px rgba(0, 0, 0, 0.3)';
       input.style.padding = '0 11px 0 13px';
       input.style.fontSize = '15px';
@@ -247,15 +246,15 @@ export default {
       var title = this.form.title;
       var desc = this.form.desc;
       var type = this.form.type;
-       // var image =
+      var image = this.form.image;
       if(window.isPlaced) {
         this.setMarkerType(window.marker, this.form.type);
         this.$http.post('map/saveIssue',{
           markerId: window.id,
           title: title,
           text: desc,
-          typeId: type
-          //image: TODO
+          typeId: type,
+          image: image
         }).then((response) => {console.log(response.body)
         });
       } else {
@@ -270,16 +269,16 @@ export default {
           this.setMarkerType(marker, type);
           this.setListeners(marker);
 
-          this.$http.post('map/saveMarker', {
+          this.$http.post('saveMarker', {
             lat: window.lat,
             lng: window.lng
           }).then((response) => {
-            this.$http.post('map/saveIssue',{
+            this.$http.post('saveIssue',{
               markerId: response.body.data[0].id,
               title: title,
               text: desc,
-              typeId: type
-              //image: TODO
+              typeId: type,
+              image: image
             }).then((response) => {console.log(response.body)
             });
           });
@@ -344,7 +343,7 @@ export default {
     },
 
     getMarkerByCoords(lat, lng) {
-      this.$http.post('map/getMarkerByCoords', null, {
+      this.$http.post('getMarkerByCoords', null, {
         params: {
           lat: lat,
           lng: lng

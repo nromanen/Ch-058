@@ -9,14 +9,13 @@
  */
 
 package com.shrralis.ssdemo1.dto;
-import com.shrralis.ssdemo1.entity.Image;
 
 public class MapDataDTO {
 	private Integer markerId;
 	private String title;
 	private String text;
 	private Integer typeId;
-	private Image image;
+	private String image;
 
 	public Integer getMarkerId() {
 		return markerId;
@@ -50,11 +49,11 @@ public class MapDataDTO {
 		this.typeId = typeId;
 	}
 
-	public Image getImage() {
+	public String getImage() {
 		return image;
 	}
 
-	public void setImage(Image image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 }
