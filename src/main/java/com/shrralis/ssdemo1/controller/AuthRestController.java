@@ -18,8 +18,6 @@ import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationTrustResolver;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -36,25 +34,15 @@ import javax.validation.Valid;
 public class AuthRestController {
 
 	private IAuthService service;
-	private AuthenticationTrustResolver authTrustResolver;
 
 	@Autowired
-	public AuthRestController(IAuthService service,
-	                          AuthenticationTrustResolver authTrustResolver) {
+	public AuthRestController(IAuthService service) {
 		this.service = service;
-		this.authTrustResolver = authTrustResolver;
-	}
-
-	@GetMapping(value = "/login", params = "error")
-	public JsonResponse showErrorOnLogin() {
-//		TODO: finish this
-		return null;
 	}
 
 	@GetMapping({ "/login", "/logout" })
 	public JsonResponse getCurrSession() {
-		return new JsonResponse(service.getCurrentSession(SecurityContextHolder.getContext().getAuthentication(),
-				authTrustResolver));
+		return new JsonResponse(service.getCurrentSession());
 	}
 
 	@PostMapping("/recoverPassword")

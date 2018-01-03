@@ -17,8 +17,6 @@ import com.shrralis.ssdemo1.dto.RegisterUserDTO;
 import com.shrralis.ssdemo1.dto.RegisteredUserDTO;
 import com.shrralis.ssdemo1.dto.UserSessionDTO;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
-import org.springframework.security.authentication.AuthenticationTrustResolver;
-import org.springframework.security.core.Authentication;
 
 import javax.mail.MessagingException;
 
@@ -42,15 +40,9 @@ public interface IAuthService {
 	/**
 	 * Returns current user's session information.
 	 *
-	 * @param auth
-	 * 		that contains current Spring Security Authentication info.
-	 * @param authTrustResolver
-	 * 		that can say that is our
-	 * 		Authentication anonymous or not.
-	 *
 	 * @return DTO with the information.
 	 */
-	UserSessionDTO getCurrentSession(final Authentication auth, AuthenticationTrustResolver authTrustResolver);
+	UserSessionDTO getCurrentSession();
 
 	/**
 	 * Recovers users password with new one via received token.
@@ -63,7 +55,7 @@ public interface IAuthService {
 	 * @see com.shrralis.ssdemo1.dto.PasswordRecoveryDTO
 	 * @see com.shrralis.ssdemo1.dto.RegisteredUserDTO
 	 */
-	RegisteredUserDTO recoverPassword(PasswordRecoveryDTO dto);
+	RegisteredUserDTO recoverPassword(PasswordRecoveryDTO dto) throws AbstractCitizenException;
 
 	/**
 	 * Creates new user account and returns error.

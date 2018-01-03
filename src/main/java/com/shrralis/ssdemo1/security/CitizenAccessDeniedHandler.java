@@ -5,7 +5,9 @@ import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -26,6 +28,13 @@ public class CitizenAccessDeniedHandler implements AccessDeniedHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(CitizenAccessDeniedHandler.class);
 
+	private ObjectMapper mapper;
+
+	@Autowired
+	public CitizenAccessDeniedHandler(ObjectMapper mapper) {
+		this.mapper = mapper;
+	}
+
 	@Override
 	public void handle(
 			HttpServletRequest request,
@@ -34,12 +43,12 @@ public class CitizenAccessDeniedHandler implements AccessDeniedHandler {
 	) throws IOException, ServletException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		if (auth != null) {
+		if (auth instanceof AnonymousAuthenticationToken) {
 			logger.debug("User: " + auth.getName()
 					+ " attempted to access the protected URL: "
 					+ request.getRequestURI());
 		}
-		new ObjectMapper().writeValue(response.getWriter(), new JsonResponse(JsonError.Error.ACCESS_DENIED));
+		mapper.writeValue(response.getWriter(), new JsonResponse(JsonError.Error.ACCESS_DENIED));
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 	}
 }

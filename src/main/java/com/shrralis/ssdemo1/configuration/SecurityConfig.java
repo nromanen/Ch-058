@@ -34,7 +34,8 @@ import java.util.Arrays;
 public class SecurityConfig {
 
 	@Bean
-	public AuthenticationProvider authProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+	public AuthenticationProvider authProvider(UserDetailsService userDetailsService,
+	                                           PasswordEncoder passwordEncoder) {
 		AuthProvider authenticationProvider = new AuthProvider();
 
 		authenticationProvider.setUserDetailsService(userDetailsService);

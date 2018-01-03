@@ -12,6 +12,7 @@
 
 package com.shrralis.ssdemo1.security;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -78,24 +79,36 @@ public class AuthorizedUser extends User {
 	    return sb.toString();
     }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		if (!super.equals(o)) return false;
-		AuthorizedUser that = (AuthorizedUser) o;
-		return Objects.equals(id, that.id) &&
-				Objects.equals(email, that.email) &&
-				type == that.type;
+	public static AuthorizedUser getCurrent() {
+		if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+			return null;
+		}
+		return (AuthorizedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
 	@Override
 	public int hashCode() {
-
 		return Objects.hash(super.hashCode(), id, email, type);
 	}
 
-	public static AuthorizedUser getCurrent() {
-		return (AuthorizedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		if (!super.equals(o)) {
+			return false;
+		}
+
+		AuthorizedUser that = (AuthorizedUser) o;
+
+		return Objects.equals(id, that.id) &&
+				Objects.equals(email, that.email) &&
+				type == that.type;
 	}
 }

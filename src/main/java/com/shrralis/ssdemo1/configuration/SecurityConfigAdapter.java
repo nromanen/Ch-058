@@ -1,6 +1,7 @@
 package com.shrralis.ssdemo1.configuration;
 
 import com.shrralis.ssdemo1.security.CitizenAccessDeniedHandler;
+import com.shrralis.ssdemo1.security.CitizenAuthenticationFailureHandler;
 import com.shrralis.ssdemo1.security.LogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -23,14 +24,17 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 
 	private AuthenticationSuccessHandler authSuccessHandler;
+	private CitizenAuthenticationFailureHandler authFailureHandler;
 	private CitizenAccessDeniedHandler accessDeniedHandler;
 	private LogoutSuccessHandler logoutSuccessHandler;
 
 	@Autowired
 	public SecurityConfigAdapter(AuthenticationSuccessHandler authSuccessHandler,
+	                             CitizenAuthenticationFailureHandler authFailureHandler,
 	                             CitizenAccessDeniedHandler accessDeniedHandler,
 	                             LogoutSuccessHandler logoutSuccessHandler) {
 		this.authSuccessHandler = authSuccessHandler;
+		this.authFailureHandler = authFailureHandler;
 		this.accessDeniedHandler = accessDeniedHandler;
 		this.logoutSuccessHandler = logoutSuccessHandler;
 	}
@@ -47,14 +51,9 @@ public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 				.cors()
 				.and()
 				.authorizeRequests()
-//					next line should allow passing all unauthorized requests
-				.antMatchers("/**").permitAll()
-//					.antMatchers("/", "/auth/login", "/signUp").permitAll()
-//					.antMatchers("/auth/logout").authenticated()
-//					.antMatchers("/admin**/**").access("hasRole('ADMIN')")
-//					.antMatchers("/leader**/**").access("hasRole('LEADER')")
-//					.antMatchers("/user**/**").access("hasRole('LEADER') or hasRole('USER')")
-//					.antMatchers("/askhelp").authenticated()
+				.antMatchers("/auth/logout").authenticated()
+				.antMatchers("/admin**/**").access("hasRole('ADMIN')")
+				.antMatchers("/user**/**").access("hasRole('ADMIN') or hasRole('USER')")
 				.and()
 				.formLogin()
 				.loginPage("/auth/login")
@@ -62,7 +61,7 @@ public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 				.usernameParameter("login")
 				.passwordParameter("password")
 				.successHandler(authSuccessHandler)
-				.failureUrl("/auth/login?error=true")
+				.failureHandler(authFailureHandler)
 				.and()
 				.logout()
 				.logoutUrl("/auth/logout")

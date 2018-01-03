@@ -18,9 +18,7 @@ import com.shrralis.tools.model.JsonResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
@@ -43,15 +41,15 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 	private static final Logger logger = LoggerFactory.getLogger(AuthSuccessHandler.class);
 	private static final String POST_SUCCESS_AUTH_URL = "/auth/login";
 
+	private ObjectMapper mapper;
 	private RedirectStrategy redirectStrategy;
 	private IAuthService authService;
-	private AuthenticationTrustResolver authTrustResolver;
 
 	@Autowired
-	public AuthSuccessHandler(IAuthService authService,
-	                          AuthenticationTrustResolver authTrustResolver) {
+	public AuthSuccessHandler(ObjectMapper mapper,
+	                          IAuthService authService) {
+		this.mapper = mapper;
 		this.authService = authService;
-		this.authTrustResolver = authTrustResolver;
 		redirectStrategy = new DefaultRedirectStrategy();
 	}
 
@@ -76,10 +74,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 	        logger.info("Response has already been committed. Unable to redirect to {}", targetUrl);
 	        return;
         }
-	    new ObjectMapper().writeValue(response.getWriter(), new JsonResponse(
-			    authService.getCurrentSession(SecurityContextHolder.getContext().getAuthentication(),
-					    authTrustResolver)
-	    ));
+	    mapper.writeValue(response.getWriter(), new JsonResponse(authService.getCurrentSession()));
 	    response.setStatus(HttpServletResponse.SC_OK);
     }
 

@@ -9,6 +9,7 @@ import java.util.Objects;
  * @version 1.0 Created 12/20/17 at 1:11 AM
  */
 public class JsonError {
+
 	private int errno = Error.NO_ERROR.getId();
 	private String errmsg = Error.NO_ERROR.getMessage();
 	private String field;
@@ -55,14 +56,15 @@ public class JsonError {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof JsonError) {
-			JsonError error = (JsonError) obj;
-
-			return error.errno == errno
-					&& error.errmsg.equals(errmsg)
-					&& error.field.equals(field);
+		if (!(obj instanceof JsonError)) {
+			return false;
 		}
-		return false;
+
+		JsonError error = (JsonError) obj;
+
+		return error.errno == errno
+				&& error.errmsg.equals(errmsg)
+				&& error.field.equals(field);
 	}
 
 	@Override
@@ -84,7 +86,12 @@ public class JsonError {
 		MISSING_FIELD(6, "Missing field"),
 		BAD_FIELD_FORMAT(7, "Bad field format"),
 		USER_NOT_EXIST(8, "User with current login doesn't exist"),
-		BAD_CREDENTIALS(9, "Password is wrong"),;
+		BAD_CREDENTIALS(9, "Password is wrong"),
+		RECOVERY_TOKEN_EXPIRED(10, "The recovery token is expired"),
+		IMAGE_NOT_EXIST(11, "Image doesn't exist"),
+		MAP_MARKER_NOT_EXIST(12, "Map marker doesn't exist"),
+		RECOVERY_TOKEN_NOT_EXIST(13, "Recovery token doesn't exist"),
+		ILLEGAL_PARAMETER(14, "The retrieved parameter is illegal"),;
 
 		public static final String NO_ERROR_NAME = "NO_ERROR";
 		public static final String UNEXPECTED_NAME = "UNEXPECTED";
@@ -96,6 +103,11 @@ public class JsonError {
 		public static final String BAD_FIELD_FORMAT_NAME = "BAD_FIELD_FORMAT";
 		public static final String USER_NOT_EXIST_NAME = "USER_NOT_EXIST";
 		public static final String BAD_CREDENTIALS_NAME = "BAD_CREDENTIALS";
+		public static final String RECOVERY_TOKEN_EXPIRED_NAME = "RECOVERY_TOKEN_EXPIRED";
+		public static final String IMAGE_NOT_EXIST_NAME = "IMAGE_NOT_EXIST";
+		public static final String MAP_MARKER_NOT_EXIST_NAME = "MAP_MARKER_NOT_EXIST";
+		public static final String RECOVERY_TOKEN_NOT_EXIST_NAME = "RECOVERY_TOKEN_NOT_EXIST";
+		public static final String ILLEGAL_PARAMETER_NAME = "ILLEGAL_PARAMETER";
 
 		private static final ArrayList<Error> lookup = new ArrayList<>();
 
@@ -135,10 +147,9 @@ public class JsonError {
 				case MISSING_FIELD:
 				case BAD_FIELD_FORMAT:
 				case USER_ALREADY_EXISTS:
+				case ILLEGAL_PARAMETER:
 					this.field = field;
 
-					break;
-				default:
 					break;
 			}
 			return this;

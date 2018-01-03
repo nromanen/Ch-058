@@ -12,8 +12,11 @@
 
 package com.shrralis.ssdemo1.exception;
 
-import com.shrralis.ssdemo1.exception.system.Entity;
+import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonError.Error;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
@@ -21,6 +24,7 @@ import com.shrralis.tools.model.JsonError.Error;
  * Created 12/21/17 at 3:47 PM
  */
 public class EntityNotUniqueException extends AbstractCitizenException {
+
 	private final Entity entity;
 	private final String additionalInfo;
 
@@ -45,5 +49,29 @@ public class EntityNotUniqueException extends AbstractCitizenException {
 	@Override
 	public Error getError() {
 		return entity.getError().forField(additionalInfo);
+	}
+
+	public enum Entity {
+		IMAGE,
+		MAP_MARKER,
+		USER;
+
+		private static final Map<Entity, JsonError.Error> entityErrorMap;
+
+		static {
+			entityErrorMap = new ConcurrentHashMap<>();
+
+			entityErrorMap.put(IMAGE, JsonError.Error.IMAGE_ALREADY_EXISTS);
+			entityErrorMap.put(MAP_MARKER, JsonError.Error.MAP_MARKER_ALREADY_EXISTS);
+			entityErrorMap.put(USER, JsonError.Error.USER_ALREADY_EXISTS);
+		}
+
+		public static JsonError.Error getError(Entity entity) {
+			return entityErrorMap.get(entity);
+		}
+
+		public JsonError.Error getError() {
+			return entityErrorMap.get(this);
+		}
 	}
 }

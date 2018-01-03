@@ -19,10 +19,7 @@ import com.shrralis.ssdemo1.dto.UserSessionDTO;
 import com.shrralis.ssdemo1.dto.mapper.RegisteredUserMapper;
 import com.shrralis.ssdemo1.entity.RecoveryToken;
 import com.shrralis.ssdemo1.entity.User;
-import com.shrralis.ssdemo1.exception.AbstractCitizenException;
-import com.shrralis.ssdemo1.exception.EntityNotExistException;
-import com.shrralis.ssdemo1.exception.EntityNotUniqueException;
-import com.shrralis.ssdemo1.exception.system.Entity;
+import com.shrralis.ssdemo1.exception.*;
 import com.shrralis.ssdemo1.mail.PasswordRecoveryEmailMessage;
 import com.shrralis.ssdemo1.mail.interfaces.IMailCitizenService;
 import com.shrralis.ssdemo1.repository.RecoveryTokensRepository;
@@ -32,6 +29,7 @@ import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +52,7 @@ public class AuthServiceImpl implements IAuthService {
 	private PasswordEncoder passwordEncoder;
 	private RegisteredUserMapper userToRegisteredUserDto;
 	private IMailCitizenService mailService;
+	private AuthenticationTrustResolver authTrustResolver;
 
 	@Autowired
 	public AuthServiceImpl(
@@ -61,12 +60,14 @@ public class AuthServiceImpl implements IAuthService {
 			RecoveryTokensRepository tokensRepository,
 			PasswordEncoder passwordEncoder,
 			RegisteredUserMapper userToRegisteredUserDto,
-			IMailCitizenService mailService) {
+			IMailCitizenService mailService,
+			AuthenticationTrustResolver authTrustResolver) {
 		this.repository = repository;
 		this.tokensRepository = tokensRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.userToRegisteredUserDto = userToRegisteredUserDto;
 		this.mailService = mailService;
+		this.authTrustResolver = authTrustResolver;
 	}
 
 	@Override
@@ -75,15 +76,13 @@ public class AuthServiceImpl implements IAuthService {
 		final User user = repository.getByLogin(login);
 
 		if (user == null) {
-			throw new EntityNotExistException(Entity.USER, "login");
+			throw new EntityNotExistException(EntityNotExistException.Entity.USER, "login");
 		}
 
 		final RecoveryToken token = RecoveryToken.Builder.aRecoveryToken()
 				.setUser(user)
 				.setToken(DigestUtils.md5DigestAsHex((login + ip + LocalDateTime.now().toString()).getBytes()))
 				.build();
-
-		System.out.println("TOKEN: " + token);
 
 		tokensRepository.save(token);
 		mailService.send(PasswordRecoveryEmailMessage.Builder.aPasswordRecoveryEmailMessage()
@@ -94,11 +93,12 @@ public class AuthServiceImpl implements IAuthService {
 	}
 
 	@Override
-	public UserSessionDTO getCurrentSession(final Authentication auth,
-	                                        AuthenticationTrustResolver authTrustResolver) {
-		AuthorizedUser authorizedUser = AuthorizedUser.getCurrent();
+	public UserSessionDTO getCurrentSession() {
+		final AuthorizedUser authorizedUser = AuthorizedUser.getCurrent();
 
-		if (isCurrentAuthenticationAnonymous(auth, authTrustResolver) || authorizedUser == null) {
+		if (isCurrentAuthenticationAnonymous(
+				SecurityContextHolder.getContext().getAuthentication(), authTrustResolver)
+				|| authorizedUser == null) {
 			return new UserSessionDTO(false);
 		}
 		return new UserSessionDTO(
@@ -108,18 +108,24 @@ public class AuthServiceImpl implements IAuthService {
 	}
 
 	@Override
-	public RegisteredUserDTO recoverPassword(final PasswordRecoveryDTO dto) {
+	public RegisteredUserDTO recoverPassword(final PasswordRecoveryDTO dto) throws AbstractCitizenException {
 		final RecoveryToken token = tokensRepository.getByToken(dto.getToken());
 		final User user = repository.getByLogin(dto.getLogin());
 
 		if (token == null) {
-			// TODO: throw new EntityNotFoundException(RECOVERY_TOKEN);
-		} else if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
-			// TODO: throw new ExpiredRecoveryTokenException();
-		} else if (user == null) {
-			// TODO: throw new EntityNotFoundException(USER, "login");
-		} else if (!user.getId().equals(token.getUser().getId())) {
-			// TODO: throw new IllegalParameter("login");
+			throw new EntityNotExistException(EntityNotExistException.Entity.RECOVERY_TOKEN);
+		}
+
+		if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
+			throw new ExpiredRecoveryTokenException();
+		}
+
+		if (user == null) {
+			throw new EntityNotExistException(EntityNotExistException.Entity.USER, "login");
+		}
+
+		if (!user.getId().equals(token.getUser().getId())) {
+			throw new IllegalParameterException("login");
 		}
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		repository.save(user);
@@ -129,11 +135,11 @@ public class AuthServiceImpl implements IAuthService {
 	@Override
 	public RegisteredUserDTO signUp(final RegisterUserDTO user) throws AbstractCitizenException {
 		if (repository.getByLogin(user.getLogin()) != null) {
-			throw new EntityNotUniqueException(Entity.USER, "login");
+			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "login");
 		}
 
 		if (repository.getByEmail(user.getEmail()) != null) {
-			throw new EntityNotUniqueException(Entity.USER, "email");
+			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "email");
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
