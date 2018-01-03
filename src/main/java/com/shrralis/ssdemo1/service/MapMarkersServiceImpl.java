@@ -10,20 +10,16 @@
 
 package com.shrralis.ssdemo1.service;
 
-import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IMapMarkersService;
-import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class MapMarkersServiceImpl implements IMapMarkersService {
-
 
     private final MapMarkersRepository repository;
 
@@ -37,11 +33,6 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
         return repository.findAll();
     }
 
-    @Override
-    public MapMarker getMarker(int id) {
-	    return repository.findById(id).orElse(null);
-    }
-
 	@Override
 	public MapMarker getMarker(double lat, double lng) {
 		return repository.getByLatAndLng(lat, lng);
@@ -50,10 +41,5 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 	@Override
     public MapMarker saveMarker(MapMarker marker) {
         return repository.save(marker);
-    }
-
-    @Override
-    public void deleteMarker(int id) {
-        repository.deleteById(id);
     }
 }

@@ -20,8 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 @RestController
 @RequestMapping(value = "/map", consumes = MediaType.APPLICATION_JSON_VALUE)
 public class MapRestController {
@@ -42,7 +40,7 @@ public class MapRestController {
 
 	@PostMapping("/getMarkerByCoords")
 	public JsonResponse getMarkerByCoords(@RequestParam("lat") double lat,
-	                              @RequestParam("lng") double lng) {
+	                                      @RequestParam("lng") double lng) {
 		return new JsonResponse(markerService.getMarker(lat, lng));
 	}
 
@@ -51,8 +49,7 @@ public class MapRestController {
         return new JsonResponse(markerService.saveMarker(marker));
     }
 
-
-	//@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@PostMapping(value = "/saveIssue")
 	public JsonResponse saveData(@RequestBody MapDataDTO data) {
 		return new JsonResponse(issueService.createIssue(data));

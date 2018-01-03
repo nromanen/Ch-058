@@ -8,7 +8,6 @@
   height: 100%;
 }
 .modal {
-  margin: 9% auto;
   display: none;
   position: fixed;
   z-index: 1;
@@ -19,9 +18,14 @@
   overflow: auto;
 }
 
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
 .modal-content {
   margin: 0 auto;
-  width: 25%;
+  width: 30%;
+  min-width: 300px;
 }
 
 .close {
