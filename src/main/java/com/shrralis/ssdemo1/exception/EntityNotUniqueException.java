@@ -56,22 +56,22 @@ public class EntityNotUniqueException extends AbstractCitizenException {
 		MAP_MARKER,
 		USER;
 
-		private static final Map<Entity, JsonError.Error> entityErrorMap;
+		private static final Map<Entity, JsonError.Error> ENTITY_ERROR_MAP;
 
 		static {
-			entityErrorMap = new ConcurrentHashMap<>();
+			ENTITY_ERROR_MAP = new ConcurrentHashMap<>();
 
-			entityErrorMap.put(IMAGE, JsonError.Error.IMAGE_ALREADY_EXISTS);
-			entityErrorMap.put(MAP_MARKER, JsonError.Error.MAP_MARKER_ALREADY_EXISTS);
-			entityErrorMap.put(USER, JsonError.Error.USER_ALREADY_EXISTS);
+			ENTITY_ERROR_MAP.put(IMAGE, JsonError.Error.IMAGE_ALREADY_EXISTS);
+			ENTITY_ERROR_MAP.put(MAP_MARKER, JsonError.Error.MAP_MARKER_ALREADY_EXISTS);
+			ENTITY_ERROR_MAP.put(USER, JsonError.Error.USER_ALREADY_EXISTS);
 		}
 
 		public static JsonError.Error getError(Entity entity) {
-			return entityErrorMap.get(entity);
+			return ENTITY_ERROR_MAP.get(entity);
 		}
 
 		public JsonError.Error getError() {
-			return entityErrorMap.get(this);
+			return ENTITY_ERROR_MAP.get(this);
 		}
 	}
 }
