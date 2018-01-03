@@ -16,22 +16,22 @@ public class IssueVotesServiceImpl implements IIssueVotesService {
     private IssuesVotesRepository issuesVotesRepository;
 
     @Override
-    public Optional<IssueVote> getByVoterIdAndIssueId(Integer voterId, Integer issueId) {
+    public Optional<IssueVote> getByVoterIdAndIssueId(int voterId, int issueId) {
         return issuesVotesRepository.getByVoterIdAndIssueId(voterId, issueId);
     }
 
     @Override
-    public void deleteByVoterIdAndIssueId(Integer voterId, Integer issueID) {
+    public void deleteByVoterIdAndIssueId(int voterId, int issueID) {
         issuesVotesRepository.deleteAllByVoterIdAndIssueId(voterId, issueID);
     }
 
     @Override
-    public void insertIssueVote(Integer issueId, Integer voterId, Boolean vote) {
+    public void insertIssueVote(int issueId, int voterId, boolean vote) {
         issuesVotesRepository.insertLikeOrDislike(issueId, voterId, vote);
     }
 
     @Override
-    public Integer countByVoteAndIssue(Boolean vote, Integer issueId) {
+    public Integer countByVoteAndIssue(boolean vote, int issueId) {
         return issuesVotesRepository.countByVoteAndIssue(vote, issueId);
     }
 }

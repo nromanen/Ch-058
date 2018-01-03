@@ -3,7 +3,7 @@ import {validationMixin} from "vuelidate";
 import {
   LoginValidator, MAX_LOGIN_LENGTH, MAX_NAME_LENGTH, MAX_SURNAME_LENGTH, MIN_LOGIN_LENGTH, MIN_NAME_LENGTH,
   MIN_SURNAME_LENGTH, NameValidator
-} from "../../_validator";
+} from "../../_validator/index";
 import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
 
 export default {
@@ -63,14 +63,14 @@ export default {
       if (field) {
         return {
           'md-invalid': field.$invalid && field.$dirty
-        }
+        };
       }
     },
     register() {
-      this.errors = []
-      this.sending = true
+      this.errors = [];
+      this.sending = true;
 
-      this.$http.post('http://localhost:8080/auth/signUp',
+      this.$http.post('auth/signUp',
         {
           login: this.form.login,
           email: this.form.email,
@@ -79,45 +79,46 @@ export default {
           surname: this.form.surname
         }).then(
         response => {
-          let json = response.body
+          let json = response.body;
 
-          if (json.result === 0) {
-            this.showSnackBar = true
-          } else if (json.error || json.error.errno !== UNEXPECTED) {
-            this.errors.push(getErrorMessage(json.error))
+          if (!json.errors) {
+            this.showSnackBar = true;
+
+            this.$parent.$parent.$parent.$parent.setLogin(json.data[0].login);
+          } else if (json.errors.length) {
+            this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
           } else {
-            this.errors.push('We have unexpected error')
+            this.errors.push(getErrorMessage(UNEXPECTED));
           }
 
-          this.sending = false
+          this.sending = false;
         }, error => {
           if (error.status === 400) {
-            let json = error.body
+            let json = error.body;
 
-            if (json.error) {
-              this.errors.push(getErrorMessage(json.error))
+            if (json.errors) {
+              this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
             }
           }
 
-          if (this.errors.length <= 0) {
-            this.errors.push('HTTP error (' + error.status + ': ' + error.statusText + ')')
+          if (!this.errors.length) {
+            this.errors.push('HTTP error (' + error.status + ': ' + error.statusText + ')');
           }
 
-          this.sending = false
+          this.sending = false;
         }
       )
     },
     snackBarAction() {
-      this.$router.push('login')
+      this.$router.push('login');
 
-      this.showSnackBar = false
-    }
-    ,
+      this.showSnackBar = false;
+    },
     validateCredentials() {
-      this.$v.$touch()
+      this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        this.register()
+        this.register();
       }
     }
   }

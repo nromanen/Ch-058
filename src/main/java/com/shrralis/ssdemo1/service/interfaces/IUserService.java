@@ -11,5 +11,5 @@ import com.shrralis.tools.model.JsonResponse;
 public interface IUserService {
 	JsonResponse getAllUsers();
 
-	JsonResponse getUser(Integer id);
+	JsonResponse getUser(int id);
 }

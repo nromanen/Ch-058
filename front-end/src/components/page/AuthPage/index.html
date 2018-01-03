@@ -1,11 +1,15 @@
 <div id="auth">
   <md-tabs md-sync-route md-dynamic-height>
-    <md-tab id="tab-login" md-label="Sign in">
-      <sign-in-page></sign-in-page>
+    <md-tab id="tab-login" md-label="Sign in" to="/auth/login">
+      <sign-in-form ref="signInForm"></sign-in-form>
     </md-tab>
 
-    <md-tab id="tab-sign-up" md-label="Sign up">
-      <sign-up-page></sign-up-page>
+    <md-tab id="tab-sign-up" md-label="Sign up" to="/auth/signUp">
+      <sign-up-form></sign-up-form>
+    </md-tab>
+
+    <md-tab id="tab-password-recovery" md-label="Recover the password" to="/auth/passwordRecovery">
+      <password-recovery-form></password-recovery-form>
     </md-tab>
   </md-tabs>
 </div>

@@ -14,8 +14,7 @@ package com.shrralis.ssdemo1.security;
 
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,8 +22,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import javax.persistence.NoResultException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,20 +32,22 @@ import java.util.Set;
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-	private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
-	@Resource
 	private UsersRepository usersRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        try {
-	        User user = usersRepository.findByLogin(login);
+	@Autowired
+	public UserDetailsServiceImpl(UsersRepository usersRepository) {
+		this.usersRepository = usersRepository;
+	}
 
-	        return new AuthorizedUser(user, getAuthorities(user));
-        } catch (NoResultException ex) {
-            throw new UsernameNotFoundException("User not found");
-        }
+	@Override
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+		User user = usersRepository.getByLogin(login);
+
+		if (user == null) {
+			throw new UsernameNotFoundException(login);
+		}
+		return new AuthorizedUser(user, getAuthorities(user));
     }
 
     private Set<GrantedAuthority> getAuthorities(User user) {

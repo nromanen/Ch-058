@@ -1,0 +1,20 @@
+package com.shrralis.ssdemo1.repository;
+
+import com.shrralis.ssdemo1.entity.RecoveryToken;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+/**
+ * @author shrralis (https://t.me/Shrralis)
+ * @version 1.0
+ * Created 1/2/18 at 2:49 PM
+ */
+@Repository
+public interface RecoveryTokensRepository extends JpaRepository<RecoveryToken, Integer> {
+
+	Optional<RecoveryToken> findByToken(String token);
+
+	RecoveryToken getByToken(String token);
+}

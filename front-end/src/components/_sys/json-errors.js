@@ -10,12 +10,22 @@ export const BAD_PARAMETER_FORMAT = 7
 // eslint-disable-next-line
 export function getErrorMessage(error) {
   switch (error.errno) {
+    case NO_ERROR:
+      return 'Everything fine'
+    case UNEXPECTED:
+      return 'Unexpected error'
+    case ACCESS_DENIED:
+      return 'Access denied'
+    case IMAGE_ALREADY_EXISTS:
+      return 'Image already exists'
+    case MAP_MARKER_ALREADY_EXISTS:
+      return 'Map marker already exists'
     case USER_ALREADY_EXISTS:
-      return 'User with the same ' + error.errmsg + ' already exists'
+      return 'User with the same ' + error.field + ' already exists'
     case MISSING_PARAMETER:
-      return 'The field ' + error.errmsg + ' is required'
+      return 'The field ' + error.field + ' is required'
     case BAD_PARAMETER_FORMAT:
-      return 'The field' + error.errmsg + 'has bad format'
+      return 'The field ' + error.field + ' has bad format'
     default:
       return error.errmsg
   }

@@ -12,12 +12,16 @@
 
 package com.shrralis.ssdemo1.service.interfaces;
 
+import com.shrralis.ssdemo1.dto.PasswordRecoveryDTO;
 import com.shrralis.ssdemo1.dto.RegisterUserDTO;
-import com.shrralis.ssdemo1.exception.interfaces.AbstractShrralisException;
-import com.shrralis.tools.model.JsonResponse;
+import com.shrralis.ssdemo1.dto.RegisteredUserDTO;
+import com.shrralis.ssdemo1.dto.UserSessionDTO;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
+
+import javax.mail.MessagingException;
 
 /**
- * Interface for managing user accounts
+ * Interface for managing user accounts.
  *
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
@@ -25,15 +29,44 @@ import com.shrralis.tools.model.JsonResponse;
  */
 public interface IAuthService {
 	/**
-	 * Creates new user account and returns error
+	 * Creates new "session" for recovering of the users password.
 	 *
-	 * @param user
-	 * 		{@link com.shrralis.ssdemo1.dto.RegisterUserDTO}
-	 *
-	 * @return {@link com.shrralis.tools.model.JsonResponse}
-	 *
-	 * @throws AbstractShrralisException
-	 * @see com.shrralis.tools.model.JsonError.Error OR {@value com.shrralis.tools.model.JsonResponse#OK}
+	 * @param login of the user
+	 * @return the users login
+	 * @throws AbstractCitizenException
 	 */
-	JsonResponse signUp(RegisterUserDTO user) throws AbstractShrralisException;
+	String generateRecoveryToken(final String login, final String ip) throws AbstractCitizenException, MessagingException;
+
+	/**
+	 * Returns current user's session information.
+	 *
+	 * @return DTO with the information.
+	 */
+	UserSessionDTO getCurrentSession();
+
+	/**
+	 * Recovers users password with new one via received token.
+	 *
+	 * @param dto
+	 * 		that contains necessary data
+	 *
+	 * @return DTO with registered user information
+	 *
+	 * @see com.shrralis.ssdemo1.dto.PasswordRecoveryDTO
+	 * @see com.shrralis.ssdemo1.dto.RegisteredUserDTO
+	 */
+	RegisteredUserDTO recoverPassword(PasswordRecoveryDTO dto) throws AbstractCitizenException;
+
+	/**
+	 * Creates new user account and returns error.
+	 *
+	 * @param user that contains information for registration
+	 * @see RegisterUserDTO
+	 *
+	 * @return DTO with registered user information
+	 * @see com.shrralis.tools.model.JsonResponse
+	 *
+	 * @throws AbstractCitizenException
+	 */
+	RegisteredUserDTO signUp(final RegisterUserDTO user) throws AbstractCitizenException;
 }
