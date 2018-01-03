@@ -12,10 +12,8 @@
 
 package com.shrralis.ssdemo1.configuration;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
-import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -26,7 +24,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import javax.annotation.Resource;
 import java.util.Properties;
 
 @Configuration
@@ -39,13 +36,17 @@ import java.util.Properties;
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
 
-	private static final String EMAIL_HOST = "email.host";
-	private static final String EMAIL_PORT = "email.port";
-	private static final String EMAIL_USERNAME = "email.username";
-	private static final String EMAIL_PASS = "email.password";
+	@Value("${email.host}")
+	private String emailHost;
 
-	@Resource
-	private Environment env;
+	@Value("${email.port}")
+	private int emailPort;
+
+	@Value("${email.username}")
+	private String emailUsername;
+
+	@Value("${email.password}")
+	private String emailPass;
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
@@ -61,21 +62,13 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public ObjectMapper getObjectMapper() {
-		ObjectMapper mapper = new ObjectMapper();
-
-		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		return mapper;
-	}
-
-	@Bean
 	public JavaMailSender getJavaMailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-		mailSender.setHost(env.getRequiredProperty(EMAIL_HOST));
-		mailSender.setPort(Integer.parseInt(env.getRequiredProperty(EMAIL_PORT)));
-		mailSender.setUsername(env.getRequiredProperty(EMAIL_USERNAME));
-		mailSender.setPassword(env.getRequiredProperty(EMAIL_PASS));
+		mailSender.setHost(emailHost);
+		mailSender.setPort(emailPort);
+		mailSender.setUsername(emailUsername);
+		mailSender.setPassword(emailPass);
 
 		Properties props = mailSender.getJavaMailProperties();
 

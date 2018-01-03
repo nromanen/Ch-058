@@ -112,21 +112,7 @@ public class AuthServiceImpl implements IAuthService {
 		final RecoveryToken token = tokensRepository.getByToken(dto.getToken());
 		final User user = repository.getByLogin(dto.getLogin());
 
-		if (token == null) {
-			throw new EntityNotExistException(EntityNotExistException.Entity.RECOVERY_TOKEN);
-		}
-
-		if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
-			throw new ExpiredRecoveryTokenException();
-		}
-
-		if (user == null) {
-			throw new EntityNotExistException(EntityNotExistException.Entity.USER, "login");
-		}
-
-		if (!user.getId().equals(token.getUser().getId())) {
-			throw new IllegalParameterException("login");
-		}
+		checkDataForPasswordRecovering(token, user);
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		repository.save(user);
 		return userToRegisteredUserDto.userToRegisteredUserDto(user);
@@ -157,5 +143,24 @@ public class AuthServiceImpl implements IAuthService {
 	private boolean isCurrentAuthenticationAnonymous(final Authentication auth,
 	                                                 final AuthenticationTrustResolver authTrustResolver) {
 		return authTrustResolver.isAnonymous(auth);
+	}
+
+	private void checkDataForPasswordRecovering(RecoveryToken token, User user)
+			throws AbstractCitizenException {
+		if (token == null) {
+			throw new EntityNotExistException(EntityNotExistException.Entity.RECOVERY_TOKEN);
+		}
+
+		if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
+			throw new ExpiredRecoveryTokenException();
+		}
+
+		if (user == null) {
+			throw new EntityNotExistException(EntityNotExistException.Entity.USER, "login");
+		}
+
+		if (!user.getId().equals(token.getUser().getId())) {
+			throw new IllegalParameterException("login");
+		}
 	}
 }

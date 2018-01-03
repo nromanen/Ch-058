@@ -38,17 +38,15 @@ import java.io.IOException;
 @Component
 public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthSuccessHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AuthSuccessHandler.class);
+	private static final ObjectMapper MAPPER = new ObjectMapper();
 	private static final String POST_SUCCESS_AUTH_URL = "/auth/login";
 
-	private ObjectMapper mapper;
 	private RedirectStrategy redirectStrategy;
 	private IAuthService authService;
 
 	@Autowired
-	public AuthSuccessHandler(ObjectMapper mapper,
-	                          IAuthService authService) {
-		this.mapper = mapper;
+	public AuthSuccessHandler(IAuthService authService) {
 		this.authService = authService;
 		redirectStrategy = new DefaultRedirectStrategy();
 	}
@@ -71,10 +69,10 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 	    String targetUrl = determineTargetUrl();
 
         if (response.isCommitted()) {
-	        logger.info("Response has already been committed. Unable to redirect to {}", targetUrl);
+	        LOGGER.info("Response has already been committed. Unable to redirect to {}", targetUrl);
 	        return;
         }
-	    mapper.writeValue(response.getWriter(), new JsonResponse(authService.getCurrentSession()));
+	    MAPPER.writeValue(response.getWriter(), new JsonResponse(authService.getCurrentSession()));
 	    response.setStatus(HttpServletResponse.SC_OK);
     }
 

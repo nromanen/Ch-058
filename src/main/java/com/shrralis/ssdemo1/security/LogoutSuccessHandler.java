@@ -21,14 +21,13 @@ import java.io.IOException;
 public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler
 		implements org.springframework.security.web.authentication.logout.LogoutSuccessHandler {
 
-	private ObjectMapper mapper;
+	private static final ObjectMapper MAPPER = new ObjectMapper();
+
 	private IAuthService authService;
 
 	@Autowired
 	public LogoutSuccessHandler(
-			ObjectMapper mapper,
 			IAuthService authService) {
-		this.mapper = mapper;
 		this.authService = authService;
 	}
 
@@ -37,7 +36,7 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse,
 			Authentication authentication) throws IOException, ServletException {
-		mapper.writeValue(httpServletResponse.getWriter(), authService.getCurrentSession());
+		MAPPER.writeValue(httpServletResponse.getWriter(), authService.getCurrentSession());
 		httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 	}
 }
