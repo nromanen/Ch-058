@@ -5,6 +5,8 @@ import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
 import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
+import com.shrralis.ssdemo1.exception.IllegalParameterException;
 import com.shrralis.ssdemo1.repository.IssuesRepository;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
@@ -15,10 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static com.shrralis.ssdemo1.security.AuthorizedUser.getCurrent;
-
 
 @Service
 @Transactional
@@ -38,34 +38,29 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
     @Override
-    public Optional<Issue> getById(Integer id) {
-        return issuesRepository.findById(id);
-    }
+    public Issue saveIssue(MapDataDTO dto)  {
 
-    @Override
-    public Issue createIssue(MapDataDTO data) {
+		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
 
-		MapMarker marker = mapMarkersRepository.findById(data.getMarkerId()).orElse(null);
+	    User user = usersRepository.findOne(getCurrent().getId());
 
-	    Issue issue = new Issue();
-        issue.setMapMarker(marker);
-	    issue.setTitle(data.getTitle());
-	    issue.setText(data.getText());
-
-	    User user = usersRepository.findById(getCurrent().getId()).orElse(null);
-        issue.setAuthor(user);
+	    boolean closed = dto.getTypeId() != 1;
 
 	    Image image = new Image();
-	    String imgPath = DigestUtils.md5Hex(data.getImage());
+	    String imgPath = DigestUtils.md5Hex(dto.getImage());
 	    image.setSrc(imgPath);
 	    image.setHash("hashhbshhashhashnashhxshhashhash");
-	    issue.setImage(image);
 
-        issue.setTypeId(data.getTypeId());
-        boolean isClosed = data.getTypeId() != 1;
-        issue.setClosed(isClosed);
-        issue.setCreatedAt(LocalDateTime.now());
-        issue.setUpdatedAt(LocalDateTime.now());
-        return issuesRepository.save(issue);
+	    return issuesRepository.save(Issue.Builder.anIssue()
+		        .setMapMarker(marker)
+		        .setTitle(dto.getTitle())
+		        .setText(dto.getText())
+		        .setAuthor(user)
+		        .setImage(image)
+		        .setTypeId(dto.getTypeId())
+		        .setClosed(closed)
+		        .setCreatedAt(LocalDateTime.now())
+		        .setUpdatedAt(LocalDateTime.now())
+		        .build());
     }
 }

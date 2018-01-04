@@ -22,6 +22,7 @@ import static com.shrralis.ssdemo1.entity.MapMarker.TABLE_NAME;
 @Entity
 @Table(name = TABLE_NAME)
 public class MapMarker implements Identifiable<Integer> {
+
     public static final String TABLE_NAME = "map_markers";
     public static final String ID_COLUMN_NAME = "id";
     public static final String LAT_COLUMN_NAME = "lat";

@@ -12,13 +12,15 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.ssdemo1.service.interfaces.IMapMarkersService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 public class MapRestController {
@@ -37,21 +39,21 @@ public class MapRestController {
         return new JsonResponse(markerService.loadAllMarkers());
     }
 
-	@PostMapping("/getMarkerByCoords")
+	@PostMapping(value = "/getMarkerByCoords")
 	public JsonResponse getMarkerByCoords(@RequestParam("lat") double lat,
 	                                      @RequestParam("lng") double lng) {
 		return new JsonResponse(markerService.getMarker(lat, lng));
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @PostMapping(value = "/saveMarker")
+    @PostMapping(value = "/marker")
     public JsonResponse saveMarker(@RequestBody MapMarker marker) {
         return new JsonResponse(markerService.saveMarker(marker));
     }
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
-	@PostMapping(value = "/saveIssue")
-	public JsonResponse saveData(@RequestBody MapDataDTO data) {
-		return new JsonResponse(issueService.createIssue(data));
+	@PostMapping(value = "/issue")
+	public JsonResponse saveIssue(@Valid @RequestBody MapDataDTO dto) {
+		return new JsonResponse(issueService.saveIssue(dto));
 	}
 }

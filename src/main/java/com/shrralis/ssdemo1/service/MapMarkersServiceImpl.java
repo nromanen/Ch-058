@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+
 public class MapMarkersServiceImpl implements IMapMarkersService {
 
     private final MapMarkersRepository repository;
@@ -35,7 +36,8 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 
 	@Override
 	public MapMarker getMarker(double lat, double lng) {
-		return repository.getByLatAndLng(lat, lng);
+		return repository.getByLatAndLng(lat, lng)
+				.orElseThrow(() ->  new IllegalStateException("Marker not found"));
 	}
 
 	@Override

@@ -25,6 +25,7 @@ import static com.shrralis.ssdemo1.entity.Issue.TABLE_NAME;
 @Entity
 @Table(name = TABLE_NAME)
 public class Issue implements Identifiable<Integer> {
+
     public static final String TABLE_NAME = "issues";
     public static final String ID_COLUMN_NAME = "id";
     public static final String MAP_MARKER_COLUMN_NAME = "map_marker_id";
@@ -51,6 +52,10 @@ public class Issue implements Identifiable<Integer> {
     private boolean closed;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private Issue() {
+
+    }
 
     @Id
     @NotNull
@@ -191,4 +196,71 @@ public class Issue implements Identifiable<Integer> {
             this.name = name;
         }
     }
+
+    public static final class Builder {
+    	private Issue issue;
+
+    	private Builder() {
+    		issue = new Issue();
+	    }
+
+	    public static Builder anIssue() {
+    		return new Builder();
+	    }
+
+	    public Builder setId(Integer id) {
+		    issue.setId(id);
+		    return this;
+	    }
+
+	    public Builder setMapMarker(MapMarker marker) {
+    		issue.setMapMarker(marker);
+    		return this;
+	    }
+
+	    public Builder setAuthor(User author) {
+    		issue.setAuthor(author);
+    		return this;
+	    }
+
+	    public Builder setTitle(String title) {
+    		issue.setTitle(title);
+    		return this;
+	    }
+
+	    public Builder setText(String text) {
+    		issue.setText(text);
+    		return this;
+	    }
+
+	    public Builder setImage(Image image) {
+    		issue.setImage(image);
+    		return this;
+	    }
+
+	    public Builder setTypeId(Integer id) {
+    		issue.setTypeId(id);
+    		return this;
+	    }
+
+	    public Builder setClosed(boolean closed) {
+    		issue.setClosed(closed);
+    		return this;
+	    }
+
+	    public Builder setCreatedAt(LocalDateTime createdAt) {
+    		issue.setCreatedAt(createdAt);
+    		return this;
+	    }
+
+	    public Builder setUpdatedAt(LocalDateTime updatedAt) {
+		    issue.setUpdatedAt(updatedAt);
+		    return this;
+	    }
+
+	    public Issue build() {
+    		return issue;
+	    }
+    }
+
 }

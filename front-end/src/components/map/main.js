@@ -249,7 +249,7 @@ export default {
       var image = this.form.image;
       if(window.isPlaced) {
         this.setMarkerType(window.marker, this.form.type);
-        this.$http.post('map/saveIssue',{
+        this.$http.post('issue',{
           markerId: window.id,
           title: title,
           text: desc,
@@ -269,11 +269,11 @@ export default {
           this.setMarkerType(marker, type);
           this.setListeners(marker);
 
-          this.$http.post('saveMarker', {
+          this.$http.post('marker', {
             lat: window.lat,
             lng: window.lng
           }).then((response) => {
-            this.$http.post('saveIssue',{
+            this.$http.post('issue',{
               markerId: response.body.data[0].id,
               title: title,
               text: desc,
