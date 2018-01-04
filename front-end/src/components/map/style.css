@@ -66,3 +66,11 @@
   max-height: 200px;
   min-height: 200px;
 }
+
+a {
+  cursor: pointer;
+}
+
+#issueDialog {
+  height : 100%;
+}

@@ -54,4 +54,9 @@ public class MapRestController {
 	public JsonResponse saveData(@RequestBody MapDataDTO data) {
 		return new JsonResponse(issueService.createIssue(data));
 	}
+
+	@GetMapping(value = "/issueByMapMarker/{mapMarkerId}")
+	public JsonResponse getIssueByMapMarker(@PathVariable("mapMarkerId") int mapMarkerId) {
+		return new JsonResponse(issueService.getAllIssueByMapMarker(mapMarkerId));
+	}
 }

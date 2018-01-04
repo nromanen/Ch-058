@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static com.shrralis.ssdemo1.security.AuthorizedUser.getCurrent;
@@ -68,4 +69,9 @@ public class IssueServiceImpl implements IIssueService {
         issue.setUpdatedAt(LocalDateTime.now());
         return issuesRepository.save(issue);
     }
+
+	@Override
+	public List<Issue> getAllIssueByMapMarker(int mapMarkerId) {
+		return issuesRepository.findByMapMarker_Id(mapMarkerId);
+	}
 }

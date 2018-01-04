@@ -3,7 +3,7 @@ import {getLocalUser} from "../../router/index";
 
 export default {
   name: 'Map',
-  data: ()=> ({
+  data: () => ({
     form: {
       title: null,
       desc: null,
@@ -16,7 +16,11 @@ export default {
     marker: null,
     isPlaced: false,
     sending: false,
-    showSnackBar: false
+    showSnackBar: false,
+    showDialog : false,
+    showIssueDialog : true,
+    issues : [
+    ]
   }),
   validations: {
     form: {
@@ -39,7 +43,7 @@ export default {
     }
   },
   methods: {
-    getValidationClass (fieldName) {
+    getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
         return {
@@ -49,7 +53,7 @@ export default {
     },
 
     // calling when submit input form
-    validateData () {
+    validateData() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.saveIssue()
@@ -67,33 +71,33 @@ export default {
 
     initMap() {
       var self = this;
-        this.map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 48.29149, lng: 25.94034},
-          zoom: 15,
-          maxZoom: 19,
-          minZoom: 15,
-          disableDefaultUI: true,
-          disableDoubleClickZoom: true,
-          zoomControl: true,
-          mapTypeControl: true,
-        });
-        this.addYourLocationButton();
-        this.addSearchField();
-        this.getUserLocation();
-        this.map.addListener('dblclick', function(e) {
-          if(getLocalUser()) {
-            self.saveCoords(e.latLng.lat(), e.latLng.lng())
-          } else {
-            self.showSnackBar = true
-          }
-        });
+      this.map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 48.29149, lng: 25.94034},
+        zoom: 15,
+        maxZoom: 19,
+        minZoom: 15,
+        disableDefaultUI: true,
+        disableDoubleClickZoom: true,
+        zoomControl: true,
+        mapTypeControl: true,
+      });
+      this.addYourLocationButton();
+      this.addSearchField();
+      this.getUserLocation();
+      this.map.addListener('dblclick', function (e) {
+        if (getLocalUser()) {
+          self.saveCoords(e.latLng.lat(), e.latLng.lng())
+        } else {
+          self.showSnackBar = true
+        }
+      });
     },
 
     search() {
       var self = this;
       var pos;
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -109,42 +113,42 @@ export default {
           radius: 10000,
         });
       autocomplete.bindTo('bounds', self.map);
-      autocomplete.addListener('place_changed', function() {
-         var place = autocomplete.getPlace();
-         if (!place.geometry) {
-           window.alert("No details available for input: '" + place.name + "'");
-           return;
-         }
-         else {
-           self.$http.post('getMarkerByCoords', null, {
-             params: {
-               lat: place.geometry.location.lat(),
-               lng: place.geometry.location.lng()
-             }
-           }).then((response) => {
-             if(response.body.data[0] == null) {
-               self.map.setCenter(place.geometry.location);
-               self.map.setZoom(19);
-               if(getLocalUser()) {
-                 self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng())
-               } else {
-                 self.showSnackBar = true;
-                 document.getElementById('pac-input').value = '';
-               }
-             }
-             else {
-               self.map.setCenter(place.geometry.location);
-               self.map.setZoom(19);
-             }
-           })
-         }
+      autocomplete.addListener('place_changed', function () {
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+          window.alert("No details available for input: '" + place.name + "'");
+          return;
+        }
+        else {
+          self.$http.post('getMarkerByCoords', null, {
+            params: {
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng()
+            }
+          }).then((response) => {
+            if (response.body.data[0] == null) {
+              self.map.setCenter(place.geometry.location);
+              self.map.setZoom(19);
+              if (getLocalUser()) {
+                self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng())
+              } else {
+                self.showSnackBar = true;
+                document.getElementById('pac-input').value = '';
+              }
+            }
+            else {
+              self.map.setCenter(place.geometry.location);
+              self.map.setZoom(19);
+            }
+          })
+        }
       });
     },
 
     getUserLocation() {
       var self = this;
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           var pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -154,8 +158,10 @@ export default {
           var infoWindow = new google.maps.InfoWindow({map: self.map});
           infoWindow.setPosition(pos);
           infoWindow.setContent('<b>Your location</b>');
-          setTimeout(function() { infoWindow.close(); }, 2000)
-        }, function() {
+          setTimeout(function () {
+            infoWindow.close();
+          }, 2000)
+        }, function () {
           self.handleLocationError(true)
         })
       }
@@ -185,7 +191,7 @@ export default {
       input.style.fontSize = '15px';
       input.style.borderColor = '#4d90fe';
       this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-      input.addEventListener('click', function() {
+      input.addEventListener('click', function () {
         self.search()
       });
     },
@@ -217,7 +223,7 @@ export default {
       secondChild.style.backgroundPosition = '0px 0px';
       firstChild.appendChild(secondChild);
 
-      firstChild.addEventListener('click', function() {
+      firstChild.addEventListener('click', function () {
         self.getUserLocation()
       });
       this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
@@ -233,7 +239,7 @@ export default {
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
       modal.style.display = "table";
-      span.onclick = function() {
+      span.onclick = function () {
         modal.style.display = "none";
         document.getElementById('pac-input').value = '';
         document.getElementById("preview").hidden = true;
@@ -247,41 +253,41 @@ export default {
       var desc = this.form.desc;
       var type = this.form.type;
       var image = this.form.image;
-      if(window.isPlaced) {
+      if (window.isPlaced) {
         this.setMarkerType(window.marker, this.form.type);
-        this.$http.post('map/saveIssue',{
+        this.$http.post('saveIssue', {
           markerId: window.id,
           title: title,
           text: desc,
           typeId: type,
           image: image
-        }).then((response) => {console.log(response.body)
+        }).then((response) => {
         });
       } else {
-          var marker = new google.maps.Marker({
-            map: this.map,
-            position: {
-              lat: window.lat,
-              lng: window.lng
-            },
-            animation: google.maps.Animation.DROP
-          });
-          this.setMarkerType(marker, type);
-          this.setListeners(marker);
-
-          this.$http.post('saveMarker', {
+        var marker = new google.maps.Marker({
+          map: this.map,
+          position: {
             lat: window.lat,
             lng: window.lng
+          },
+          animation: google.maps.Animation.DROP
+        });
+        this.setMarkerType(marker, type);
+        this.setListeners(marker);
+
+        this.$http.post('saveMarker', {
+          lat: window.lat,
+          lng: window.lng
+        }).then((response) => {
+          this.$http.post('saveIssue', {
+            markerId: response.body.data[0].id,
+            title: title,
+            text: desc,
+            typeId: type,
+            image: image
           }).then((response) => {
-            this.$http.post('saveIssue',{
-              markerId: response.body.data[0].id,
-              title: title,
-              text: desc,
-              typeId: type,
-              image: image
-            }).then((response) => {console.log(response.body)
-            });
           });
+        });
       }
 
       document.getElementById('myModal').style.display = "none";
@@ -294,14 +300,18 @@ export default {
 
     setMarkerType(marker, type) {
       var url;
-      switch(type) {
-        case '1': url = '/src/assets/caution.png';
+      switch (type) {
+        case '1':
+          url = '/src/assets/caution.png';
           break;
-        case '2': url = '/src/assets/info.png';
+        case '2':
+          url = '/src/assets/info.png';
           break;
-        case '3': url ='/src/assets/feedback.png';
+        case '3':
+          url = '/src/assets/feedback.png';
           break;
-        default: url = ''
+        default:
+          url = ''
       }
       var icon = {
         url: url,
@@ -311,34 +321,58 @@ export default {
       marker.setIcon(icon);
     },
 
+    onCancelIssuesDialog: function () {
+      this.issues = []
+    },
+
     setListeners(marker) {
       var self = this;
       var timer = 0;
       var delay = 300;
       var prevent = false;
 
-      marker.addListener('click', function() {
-        timer = setTimeout(function() {
+      marker.addListener('click', function () {
+        timer = setTimeout(function () {
           if (!prevent) {
-
+            self.$http.post('getMarkerByCoords', null, {
+              params: {
+                lat: marker.getPosition().lat(),
+                lng: marker.getPosition().lng()
+              }
+            }).then((response) => {
+              var mapMarkerId = response.body.data[0].id;
+              window.isPlaced = true;
+              self.$http.get("issueByMapMarker/" + mapMarkerId).then(response => {
+                console.log(response.body);
+                var i;
+                for (i = 0; i < response.body.data.length; i++) {
+                  self.issues.push({
+                    id : response.body.data[i].id,
+                    title: response.body.data[i].title,
+                    description: response.body.data[i].text
+                  });
+                }
+                self.showDialog = true;
+              })
+            });
           }
           prevent = false;
         }, delay);
 
       });
-      marker.addListener('dblclick', function() {
-          clearTimeout(timer);
-          prevent = true;
+      marker.addListener('dblclick', function () {
+        clearTimeout(timer);
+        prevent = true;
 
-          self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
-          window.marker = marker;
-          var modal = document.getElementById('myModal');
-          var span = document.getElementsByClassName("close")[0];
-          modal.style.display = "table";
+        self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
+        window.marker = marker;
+        var modal = document.getElementById('myModal');
+        var span = document.getElementsByClassName("close")[0];
+        modal.style.display = "table";
 
-          span.onclick = function() {
-            modal.style.display = "none";
-          };
+        span.onclick = function () {
+          modal.style.display = "none";
+        };
       });
     },
 
@@ -406,16 +440,16 @@ export default {
         }
         );
     },*/
-        /*function drop() {
-      for (var i =0; i < markerArray.length; i++) {
-        setTimeout(function() {
-          addMarkerMethod();
-        }, i * 200);
-      }
-    }*/
+    /*function drop() {
+  for (var i =0; i < markerArray.length; i++) {
+	setTimeout(function() {
+	  addMarkerMethod();
+	}, i * 200);
+  }
+}*/
   },
 
   mounted: function () {
-      this.initMap();
+    this.initMap();
   }
 }

@@ -16,18 +16,22 @@
 
               <md-field :class="getValidationClass('title')">
                 <label for="title">Title</label>
-                <md-input name="title" id="title" :disabled="sending"  v-model.trim="form.title"/>
+                <md-input name="title" id="title" :disabled="sending" v-model.trim="form.title"/>
                 <span class="md-error" v-if="!$v.form.title.required">Title is required</span>
-                <span class="md-error" v-else-if="!$v.form.title.minLength">Title must be at least 4 characters length</span>
-                <span class="md-error" v-else-if="!$v.form.title.maxLength">Title can't be longer than 32 characters</span>
+                <span class="md-error"
+                      v-else-if="!$v.form.title.minLength">Title must be at least 4 characters length</span>
+                <span class="md-error"
+                      v-else-if="!$v.form.title.maxLength">Title can't be longer than 32 characters</span>
               </md-field>
 
               <md-field :class="getValidationClass('desc')">
                 <label>Description</label>
                 <md-textarea id="desc" v-model.trim="form.desc"></md-textarea>
                 <span class="md-error" v-if="!$v.form.desc.required">Description is required</span>
-                <span class="md-error" v-if="!$v.form.desc.minLength">Description must be at least 8 characters length</span>
-                <span class="md-error" v-if="!$v.form.desc.maxLength">Description can't be longer than 2048 characters</span>
+                <span class="md-error"
+                      v-if="!$v.form.desc.minLength">Description must be at least 8 characters length</span>
+                <span class="md-error"
+                      v-if="!$v.form.desc.maxLength">Description can't be longer than 2048 characters</span>
               </md-field>
 
               <md-field :class="getValidationClass('type')">
@@ -46,7 +50,7 @@
                 <span class="md-error" v-if="!$v.form.image.required">Please, attach an image</span>
               </md-field>
 
-              <img src = "" id="preview" hidden>
+              <img src="" id="preview" hidden>
 
             </md-card-content>
 
@@ -65,6 +69,24 @@
     <md-button class="md-primary" @click="snackBarAction()">Login</md-button>
   </md-snackbar>
 
-<div id="map"></div>
+  <div id="issuesDialog">
+    <md-dialog :md-active.sync="showDialog" @md-closed="onCancelIssuesDialog" :md-fullscreen="false">
+      <md-dialog-title>
+        All issues by marker:
+      </md-dialog-title>
+      <br>
+      <md-dialog-content>
+        <div v-for="issue in issues" :key="issue.id">
+          <a>
+            <input type="hidden" v-model="issue.id">
+            <h2>{{ issue.title }}</h2>
+          </a>
+          <p>{{issue.description}}</p>
+          <hr align="center" width="100%" size="2" color="grey">
+        </div>
+      </md-dialog-content>
+    </md-dialog>
+  </div>
+
 </div>
 
