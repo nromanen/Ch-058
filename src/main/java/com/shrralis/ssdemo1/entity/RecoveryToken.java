@@ -41,8 +41,8 @@ public class RecoveryToken implements Identifiable<Integer> {
 	private String token;
 
 	@NotNull
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = USER_COLUMN_NAME)
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@JoinColumn(name = USER_COLUMN_NAME, nullable = false)
 	private User user;
 
 	@NotNull

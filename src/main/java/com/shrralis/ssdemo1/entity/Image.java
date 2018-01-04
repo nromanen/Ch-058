@@ -15,6 +15,7 @@ package com.shrralis.ssdemo1.entity;
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,27 +34,37 @@ public class Image implements Identifiable<Integer> {
     public static final int MAX_HASH_LENGTH = 32;
     public static final int MIN_HASH_LENGTH = MAX_HASH_LENGTH;
 
-    private Integer id;
-    private Type type = Type.ISSUE;
-    private String src;
-    private String hash;
-
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "images_seq_gen")
     @SequenceGenerator(name = "images_seq_gen", sequenceName = "images_id_seq")
     @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
-    public Integer getId() {
-        return id;
-    }
+    private Integer id;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(name = TYPE_COLUMN_NAME, nullable = false)
+	private Type type = Type.ISSUE;
+
+	@NotBlank
+	@Size(min = MIN_SRC_LENGTH, max = MAX_SRC_LENGTH)
+	@Column(name = SRC_COLUMN_NAME, nullable = false, length = MAX_SRC_LENGTH)
+	private String src;
+
+	@NotBlank
+	@Size(min = MIN_HASH_LENGTH, max = MAX_HASH_LENGTH)
+	@Column(name = HASH_COLUMN_NAME, nullable = false, length = MAX_HASH_LENGTH)
+	private String hash;
+
+	@Override
+	public Integer getId() {
+		return id;
+	}
 
     public void setId(Integer id) {
         this.id = id;
     }
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = TYPE_COLUMN_NAME, nullable = false)
     public Image.Type getType() {
         return type;
     }
@@ -62,9 +73,6 @@ public class Image implements Identifiable<Integer> {
         this.type = type;
     }
 
-    @NotNull
-    @Size(min = MIN_SRC_LENGTH, max = MAX_SRC_LENGTH)
-    @Column(name = SRC_COLUMN_NAME, nullable = false, length = MAX_SRC_LENGTH)
     public String getSrc() {
         return src;
     }
@@ -73,9 +81,6 @@ public class Image implements Identifiable<Integer> {
         this.src = src;
     }
 
-    @NotNull
-    @Size(min = MIN_HASH_LENGTH, max = MAX_HASH_LENGTH)
-    @Column(name = HASH_COLUMN_NAME, nullable = false, length = MAX_HASH_LENGTH)
     public String getHash() {
         return hash;
     }

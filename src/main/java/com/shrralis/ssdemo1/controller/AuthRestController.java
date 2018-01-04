@@ -40,11 +40,6 @@ public class AuthRestController {
 		this.service = service;
 	}
 
-	@GetMapping({ "/login", "/logout" })
-	public JsonResponse getCurrSession() {
-		return new JsonResponse(service.getCurrentSession());
-	}
-
 	@PostMapping("/recoverPassword")
 	public JsonResponse recoverPassword(@RequestBody @Valid PasswordRecoveryDTO dto) throws AbstractCitizenException {
 		return new JsonResponse(service.recoverPassword(dto));

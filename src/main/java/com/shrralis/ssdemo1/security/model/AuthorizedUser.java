@@ -10,7 +10,7 @@
  * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
  */
 
-package com.shrralis.ssdemo1.security;
+package com.shrralis.ssdemo1.security.model;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,9 +27,10 @@ import java.util.Objects;
  */
 public class AuthorizedUser extends User {
 
-    private Integer id;
-    private String email;
-    private com.shrralis.ssdemo1.entity.User.Type type;
+	private Integer id;
+	private String email;
+	private com.shrralis.ssdemo1.entity.User.Type type;
+	private transient int failedAuthCount;
 
 	public AuthorizedUser(
 			com.shrralis.ssdemo1.entity.User user,
@@ -39,56 +40,49 @@ public class AuthorizedUser extends User {
 		id = user.getId();
 		email = user.getEmail();
 		type = user.getType();
+		failedAuthCount = user.getFailedAuthCount();
 	}
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public com.shrralis.ssdemo1.entity.User.Type getType() {
-        return type;
-    }
-
-    public AuthorizedUser setType(com.shrralis.ssdemo1.entity.User.Type type) {
-        this.type = type;
-
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("Authorized user: { id: ").append(id).append(", ")
-                .append("login: ").append(getUsername()).append(", ")
-                .append("email: ").append(email).append(", ")
-		        .append("type: ").append(type).append(" }, parent: ")
-		        .append(super.toString());
-	    return sb.toString();
-    }
-
 	public static AuthorizedUser getCurrent() {
-		if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+		if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken
+				|| SecurityContextHolder.getContext().getAuthentication() == null) {
 			return null;
 		}
 		return (AuthorizedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), id, email, type);
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public com.shrralis.ssdemo1.entity.User.Type getType() {
+		return type;
+	}
+
+	public AuthorizedUser setType(com.shrralis.ssdemo1.entity.User.Type type) {
+		this.type = type;
+
+		return this;
+	}
+
+	public int getFailedAuthCount() {
+		return failedAuthCount;
+	}
+
+	public void setFailedAuthCount(int failedAuthCount) {
+		this.failedAuthCount = failedAuthCount;
 	}
 
 	@Override
@@ -110,5 +104,20 @@ public class AuthorizedUser extends User {
 		return Objects.equals(id, that.id) &&
 				Objects.equals(email, that.email) &&
 				type == that.type;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), id, email, type);
+	}
+
+	@Override
+	public String toString() {
+		return "AuthorizedUser{" +
+				"id=" + id +
+				", email='" + email + '\'' +
+				", type=" + type +
+				", failedAuthCount=" + failedAuthCount +
+				'}';
 	}
 }

@@ -12,9 +12,12 @@
 
 package com.shrralis.ssdemo1.configuration;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -82,5 +85,13 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public MappingJackson2HttpMessageConverter jacksonConverter() {
+		final ObjectMapper mapper = new ObjectMapper();
+
+		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		return new MappingJackson2HttpMessageConverter(mapper);
 	}
 }

@@ -15,7 +15,7 @@
             Login
           </md-button>
 
-          <md-menu md-size="auto" md-align-trigger v-if="userEmail">
+          <md-menu md-size="auto" md-align-trigger v-else>
             <md-button md-menu-trigger>{{userEmail}}</md-button>
 
             <md-menu-content>
@@ -55,13 +55,13 @@
     </md-app-drawer>-->
 
     <md-app-content>
-      <!--<md-empty-state
-        md-rounded
-        md-icon="access_time"
-        md-label="Here will be a map soon"
-        md-description="The map with great markers special by Yura">
-      </md-empty-state>-->
       <map-page></map-page>
+
+      <md-snackbar md-position="center" :md-duration="Infinity" :md-active.sync="snackBarText" md-persistent>
+        <span>{snackBarText}</span>
+
+        <md-button class="md-primary" @click="hideSnackBar()">OK</md-button>
+      </md-snackbar>
     </md-app-content>
   </md-app>
 </div>

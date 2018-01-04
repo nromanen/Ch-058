@@ -12,10 +12,14 @@
 
 package com.shrralis.ssdemo1.controller.system;
 
+import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.BadFieldFormatException;
 import com.shrralis.ssdemo1.exception.EntityNotUniqueException;
 import com.shrralis.ssdemo1.exception.ExpiredRecoveryTokenException;
 import com.shrralis.ssdemo1.exception.IllegalParameterException;
+import com.shrralis.ssdemo1.security.exception.CitizenBadCredentialsException;
+import com.shrralis.ssdemo1.security.exception.EmailNotFoundException;
+import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensException;
 import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonResponse;
 import org.slf4j.Logger;
@@ -46,6 +50,13 @@ public class ExceptionHandlerControllerAdvice {
 			new JsonError(JsonError.Error.valueOf(fieldError.getDefaultMessage()).forField(fieldError.getField()));
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value = TooManyNonExpiredRecoveryTokensException.class)
+	public JsonResponse tooManyNonExpiredRecoveryTokensException(TooManyNonExpiredRecoveryTokensException e) {
+		logger.error("TooManyNonExpiredRecoveryTokensException: {}", e);
+		return new JsonResponse(JsonError.Error.TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS);
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = IllegalParameterException.class)
 	public JsonResponse illegalParameterException(IllegalParameterException e) {
 		logger.error("IllegalParameterException: {}", e);
@@ -67,10 +78,25 @@ public class ExceptionHandlerControllerAdvice {
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value = CitizenBadCredentialsException.class)
+	public JsonResponse citizenBadCredentialsException(CitizenBadCredentialsException e) {
+		logger.error("CitizenBadCredentialsException: {}", e);
+		return new JsonResponse(JsonError.Error.BAD_CREDENTIALS
+				.forField(e.getFailedAttempts() + "/" + User.MAX_FAILED_AUTH_VALUE));
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value = EmailNotFoundException.class)
+	public JsonResponse emailNotFoundException(EmailNotFoundException e) {
+		logger.error("EmailNotFoundException: {}", e);
+		return new JsonResponse(JsonError.Error.USER_NOT_EXIST.forField("email"));
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = UsernameNotFoundException.class)
 	public JsonResponse usernameNotFoundException(UsernameNotFoundException e) {
 		logger.error("UsernameNotFoundException: {}", e);
-		return new JsonResponse(JsonError.Error.USER_NOT_EXIST);
+		return new JsonResponse(JsonError.Error.USER_NOT_EXIST.forField("login"));
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
