@@ -36,8 +36,7 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 
 	@Override
 	public MapMarker getMarker(double lat, double lng) {
-		return repository.getByLatAndLng(lat, lng)
-				.orElseThrow(() ->  new IllegalStateException("Marker not found"));
+		return repository.getByLatAndLng(lat, lng);
 	}
 
 	@Override

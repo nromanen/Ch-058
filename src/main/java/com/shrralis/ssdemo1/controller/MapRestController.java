@@ -39,20 +39,20 @@ public class MapRestController {
         return new JsonResponse(markerService.loadAllMarkers());
     }
 
-	@PostMapping(value = "/getMarkerByCoords")
-	public JsonResponse getMarkerByCoords(@RequestParam("lat") double lat,
-	                                      @RequestParam("lng") double lng) {
+	@GetMapping("/marker/{lat}/{lng}/")
+	public JsonResponse getMarkerByCoords(@PathVariable("lat") double lat,
+	                                      @PathVariable("lng") double lng) {
 		return new JsonResponse(markerService.getMarker(lat, lng));
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @PostMapping(value = "/marker")
+    @PostMapping("/marker")
     public JsonResponse saveMarker(@RequestBody MapMarker marker) {
         return new JsonResponse(markerService.saveMarker(marker));
     }
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
-	@PostMapping(value = "/issue")
+	@PostMapping("/issue")
 	public JsonResponse saveIssue(@Valid @RequestBody MapDataDTO dto) {
 		return new JsonResponse(issueService.saveIssue(dto));
 	}

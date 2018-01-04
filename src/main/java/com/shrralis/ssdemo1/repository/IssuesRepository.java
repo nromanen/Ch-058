@@ -21,5 +21,6 @@ import java.util.Optional;
 
 @Repository
 public interface IssuesRepository extends JpaRepository<Issue, Integer> {
+
     Optional<Issue> findById(Integer id);
 }

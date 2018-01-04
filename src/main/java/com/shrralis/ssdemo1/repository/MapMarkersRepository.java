@@ -16,11 +16,8 @@ import com.shrralis.ssdemo1.entity.MapMarker;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Map;
-import java.util.Optional;
-
 @Repository
 public interface MapMarkersRepository extends JpaRepository<MapMarker, Integer> {
 
-	Optional<MapMarker> getByLatAndLng(double lat, double lng);
+	MapMarker getByLatAndLng(double lat, double lng);
 }

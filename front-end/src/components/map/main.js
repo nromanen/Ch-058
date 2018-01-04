@@ -116,12 +116,8 @@ export default {
            return;
          }
          else {
-           self.$http.post('getMarkerByCoords', null, {
-             params: {
-               lat: place.geometry.location.lat(),
-               lng: place.geometry.location.lng()
-             }
-           }).then((response) => {
+           self.$http.get('marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
+             .then((response) => {
              if(response.body.data[0] == null) {
                self.map.setCenter(place.geometry.location);
                self.map.setZoom(19);
@@ -343,15 +339,11 @@ export default {
     },
 
     getMarkerByCoords(lat, lng) {
-      this.$http.post('getMarkerByCoords', null, {
-        params: {
-          lat: lat,
-          lng: lng
-        }
-      }).then((response) => {
+      this.$http.get('marker/' + lat + "/" + lng + "/").then((response) => {
         window.id = response.body.data[0].id;
-        window.isPlaced = true;
-      })
+        console.log(response.body);
+      });
+      window.isPlaced = true;
     },
 
     previewImage() {
