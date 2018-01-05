@@ -1,5 +1,7 @@
 package com.shrralis.ssdemo1.security.exception;
 
+import com.shrralis.ssdemo1.security.exception.interfaces.ICitizenAuthenticationException;
+import com.shrralis.tools.model.JsonError;
 import org.springframework.security.core.AuthenticationException;
 
 /**
@@ -7,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
  * @version 1.0
  * Created 1/4/18 at 3:36 PM
  */
-public class EmailNotFoundException extends AuthenticationException {
+public class EmailNotFoundException extends AuthenticationException implements ICitizenAuthenticationException {
 
 	/**
 	 * Constructs a <code>EmailNotFoundException</code> with the specified message.
@@ -30,5 +32,10 @@ public class EmailNotFoundException extends AuthenticationException {
 	 */
 	public EmailNotFoundException(String msg, Throwable t) {
 		super(msg, t);
+	}
+
+	@Override
+	public JsonError.Error getError() {
+		return JsonError.Error.USER_NOT_EXIST.forField("email");
 	}
 }
