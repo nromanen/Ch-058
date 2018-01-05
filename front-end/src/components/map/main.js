@@ -16,7 +16,7 @@ export default {
     marker: null,
     isPlaced: false,
     sending: false,
-    showSnackBar: false
+    showSnackBar: false,
   }),
   validations: {
     form: {
@@ -52,7 +52,13 @@ export default {
     validateData () {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.saveIssue()
+        var fileSize = document.getElementById("uploadImage").files[0].size;
+        if(fileSize > 1024 * 1024 * 5) // 5 MB
+        {
+          window.alert('Image size cannot be bigger then 5 MB');
+        } else {
+          this.saveIssue();
+        }
       }
     },
 
@@ -301,8 +307,9 @@ export default {
       }
       var icon = {
         url: url,
-        scaledSize: new google.maps.Size(260, 260),
-        anchor: new google.maps.Point(130, 150)
+        scaledSize: new google.maps.Size(200, 200),
+        anchor: new google.maps.Point(100, 120)
+
       };
       marker.setIcon(icon);
     },
