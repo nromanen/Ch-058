@@ -1,0 +1,63 @@
+<div id="root">
+
+  <div id="map"></div>
+
+  <div id="myModal" class="modal">
+
+    <div class="modal-content">
+      <form id="myForm" novalidate class="md-layout-row md-gutter" @submit.prevent="validateData">
+        <md-card class="md-flex-50 md-flex-small-100">
+
+          <span class="close" @click="reset">&times;</span>
+
+          <md-card-header>
+            <div class="md-title">Create new issue</div>
+          </md-card-header>
+
+          <md-card-content>
+
+            <md-field :class="getValidationClass('title')">
+              <label for="title">Title</label>
+              <md-input name="title" id="title" :disabled="sending"  v-model="form.title"/>
+              <span class="md-error" v-if="!$v.form.title.required">Title is required</span>
+              <span class="md-error" v-else-if="!$v.form.title.minLength">Title is too short</span>
+            </md-field>
+
+
+
+            <md-field :class="getValidationClass('desc')">
+                <label>Description</label>
+                <md-textarea id="desc" v-model="form.desc"></md-textarea>
+                <span class="md-error" v-if="!$v.form.desc.minLength">Description is too short</span>
+            </md-field>
+
+
+            <md-field :class="getValidationClass('type')">
+                <label for="type">Type</label>
+                  <md-select id="type" name="type" v-model="form.type">
+                    <md-option value="Problem">Problem</md-option>
+                    <md-option value="Info">Info</md-option>
+                    <md-option value="Feedback">Feedback</md-option>
+                  </md-select>
+                <span class="md-error" v-if="!$v.form.type.required">Please, choose the type</span>
+            </md-field>
+
+
+            <md-field>
+                <label>Add an image</label>
+                <md-file accept="image/*" />
+            </md-field>
+
+          </md-card-content>
+
+          <md-card-actions>
+            <md-button type="submit" class="md-raised md-primary" :disabled="sending" id="save">Create</md-button>
+          </md-card-actions>
+
+          </md-card>
+      </form>
+    </div>
+
+  </div>
+
+</div>

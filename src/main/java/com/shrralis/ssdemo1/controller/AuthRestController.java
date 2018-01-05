@@ -12,22 +12,17 @@
 
 package com.shrralis.ssdemo1.controller;
 
+import com.shrralis.ssdemo1.dto.PasswordRecoveryDTO;
 import com.shrralis.ssdemo1.dto.RegisterUserDTO;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationTrustResolver;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
@@ -37,45 +32,32 @@ import java.util.Set;
 @RestController
 @RequestMapping("/auth")
 public class AuthRestController {
-    @Autowired
-    IAuthService service;
-    @Autowired
-    private AuthenticationTrustResolver authenticationTrustResolver;
 
-    /*@RequestMapping("/login")
-    ResponseEntity<Boolean> isCurrentUserLoggedIn() {
-        return new ResponseEntity<>(Boolean.FALSE, OK);
-    }*/
+	private IAuthService service;
 
-    @RequestMapping(
-            value = "signUp",
-            consumes = "application/json",
-            produces = "application/json",
-            method = RequestMethod.POST)
-    public JsonResponse signUp(@RequestBody RegisterUserDTO user) {
-        return service.signUp(user);
-    }
+	@Autowired
+	public AuthRestController(IAuthService service) {
+		this.service = service;
+	}
 
-    private boolean isCurrentAuthenticationAnonymous() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	@PostMapping("/requestRecoveryToken")
+	public JsonResponse generateRecoveryToken(@RequestParam(name = "login") String login, HttpServletRequest request)
+			throws AbstractCitizenException, MessagingException {
+		return new JsonResponse(service.generateRecoveryToken(login, request.getRemoteAddr()));
+	}
 
-        return authenticationTrustResolver.isAnonymous(authentication);
-    }
+	@GetMapping("/getCurrentSession")
+	public JsonResponse getCurrentSession() {
+		return new JsonResponse(service.getCurrentSession());
+	}
 
-    private String getRedirectPath() {
-        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Set<String> authorities = new HashSet<>();
+	@PostMapping("/recoverPassword")
+	public JsonResponse recoverPassword(@RequestBody @Valid PasswordRecoveryDTO dto) throws AbstractCitizenException {
+		return new JsonResponse(service.recoverPassword(dto));
+	}
 
-        for (GrantedAuthority authority : principal.getAuthorities()) {
-            authorities.add(authority.getAuthority());
-        }
-
-        if (authorities.contains("ROLE_ADMIN")) {
-            return "redirect:/admin";
-        } else if (authorities.contains("ROLE_LEADER")) {
-            return "redirect:/leader";
-        } else {
-            return "redirect:/user/init";
-        }
+	@PostMapping("/signUp")
+	public JsonResponse signUp(@RequestBody @Valid RegisterUserDTO user) throws AbstractCitizenException {
+		return new JsonResponse(service.signUp(user));
     }
 }

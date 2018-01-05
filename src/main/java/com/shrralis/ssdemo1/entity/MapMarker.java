@@ -22,20 +22,27 @@ import static com.shrralis.ssdemo1.entity.MapMarker.TABLE_NAME;
 @Entity
 @Table(name = TABLE_NAME)
 public class MapMarker implements Identifiable<Integer> {
+
     public static final String TABLE_NAME = "map_markers";
     public static final String ID_COLUMN_NAME = "id";
     public static final String LAT_COLUMN_NAME = "lat";
     public static final String LNG_COLUMN_NAME = "lng";
 
-    private Integer id;
-    private Double lat;
-    private Double lng;
+	@Id
+	@NotNull
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "map_markers_seq_gen")
+	@SequenceGenerator(name = "map_markers_seq_gen", sequenceName = "map_markers_id_seq", allocationSize = 1)
+	@Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
+	private Integer id;
 
-    @Id
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "map_markers_seq_gen")
-    @SequenceGenerator(name = "map_markers_seq_gen", sequenceName = "map_markers_id_seq")
-    @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
+	@NotNull
+	@Column(name = LAT_COLUMN_NAME, nullable = false)
+	private Double lat;
+
+	@NotNull
+	@Column(name = LNG_COLUMN_NAME, nullable = false)
+	private Double lng;
+
     public Integer getId() {
         return id;
     }
@@ -44,8 +51,6 @@ public class MapMarker implements Identifiable<Integer> {
         this.id = id;
     }
 
-    @NotNull
-    @Column(name = LAT_COLUMN_NAME, nullable = false)
     public Double getLat() {
         return lat;
     }
@@ -54,8 +59,6 @@ public class MapMarker implements Identifiable<Integer> {
         this.lat = lat;
     }
 
-    @NotNull
-    @Column(name = LNG_COLUMN_NAME, nullable = false)
     public Double getLng() {
         return lng;
     }

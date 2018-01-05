@@ -12,20 +12,62 @@
 
 package com.shrralis.ssdemo1.dto;
 
+import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.tools.model.JsonError;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+
 /**
+ * A DTO that is received and contains information
+ * that is necessary for creating new account
+ *
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
  * Created 12/21/17 at 5:38 PM
  */
-public class RegisterUserDTO {
-    private String login;
-    private String email;
-    private String password;
-    private String name;
-    private String surname;
+public class RegisterUserDTO implements Serializable {
+
+	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
+	@Pattern(regexp = User.LOGIN_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	@Size(
+			min = User.MIN_LOGIN_LENGTH, max = User.MAX_LOGIN_LENGTH,
+			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	private String login;
+
+	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
+	@Email(message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	@Size(
+			min = User.MIN_EMAIL_LENGTH, max = User.MAX_EMAIL_LENGTH,
+			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	private String email;
+
+	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
+	@Size(
+			min = User.MIN_PASSWORD_LENGTH, max = User.MAX_PASSWORD_LENGTH,
+			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	private String password;
+
+	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
+	@Pattern(regexp = User.NAME_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	@Size(
+			min = User.MIN_NAME_LENGTH, max = User.MAX_NAME_LENGTH,
+			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	private String name;
+
+	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
+	@Pattern(regexp = User.NAME_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	@Size(
+			min = User.MIN_SURNAME_LENGTH, max = User.MAX_SURNAME_LENGTH,
+			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	private String surname;
 
     public String getLogin() {
-        return login;
+	    return StringUtils.trim(login);
     }
 
     public void setLogin(String login) {
@@ -33,7 +75,7 @@ public class RegisterUserDTO {
     }
 
     public String getEmail() {
-        return email;
+	    return StringUtils.trim(email);
     }
 
     public void setEmail(String email) {
@@ -41,7 +83,7 @@ public class RegisterUserDTO {
     }
 
     public String getPassword() {
-        return password;
+	    return StringUtils.trim(password);
     }
 
     public void setPassword(String password) {
@@ -49,7 +91,7 @@ public class RegisterUserDTO {
     }
 
     public String getName() {
-        return name;
+	    return StringUtils.trim(name);
     }
 
     public void setName(String name) {
@@ -57,7 +99,7 @@ public class RegisterUserDTO {
     }
 
     public String getSurname() {
-        return surname;
+	    return StringUtils.trim(surname);
     }
 
     public void setSurname(String surname) {
