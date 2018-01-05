@@ -47,7 +47,8 @@ public class IssueServiceImpl implements IIssueService {
 	    boolean closed = dto.getTypeId() != 1;
 
 	    Image image = new Image();
-	    String imgPath = DigestUtils.md5Hex(dto.getImage());
+	    //String imgPath = DigestUtils.md5Hex(dto.getImage());
+	    String imgPath = "qwerty";
 	    image.setSrc(imgPath);
 	    image.setHash("hashhbshhashhashnashhxshhashhash");
 

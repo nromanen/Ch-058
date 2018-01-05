@@ -15,10 +15,12 @@ import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.ssdemo1.service.interfaces.IMapMarkersService;
+import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -53,7 +55,12 @@ public class MapRestController {
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@PostMapping("/issue")
-	public JsonResponse saveIssue(@Valid @RequestBody MapDataDTO dto) {
-		return new JsonResponse(issueService.saveIssue(dto));
+	public JsonResponse saveIssue(@Valid @RequestPart MapDataDTO dto, @RequestPart("image") MultipartFile file) {
+
+    	if(!file.isEmpty()) {
+    		dto.setImage(file);
+		    return new JsonResponse(issueService.saveIssue(dto));
+	    }
+		return new JsonResponse(JsonError.Error.IMAGE_NOT_EXIST);
 	}
 }
