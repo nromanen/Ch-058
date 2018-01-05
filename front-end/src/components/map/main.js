@@ -342,7 +342,7 @@ export default {
             }).then((response) => {
               var mapMarkerId = response.body.data[0].id;
               window.isPlaced = true;
-              self.$http.get("issueByMapMarker/" + mapMarkerId).then(response => {
+              self.$http.get("issues/mapMarker/" + mapMarkerId).then(response => {
                 console.log(response.body);
                 var i;
                 for (i = 0; i < response.body.data.length; i++) {
@@ -399,6 +399,10 @@ export default {
 
     snackBarAction() {
       this.$router.push('login');
+    },
+
+    redirectToIssue(id) {
+      this.$router.push('issue/' + id);
     }
 
     /*google.maps.event.addListener('dblclick', function() {

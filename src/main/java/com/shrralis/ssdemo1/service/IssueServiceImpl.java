@@ -39,8 +39,8 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
     @Override
-    public Optional<Issue> getById(Integer id) {
-        return issuesRepository.findById(id);
+    public Issue getById(Integer id) {
+        return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
     }
 
     @Override

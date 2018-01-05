@@ -69,20 +69,26 @@
     <md-button class="md-primary" @click="snackBarAction()">Login</md-button>
   </md-snackbar>
 
-  <div id="issuesDialog">
+  <div id="map"></div>
+
+  <div id="issuesByMarker">
     <md-dialog :md-active.sync="showDialog" @md-closed="onCancelIssuesDialog" :md-fullscreen="false">
       <md-dialog-title>
         All issues by marker:
       </md-dialog-title>
       <br>
       <md-dialog-content>
-        <div v-for="issue in issues" :key="issue.id">
-          <a>
-            <input type="hidden" v-model="issue.id">
-            <h2>{{ issue.title }}</h2>
-          </a>
-          <p>{{issue.description}}</p>
-          <hr align="center" width="100%" size="2" color="grey">
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item md-size-70">
+            <div v-for="issue in issues" :key="issue.id">
+              <a @click="redirectToIssue(issue.id)">
+                <h2>{{ issue.title }}</h2>
+              </a>
+              <p>{{issue.description.substring(0,20)}}...</p>
+              <hr align="center" width="100%" size="2" color="grey">
+            </div>
+          </div>
+          <div class="md-layout-item md-size-30"></div>
         </div>
       </md-dialog-content>
     </md-dialog>

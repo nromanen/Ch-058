@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface IIssueService {
 
-	Optional<Issue> getById(Integer id);
+	Issue getById(Integer id);
 
     Issue createIssue(MapDataDTO data);
 
