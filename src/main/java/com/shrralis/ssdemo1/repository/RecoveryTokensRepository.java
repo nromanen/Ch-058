@@ -2,6 +2,7 @@ package com.shrralis.ssdemo1.repository;
 
 import com.shrralis.ssdemo1.entity.RecoveryToken;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -17,4 +18,9 @@ public interface RecoveryTokensRepository extends JpaRepository<RecoveryToken, I
 	Optional<RecoveryToken> findByToken(String token);
 
 	RecoveryToken getByToken(String token);
+
+	@Query(value = "SELECT COUNT(*) FROM " + RecoveryToken.TABLE_NAME +
+			" WHERE " + RecoveryToken.USER_COLUMN_NAME + " = ?1 AND " +
+			RecoveryToken.EXPIRES_AT_COLUMN_NAME + " >= NOW() ", nativeQuery = true)
+	int countNonExpiredByUser(int userId);
 }

@@ -16,7 +16,10 @@ import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.tools.model.JsonError;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -29,7 +32,6 @@ import java.io.Serializable;
  */
 public class RegisterUserDTO implements Serializable {
 
-	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
 	@Pattern(regexp = User.LOGIN_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	@Size(
@@ -37,7 +39,6 @@ public class RegisterUserDTO implements Serializable {
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String login;
 
-	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
 	@Email(message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	@Size(
@@ -45,14 +46,12 @@ public class RegisterUserDTO implements Serializable {
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String email;
 
-	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
 	@Size(
 			min = User.MIN_PASSWORD_LENGTH, max = User.MAX_PASSWORD_LENGTH,
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String password;
 
-	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
 	@Pattern(regexp = User.NAME_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	@Size(
@@ -60,7 +59,6 @@ public class RegisterUserDTO implements Serializable {
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String name;
 
-	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
 	@Pattern(regexp = User.NAME_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	@Size(

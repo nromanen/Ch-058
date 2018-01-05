@@ -24,7 +24,7 @@ export default router
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    Vue.http.get('auth/login').then(response => {
+    Vue.http.get('auth/getCurrentSession').then(response => {
       let json = response.body
 
       if (!json.errors && json.data[0].login) {

@@ -1,11 +1,10 @@
-package com.shrralis.ssdemo1.security;
+package com.shrralis.ssdemo1.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shrralis.ssdemo1.security.exception.interfaces.ICitizenAuthenticationException;
 import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonResponse;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -29,12 +28,11 @@ public class CitizenAuthenticationFailureHandler extends SimpleUrlAuthentication
 	                                    HttpServletResponse response,
 	                                    AuthenticationException e
 	) throws IOException, ServletException {
-		if (e.getClass().isAssignableFrom(UsernameNotFoundException.class)) {
-			logger.error("UsernameNotFoundException: {}", e);
-			MAPPER.writeValue(response.getWriter(), new JsonResponse(JsonError.Error.USER_NOT_EXIST.forField("login")));
-		} else if (e.getClass().isAssignableFrom(BadCredentialsException.class)) {
-			MAPPER.writeValue(response.getWriter(), new JsonResponse(JsonError.Error.BAD_CREDENTIALS));
+		if (e.getClass().isAssignableFrom(ICitizenAuthenticationException.class)) {
+			logger.error(e.getClass().getName() + ": {}", e);
+			MAPPER.writeValue(response.getWriter(), new JsonResponse(((ICitizenAuthenticationException) e).getError()));
 		} else {
+			logger.error("AuthenticationException: {}", e);
 			MAPPER.writeValue(response.getWriter(), new JsonResponse(new JsonError(e.getMessage())));
 		}
 	}

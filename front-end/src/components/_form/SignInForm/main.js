@@ -1,6 +1,6 @@
 import {validationMixin} from 'vuelidate'
-import {maxLength, minLength, required} from 'vuelidate/lib/validators'
-import {LoginValidator, MAX_LOGIN_LENGTH, MIN_LOGIN_LENGTH} from "../../_validator/LoginValidator";
+import {minLength, required} from 'vuelidate/lib/validators'
+import {LoginOrEmailValidator, MIN_LOGIN_LENGTH} from "../../_validator";
 import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
 
 export default {
@@ -19,8 +19,7 @@ export default {
       login: {
         required,
         minLength: minLength(MIN_LOGIN_LENGTH),
-        maxLength: maxLength(MAX_LOGIN_LENGTH),
-        LoginValidator
+        LoginOrEmailValidator
       },
       password: {
         required,
@@ -68,6 +67,7 @@ export default {
         }, error => {
           switch (error.status) {
             case 400:
+            case 500:
               let json = error.body;
 
               if (json.errors) {

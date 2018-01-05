@@ -1,7 +1,8 @@
-package com.shrralis.ssdemo1.security;
+package com.shrralis.ssdemo1.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
+import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
@@ -36,7 +37,7 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse,
 			Authentication authentication) throws IOException, ServletException {
-		MAPPER.writeValue(httpServletResponse.getWriter(), authService.getCurrentSession());
+		MAPPER.writeValue(httpServletResponse.getWriter(), new JsonResponse(authService.getCurrentSession()));
 		httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 	}
 }

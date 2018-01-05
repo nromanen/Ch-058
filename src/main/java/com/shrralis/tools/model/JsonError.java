@@ -91,7 +91,9 @@ public class JsonError {
 		IMAGE_NOT_EXIST(11, "Image doesn't exist"),
 		MAP_MARKER_NOT_EXIST(12, "Map marker doesn't exist"),
 		RECOVERY_TOKEN_NOT_EXIST(13, "Recovery token doesn't exist"),
-		ILLEGAL_PARAMETER(14, "The retrieved parameter is illegal"),;
+		ILLEGAL_PARAMETER(14, "The retrieved parameter is illegal"),
+		TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS(15, "There are too many non expired recovery tokens for the user"),
+		USER_BLOCKED_BY_MAX_FAILED_AUTH(16, "The user has been blocked because of failed authentication attempts"),;
 
 		public static final String NO_ERROR_NAME = "NO_ERROR";
 		public static final String UNEXPECTED_NAME = "UNEXPECTED";
@@ -108,6 +110,8 @@ public class JsonError {
 		public static final String MAP_MARKER_NOT_EXIST_NAME = "MAP_MARKER_NOT_EXIST";
 		public static final String RECOVERY_TOKEN_NOT_EXIST_NAME = "RECOVERY_TOKEN_NOT_EXIST";
 		public static final String ILLEGAL_PARAMETER_NAME = "ILLEGAL_PARAMETER";
+		public static final String TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS_NAME = "TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS";
+		public static final String USER_BLOCKED_BY_MAX_FAILED_AUTH_NAME = "USER_BLOCKED_BY_MAX_FAILED_AUTH";
 
 		private static final ArrayList<Error> lookup = new ArrayList<>();
 
@@ -146,8 +150,10 @@ public class JsonError {
 			switch (this) {
 				case MISSING_FIELD:
 				case BAD_FIELD_FORMAT:
-				case USER_ALREADY_EXISTS:
 				case ILLEGAL_PARAMETER:
+				case USER_NOT_EXIST:
+				case USER_ALREADY_EXISTS:
+				case BAD_CREDENTIALS:
 					this.field = field;
 
 					break;

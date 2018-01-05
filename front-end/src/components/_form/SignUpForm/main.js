@@ -93,12 +93,15 @@ export default {
 
           this.sending = false;
         }, error => {
-          if (error.status === 400) {
-            let json = error.body;
+          switch (error.status) {
+            case 400:
+            case 500:
+              let json = error.body;
 
-            if (json.errors) {
-              this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
-            }
+              if (json.errors) {
+                this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
+              }
+              break;
           }
 
           if (!this.errors.length) {

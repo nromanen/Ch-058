@@ -24,7 +24,8 @@ import com.shrralis.ssdemo1.mail.PasswordRecoveryEmailMessage;
 import com.shrralis.ssdemo1.mail.interfaces.IMailCitizenService;
 import com.shrralis.ssdemo1.repository.RecoveryTokensRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
-import com.shrralis.ssdemo1.security.AuthorizedUser;
+import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensException;
+import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
@@ -79,6 +80,10 @@ public class AuthServiceImpl implements IAuthService {
 			throw new EntityNotExistException(EntityNotExistException.Entity.USER, "login");
 		}
 
+		if (tokensRepository.countNonExpiredByUser(user.getId()) > 2) {
+			throw new TooManyNonExpiredRecoveryTokensException(user.getLogin());
+		}
+
 		final RecoveryToken token = RecoveryToken.Builder.aRecoveryToken()
 				.setUser(user)
 				.setToken(DigestUtils.md5DigestAsHex((login + ip + LocalDateTime.now().toString()).getBytes()))
@@ -114,7 +119,9 @@ public class AuthServiceImpl implements IAuthService {
 
 		checkDataForPasswordRecovering(token, user);
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+		user.setFailedAuthCount(0);
 		repository.save(user);
+		tokensRepository.delete(token);
 		return userToRegisteredUserDto.userToRegisteredUserDto(user);
 	}
 

@@ -15,9 +15,9 @@ package com.shrralis.ssdemo1.entity;
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 
 import static com.shrralis.ssdemo1.entity.Issue.TABLE_NAME;
@@ -41,23 +41,56 @@ public class Issue implements Identifiable<Integer> {
     public static final int MAX_TEXT_LENGTH = 2048;
     public static final int MIN_TEXT_LENGTH = 64;
 
-    private Integer id;
-    private MapMarker mapMarker;
-    private User author;
-    private String title;
-    private String text;
-    private Image image;
-    private String type;
-    private boolean closed;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+	@Id
+	@NotNull
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issues_seq_gen")
+	@SequenceGenerator(name = "issues_seq_gen", sequenceName = "issues_id_seq", allocationSize = 1)
+	@Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
+	private Integer id;
 
-    @Id
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issues_seq_gen")
-    @SequenceGenerator(name = "issues_seq_gen", sequenceName = "issues_id_seq", allocationSize = 1)
-    @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
-    @Override
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@JoinColumn(name = MAP_MARKER_COLUMN_NAME, nullable = false)
+	private MapMarker mapMarker;
+
+	@NotNull
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = AUTHOR_COLUMN_NAME, nullable = false)
+	private User author;
+
+	@NotNull
+	@Size(min = MIN_TITLE_LENGTH, max = MAX_TITLE_LENGTH)
+	@Column(name = TITLE_COLUMN_NAME, nullable = false, length = MAX_TITLE_LENGTH)
+	private String title;
+
+	@NotNull
+	@Size(min = MIN_TEXT_LENGTH, max = MIN_TEXT_LENGTH)
+	@Column(name = TEXT_COLUMN_NAME, nullable = false, length = MAX_TEXT_LENGTH)
+	private String text;
+
+	@NotBlank
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@JoinColumn(name = IMG_COLUMN_NAME)
+	private Image image;
+
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@JoinColumn(name = TYPE_COLUMN_NAME, nullable = false)
+	private Type type;
+
+	@NotNull
+	@Column(name = CLOSED_COLUMN_NAME, nullable = false)
+	private Boolean closed;
+
+	@NotNull
+	@Column(name = CREATED_AT_COLUMN_NAME, nullable = false)
+	private LocalDateTime createdAt;
+
+	@NotNull
+	@Column(name = UPDATED_AT_COLUMN_NAME, nullable = false)
+	private LocalDateTime updatedAt;
+
+	@Override
     public Integer getId() {
         return id;
     }
@@ -66,9 +99,6 @@ public class Issue implements Identifiable<Integer> {
         this.id = id;
     }
 
-    @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = MAP_MARKER_COLUMN_NAME)
     public MapMarker getMapMarker() {
         return mapMarker;
     }
@@ -77,29 +107,22 @@ public class Issue implements Identifiable<Integer> {
         this.mapMarker = mapMarker;
     }
 
-    @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = AUTHOR_COLUMN_NAME)
     public User getAuthor() {
         return author;
     }
+
     public void setAuthor(User author) {
         this.author = author;
     }
 
-    @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = IMG_COLUMN_NAME)
     public Image getImage() {
         return image;
     }
+
     public void setImage(Image image) {
         this.image = image;
     }
 
-    @NotNull
-    @Size(min = MIN_TITLE_LENGTH, max = MAX_TITLE_LENGTH)
-    @Column(name = TITLE_COLUMN_NAME, nullable = false, length = MAX_TITLE_LENGTH)
     public String getTitle() {
         return title;
     }
@@ -108,9 +131,6 @@ public class Issue implements Identifiable<Integer> {
         this.title = title;
     }
 
-    @NotNull
-    @Size(min = MIN_TEXT_LENGTH, max = MIN_TEXT_LENGTH)
-    @Column(name = TEXT_COLUMN_NAME, nullable = false, length = MAX_TEXT_LENGTH)
     public String getText() {
         return text;
     }
@@ -119,39 +139,35 @@ public class Issue implements Identifiable<Integer> {
         this.text = text;
     }
 
-    @NotNull
-    @Column(name = TYPE_COLUMN_NAME)
-    public String getType() {
+	public Type getType() {
         return type;
     }
-    public void setType(String type) {
+
+	public void setType(Type type) {
         this.type = type;
     }
 
-    @NotNull
-    @Column(name = CLOSED_COLUMN_NAME, nullable = false)
     public boolean isClosed() {
         return closed;
     }
-    public void setClosed(boolean closed) {
+
+	public void setClosed(boolean closed) {
         this.closed = closed;
     }
 
-    @NotNull
-    @Column(name = CREATED_AT_COLUMN_NAME, nullable = false)
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(LocalDateTime createdAt) {
+
+	public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    @NotNull
-    @Column(name = UPDATED_AT_COLUMN_NAME, nullable = false)
     LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -164,14 +180,18 @@ public class Issue implements Identifiable<Integer> {
         public static final int MIN_NAME_LENGTH = 4;
         public static final int MAX_NAME_LENGTH = 16;
 
-        private Integer id;
-        private String name;
-
         @Id
         @NotNull
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issue_types_seq_gen")
         @SequenceGenerator(name = "issue_types_seq_gen", sequenceName = "issue_types_id_seq")
         @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
+        private Integer id;
+
+	    @NotNull
+	    @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
+	    @Column(name = NAME_COLUMN_NAME, nullable = false, unique = true, length = MAX_NAME_LENGTH)
+	    private String name;
+
         public Integer getId() {
             return id;
         }
@@ -180,9 +200,6 @@ public class Issue implements Identifiable<Integer> {
             this.id = id;
         }
 
-        @NotNull
-        @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
-        @Column(name = NAME_COLUMN_NAME, nullable = false, unique = true, length = MAX_NAME_LENGTH)
         public String getName() {
             return name;
         }

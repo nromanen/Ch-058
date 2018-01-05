@@ -2,6 +2,8 @@ package com.shrralis.ssdemo1.exception;
 
 import com.shrralis.tools.model.JsonError;
 
+import static com.shrralis.tools.model.JsonError.Error.RECOVERY_TOKEN_EXPIRED;
+
 /**
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
@@ -15,6 +17,6 @@ public class ExpiredRecoveryTokenException extends AbstractCitizenException {
 
 	@Override
 	public JsonError.Error getError() {
-		return JsonError.Error.RECOVERY_TOKEN_EXPIRED;
+		return RECOVERY_TOKEN_EXPIRED;
 	}
 }

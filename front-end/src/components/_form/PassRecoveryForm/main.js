@@ -65,7 +65,7 @@ export default {
           if (!json.errors) {
             this.sending = false;
             this.haveToken = true;
-          } else if (json.errors.length > 0) {
+          } else if (json.errors.length) {
             this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
           } else {
             this.errors.push(getErrorMessage(UNEXPECTED));
@@ -73,6 +73,7 @@ export default {
         }, error => {
           switch (error.status) {
             case 400:
+            case 500:
               let json = error.body;
 
               if (json.errors) {
@@ -88,21 +89,16 @@ export default {
           this.sending = false;
         }
       );
-
-      this.haveToken = true;
     },
     recoverPassword() {
       this.errors = [];
       this.sending = true;
 
-      this.$http.post('auth/recoverPassword', null,
-        {
-          params: {
-            login: this.form.login,
-            token: this.form.token,
-            password: this.form.password
-          }
-        }).then(
+      this.$http.post('auth/recoverPassword', {
+        login: this.form.login,
+        token: this.form.token,
+        password: this.form.password
+      }).then(
         response => {
           let json = response.body;
 
@@ -122,6 +118,7 @@ export default {
         }, error => {
           switch (error.status) {
             case 400:
+            case 500:
               let json = error.body;
 
               if (json.errors) {
