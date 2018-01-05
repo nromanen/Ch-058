@@ -36,6 +36,7 @@ import java.util.Properties;
 @Import(value = {
 		DatabaseConfig.class,
 		SecurityConfig.class,
+		WebSocketConfig.class
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
 

@@ -16,6 +16,7 @@ import com.shrralis.ssdemo1.configuration.AppConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class WebSpringInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
     protected Class<?>[] getRootConfigClasses() {
 	    return new Class[] { AppConfig.class };
     }
@@ -27,4 +28,5 @@ public class WebSpringInitializer extends AbstractAnnotationConfigDispatcherServ
     protected String[] getServletMappings() {
 	    return new String[] { "/" };
     }
+
 }
