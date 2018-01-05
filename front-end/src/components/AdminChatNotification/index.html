@@ -1,0 +1,7 @@
+<div class="notification">
+  <p>There is new message</p>
+  <div v-for="user in users" class="row">
+    <p>{{user.userId}}</p>
+    <md-button @click="answer(user.userId, user.issueId)">Answer</md-button>
+  </div>
+</div>
