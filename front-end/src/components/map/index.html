@@ -78,17 +78,32 @@
       </md-dialog-title>
       <br>
       <md-dialog-content>
-        <div class="md-layout md-gutter">
-          <div class="md-layout-item md-size-70">
-            <div v-for="issue in issues" :key="issue.id">
+        <div v-for="issue in issues" :key="issue.id">
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-size-70">
               <a @click="redirectToIssue(issue.id)">
                 <h2>{{ issue.title }}</h2>
               </a>
               <p>{{issue.description.substring(0,20)}}...</p>
               <hr align="center" width="100%" size="2" color="grey">
             </div>
+            <div class="md-layout-item md-size-30">
+              <div class="myImage">
+                <div v-if="issue.typeId===1">
+                  <img src="../../assets/caution-large.png" width="50px" height="50px">
+                  <div style="text-align: center">Problem</div>
+                </div>
+                <div v-else-if="issue.typeId===2">
+                  <img src="../../assets/info-large.png" width="50px" height="50px">
+                  <div style="text-align: center">Info</div>
+                </div>
+                <div v-else-if="issue.typeId===3">
+                  <img src="../../assets/feedback-large.png" width="50px" height="50px">
+                  <div style="text-align: center">Feedback</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="md-layout-item md-size-30"></div>
         </div>
       </md-dialog-content>
     </md-dialog>

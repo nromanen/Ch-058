@@ -15,7 +15,6 @@ Vue.use(VueResource)
 });*/
 
 export default {
-  name: 'Map',
   data () {
     return {
       center: {lat: 0, lng: 0},
@@ -26,7 +25,9 @@ export default {
       isUnliked : false,
       countLike : 0,
       countDislike: 0,
-      clickDisabled : false
+      clickDisabled : false,
+      typeId: -1,
+      marker : null,
     }
   },
 
@@ -42,10 +43,11 @@ export default {
           this.center.lng = parseFloat(data.body.mapMarker.lng);
           this.title = data.body.title;
           this.text = data.body.text;
+          this.typeId = data.body.typeId;
 
         this.map = new google.maps.Map(document.getElementById('issueMap'), {
           center: self.markerPosition,
-          zoom: 14,
+          zoom: 16,
           maxZoom: 17,
           minZoom: 4,
           disableDefaultUI: true,
@@ -53,10 +55,29 @@ export default {
           zoomControl: true,
           mapTypeControl: true
         });
+        var url;
+        console.log(self.typeId);
+        switch (self.typeId) {
+          case 1:
+            url = '/src/assets/caution-large.png';
+            break;
+          case 2:
+            url = '/src/assets/info-large.png';
+            break;
+          case 3:
+            url = '/src/assets/feedback-large.png';
+            break;
+          default:
+            url = ''
+        }
         var marker = new google.maps.Marker({
           map: self.map,
           position: self.markerPosition,
-          animation: google.maps.Animation.DROP
+          animation: google.maps.Animation.DROP,
+          icon: {
+            url:url,
+            scaledSize: new google.maps.Size(50, 50)
+          }
         });
       })
     },
@@ -70,8 +91,6 @@ export default {
         }
       })
     },
-
-
 
     like() {
       var isLiked = this.isLiked;
@@ -113,7 +132,7 @@ export default {
       } else if(!isUnliked) {
         if(isLiked){
           this.$http.get('deleteVote/' + issueId).then(data=>{
-          })
+          });
           this.isLiked = !isLiked;
         }
         this.$http.get('addVote/' + issueId +'/' + false).then(data=>{

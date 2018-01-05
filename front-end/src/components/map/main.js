@@ -349,7 +349,8 @@ export default {
                   self.issues.push({
                     id : response.body.data[i].id,
                     title: response.body.data[i].title,
-                    description: response.body.data[i].text
+                    description: response.body.data[i].text,
+                    typeId : response.body.data[i].typeId
                   });
                 }
                 self.showDialog = true;
