@@ -40,15 +40,20 @@ public class AuthRestController {
 		this.service = service;
 	}
 
-	@PostMapping("/recoverPassword")
-	public JsonResponse recoverPassword(@RequestBody @Valid PasswordRecoveryDTO dto) throws AbstractCitizenException {
-		return new JsonResponse(service.recoverPassword(dto));
-	}
-
 	@PostMapping("/requestRecoveryToken")
 	public JsonResponse generateRecoveryToken(@RequestParam(name = "login") String login, HttpServletRequest request)
 			throws AbstractCitizenException, MessagingException {
 		return new JsonResponse(service.generateRecoveryToken(login, request.getRemoteAddr()));
+	}
+
+	@GetMapping("/getCurrentSession")
+	public JsonResponse getCurrentSession() {
+		return new JsonResponse(service.getCurrentSession());
+	}
+
+	@PostMapping("/recoverPassword")
+	public JsonResponse recoverPassword(@RequestBody @Valid PasswordRecoveryDTO dto) throws AbstractCitizenException {
+		return new JsonResponse(service.recoverPassword(dto));
 	}
 
 	@PostMapping("/signUp")
