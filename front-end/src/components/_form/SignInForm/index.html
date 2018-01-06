@@ -13,14 +13,12 @@
 
               <md-input name="login" id="a-login" v-model.trim="form.login" :disabled="sending"/>
 
-              <span class="md-error" v-if="!$v.form.login.required">Login is required</span>
+              <span class="md-error" v-if="!$v.form.login.required">Is required</span>
 
-              <span class="md-error" v-else-if="!$v.form.login.minLength">Login must have at least 4 characters</span>
+              <span class="md-error" v-else-if="!$v.form.login.minLength">Must have at least 4 characters</span>
 
-              <span class="md-error" v-else-if="!$v.form.login.maxLength">Login can contain maximum 16 characters</span>
-
-              <span class="md-error" v-else-if="!$v.form.login.LoginValidator">
-                Login can contain only characters like A-z, 0-9 and _ - .
+              <span class="md-error" v-else-if="!$v.form.login.LoginOrEmailValidator">
+                Can contain only A-z, 0-9 and _ - or be valid E-Mail.
               </span>
             </md-field>
           </div>
@@ -32,10 +30,10 @@
               <md-input name="password" id="a-password" type="password" v-model.trim="form.password"
                         :disabled="sending"/>
 
-              <span class="md-error" v-if="!$v.form.password.required">The password is required</span>
+              <span class="md-error" v-if="!$v.form.password.required">Is required</span>
 
               <span class="md-error" v-else-if="!$v.form.password.minLength">
-                Password must have at least 8 characters
+                Must have at least 8 characters
               </span>
             </md-field>
           </div>

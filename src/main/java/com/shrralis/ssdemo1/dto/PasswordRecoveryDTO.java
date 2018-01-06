@@ -5,7 +5,6 @@ import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.tools.model.JsonError;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -16,7 +15,6 @@ import javax.validation.constraints.Size;
  */
 public class PasswordRecoveryDTO {
 
-	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
 	@Pattern(regexp = User.LOGIN_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	@Size(
@@ -24,14 +22,12 @@ public class PasswordRecoveryDTO {
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String login;
 
-	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
 	@Size(
 			min = RecoveryToken.MIN_TOKEN_LENGTH, max = RecoveryToken.MAX_TOKEN_LENGTH,
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String token;
 
-	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
 	@Size(
 			min = User.MIN_PASSWORD_LENGTH, max = User.MAX_PASSWORD_LENGTH,

@@ -2,6 +2,8 @@ package com.shrralis.ssdemo1.exception;
 
 import com.shrralis.tools.model.JsonError;
 
+import static com.shrralis.tools.model.JsonError.Error.BAD_FIELD_FORMAT;
+
 /**
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0 Created 12/24/17 at 2:15 AM
@@ -26,6 +28,6 @@ public class BadFieldFormatException extends AbstractCitizenException {
 
 	@Override
 	public JsonError.Error getError() {
-		return JsonError.Error.BAD_FIELD_FORMAT.forField(field);
+		return BAD_FIELD_FORMAT.forField(field);
 	}
 }

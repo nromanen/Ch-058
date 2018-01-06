@@ -13,12 +13,12 @@
 package com.shrralis.ssdemo1.configuration;
 
 import com.shrralis.ssdemo1.security.AuthProvider;
+import com.shrralis.ssdemo1.security.service.interfaces.ICitizenUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -34,7 +34,7 @@ import java.util.Arrays;
 public class SecurityConfig {
 
 	@Bean
-	public AuthenticationProvider authProvider(UserDetailsService userDetailsService,
+	public AuthenticationProvider authProvider(ICitizenUserDetailsService userDetailsService,
 	                                           PasswordEncoder passwordEncoder) {
 		AuthProvider authenticationProvider = new AuthProvider();
 

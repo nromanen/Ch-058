@@ -1,4 +1,4 @@
-package com.shrralis.ssdemo1.security;
+package com.shrralis.ssdemo1.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shrralis.tools.model.JsonError;

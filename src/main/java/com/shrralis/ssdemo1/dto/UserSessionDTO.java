@@ -18,7 +18,7 @@ public class UserSessionDTO {
 	private User.Type type;
 
 	@JsonProperty("logged_in")
-	private boolean loggedIn = false;
+	private boolean loggedIn;
 
 	public UserSessionDTO(boolean loggedIn) {
 		this.loggedIn = loggedIn;
