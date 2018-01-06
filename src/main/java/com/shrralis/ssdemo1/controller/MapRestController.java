@@ -55,12 +55,8 @@ public class MapRestController {
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@PostMapping("/issue")
-	public JsonResponse saveIssue(@Valid @RequestPart MapDataDTO dto, @RequestPart("image") MultipartFile file) {
+	public JsonResponse saveIssue(@Valid @RequestBody MapDataDTO dto) {
 
-    	if(!file.isEmpty()) {
-    		dto.setImage(file);
-		    return new JsonResponse(issueService.saveIssue(dto));
-	    }
-		return new JsonResponse(JsonError.Error.IMAGE_NOT_EXIST);
+		return new JsonResponse(issueService.saveIssue(dto));
 	}
 }

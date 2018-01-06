@@ -13,6 +13,8 @@
 package com.shrralis.ssdemo1.entity;
 
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
+import com.shrralis.ssdemo1.util.PsqlEnum;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -23,6 +25,10 @@ import static com.shrralis.ssdemo1.entity.Image.TABLE_NAME;
 
 @Entity
 @Table(name = TABLE_NAME)
+@TypeDef(
+		name = "image_type",
+		typeClass = PsqlEnum.class
+)
 public class Image implements Identifiable<Integer> {
     public static final String TABLE_NAME = "images";
     public static final String TYPE_COLUMN_NAME = "type";
@@ -43,6 +49,7 @@ public class Image implements Identifiable<Integer> {
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
+	@org.hibernate.annotations.Type(type = "image_type")
 	@Column(name = TYPE_COLUMN_NAME, nullable = false)
 	private Type type = Type.ISSUE;
 

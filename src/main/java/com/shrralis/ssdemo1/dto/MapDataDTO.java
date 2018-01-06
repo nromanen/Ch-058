@@ -38,7 +38,7 @@ public class MapDataDTO {
 	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
 	private Integer typeId;
 
-	private MultipartFile image;
+	private String image;
 
 	public Integer getMarkerId() {
 		return markerId;
@@ -72,11 +72,11 @@ public class MapDataDTO {
 		this.typeId = typeId;
 	}
 
-	public MultipartFile getImage() {
+	public String getImage() {
 		return image;
 	}
 
-	public void setImage(MultipartFile image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 }

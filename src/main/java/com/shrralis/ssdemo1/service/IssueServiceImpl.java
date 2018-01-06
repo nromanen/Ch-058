@@ -5,8 +5,6 @@ import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
 import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.entity.User;
-import com.shrralis.ssdemo1.exception.AbstractCitizenException;
-import com.shrralis.ssdemo1.exception.IllegalParameterException;
 import com.shrralis.ssdemo1.repository.IssuesRepository;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
@@ -18,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static com.shrralis.ssdemo1.security.AuthorizedUser.getCurrent;
+import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 
 @Service
 @Transactional
@@ -47,8 +45,7 @@ public class IssueServiceImpl implements IIssueService {
 	    boolean closed = dto.getTypeId() != 1;
 
 	    Image image = new Image();
-	    //String imgPath = DigestUtils.md5Hex(dto.getImage());
-	    String imgPath = "qwerty";
+	    String imgPath = DigestUtils.md5Hex(dto.getImage());
 	    image.setSrc(imgPath);
 	    image.setHash("hashhbshhashhashnashhxshhashhash");
 

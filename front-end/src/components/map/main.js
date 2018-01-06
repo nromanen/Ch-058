@@ -14,9 +14,11 @@ export default {
     lat: 0,
     lng: 0,
     marker: null,
+    select: null,
     isPlaced: false,
     sending: false,
     showSnackBar: false,
+    markers: []
   }),
   validations: {
     form: {
@@ -77,7 +79,7 @@ export default {
           center: {lat: 48.29149, lng: 25.94034},
           zoom: 15,
           maxZoom: 19,
-          minZoom: 15,
+          minZoom: 13,
           disableDefaultUI: true,
           disableDoubleClickZoom: true,
           zoomControl: true,
@@ -86,6 +88,20 @@ export default {
         this.addYourLocationButton();
         this.addSearchField();
         this.getUserLocation();
+        this.loadAllMarkers();
+
+        this.map.addListener('idle', function () {
+          for (var i = 0; i < self.markers.length; i++) {
+            var marker = self.markers[i];
+            if(self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
+              marker.setMap(self.map);
+            }
+            if(!self.map.getBounds().contains(marker.getPosition())) {
+              marker.setMap(null);
+            }
+          }
+        });
+
         this.map.addListener('dblclick', function(e) {
           if(getLocalUser()) {
             self.saveCoords(e.latLng.lat(), e.latLng.lng())
@@ -127,8 +143,19 @@ export default {
              if(response.body.data[0] == null) {
                self.map.setCenter(place.geometry.location);
                self.map.setZoom(19);
+               window.select = new google.maps.Marker({
+                 map: self.map,
+                 position: {
+                   lat: place.geometry.location.lat(),
+                   lng: place.geometry.location.lng()
+                 },
+                 animation: google.maps.Animation.DROP
+               });
+               self.setMarkerType(window.select, '5');
                if(getLocalUser()) {
-                 self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng())
+                 setTimeout(function() {
+                   self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng())
+                 }, 1200)
                } else {
                  self.showSnackBar = true;
                  document.getElementById('pac-input').value = '';
@@ -241,6 +268,7 @@ export default {
         document.getElementById("preview").hidden = true;
         window.lat = 0;
         window.lng = 0;
+        window.select.setMap(null);
       };
     },
 
@@ -250,13 +278,14 @@ export default {
       var type = this.form.type;
       var image = this.form.image;
       if(window.isPlaced) {
-        this.setMarkerType(window.marker, this.form.type);
-        this.$http.post('issue',{
+        this.setMarkerType(window.marker, '4');
+        this.$http.post('issue', {
           markerId: window.id,
           title: title,
           text: desc,
           typeId: type,
           image: image
+
         }).then((response) => {console.log(response.body)
         });
       } else {
@@ -266,7 +295,6 @@ export default {
               lat: window.lat,
               lng: window.lng
             },
-            animation: google.maps.Animation.DROP
           });
           this.setMarkerType(marker, type);
           this.setListeners(marker);
@@ -275,7 +303,7 @@ export default {
             lat: window.lat,
             lng: window.lng
           }).then((response) => {
-            this.$http.post('issue',{
+            this.$http.post('issue', {
               markerId: response.body.data[0].id,
               title: title,
               text: desc,
@@ -302,6 +330,10 @@ export default {
         case '2': url = '/src/assets/info.png';
           break;
         case '3': url ='/src/assets/feedback.png';
+          break;
+        case '4': url ='/src/assets/multiple.png';
+          break;
+        case '5': url ='/src/assets/select.png';
           break;
         default: url = ''
       }
@@ -364,54 +396,38 @@ export default {
 
     snackBarAction() {
       this.$router.push('login');
-    }
+    },
 
-    /*google.maps.event.addListener('dblclick', function() {
-        map.setCenter(marker.getPosition());
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-      });*/
+    loadAllMarkers() {
+      let self = this;
+      this.$http.get('').then((response) => {
+        for (var i = 0; i < response.body.data.length; i++) {
 
-    /*tornOffBounce(marker) {
-      marker.setAnimation(null);
-    },*/
+              var lat = parseFloat(response.body.data[i].lat);
+              var lng = parseFloat(response.body.data[i].lng);
+              var type = response.body.data[i].type.toString();
 
-    /*loadAllMarkers() {
-        let self = this
-        this.$http.get('map').then((response) => {
-            for (var i = 0; i < response.body.data.length; i++) {
-                var lat = parseFloat(response.body.data[i].lat)
-                var lng = parseFloat(response.body.data[i].lng)
-                var id = parseFloat(response.body.data[i].id)
-                var marker = new google.maps.Marker({
-                    map: self.map,
-                    position: {
-                      lat: lat,
-                      lng: lng
-                    },
-                    animation: google.maps.Animation.DROP
-                })
+              var marker = new google.maps.Marker({
+                position: {
+                  lat: lat,
+                  lng: lng
+                },
+              });
+              this.setListeners(marker);
+              this.setMarkerType(marker, type);
 
-                var infoWindow = new google.maps.InfoWindow();
-                marker.addListener('click', (function(marker, infoWindow, id){
-                    return function() {
-                        infoWindow.setContent(id.toString())
-                        infoWindow.open(map, marker)
-                        google.maps.event.addListener(self.map, 'click', function(){
-                          infoWindow.close();
-                        })
-                    };
-                })(marker, infoWindow, id))
+              this.markers.push(marker);
+          }
+
+          for (var i = 0; i < this.markers.length; i++) {
+            var marker = this.markers[i];
+            if(self.map.getBounds().contains(marker.getPosition())) {
+              marker.setMap(self.map);
             }
         }
-        );
-    },*/
-        /*function drop() {
-      for (var i =0; i < markerArray.length; i++) {
-        setTimeout(function() {
-          addMarkerMethod();
-        }, i * 200);
-      }
-    }*/
+        }
+      );
+    },
   },
 
   mounted: function () {

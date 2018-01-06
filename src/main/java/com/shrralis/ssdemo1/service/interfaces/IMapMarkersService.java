@@ -10,15 +10,14 @@
 
 package com.shrralis.ssdemo1.service.interfaces;
 
-import com.shrralis.ssdemo1.dto.MapDataDTO;
+import com.shrralis.ssdemo1.dto.MarkerDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
-import com.shrralis.tools.model.JsonResponse;
 
 import java.util.List;
 
 public interface IMapMarkersService {
 
-	List<MapMarker> loadAllMarkers();
+	List<MarkerDTO> loadAllMarkers();
 
 	MapMarker getMarker(double lat, double lng);
 
