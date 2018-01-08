@@ -27,8 +27,8 @@ import static com.shrralis.ssdemo1.entity.User.TABLE_NAME;
 @Proxy(lazy = false)
 @Table(name = TABLE_NAME)
 @TypeDef(
-		name = "user_type",
-		typeClass = PsqlEnum.class
+	name = "user_type",
+	typeClass = PsqlEnum.class
 )
 public class User implements Identifiable<Integer> {
 
