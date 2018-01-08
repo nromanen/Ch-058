@@ -79,7 +79,7 @@ export default {
           center: {lat: 48.29149, lng: 25.94034},
           zoom: 15,
           maxZoom: 19,
-          minZoom: 13,
+          minZoom: 15,
           disableDefaultUI: true,
           disableDoubleClickZoom: true,
           zoomControl: true,
@@ -138,12 +138,13 @@ export default {
            return;
          }
          else {
+           var s = window.select;
            self.$http.get('marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
              .then((response) => {
              if(response.body.data[0] == null) {
                self.map.setCenter(place.geometry.location);
                self.map.setZoom(19);
-               window.select = new google.maps.Marker({
+               s = new google.maps.Marker({
                  map: self.map,
                  position: {
                    lat: place.geometry.location.lat(),
@@ -151,10 +152,11 @@ export default {
                  },
                  animation: google.maps.Animation.DROP
                });
-               self.setMarkerType(window.select, '5');
+               self.setMarkerType(s, '5');
                if(getLocalUser()) {
                  setTimeout(function() {
-                   self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng())
+                   self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+                   s.setMap(null);
                  }, 1200)
                } else {
                  self.showSnackBar = true;
@@ -268,7 +270,6 @@ export default {
         document.getElementById("preview").hidden = true;
         window.lat = 0;
         window.lng = 0;
-        window.select.setMap(null);
       };
     },
 
@@ -277,16 +278,17 @@ export default {
       var desc = this.form.desc;
       var type = this.form.type;
       var image = this.form.image;
-      if(window.isPlaced) {
-        this.setMarkerType(window.marker, '4');
-        this.$http.post('issue', {
-          markerId: window.id,
-          title: title,
-          text: desc,
-          typeId: type,
-          image: image
 
-        }).then((response) => {console.log(response.body)
+      var formData = new FormData();
+      formData.append('title', title);
+      formData.append('desc', desc);
+      formData.append('typeId', type);
+      formData.append('file', document.getElementById("uploadImage").files[0]);
+
+      if(window.isPlaced) {
+        formData.append('markerId', window.id);
+        this.setMarkerType(window.marker, '4');
+        this.$http.post('issue', formData).then((response) => {console.log(response.body)
         });
       } else {
           var marker = new google.maps.Marker({
@@ -303,13 +305,8 @@ export default {
             lat: window.lat,
             lng: window.lng
           }).then((response) => {
-            this.$http.post('issue', {
-              markerId: response.body.data[0].id,
-              title: title,
-              text: desc,
-              typeId: type,
-              image: image
-            }).then((response) => {console.log(response.body)
+            formData.append('markerId', response.body.data[0].id);
+            this.$http.post('issue', formData).then((response) => {console.log(response.body)
             });
           });
       }

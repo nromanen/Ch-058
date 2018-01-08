@@ -3,7 +3,7 @@
   <div id="myModal" class="modal">
     <div class="modal-wrapper">
       <div class="modal-content">
-        <form id="myForm" novalidate class="md-layout-row md-gutter" @submit.prevent="validateData">
+        <form method="post" id="myForm" novalidate class="md-layout-row md-gutter" @submit.prevent="validateData" enctype="multipart/form-data">
           <md-card class="md-flex-50 md-flex-small-100">
 
             <span class="close" @click="clearForm">&times;</span>

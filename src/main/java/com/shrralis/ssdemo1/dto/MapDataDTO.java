@@ -12,7 +12,6 @@ package com.shrralis.ssdemo1.dto;
 
 import com.shrralis.ssdemo1.entity.Issue;
 import com.shrralis.tools.model.JsonError;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -33,12 +32,10 @@ public class MapDataDTO {
 	@Size(
 			min = Issue.MIN_TEXT_LENGTH, max = Issue.MAX_TEXT_LENGTH,
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
-	private String text;
+	private String desc;
 
 	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
 	private Integer typeId;
-
-	private String image;
 
 	public Integer getMarkerId() {
 		return markerId;
@@ -56,12 +53,12 @@ public class MapDataDTO {
 		this.title = title;
 	}
 
-	public String getText() {
-		return text;
+	public String getDesc() {
+		return desc;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
 	public Integer getTypeId() {
@@ -70,13 +67,5 @@ public class MapDataDTO {
 
 	public void setTypeId(Integer typeId) {
 		this.typeId = typeId;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 }

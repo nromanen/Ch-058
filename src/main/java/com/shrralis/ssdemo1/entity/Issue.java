@@ -275,5 +275,4 @@ public class Issue implements Identifiable<Integer> {
     		return issue;
 	    }
     }
-
 }

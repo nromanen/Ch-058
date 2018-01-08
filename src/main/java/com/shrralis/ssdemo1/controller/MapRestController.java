@@ -12,7 +12,6 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
-import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.ssdemo1.service.interfaces.IMapMarkersService;
 import com.shrralis.tools.model.JsonError;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+
 
 @RestController
 public class MapRestController {
@@ -49,14 +49,17 @@ public class MapRestController {
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PostMapping("/marker")
-    public JsonResponse saveMarker(@RequestBody MapMarker marker) {
+    public JsonResponse saveMarker(@RequestBody final MapMarker marker) {
         return new JsonResponse(markerService.saveMarker(marker));
     }
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@PostMapping("/issue")
-	public JsonResponse saveIssue(@Valid @RequestBody MapDataDTO dto) {
-
-		return new JsonResponse(issueService.saveIssue(dto));
+	public JsonResponse saveIssue(@RequestParam("file") MultipartFile image,
+	                              @Valid @ModelAttribute MapDataDTO dto) {
+		if(image != null) {
+			return new JsonResponse(issueService.saveIssue(dto, image));
+		}
+		return new JsonResponse(JsonError.Error.IMAGE_NOT_EXIST);
 	}
 }

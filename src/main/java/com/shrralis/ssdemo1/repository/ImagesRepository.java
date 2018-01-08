@@ -18,4 +18,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ImagesRepository extends JpaRepository<Image, Integer> {
+
+	Image getByHash(String hash);
 }
