@@ -26,8 +26,8 @@ import static com.shrralis.ssdemo1.entity.Image.TABLE_NAME;
 @Entity
 @Table(name = TABLE_NAME)
 @TypeDef(
-		name = "image_type",
-		typeClass = PsqlEnum.class
+	name = "image_type",
+	typeClass = PsqlEnum.class
 )
 public class Image implements Identifiable<Integer> {
     public static final String TABLE_NAME = "images";
