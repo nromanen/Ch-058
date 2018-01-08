@@ -2,6 +2,8 @@ package com.shrralis.ssdemo1.exception;
 
 import com.shrralis.tools.model.JsonError;
 
+import static com.shrralis.tools.model.JsonError.Error.ILLEGAL_PARAMETER;
+
 /**
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
@@ -23,6 +25,6 @@ public class IllegalParameterException extends AbstractCitizenException {
 
 	@Override
 	public JsonError.Error getError() {
-		return JsonError.Error.ILLEGAL_PARAMETER.forField(field);
+		return ILLEGAL_PARAMETER.forField(field);
 	}
 }

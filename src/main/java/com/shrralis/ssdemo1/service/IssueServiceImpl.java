@@ -5,37 +5,52 @@ import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
 import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.repository.ImagesRepository;
 import com.shrralis.ssdemo1.repository.IssuesRepository;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import static com.shrralis.ssdemo1.security.AuthorizedUser.getCurrent;
-
+import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 
 @Service
 @Transactional
 public class IssueServiceImpl implements IIssueService {
 
+	@Value("${imageStorage}")
+	private String imageStorage;
+
+	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
+
     private final IssuesRepository issuesRepository;
     private final MapMarkersRepository mapMarkersRepository;
     private final UsersRepository usersRepository;
+    private final ImagesRepository imagesRepository;
 
 	@Autowired
 	public IssueServiceImpl(IssuesRepository issuesRepository,
 	                        MapMarkersRepository mapMarkersRepository,
-	                        UsersRepository usersRepository) {
+	                        UsersRepository usersRepository,
+	                        ImagesRepository imagesRepository) {
 		this.issuesRepository = issuesRepository;
 		this.mapMarkersRepository = mapMarkersRepository;
 		this.usersRepository = usersRepository;
+		this.imagesRepository = imagesRepository;
 	}
 
     @Override
@@ -43,31 +58,53 @@ public class IssueServiceImpl implements IIssueService {
         return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
     }
 
-    @Override
-    public Issue createIssue(MapDataDTO data) {
+    public Issue saveIssue(MapDataDTO dto, MultipartFile file)  {
 
-		MapMarker marker = mapMarkersRepository.findById(data.getMarkerId()).orElse(null);
+		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
 
-	    Issue issue = new Issue();
-        issue.setMapMarker(marker);
-	    issue.setTitle(data.getTitle());
-	    issue.setText(data.getText());
+	    User user = usersRepository.findOne(getCurrent().getId());
 
-	    User user = usersRepository.findById(getCurrent().getId()).orElse(null);
-        issue.setAuthor(user);
+	    boolean closed = dto.getTypeId() != 1;
 
-	    Image image = new Image();
-	    String imgPath = DigestUtils.md5Hex(data.getImage());
-	    image.setSrc(imgPath);
-	    image.setHash("hashhbshhashhashnashhxshhashhash");
-	    issue.setImage(image);
+	    Image image;
+	    byte[] fileBytes = {};
+	    try {
+		    fileBytes = file.getBytes();
+	    } catch (IOException e) {
+		    logger.info("Error while file encoding", e);
+	    }
+	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(fileBytes));
+	    if(duplicateImage != null) {
+			image = duplicateImage;
+	    } else {
+		    image = new Image();
 
-        issue.setTypeId(data.getTypeId());
-        boolean isClosed = data.getTypeId() != 1;
-        issue.setClosed(isClosed);
-        issue.setCreatedAt(LocalDateTime.now());
-        issue.setUpdatedAt(LocalDateTime.now());
-        return issuesRepository.save(issue);
+		    String uniqueFileName = UUID.randomUUID().toString().replace("-", "");
+			String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+			String uniqueFile = uniqueFileName + "." + extension;
+
+		    image.setSrc(uniqueFile);
+		    image.setHash(DigestUtils.md5Hex(fileBytes));
+
+		    File newFile = new File(imageStorage + uniqueFile);
+		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
+			    stream.write(fileBytes);
+		    } catch (IOException e) {
+			    logger.info("Error while file saving", e);
+		    }
+	    }
+
+	    return issuesRepository.save(Issue.Builder.anIssue()
+		        .setMapMarker(marker)
+		        .setTitle(dto.getTitle())
+		        .setText(dto.getDesc())
+		        .setAuthor(user)
+		        .setImage(image)
+		        .setTypeId(dto.getTypeId())
+		        .setClosed(closed)
+		        .setCreatedAt(LocalDateTime.now())
+		        .setUpdatedAt(LocalDateTime.now())
+		        .build());
     }
 
 	@Override

@@ -13,6 +13,10 @@
 package com.shrralis.ssdemo1.security;
 
 import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.security.exception.CitizenBadCredentialsException;
+import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensException;
+import com.shrralis.ssdemo1.security.model.AuthorizedUser;
+import com.shrralis.ssdemo1.security.service.interfaces.ICitizenUserDetailsService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,7 +26,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -33,7 +36,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AuthProvider implements AuthenticationProvider, InitializingBean {
 
     private PasswordEncoder passwordEncoder;
-    private UserDetailsService userDetailsService;
+	private ICitizenUserDetailsService userDetailsService;
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
 	@Override
@@ -45,20 +48,29 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 
     @Override
     public Authentication authenticate(Authentication authentication) {
-        String login = (authentication.getPrincipal() == null) ? null : authentication.getName();
-        UserDetails userDetails = retrieveUserDetails(login);
+	    String loginOrEmail = (authentication.getPrincipal() == null) ? null : authentication.getName();
+	    UserDetails userDetails = retrieveUserDetails(loginOrEmail);
 
-        additionalAuthenticationChecks(userDetails, (UsernamePasswordAuthenticationToken) authentication);
+	    additionalAuthenticationChecks((AuthorizedUser) userDetails, (UsernamePasswordAuthenticationToken) authentication);
         return createSuccessAuthentication(authentication, userDetails);
     }
 
-    private UserDetails retrieveUserDetails(String login) {
-	    UserDetails userDetails = userDetailsService.loadUserByUsername(login);
+	private UserDetails retrieveUserDetails(String loginOrEmail) {
+		UserDetails userDetails;
 
-        if (userDetails == null) {
-            throw new InternalAuthenticationServiceException(
-                    "UserDetailsService returned null, which is an interface contract violation");
-        }
+		if (!loginOrEmail.contains("@")) {
+			userDetails = userDetailsService.loadUserByUsername(loginOrEmail);
+		} else {
+			userDetails = userDetailsService.loadUserByEmail(loginOrEmail);
+		}
+
+		if (userDetails == null) {
+			throw new InternalAuthenticationServiceException(
+					"UserDetailsService returned null, which is an interface contract violation");
+		} else if (userDetails instanceof AuthorizedUser
+				&& ((AuthorizedUser) userDetails).getFailedAuthCount() == User.MAX_FAILED_AUTH_VALUE) {
+			throw new TooManyNonExpiredRecoveryTokensException(loginOrEmail);
+		}
         return userDetails;
     }
 
@@ -70,18 +82,21 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
      * @throws BadCredentialsException if invalid password was entered
      */
     private void additionalAuthenticationChecks(
-		    UserDetails userDetails,
+		    AuthorizedUser userDetails,
 		    UsernamePasswordAuthenticationToken authentication) {
         if (authentication.getCredentials() != null) {
             String password = authentication.getCredentials().toString();
 
 	        if (password.length() < User.MIN_PASSWORD_LENGTH
 			        || !passwordEncoder.matches(password, userDetails.getPassword())) {
-                throw new BadCredentialsException("Bad credentials");
+		        userDetailsService.increaseUserFailedAttempts(userDetails);
+		        throw new CitizenBadCredentialsException(
+				        userDetails.getUsername(), userDetails.getFailedAuthCount() + 1);
             }
         } else {
-            throw new BadCredentialsException("Bad credentials");
+	        throw new BadCredentialsException(userDetails.getUsername());
         }
+	    userDetailsService.resetUserFailedAttempts(userDetails);
     }
 
 	@Override
@@ -103,7 +118,7 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	public void setUserDetailsService(UserDetailsService userDetailsService) {
+	public void setUserDetailsService(ICitizenUserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
 }

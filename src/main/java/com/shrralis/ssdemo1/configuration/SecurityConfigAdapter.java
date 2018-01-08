@@ -1,8 +1,8 @@
 package com.shrralis.ssdemo1.configuration;
 
-import com.shrralis.ssdemo1.security.CitizenAccessDeniedHandler;
-import com.shrralis.ssdemo1.security.CitizenAuthenticationFailureHandler;
-import com.shrralis.ssdemo1.security.LogoutSuccessHandler;
+import com.shrralis.ssdemo1.security.handler.CitizenAccessDeniedHandler;
+import com.shrralis.ssdemo1.security.handler.CitizenAuthenticationFailureHandler;
+import com.shrralis.ssdemo1.security.handler.LogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;

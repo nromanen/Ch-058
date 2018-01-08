@@ -27,8 +27,8 @@ import static com.shrralis.ssdemo1.entity.User.TABLE_NAME;
 @Proxy(lazy = false)
 @Table(name = TABLE_NAME)
 @TypeDef(
-		name = "user_type",
-		typeClass = PsqlEnum.class
+	 name = "user_type",
+	 typeClass = PsqlEnum.class
 )
 public class User implements Identifiable<Integer> {
 
@@ -43,6 +43,7 @@ public class User implements Identifiable<Integer> {
     public static final String IMAGE_COLUMN_NAME = "image_id";
     public static final String NAME_COLUMN_NAME = "name";
     public static final String SURNAME_COLUMN_NAME = "surname";
+	public static final String FAILED_AUTH_COUNT_COLUMN_NAME = "failed_auth_count";
     public static final int MAX_LOGIN_LENGTH = 16;
     public static final int MIN_LOGIN_LENGTH = 4;
     public static final int MAX_EMAIL_LENGTH = 256;
@@ -53,6 +54,7 @@ public class User implements Identifiable<Integer> {
     public static final int MIN_NAME_LENGTH = 1;
     public static final int MAX_SURNAME_LENGTH = 32;
     public static final int MIN_SURNAME_LENGTH = 1;
+	public static final int MAX_FAILED_AUTH_VALUE = 5;
 
 	@Id
 	@NotNull
@@ -88,7 +90,7 @@ public class User implements Identifiable<Integer> {
 	@Column(name = PASS_COLUMN_NAME, nullable = false, length = MAX_PASSWORD_LENGTH)
 	private String password;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = IMAGE_COLUMN_NAME)
 	private Image image;
 
@@ -105,6 +107,11 @@ public class User implements Identifiable<Integer> {
 	@Size(min = MIN_SURNAME_LENGTH, max = MAX_SURNAME_LENGTH)
 	@Column(name = SURNAME_COLUMN_NAME, nullable = false, length = MAX_SURNAME_LENGTH)
 	private String surname;
+
+	@NotNull
+	@Max(MAX_FAILED_AUTH_VALUE)
+	@Column(name = FAILED_AUTH_COUNT_COLUMN_NAME, nullable = false)
+	private Integer failedAuthCount = 0;
 
     public Integer getId() {
         return id;
@@ -170,20 +177,30 @@ public class User implements Identifiable<Integer> {
         this.surname = surname;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", type=" + type +
-                ", email='" + email + '\'' +
-                ", image=" + image +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                '}';
-    }
+	public Integer getFailedAuthCount() {
+		return failedAuthCount;
+	}
 
-    public enum Type {
+	public void setFailedAuthCount(Integer failedAuthCount) {
+		this.failedAuthCount = failedAuthCount;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", login='" + login + '\'' +
+				", type=" + type +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", image=" + image +
+				", name='" + name + '\'' +
+				", surname='" + surname + '\'' +
+				", failedAuthCount=" + failedAuthCount +
+				'}';
+	}
+
+	public enum Type {
         BANNED,
         USER,
         ADMIN,
@@ -240,6 +257,11 @@ public class User implements Identifiable<Integer> {
             user.setSurname(surname);
             return this;
         }
+
+	    public Builder setFailedAuthCount(Integer failedAuthCount) {
+		    user.setFailedAuthCount(failedAuthCount);
+		    return this;
+	    }
 
         public User build() {
             return user;

@@ -3,7 +3,7 @@
   <div id="myModal" class="modal">
     <div class="modal-wrapper">
       <div class="modal-content">
-        <form id="myForm" novalidate class="md-layout-row md-gutter" @submit.prevent="validateData">
+        <form method="post" id="myForm" novalidate class="md-layout-row md-gutter" @submit.prevent="validateData" enctype="multipart/form-data">
           <md-card class="md-flex-50 md-flex-small-100">
 
             <span class="close" @click="clearForm">&times;</span>
@@ -16,7 +16,7 @@
 
               <md-field :class="getValidationClass('title')">
                 <label for="title">Title</label>
-                <md-input name="title" id="title" :disabled="sending" v-model.trim="form.title"/>
+                <md-input name="title" id="title" :disabled="sending"  v-model.trim="form.title"/>
                 <span class="md-error" v-if="!$v.form.title.required">Title is required</span>
                 <span class="md-error"
                       v-else-if="!$v.form.title.minLength">Title must be at least 4 characters length</span>
@@ -28,10 +28,8 @@
                 <label>Description</label>
                 <md-textarea id="desc" v-model.trim="form.desc"></md-textarea>
                 <span class="md-error" v-if="!$v.form.desc.required">Description is required</span>
-                <span class="md-error"
-                      v-if="!$v.form.desc.minLength">Description must be at least 8 characters length</span>
-                <span class="md-error"
-                      v-if="!$v.form.desc.maxLength">Description can't be longer than 2048 characters</span>
+                <span class="md-error" v-if="!$v.form.desc.minLength">Description must be at least 8 characters length</span>
+                <span class="md-error" v-if="!$v.form.desc.maxLength">Description cannot be longer than 2048 characters</span>
               </md-field>
 
               <md-field :class="getValidationClass('type')">

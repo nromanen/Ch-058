@@ -3,7 +3,7 @@ import {getLocalUser} from "../../router/index";
 
 export default {
   name: 'Map',
-  data: () => ({
+  data: ()=> ({
     form: {
       title: null,
       desc: null,
@@ -14,13 +14,15 @@ export default {
     lat: 0,
     lng: 0,
     marker: null,
+    select: null,
     isPlaced: false,
     sending: false,
-    showSnackBar: false,
     showDialog : false,
     showIssueDialog : true,
     issues : [
-    ]
+    ],
+    showSnackBar: false,
+    markers: []
   }),
   validations: {
     form: {
@@ -56,7 +58,13 @@ export default {
     validateData() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.saveIssue()
+        var fileSize = document.getElementById("uploadImage").files[0].size;
+        if(fileSize > 1024 * 1024 * 5) // 5 MB
+        {
+          window.alert('Image size cannot be bigger then 5 MB');
+        } else {
+          this.saveIssue();
+        }
       }
     },
 
@@ -71,26 +79,40 @@ export default {
 
     initMap() {
       var self = this;
-      this.map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 48.29149, lng: 25.94034},
-        zoom: 15,
-        maxZoom: 19,
-        minZoom: 15,
-        disableDefaultUI: true,
-        disableDoubleClickZoom: true,
-        zoomControl: true,
-        mapTypeControl: true,
-      });
-      this.addYourLocationButton();
-      this.addSearchField();
-      this.getUserLocation();
-      this.map.addListener('dblclick', function (e) {
-        if (getLocalUser()) {
-          self.saveCoords(e.latLng.lat(), e.latLng.lng())
-        } else {
-          self.showSnackBar = true
-        }
-      });
+        this.map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 48.29149, lng: 25.94034},
+          zoom: 15,
+          maxZoom: 19,
+          minZoom: 15,
+          disableDefaultUI: true,
+          disableDoubleClickZoom: true,
+          zoomControl: true,
+          mapTypeControl: true,
+        });
+        this.addYourLocationButton();
+        this.addSearchField();
+        this.getUserLocation();
+        this.loadAllMarkers();
+
+        this.map.addListener('idle', function () {
+          for (var i = 0; i < self.markers.length; i++) {
+            var marker = self.markers[i];
+            if(self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
+              marker.setMap(self.map);
+            }
+            if(!self.map.getBounds().contains(marker.getPosition())) {
+              marker.setMap(null);
+            }
+          }
+        });
+
+        this.map.addListener('dblclick', function(e) {
+          if(getLocalUser()) {
+            self.saveCoords(e.latLng.lat(), e.latLng.lng())
+          } else {
+            self.showSnackBar = true
+          }
+        });
     },
 
     search() {
@@ -113,35 +135,44 @@ export default {
           radius: 10000,
         });
       autocomplete.bindTo('bounds', self.map);
-      autocomplete.addListener('place_changed', function () {
-        var place = autocomplete.getPlace();
-        if (!place.geometry) {
-          window.alert("No details available for input: '" + place.name + "'");
-          return;
-        }
-        else {
-          self.$http.post('getMarkerByCoords', null, {
-            params: {
-              lat: place.geometry.location.lat(),
-              lng: place.geometry.location.lng()
-            }
-          }).then((response) => {
-            if (response.body.data[0] == null) {
-              self.map.setCenter(place.geometry.location);
-              self.map.setZoom(19);
-              if (getLocalUser()) {
-                self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng())
-              } else {
-                self.showSnackBar = true;
-                document.getElementById('pac-input').value = '';
-              }
-            }
-            else {
-              self.map.setCenter(place.geometry.location);
-              self.map.setZoom(19);
-            }
-          })
-        }
+      autocomplete.addListener('place_changed', function() {
+         var place = autocomplete.getPlace();
+         if (!place.geometry) {
+           window.alert("No details available for input: '" + place.name + "'");
+           return;
+         }
+         else {
+           var s = window.select;
+           self.$http.get('marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
+             .then((response) => {
+             if(response.body.data[0] == null) {
+               self.map.setCenter(place.geometry.location);
+               self.map.setZoom(19);
+               s = new google.maps.Marker({
+                 map: self.map,
+                 position: {
+                   lat: place.geometry.location.lat(),
+                   lng: place.geometry.location.lng()
+                 },
+                 animation: google.maps.Animation.DROP
+               });
+               self.setMarkerType(s, '5');
+               if(getLocalUser()) {
+                 setTimeout(function() {
+                   self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+                   s.setMap(null);
+                 }, 1200)
+               } else {
+                 self.showSnackBar = true;
+                 document.getElementById('pac-input').value = '';
+               }
+             }
+             else {
+               self.map.setCenter(place.geometry.location);
+               self.map.setZoom(19);
+             }
+           })
+         }
       });
     },
 
@@ -239,7 +270,7 @@ export default {
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
       modal.style.display = "table";
-      span.onclick = function () {
+      span.onclick = function() {
         modal.style.display = "none";
         document.getElementById('pac-input').value = '';
         document.getElementById("preview").hidden = true;
@@ -253,41 +284,37 @@ export default {
       var desc = this.form.desc;
       var type = this.form.type;
       var image = this.form.image;
-      if (window.isPlaced) {
-        this.setMarkerType(window.marker, this.form.type);
-        this.$http.post('saveIssue', {
-          markerId: window.id,
-          title: title,
-          text: desc,
-          typeId: type,
-          image: image
-        }).then((response) => {
+
+      var formData = new FormData();
+      formData.append('title', title);
+      formData.append('desc', desc);
+      formData.append('typeId', type);
+      formData.append('file', document.getElementById("uploadImage").files[0]);
+
+      if(window.isPlaced) {
+        formData.append('markerId', window.id);
+        this.setMarkerType(window.marker, '4');
+        this.$http.post('issue', formData).then((response) => {console.log(response.body)
         });
       } else {
-        var marker = new google.maps.Marker({
-          map: this.map,
-          position: {
+          var marker = new google.maps.Marker({
+            map: this.map,
+            position: {
+              lat: window.lat,
+              lng: window.lng
+            },
+          });
+          this.setMarkerType(marker, type);
+          this.setListeners(marker);
+
+          this.$http.post('marker', {
             lat: window.lat,
             lng: window.lng
-          },
-          animation: google.maps.Animation.DROP
-        });
-        this.setMarkerType(marker, type);
-        this.setListeners(marker);
-
-        this.$http.post('saveMarker', {
-          lat: window.lat,
-          lng: window.lng
-        }).then((response) => {
-          this.$http.post('saveIssue', {
-            markerId: response.body.data[0].id,
-            title: title,
-            text: desc,
-            typeId: type,
-            image: image
           }).then((response) => {
+            formData.append('markerId', response.body.data[0].id);
+            this.$http.post('issue', formData).then((response) => {console.log(response.body)
+            });
           });
-        });
       }
 
       document.getElementById('myModal').style.display = "none";
@@ -300,23 +327,24 @@ export default {
 
     setMarkerType(marker, type) {
       var url;
-      switch (type) {
-        case '1':
-          url = '/src/assets/caution.png';
+      switch(type) {
+        case '1': url = '/src/assets/caution.png';
           break;
-        case '2':
-          url = '/src/assets/info.png';
+        case '2': url = '/src/assets/info.png';
           break;
-        case '3':
-          url = '/src/assets/feedback.png';
+        case '3': url ='/src/assets/feedback.png';
           break;
-        default:
-          url = ''
+        case '4': url ='/src/assets/multiple.png';
+          break;
+        case '5': url ='/src/assets/select.png';
+          break;
+        default: url = ''
       }
       var icon = {
         url: url,
-        scaledSize: new google.maps.Size(260, 260),
-        anchor: new google.maps.Point(130, 150)
+        scaledSize: new google.maps.Size(200, 200),
+        anchor: new google.maps.Point(100, 120)
+
       };
       marker.setIcon(icon);
     },
@@ -378,15 +406,11 @@ export default {
     },
 
     getMarkerByCoords(lat, lng) {
-      this.$http.post('getMarkerByCoords', null, {
-        params: {
-          lat: lat,
-          lng: lng
-        }
-      }).then((response) => {
+      this.$http.get('marker/' + lat + "/" + lng + "/").then((response) => {
         window.id = response.body.data[0].id;
-        window.isPlaced = true;
-      })
+        console.log(response.body);
+      });
+      window.isPlaced = true;
     },
 
     previewImage() {
@@ -404,54 +428,38 @@ export default {
 
     redirectToIssue(id) {
       this.$router.push('issue/' + id);
-    }
+    },
 
-    /*google.maps.event.addListener('dblclick', function() {
-        map.setCenter(marker.getPosition());
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-      });*/
+    loadAllMarkers() {
+      let self = this;
+      this.$http.get('').then((response) => {
+        for (var i = 0; i < response.body.data.length; i++) {
 
-    /*tornOffBounce(marker) {
-      marker.setAnimation(null);
-    },*/
+              var lat = parseFloat(response.body.data[i].lat);
+              var lng = parseFloat(response.body.data[i].lng);
+              var type = response.body.data[i].type.toString();
 
-    /*loadAllMarkers() {
-        let self = this
-        this.$http.get('map').then((response) => {
-            for (var i = 0; i < response.body.data.length; i++) {
-                var lat = parseFloat(response.body.data[i].lat)
-                var lng = parseFloat(response.body.data[i].lng)
-                var id = parseFloat(response.body.data[i].id)
-                var marker = new google.maps.Marker({
-                    map: self.map,
-                    position: {
-                      lat: lat,
-                      lng: lng
-                    },
-                    animation: google.maps.Animation.DROP
-                })
+              var marker = new google.maps.Marker({
+                position: {
+                  lat: lat,
+                  lng: lng
+                },
+              });
+              this.setListeners(marker);
+              this.setMarkerType(marker, type);
 
-                var infoWindow = new google.maps.InfoWindow();
-                marker.addListener('click', (function(marker, infoWindow, id){
-                    return function() {
-                        infoWindow.setContent(id.toString())
-                        infoWindow.open(map, marker)
-                        google.maps.event.addListener(self.map, 'click', function(){
-                          infoWindow.close();
-                        })
-                    };
-                })(marker, infoWindow, id))
+              this.markers.push(marker);
+          }
+
+          for (var i = 0; i < this.markers.length; i++) {
+            var marker = this.markers[i];
+            if(self.map.getBounds().contains(marker.getPosition())) {
+              marker.setMap(self.map);
             }
         }
-        );
-    },*/
-    /*function drop() {
-  for (var i =0; i < markerArray.length; i++) {
-	setTimeout(function() {
-	  addMarkerMethod();
-	}, i * 200);
-  }
-}*/
+        }
+      );
+    },
   },
 
   mounted: function () {
