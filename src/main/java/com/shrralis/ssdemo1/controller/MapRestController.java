@@ -12,6 +12,9 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
+import com.shrralis.ssdemo1.exception.EntityNotExistException;
+import com.shrralis.ssdemo1.exception.IllegalParameterException;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.ssdemo1.service.interfaces.IMapMarkersService;
 import com.shrralis.tools.model.JsonError;
@@ -56,10 +59,10 @@ public class MapRestController {
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@PostMapping("/issue")
 	public JsonResponse saveIssue(@RequestParam("file") MultipartFile image,
-	                              @Valid @ModelAttribute MapDataDTO dto) {
-		if(image != null) {
-			return new JsonResponse(issueService.saveIssue(dto, image));
+	                              @Valid @ModelAttribute MapDataDTO dto) throws AbstractCitizenException {
+		if (image == null) {
+			throw new IllegalParameterException("file");
 		}
-		return new JsonResponse(JsonError.Error.IMAGE_NOT_EXIST);
+		return new JsonResponse(issueService.saveIssue(dto, image));
 	}
 }

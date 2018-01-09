@@ -277,7 +277,6 @@ export default {
       var title = this.form.title;
       var desc = this.form.desc;
       var type = this.form.type;
-      var image = this.form.image;
 
       var formData = new FormData();
       formData.append('title', title);

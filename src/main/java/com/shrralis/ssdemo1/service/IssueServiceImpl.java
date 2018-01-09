@@ -29,6 +29,7 @@ import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 @Service
 @Transactional
 public class IssueServiceImpl implements IIssueService {
+	public static final int OPENED_TYPE = 1;
 
 	@Value("${imageStorage}")
 	private String imageStorage;
@@ -58,15 +59,15 @@ public class IssueServiceImpl implements IIssueService {
 
 	    User user = usersRepository.findOne(getCurrent().getId());
 
-	    boolean closed = dto.getTypeId() != 1;
+	    boolean closed = dto.getTypeId() != OPENED_TYPE;
 
-	    Image image;
 	    byte[] fileBytes = {};
 	    try {
 		    fileBytes = file.getBytes();
 	    } catch (IOException e) {
 		    logger.info("Error while file encoding", e);
 	    }
+	    Image image;
 	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(fileBytes));
 	    if(duplicateImage != null) {
 			image = duplicateImage;
