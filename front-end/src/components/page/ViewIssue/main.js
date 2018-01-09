@@ -8,6 +8,7 @@ Vue.directive('my-tooltip', VTooltip);
 Vue.use(VueMaterial);
 Vue.use(VueResource);
 
+
 export default {
   data () {
     return {

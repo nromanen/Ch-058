@@ -12,7 +12,5 @@ public interface IIssueService {
 
     Issue getById(Integer id);
 
-    Issue createIssue(MapDataDTO data);
-
     List<Issue> getAllIssueByMapMarker(int mapMarkerId);
 }

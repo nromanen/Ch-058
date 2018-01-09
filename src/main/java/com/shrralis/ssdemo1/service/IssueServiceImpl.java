@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;

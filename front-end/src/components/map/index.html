@@ -3,7 +3,8 @@
   <div id="myModal" class="modal">
     <div class="modal-wrapper">
       <div class="modal-content">
-        <form method="post" id="myForm" novalidate class="md-layout-row md-gutter" @submit.prevent="validateData" enctype="multipart/form-data">
+        <form method="post" id="myForm" novalidate class="md-layout-row md-gutter" @submit.prevent="validateData"
+              enctype="multipart/form-data">
           <md-card class="md-flex-50 md-flex-small-100">
 
             <span class="close" @click="clearForm">&times;</span>
@@ -16,7 +17,7 @@
 
               <md-field :class="getValidationClass('title')">
                 <label for="title">Title</label>
-                <md-input name="title" id="title" :disabled="sending"  v-model.trim="form.title"/>
+                <md-input name="title" id="title" :disabled="sending" v-model.trim="form.title"/>
                 <span class="md-error" v-if="!$v.form.title.required">Title is required</span>
                 <span class="md-error"
                       v-else-if="!$v.form.title.minLength">Title must be at least 4 characters length</span>
@@ -28,8 +29,10 @@
                 <label>Description</label>
                 <md-textarea id="desc" v-model.trim="form.desc"></md-textarea>
                 <span class="md-error" v-if="!$v.form.desc.required">Description is required</span>
-                <span class="md-error" v-if="!$v.form.desc.minLength">Description must be at least 8 characters length</span>
-                <span class="md-error" v-if="!$v.form.desc.maxLength">Description cannot be longer than 2048 characters</span>
+                <span class="md-error"
+                      v-if="!$v.form.desc.minLength">Description must be at least 8 characters length</span>
+                <span class="md-error"
+                      v-if="!$v.form.desc.maxLength">Description cannot be longer than 2048 characters</span>
               </md-field>
 
               <md-field :class="getValidationClass('type')">
@@ -69,43 +72,49 @@
 
   <div id="map"></div>
 
-  <div id="issuesByMarker">
-    <md-dialog :md-active.sync="showDialog" @md-closed="onCancelIssuesDialog" :md-fullscreen="false">
-      <md-dialog-title>
-        All issues by marker:
-      </md-dialog-title>
-      <br>
-      <md-dialog-content>
-        <div v-for="issue in issues" :key="issue.id">
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-70">
-              <a @click="redirectToIssue(issue.id)">
-                <h2>{{ issue.title }}</h2>
-              </a>
-              <p>{{issue.description.substring(0,20)}}...</p>
-              <hr align="center" width="100%" size="2" color="grey">
-            </div>
-            <div class="md-layout-item md-size-30">
-              <div class="myImage">
-                <div v-if="issue.typeId===1">
+
+  <md-dialog :md-active.sync="showDialog" @md-closed="onCancelIssuesDialog" :md-fullscreen="false"
+             class="issuesByMarker">
+    <md-dialog-title>
+      All issues by marker:
+    </md-dialog-title>
+    <br>
+    <md-dialog-content>
+      <div v-for="issue in issues" :key="issue.id">
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item md-size-70">
+            <a @click="redirectToIssue(issue.id, activeMarker)">
+              <h2>{{ issue.title }}</h2>
+            </a>
+            <p>{{issue.description.substring(0,20)}}...</p>
+            <hr align="center" width="100%" size="2" color="grey">
+          </div>
+          <div class="md-layout-item md-size-30">
+            <div class="myImage">
+              <div v-if="issue.typeId===1">
+                <div style="text-align: center">
                   <img src="../../assets/caution-large.png" width="50px" height="50px">
-                  <div style="text-align: center">Problem</div>
                 </div>
-                <div v-else-if="issue.typeId===2">
+                <div style="text-align: center">Problem</div>
+              </div>
+              <div v-else-if="issue.typeId===2">
+                <div style="text-align: center">
                   <img src="../../assets/info-large.png" width="50px" height="50px">
-                  <div style="text-align: center">Info</div>
                 </div>
-                <div v-else-if="issue.typeId===3">
+                <div style="text-align: center">Info</div>
+              </div>
+              <div v-else-if="issue.typeId===3">
+                <div style="text-align: center">
                   <img src="../../assets/feedback-large.png" width="50px" height="50px">
-                  <div style="text-align: center">Feedback</div>
                 </div>
+                <div style="text-align: center">Feedback</div>
               </div>
             </div>
           </div>
         </div>
-      </md-dialog-content>
-    </md-dialog>
-  </div>
+      </div>
+    </md-dialog-content>
+  </md-dialog>
 
 </div>
 
