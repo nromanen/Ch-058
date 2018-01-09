@@ -9,5 +9,5 @@ public interface INotificationService {
     Notification addNotification(Notification notification);
     Long removeNotification(Notification notification);
     List<Notification> getAllNotifications();
-
+    Notification setWaiting(Notification notification, Boolean waiting);
 }

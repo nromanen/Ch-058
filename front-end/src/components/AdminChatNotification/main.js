@@ -17,6 +17,12 @@ export default {
     answer: function (userId, issueId) {
       this.stompClient.send("/app/connect", {}, JSON.stringify({text: 'Accept', login: "", issueId: issueId, userId: userId}));
       window.location.href = "http://localhost:8081/#/adminChatPage/" + issueId + "/" + userId;
+    },
+    markAsReaded: function (userId, issueId) {
+      this.$http.delete('http://localhost:8080/notification/' + issueId + '/' + userId,
+        JSON.stringify({text: 'Delete', login: "", issueId: issueId, userId: userId})).then( data => {
+          console.log(data.body);
+      });
     }
   },
   created: function () {
@@ -44,6 +50,18 @@ export default {
           _this.users.splice(index, 1);
           console.log(index);
           console.log('removed');
+        }
+        else if(user.text == "Notification timed out"){
+          var issueId = user.issueId;
+          var userId = user.userId;
+          var index = -1;
+          for(var i = 0; i < _this.users.length; i++){
+            if(_this.users[i].userId == user.userId && _this.users[i].issueId == user.issueId){
+              index = i;
+              break;
+            }
+          }
+          _this.users[i].waiting = true;
         }
         else {
           var user = JSON.parse(input.body);

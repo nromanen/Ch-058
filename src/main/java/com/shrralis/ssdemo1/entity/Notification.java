@@ -14,6 +14,7 @@ public class Notification {
     private String text;
     private Long userId;
     private Long issueId;
+    private Boolean waiting;
 
     public Long getId() {
         return id;
@@ -53,5 +54,13 @@ public class Notification {
 
     public void setIssueId(Long issueId) {
         this.issueId = issueId;
+    }
+
+    public Boolean getWaiting() {
+        return waiting;
+    }
+
+    public void setWaiting(Boolean waiting) {
+        this.waiting = waiting;
     }
 }

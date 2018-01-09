@@ -8,7 +8,8 @@ export default {
       login: '',
       socket: null,
       stompClient: null,
-      waiting: false
+      waiting: false,
+      noAdmins: false
     }
   },
   methods: {
@@ -49,6 +50,12 @@ export default {
           let _this = this;
           _this.notificateAdmins(_this.login);
           _this.waiting = true;
+          function func() {
+            _this.noAdmins = true;
+          }
+          var timerId = setTimeout(func, 60000);
+          _this.stompClient.send("/app/connect",  {},
+            JSON.stringify({text: "Notification timed out", login: login, issueId: 3, userId: getLocalUser().id}));
         }
       })
     }

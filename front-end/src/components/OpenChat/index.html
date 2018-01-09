@@ -2,8 +2,11 @@
   <div class="center" v-if="!waiting">
     <md-button @click="openChat" id="button">Open chat</md-button>
   </div>
-  <div class="center" v-else>
+  <div class="center" v-else-if="waiting && !noAdmins">
     <p id="hint">Please wait for a minute for an answer from admin</p>
     <div id="loader"></div>
+  </div>
+  <div class="center" v-else>
+    <p>Sorry, but there are no administrators currently available. Please contact later</p>
   </div>
 </div>

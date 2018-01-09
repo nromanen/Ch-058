@@ -30,6 +30,11 @@ public class ChatController {
     private static final Logger logger =
             LoggerFactory.getLogger(ChatController.class);
 
+    @RequestMapping("/notification/{issueId}/{userId}")
+    private Long delete(Notification notification){
+        return notificationService.removeNotification(notification);
+    }
+
     @RequestMapping("/{issueId}/{userId}/chat")
     public Boolean checkChatExist(@PathVariable("issueId") Long issueId, @PathVariable("userId") Long userId){
         return messageService.checkChat(issueId, userId);
