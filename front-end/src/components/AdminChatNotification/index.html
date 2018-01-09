@@ -1,7 +1,7 @@
 <div class="notification">
-  <p>There is new message</p>
+  <p>Notifications from:</p>
   <div v-for="user in users" class="row">
-    <p>{{user.userId}}</p>
-    <md-button @click="answer(user.userId, user.issueId)">Answer</md-button>
+    <!--<p style="display: inline-block;"></p>-->
+    <md-button style="display: inline-block;" @click="answer(user.userId, user.issueId)">Answer to {{user.login}}</md-button>
   </div>
 </div>

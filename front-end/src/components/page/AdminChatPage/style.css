@@ -1,0 +1,58 @@
+h1{
+  margin: 0px;
+  padding: 20px;
+  text-align: center;
+}
+
+.messageList{
+  /*border: 1px solid white;*/
+  display: table;
+  position:relative;
+  margin: auto;
+  width: 60%;
+  height: 40em;
+  padding: 10px 20px;
+}
+
+.row{
+  display: table-row;
+  height: fit-content;
+}
+
+.innerMes{
+  background: #FFB74D;
+}
+
+.myMes{
+  float: right;
+  background: #66BB6A;
+}
+
+.messageText{
+  margin: 10px auto;
+  float: left;
+  width: 80%;
+}
+
+.messageSend{
+  bottom: 0px;
+}
+
+.messageManagment{
+  /*margin-left:3%;*/
+  width: 60%;
+  position: fixed;
+  bottom: 0px;
+}
+
+.md-raised{
+  height: 8em;
+}
+
+.messageBack::after{
+  clear: both;
+}
+
+.messageBack::before{
+  clear: both;
+}

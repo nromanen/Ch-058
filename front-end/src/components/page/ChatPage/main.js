@@ -6,12 +6,7 @@ export default {
   name: 'ChatPage',
   data() {
     return {
-      messages: [
-        {
-          text: '',
-          authorId: 0
-        }
-      ],
+      messages: [],
       newMessageText: '',
       stompClient: null,
       userId: -1
@@ -35,9 +30,20 @@ export default {
       this.messages.push(result);
       console.log(this.messages);
     },
+    showMessages: function (messages) {
+      for(var i = 0; i < messages.length; i++) {
+        var result = {
+          text: messages[i].text,
+          authorId: messages[i].authorId
+        }
+        this.messages.push(result);
+      }
+      console.log(this.messages);
+    },
     getAllMessages: function () {
       this.$http.get('http://localhost:8080/message/all/3/' + this.userId).then( data => {
         console.log(data.body);
+        this.showMessages(data.body);
       });
     }
   },

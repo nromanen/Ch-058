@@ -6,12 +6,7 @@ export default {
   name: 'AdminChatPage',
   data() {
     return {
-      messages: [
-        {
-          text: '',
-          authorId: 0
-        }
-      ],
+      messages: [],
       newMessageText: '',
       stompClient: null,
       adminId: -1,
@@ -28,7 +23,7 @@ export default {
     },
     sendMes: function (event) {
       this.stompClient.send("/app/message" + "/" + this.issueId + "/" + this.userId, {},
-        JSON.stringify({text: this.newMessageText, authorId: this.authorId}));
+        JSON.stringify({text: this.newMessageText, authorId: this.adminId}));
       this.newMessageText = '';
     },
     showMessage: function (message) {

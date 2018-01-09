@@ -1,30 +1,19 @@
 package com.shrralis.ssdemo1.entity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "message")
-public class FullMessage {
+@Table(name = "notification")
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    private String login;
     private String text;
     private Long userId;
     private Long issueId;
-    private Long authorId;
-    private LocalDateTime date;
-
-    public FullMessage(Long id, String text) {
-        this.id = id;
-        this.text = text;
-    }
-
-    public FullMessage(){
-        this.text = "default";
-    }
 
     public Long getId() {
         return id;
@@ -32,6 +21,14 @@ public class FullMessage {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getText() {
@@ -56,21 +53,5 @@ public class FullMessage {
 
     public void setIssueId(Long issueId) {
         this.issueId = issueId;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public Long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
     }
 }

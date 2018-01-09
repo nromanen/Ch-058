@@ -7,7 +7,8 @@ export default {
     return {
       login: '',
       socket: null,
-      stompClient: null
+      stompClient: null,
+      waiting: false
     }
   },
   methods: {
@@ -31,7 +32,8 @@ export default {
       })
     },
     notificateAdmins: function (login) {
-      this.stompClient.send("/app/connect", {}, JSON.stringify({text: 'Alert', issueId: 3, userId: getLocalUser().id}));
+      this.stompClient.send("/app/connect", {}, JSON.stringify({text: "Alert", login: login,
+        issueId: 3, userId: getLocalUser().id}));
     },
     openChat: function(){
       this.$http.get('http://localhost:8080/3/' + getLocalUser().id + '/chat').then( data => {
@@ -44,12 +46,9 @@ export default {
           window.location.href = "http://localhost:8081/#/chat";
         }
         else{
-          //  chat doesn`t exist yet
-          //  must send notification to admins
-          //  and wait for response(1 min)
-          //  if 1 min no admins send response(no free admins please connect to us later, sorry for inconvinience)
           let _this = this;
           _this.notificateAdmins(_this.login);
+          _this.waiting = true;
         }
       })
     }

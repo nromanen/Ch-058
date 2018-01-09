@@ -11,6 +11,7 @@ export default {
     snackBarText: null
   }),
   created: function () {
+    console.log(getLocalUser().login);
     Vue.http.get('users/get/' + getLocalUser().id)
       .then(
         response => {

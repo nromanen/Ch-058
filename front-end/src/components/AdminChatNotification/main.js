@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     answer: function (userId, issueId) {
-      this.stompClient.send("/app/connect", {}, JSON.stringify({text: 'Accept', issueId: issueId, userId: userId}));
+      this.stompClient.send("/app/connect", {}, JSON.stringify({text: 'Accept', login: "", issueId: issueId, userId: userId}));
       window.location.href = "http://localhost:8081/#/adminChatPage/" + issueId + "/" + userId;
     }
   },
@@ -31,12 +31,34 @@ export default {
     stompClient.connect({}, function (frame) {
       console.log('Connected: ' + frame);
       stompClient.subscribe('/checkTopic/broadcast', function (input) {
+        console.log(input.body);
         var user = JSON.parse(input.body);
-        _this.users.push(user);
-        console.log('received notification ! connectedToAdmin');
-        // console.log(input);
-        console.log(_this.users[0].userId);
+        if(user.text == "Accept"){
+          var index = -1;
+          for(var i = 0; i < _this.users.length; i++){
+            if(_this.users[i].userId == user.userId && _this.users[i].issueId == user.issueId){
+              index = i;
+              break;
+            }
+          }
+          _this.users.splice(index, 1);
+          console.log(index);
+          console.log('removed');
+        }
+        else {
+          var user = JSON.parse(input.body);
+          _this.users.push(user);
+          console.log('received notification !');
+        }
       });
     })
+
+    this.$http.get('http://localhost:8080/notification/all').then( data => {
+      var charRequestArray = data.body;
+      for(var i = 0; i < charRequestArray.length; i++) {
+        var user = charRequestArray[i];
+        this.users.push(user);
+      }
+    });
   }
 }

@@ -1,3 +1,9 @@
-<div class="">
-<md-button @click="openChat">Open chat</md-button>
+<div class="parent">
+  <div class="center" v-if="!waiting">
+    <md-button @click="openChat" id="button">Open chat</md-button>
+  </div>
+  <div class="center" v-else>
+    <p id="hint">Please wait for a minute for an answer from admin</p>
+    <div id="loader"></div>
+  </div>
 </div>
