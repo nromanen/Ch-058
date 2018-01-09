@@ -57,6 +57,7 @@
 	    <javax.mail.version>1.4.7</javax.mail.version>
 	    <apache.commons.lang>3.7</apache.commons.lang>
 	    <apache.commons.collections>4.1</apache.commons.collections>
+        <apache.commons.io>2.6</apache.commons.io>
     </properties>
 
     <dependencies>
@@ -373,6 +374,12 @@
 		    <artifactId>commons-collections4</artifactId>
 		    <version>${apache.commons.collections}</version>
 	    </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${apache.commons.io}</version>
+        </dependency>
     </dependencies>
 
     <build>

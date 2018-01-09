@@ -9,33 +9,40 @@
  */
 
 package com.shrralis.ssdemo1.dto;
-import java.time.LocalDateTime;
+
+import com.shrralis.ssdemo1.entity.Issue;
+import com.shrralis.tools.model.JsonError;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class MapDataDTO {
-	private Integer mapMarkerId;
-	private Integer authorId;
+
+	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
+	private Integer markerId;
+
+	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
+	@Size(
+			min = Issue.MIN_TITLE_LENGTH, max = Issue.MAX_TITLE_LENGTH,
+			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String title;
-	private String text;
-	private String type;
-	private Integer imageId;
-	private boolean isClosed;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
 
-	public Integer getMapMarkerId() {
-		return mapMarkerId;
+	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
+	@Size(
+			min = Issue.MIN_TEXT_LENGTH, max = Issue.MAX_TEXT_LENGTH,
+			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	private String desc;
+
+	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
+	private Integer typeId;
+
+	public Integer getMarkerId() {
+		return markerId;
 	}
 
-	public void setMapMarkerId(Integer mapMarkerId) {
-		this.mapMarkerId = mapMarkerId;
-	}
-
-	public Integer getAuthorId() {
-		return authorId;
-	}
-
-	public void setAuthorId(Integer authorId) {
-		this.authorId = authorId;
+	public void setMarkerId(Integer markerId) {
+		this.markerId = markerId;
 	}
 
 	public String getTitle() {
@@ -46,51 +53,19 @@ public class MapDataDTO {
 		this.title = title;
 	}
 
-	public String getText() {
-		return text;
+	public String getDesc() {
+		return desc;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
-	public String getType() {
-		return type;
+	public Integer getTypeId() {
+		return typeId;
 	}
 
-	public void setType(Integer typeId) {
-		this.type = type;
-	}
-
-	public Integer getImageId() {
-		return imageId;
-	}
-
-	public void setImageId(Integer imageId) {
-		this.imageId = imageId;
-	}
-
-	public boolean isClosed() {
-		return isClosed;
-	}
-
-	public void setClosed(boolean closed) {
-		isClosed = closed;
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
 	}
 }

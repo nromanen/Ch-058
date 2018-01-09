@@ -18,9 +18,29 @@
   overflow: auto;
 }
 
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
 .modal-content {
-  margin: 5% auto;
-  width: 25%;
+  margin: 0 auto;
+  width: 90%;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+@media (min-width: 40em) {
+  .modal-content {
+    margin: 0 auto;
+    width: 50%;
+  }
+}
+
+@media (min-width: 75em) {
+  .modal-content {
+    margin: 0 auto;
+    width: 25%;
+  }
 }
 
 .close {
@@ -40,4 +60,9 @@
 
 #desc {
   resize: none;
+}
+
+#preview {
+  max-height: 200px;
+  min-height: 200px;
 }

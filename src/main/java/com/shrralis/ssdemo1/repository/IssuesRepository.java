@@ -21,5 +21,9 @@ import java.util.Optional;
 
 @Repository
 public interface IssuesRepository extends JpaRepository<Issue, Integer> {
+
     Optional<Issue> findById(Integer id);
+
+    @Query(value = "SELECT type_id FROM issues WHERE map_marker_id = ?1", nativeQuery = true)
+    int[] getIssueTypeById(int id);
 }
