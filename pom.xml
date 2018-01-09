@@ -57,6 +57,7 @@
 	    <javax.mail.version>1.4.7</javax.mail.version>
 	    <apache.commons.lang>3.7</apache.commons.lang>
 	    <apache.commons.collections>4.1</apache.commons.collections>
+        <apache.commons.io>2.6</apache.commons.io>
     </properties>
 
     <dependencies>
@@ -374,6 +375,12 @@
 		    <version>${apache.commons.collections}</version>
 	    </dependency>
 
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${apache.commons.io}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -405,6 +412,10 @@
                 <configuration>
                     <source>1.${java.version}</source>
                     <target>1.${java.version}</target>
+                    <compilerArgs>
+                        <arg>--add-modules</arg>
+                        <arg>java.xml.bind</arg>
+                    </compilerArgs>
 	                <annotationProcessorPaths>
 		                <path>
 			                <groupId>org.mapstruct</groupId>

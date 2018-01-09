@@ -25,6 +25,7 @@ import static com.shrralis.ssdemo1.entity.Issue.TABLE_NAME;
 @Entity
 @Table(name = TABLE_NAME)
 public class Issue implements Identifiable<Integer> {
+
     public static final String TABLE_NAME = "issues";
     public static final String ID_COLUMN_NAME = "id";
     public static final String MAP_MARKER_COLUMN_NAME = "map_marker_id";
@@ -32,14 +33,14 @@ public class Issue implements Identifiable<Integer> {
     public static final String IMG_COLUMN_NAME = "image_id";
     public static final String TITLE_COLUMN_NAME = "title";
     public static final String TEXT_COLUMN_NAME = "text";
-    public static final String TYPE_COLUMN_NAME = "type";
+    public static final String TYPE_COLUMN_NAME = "type_id";
     public static final String CLOSED_COLUMN_NAME = "closed";
     public static final String CREATED_AT_COLUMN_NAME = "created_at";
     public static final String UPDATED_AT_COLUMN_NAME = "updated_at";
     public static final int MAX_TITLE_LENGTH = 32;
     public static final int MIN_TITLE_LENGTH = 4;
     public static final int MAX_TEXT_LENGTH = 2048;
-    public static final int MIN_TEXT_LENGTH = 64;
+    public static final int MIN_TEXT_LENGTH = 8;
 
 	@Id
 	@NotNull
@@ -64,19 +65,18 @@ public class Issue implements Identifiable<Integer> {
 	private String title;
 
 	@NotNull
-	@Size(min = MIN_TEXT_LENGTH, max = MIN_TEXT_LENGTH)
+	@Size(min = MIN_TEXT_LENGTH, max = MAX_TEXT_LENGTH)
 	@Column(name = TEXT_COLUMN_NAME, nullable = false, length = MAX_TEXT_LENGTH)
 	private String text;
 
-	@NotBlank
+	@NotNull
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = IMG_COLUMN_NAME)
 	private Image image;
 
 	@NotNull
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
-	@JoinColumn(name = TYPE_COLUMN_NAME, nullable = false)
-	private Type type;
+	@Column(name = TYPE_COLUMN_NAME)
+	private Integer typeId;
 
 	@NotNull
 	@Column(name = CLOSED_COLUMN_NAME, nullable = false)
@@ -89,6 +89,8 @@ public class Issue implements Identifiable<Integer> {
 	@NotNull
 	@Column(name = UPDATED_AT_COLUMN_NAME, nullable = false)
 	private LocalDateTime updatedAt;
+
+	private Issue() {}
 
 	@Override
     public Integer getId() {
@@ -139,13 +141,12 @@ public class Issue implements Identifiable<Integer> {
         this.text = text;
     }
 
-	public Type getType() {
-        return type;
-    }
-
-	public void setType(Type type) {
-        this.type = type;
-    }
+	public Integer getTypeId() {
+		return typeId;
+	}
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
+	}
 
     public boolean isClosed() {
         return closed;
@@ -183,7 +184,7 @@ public class Issue implements Identifiable<Integer> {
         @Id
         @NotNull
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issue_types_seq_gen")
-        @SequenceGenerator(name = "issue_types_seq_gen", sequenceName = "issue_types_id_seq")
+        @SequenceGenerator(name = "issue_types_seq_gen", sequenceName = "issue_types_id_seq", allocationSize = 1)
         @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
         private Integer id;
 
@@ -207,5 +208,71 @@ public class Issue implements Identifiable<Integer> {
         public void setName(String name) {
             this.name = name;
         }
+    }
+
+    public static final class Builder {
+    	private Issue issue;
+
+    	private Builder() {
+    		issue = new Issue();
+	    }
+
+	    public static Builder anIssue() {
+    		return new Builder();
+	    }
+
+	    public Builder setId(Integer id) {
+		    issue.setId(id);
+		    return this;
+	    }
+
+	    public Builder setMapMarker(MapMarker marker) {
+    		issue.setMapMarker(marker);
+    		return this;
+	    }
+
+	    public Builder setAuthor(User author) {
+    		issue.setAuthor(author);
+    		return this;
+	    }
+
+	    public Builder setTitle(String title) {
+    		issue.setTitle(title);
+    		return this;
+	    }
+
+	    public Builder setText(String text) {
+    		issue.setText(text);
+    		return this;
+	    }
+
+	    public Builder setImage(Image image) {
+    		issue.setImage(image);
+    		return this;
+	    }
+
+	    public Builder setTypeId(Integer id) {
+		    issue.setTypeId(id);
+		    return this;
+	    }
+
+	    public Builder setClosed(boolean closed) {
+    		issue.setClosed(closed);
+    		return this;
+	    }
+
+	    public Builder setCreatedAt(LocalDateTime createdAt) {
+    		issue.setCreatedAt(createdAt);
+    		return this;
+	    }
+
+	    public Builder setUpdatedAt(LocalDateTime updatedAt) {
+		    issue.setUpdatedAt(updatedAt);
+		    return this;
+	    }
+
+	    public Issue build() {
+    		return issue;
+	    }
     }
 }
