@@ -15,6 +15,7 @@ package com.shrralis.ssdemo1.security.service;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.security.exception.EmailNotFoundException;
+import com.shrralis.ssdemo1.security.exception.LoginNotFoundException;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.security.service.interfaces.ICitizenUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class UserDetailsServiceImpl implements ICitizenUserDetailsService {
 		User user = usersRepository.getByLogin(login);
 
 		if (user == null) {
-			throw new UsernameNotFoundException(login);
+			throw new LoginNotFoundException(login);
 		}
 		return new AuthorizedUser(user, getAuthorities(user));
     }
