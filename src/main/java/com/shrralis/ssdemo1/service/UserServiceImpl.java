@@ -16,10 +16,12 @@ import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
 @Service
+@Transactional
 public class UserServiceImpl implements IUserService {
     @Resource
     private UsersRepository repository;
@@ -30,7 +32,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public JsonResponse getUser(Integer id) {
+	public JsonResponse getUser(int id) {
 		return new JsonResponse(repository.getOne(id));
 	}
 }

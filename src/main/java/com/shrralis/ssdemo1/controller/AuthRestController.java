@@ -12,100 +12,52 @@
 
 package com.shrralis.ssdemo1.controller;
 
+import com.shrralis.ssdemo1.dto.PasswordRecoveryDTO;
 import com.shrralis.ssdemo1.dto.RegisterUserDTO;
-import com.shrralis.ssdemo1.exception.interfaces.AbstractShrralisException;
-import com.shrralis.ssdemo1.security.AuthorizedUser;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
-import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationTrustResolver;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import static java.util.Map.entry;
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
- * @author sh
- * rralis (https://t.me/Shrralis)
+ * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
  * Created 12/20/17 at 5:59 PM
  */
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 public class AuthRestController {
-	private static final Logger logger = LoggerFactory.getLogger(AuthRestController.class);
+
+	private IAuthService service;
+
 	@Autowired
-	IAuthService service;
-    @Autowired
-    private AuthenticationTrustResolver authenticationTrustResolver;
-
-	@RequestMapping({ "/login", "/logout" })
-	public JsonResponse checkCurrSession(@RequestParam(value = "error", required = false) Boolean isError) {
-		if (isError != null) {
-			if (isError) {
-				return new JsonResponse(JsonError.Error.UNEXPECTED);
-			} else {
-				return new JsonResponse(JsonError.Error.NO_ERROR);
-			}
-		}
-
-		AuthorizedUser authorizedUser = AuthorizedUser.getCurrent();
-
-		if (isCurrentAuthenticationAnonymous() || authorizedUser == null) {
-			return new JsonResponse(Map.ofEntries(entry("logged_in", false)));
-		}
-
-
-		return new JsonResponse(Map.ofEntries(
-				entry("id", authorizedUser.getId()),
-				entry("login", authorizedUser.getUsername()),
-				entry("type", authorizedUser.getType())
-		));
+	public AuthRestController(IAuthService service) {
+		this.service = service;
 	}
 
-//	@RequestMapping(value = "fbSignUp", method = RequestMethod.POST)
-//	public JsonResponse fbSignUp(@RequestBody)
+	@PostMapping("/requestRecoveryToken")
+	public JsonResponse generateRecoveryToken(@RequestParam(name = "login") String login, HttpServletRequest request)
+			throws AbstractCitizenException, MessagingException {
+		return new JsonResponse(service.generateRecoveryToken(login, request.getRemoteAddr()));
+	}
 
-    @RequestMapping(
-            value = "signUp",
-		    consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-		    produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
-		    method = RequestMethod.POST)
-    public JsonResponse signUp(@RequestBody RegisterUserDTO user) throws AbstractShrralisException {
-        return service.signUp(user);
-    }
+	@GetMapping("/getCurrentSession")
+	public JsonResponse getCurrentSession() {
+		return new JsonResponse(service.getCurrentSession());
+	}
 
-    private boolean isCurrentAuthenticationAnonymous() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	@PostMapping("/recoverPassword")
+	public JsonResponse recoverPassword(@RequestBody @Valid PasswordRecoveryDTO dto) throws AbstractCitizenException {
+		return new JsonResponse(service.recoverPassword(dto));
+	}
 
-        return authenticationTrustResolver.isAnonymous(authentication);
-    }
-
-    private String getRedirectPath() {
-        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Set<String> authorities = new HashSet<>();
-
-        for (GrantedAuthority authority : principal.getAuthorities()) {
-            authorities.add(authority.getAuthority());
-        }
-
-        if (authorities.contains("ROLE_ADMIN")) {
-            return "redirect:/admin";
-        } else if (authorities.contains("ROLE_LEADER")) {
-            return "redirect:/leader";
-        } else {
-            return "redirect:/user/init";
-        }
+	@PostMapping("/signUp")
+	public JsonResponse signUp(@RequestBody @Valid RegisterUserDTO user) throws AbstractCitizenException {
+		return new JsonResponse(service.signUp(user));
     }
 }

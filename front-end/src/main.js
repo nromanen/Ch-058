@@ -8,8 +8,9 @@ import Vuelidate from 'vuelidate'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default-dark.css'
 import App from './App'
-import SignInPage from '@/components/page/SignInPage/SignInPage'
-import SignUpPage from '@/components/page/SignUpPage/SignUpPage'
+import SignInForm from '@/components/_form/SignInForm/SignInForm'
+import SignUpForm from '@/components/_form/SignUpForm/SignUpForm'
+import PassRecoveryForm from '@/components/_form/PassRecoveryForm/PassRecoveryForm'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
 import GoogleMap from '@/components/map/GoogleMap'
 import router from './router/index'
@@ -21,14 +22,11 @@ Vue.use(VueMaterial)
 Vue.http.options.root = 'http://localhost:8080'
 Vue.http.headers.common['Accept'] = 'application/json;charset=UTF-8'
 Vue.http.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
-// Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
-// Vue.http.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE'
 Vue.http.headers.common['Access-Control-Allow-Credentials'] = 'true'
-// Vue.http.options.crossOrigin = true
 Vue.http.options.credentials = true
-// Vue.config.productionTip = false
-Vue.component('sign-in-page', SignInPage)
-Vue.component('sign-up-page', SignUpPage)
+Vue.component('sign-in-form', SignInForm)
+Vue.component('sign-up-form', SignUpForm)
+Vue.component('password-recovery-form', PassRecoveryForm)
 Vue.component('auth-page', AuthPage)
 Vue.component('map-page', GoogleMap)
 

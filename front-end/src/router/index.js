@@ -2,14 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import IndexPage from '@/components/page/IndexPage/IndexPage'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
-import SignInPage from '@/components/page/SignInPage/SignInPage'
-import SignUpPage from '@/components/page/SignUpPage/SignUpPage'
-import Map from '@/components/map/GoogleMap'
-import Issue from '@/components/ViewIssue/App'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -17,32 +13,36 @@ export default new Router({
       component: IndexPage
     },
     {
-      path: '/issue/:id',
-      component: Issue
-    },
-    {
       path: '/auth**',
       name: 'AuthPage',
       component: AuthPage
-    },
-    {
-      path: '/login',
-      name: 'SignInPage',
-      component: SignInPage
-    },
-    {
-      path: '/signUp',
-      name: 'SignUpPage',
-      component: SignUpPage
-    },
-    {
-      path: '/map',
-      name: 'Map',
-      component: Map
     }
   ]
 })
 
+export default router
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    Vue.http.get('auth/getCurrentSession').then(response => {
+      let json = response.body
+
+      if (!json.errors && json.data[0].login) {
+        localStorage.setItem('user', JSON.stringify(json.data[0]))
+        next({
+          path: '/auth/login',
+          query: {
+            redirect: to.fullPath
+          }
+        })
+      } else {
+        next()
+      }
+    })
+  } else {
+    next()
+  }
+})
 // eslint-disable-next-line
 export function getLocalUser() {
   return JSON.parse(localStorage.getItem('user'))

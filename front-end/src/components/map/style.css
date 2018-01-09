@@ -1,8 +1,11 @@
 #map {
-  margin: 5vw auto;
-  width:  90vw;
-  height: 80vh;
+  margin: auto;
+  width:  100%;
+  height: 100%;
   color: #000000;
+}
+#root {
+  height: 100%;
 }
 .modal {
   display: none;
@@ -16,8 +19,8 @@
 }
 
 .modal-content {
-  margin: 10% auto;
-  width: 20%;
+  margin: 5% auto;
+  width: 25%;
 }
 
 .close {
@@ -25,7 +28,7 @@
   float: right;
   font-size: 28px;
   font-weight: bold;
-  margin: 15px;
+  margin: 10px;
 }
 
 .close:hover,

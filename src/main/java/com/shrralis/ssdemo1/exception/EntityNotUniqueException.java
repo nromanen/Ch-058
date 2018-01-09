@@ -12,19 +12,19 @@
 
 package com.shrralis.ssdemo1.exception;
 
-import com.shrralis.ssdemo1.exception.interfaces.AbstractShrralisException;
+import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonError.Error;
 
 import java.util.Map;
-
-import static java.util.Map.entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
  * Created 12/21/17 at 3:47 PM
  */
-public class EntityNotUniqueException extends AbstractShrralisException {
+public class EntityNotUniqueException extends AbstractCitizenException {
+
 	private final Entity entity;
 	private final String additionalInfo;
 
@@ -48,7 +48,7 @@ public class EntityNotUniqueException extends AbstractShrralisException {
 
 	@Override
 	public Error getError() {
-		return entity.getError().setParam(additionalInfo);
+		return entity.getError().forField(additionalInfo);
 	}
 
 	public enum Entity {
@@ -56,22 +56,22 @@ public class EntityNotUniqueException extends AbstractShrralisException {
 		MAP_MARKER,
 		USER;
 
-		private static final Map<Entity, Error> entityErrorMap;
+		private static final Map<Entity, JsonError.Error> ENTITY_ERROR_MAP;
 
 		static {
-			entityErrorMap = Map.ofEntries(
-					entry(IMAGE, Error.IMAGE_ALREADY_EXISTS),
-					entry(MAP_MARKER, Error.MAP_MARKER_ALREADY_EXISTS),
-					entry(USER, Error.USER_ALREADY_EXISTS)
-			);
+			ENTITY_ERROR_MAP = new ConcurrentHashMap<>();
+
+			ENTITY_ERROR_MAP.put(IMAGE, JsonError.Error.IMAGE_ALREADY_EXISTS);
+			ENTITY_ERROR_MAP.put(MAP_MARKER, JsonError.Error.MAP_MARKER_ALREADY_EXISTS);
+			ENTITY_ERROR_MAP.put(USER, JsonError.Error.USER_ALREADY_EXISTS);
 		}
 
-		public static Error getError(Entity entity) {
-			return entityErrorMap.get(entity);
+		public static JsonError.Error getError(Entity entity) {
+			return ENTITY_ERROR_MAP.get(entity);
 		}
 
-		public Error getError() {
-			return entityErrorMap.get(this);
+		public JsonError.Error getError() {
+			return ENTITY_ERROR_MAP.get(this);
 		}
 	}
 }

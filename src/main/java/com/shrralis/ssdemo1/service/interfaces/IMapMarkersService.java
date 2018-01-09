@@ -14,10 +14,15 @@ import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.tools.model.JsonResponse;
 
+import java.util.List;
+
 public interface IMapMarkersService {
-    JsonResponse loadAllMarkers();
-    MapMarker findByLatAndLng(Double lat, Double lng);
-    JsonResponse getMarker(double lat, double lng);
-    JsonResponse saveMarker(MapMarker marker);
-    JsonResponse saveData(MapDataDTO data);
+
+	List<MapMarker> loadAllMarkers();
+
+	MapMarker getMarker(double lat, double lng);
+
+	MapMarker saveMarker(MapMarker marker);
+
+	MapMarker deleteMarker(MapMarker marker);
 }

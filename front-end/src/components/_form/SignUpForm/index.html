@@ -1,0 +1,140 @@
+<div id="registration">
+  <form novalidate class="md-layout-row md-gutter" @submit.prevent="validateCredentials()">
+    <md-card class="md-flex50 md-flex-small-100">
+      <md-card-header>
+        <div class="md-title">Sign up</div>
+      </md-card-header>
+
+      <md-card-content>
+        <div class="md-layout-row md-layout-wrap md-gutter">
+          <div class="md-flex md-flex-small-100">
+            <md-field :class="getValidationClass('login')">
+              <label for="r-login">Login</label>
+
+              <md-input name="login" id="r-login" autocomplete="off" v-model.trim="form.login" :disabled="sending"/>
+
+              <span class="md-error" v-if="!$v.form.login.required">Login is required</span>
+
+              <span class="md-error" v-else-if="!$v.form.login.minLength">Login must have at least 4 characters</span>
+
+              <span class="md-error" v-else-if="!$v.form.login.maxLength">Login can contain maximum 16 characters</span>
+
+              <span class="md-error" v-else-if="!$v.form.login.LoginValidator">
+                Login can contain only characters like A-z, 0-9 and _ - .
+              </span>
+            </md-field>
+          </div>
+
+          <div class="flex md-flex-small-100">
+            <md-field :class="getValidationClass('password')">
+              <label for="r-password">Password</label>
+
+              <md-input name="password" id="r-password" autocomplete="off" type="password" v-model.trim="form.password"
+                        :disabled="sending"/>
+
+              <span class="md-error" v-if="!$v.form.password.required">Password is required</span>
+
+              <span class="md-error" v-else-if="!$v.form.password.minLength">
+                Password must have at least 8 characters
+              </span>
+            </md-field>
+          </div>
+
+          <div class="flex md-flex-small-100">
+            <md-field :class="getValidationClass('confirmPassword')">
+              <label for="confirm-password">Confirm password</label>
+
+              <md-input name="confirm_password" id="confirm-password" autocomplete="off" type="password"
+                        v-model.trim="form.confirmPassword" :disabled="sending"/>
+
+              <span class="md-error" v-if="!$v.form.confirmPassword.required">
+                The password confirmation is required
+              </span>
+
+              <span class="md-error" v-else-if="!$v.form.confirmPassword.sameAs">The passwords are different</span>
+            </md-field>
+          </div>
+
+          <div class="flex md-flex-small-100">
+            <md-field :class="getValidationClass('email')">
+              <label for="email">E-Mail</label>
+
+              <md-input name="email" id="email" autocomplete="email" type="email" v-model.trim="form.email"
+                        :disabled="sending"/>
+
+              <span class="md-error" v-if="!$v.form.email.required">E-Mail is required</span>
+
+              <span class="md-error" v-else-if="!$v.form.email.email">Bad E-Mail format</span>
+            </md-field>
+          </div>
+
+          <div class="flex md-flex-small-100">
+            <md-field :class="getValidationClass('name')">
+              <label for="name">First name</label>
+
+              <md-input name="name" id="name" autocomplete="name" type="name" v-model.trim="form.name"
+                        :disabled="sending"/>
+
+              <span class="md-error" v-if="!$v.form.name.required">First name is required</span>
+
+              <span class="md-error" v-else-if="!$v.form.name.minLength">
+                First name must have at least 1 character
+              </span>
+
+              <span class="md-error" v-else-if="!$v.form.name.maxLength">
+                First name can contain maximum 16 characters
+              </span>
+
+              <span class="md-error" v-else-if="!$v.form.name.NameFormat">
+                It doesn't look like a real name (real name e.g.: L'uke, Dart)
+              </span>
+            </md-field>
+          </div>
+
+          <div class="flex md-flex-small-100">
+            <md-field :class="getValidationClass('surname')">
+              <label for="surname">Last name</label>
+
+              <md-input name="surname" id="surname" autocomplete="surname" type="surname" v-model.trim="form.surname"
+                        :disabled="sending"/>
+
+              <span class="md-error" v-if="!$v.form.surname.required">Last name is required</span>
+
+              <span class="md-error" v-else-if="!$v.form.surname.minLength">
+                Last name must have at least 1 character
+              </span>
+
+              <span class="md-error"
+                    v-else-if="!$v.form.surname.maxLength">Last name can contain maximum 32 characters</span>
+
+              <span class="md-error" v-else-if="!$v.form.name.NameFormat">
+                It doesn't look like a real surname (real surname e.g.: Vader, O'Connor)
+              </span>
+            </md-field>
+          </div>
+
+          <md-chip class="md-accent" v-for="err in errors" :key="err">{{ err }}</md-chip>
+        </div>
+      </md-card-content>
+
+      <md-progress-bar md-mode="indeterminate" v-if="sending"/>
+
+      <md-card-actions>
+        <md-button type="button" class="md-primary" to="/connect/facebook">FB</md-button>
+
+        <md-button type="button" class="md-primary" to="/">Home</md-button>
+
+        <md-button type="submit" class="md-primary" :disabled="sending">Sign up</md-button>
+      </md-card-actions>
+    </md-card>
+  </form>
+  <form action="http://localhost:8080/connect/facebook" method="post">
+    <button type="submit">Facebook</button>
+  </form>
+
+  <md-snackbar md-position="center" :md-duration="Infinity" :md-active.sync="showSnackBar" md-persistent>
+    <span>You have been successfully registered!</span>
+
+    <md-button class="md-primary" @click="snackBarAction()">OK</md-button>
+  </md-snackbar>
+</div>

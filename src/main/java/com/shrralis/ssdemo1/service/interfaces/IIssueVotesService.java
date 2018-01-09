@@ -5,11 +5,12 @@ import com.shrralis.ssdemo1.entity.IssueVote;
 import java.util.Optional;
 
 public interface IIssueVotesService {
-    Optional<IssueVote> getByVoterIdAndIssueId(Integer voterId, Integer issueId);
 
-    void deleteByVoterIdAndIssueId(Integer voterId, Integer issueID);
+	Optional<IssueVote> getByVoterIdAndIssueId(int voterId, int issueId);
 
-    void insertIssueVote(Integer issueId, Integer voterId, Boolean vote);
+	void deleteByVoterIdAndIssueId(int voterId, int issueID);
 
-    Integer countByVoteAndIssue(Boolean vote, Integer issueId);
+	void insertIssueVote(int issueId, int voterId, boolean vote);
+
+	Integer countByVoteAndIssue(boolean vote, int issueId);
 }

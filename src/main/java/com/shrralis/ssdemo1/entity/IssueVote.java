@@ -29,13 +29,26 @@ public class IssueVote implements Identifiable<IssueVote.Id> {
     public static final String VOTER_COLUMN_NAME = "voter_id";
     public static final String VOTE_COLUMN_NAME = "vote";
 
-    private Id id;
-    private Issue issue;
-    private User voter;
+	@EmbeddedId
+	private Id id;
+
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@MapsId("issueId")
+	@JoinColumn(name = ISSUE_COLUMN_NAME, nullable = false)
+	private Issue issue;
+
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@MapsId("voterId")
+	@JoinColumn(name = VOTER_COLUMN_NAME, nullable = false)
+	private User voter;
+
+	@NotNull
+	@Column(name = VOTE_COLUMN_NAME, nullable = false)
     private Boolean vote = true;
 
-    @EmbeddedId
-    @Override
+	@Override
     public Id getId() {
         return id;
     }
@@ -44,9 +57,6 @@ public class IssueVote implements Identifiable<IssueVote.Id> {
         this.id = id;
     }
 
-    @ManyToOne
-    @MapsId("issueId")
-    @JoinColumn(name = ISSUE_COLUMN_NAME)
     public Issue getIssue() {
         return issue;
     }
@@ -55,9 +65,6 @@ public class IssueVote implements Identifiable<IssueVote.Id> {
         this.issue = issue;
     }
 
-    @ManyToOne
-    @MapsId("voterId")
-    @JoinColumn(name = VOTER_COLUMN_NAME)
     public User getVoter() {
         return voter;
     }
@@ -66,19 +73,23 @@ public class IssueVote implements Identifiable<IssueVote.Id> {
         this.voter = voter;
     }
 
-    @NotNull
-    @Column(name = VOTE_COLUMN_NAME, nullable = false)
-    public Boolean getVote() {
+	public boolean getVote() {
         return vote;
     }
 
-    public void setVote(Boolean vote) {
+	public void setVote(boolean vote) {
         this.vote = vote;
     }
 
     @Embeddable
     public static class Id implements Serializable {
-        private Integer issueId;
+
+	    @NotNull
+	    @Column(name = ISSUE_COLUMN_NAME, nullable = false)
+	    private Integer issueId;
+
+	    @NotNull
+	    @Column(name = VOTER_COLUMN_NAME, nullable = false)
         private Integer voterId;
 
         private Id() {
@@ -89,8 +100,6 @@ public class IssueVote implements Identifiable<IssueVote.Id> {
             this.voterId = voterId;
         }
 
-        @NotNull
-        @Column(name = ISSUE_COLUMN_NAME, nullable = false)
         public Integer getIssueId() {
             return issueId;
         }
@@ -99,8 +108,6 @@ public class IssueVote implements Identifiable<IssueVote.Id> {
             this.issueId = issueId;
         }
 
-        @NotNull
-        @Column(name = VOTER_COLUMN_NAME, nullable = false)
         public Integer getVoterId() {
             return voterId;
         }
