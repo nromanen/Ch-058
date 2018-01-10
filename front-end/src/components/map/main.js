@@ -42,7 +42,7 @@ export default {
     }
   },
   methods: {
-    getValidationClass (fieldName) {
+    getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
         return {
@@ -52,7 +52,7 @@ export default {
     },
 
     // calling when submit input form
-    validateData () {
+    validateData() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         var fileSize = document.getElementById("uploadImage").files[0].size;
@@ -131,9 +131,8 @@ export default {
       }
       var autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('pac-input'), {
-          types: ['establishment'],
           location: pos,
-          radius: 10000,
+          radius: 10000
         });
       autocomplete.bindTo('bounds', self.map);
       autocomplete.addListener('place_changed', function() {
@@ -166,8 +165,7 @@ export default {
                  self.showSnackBar = true;
                  document.getElementById('pac-input').value = '';
                }
-             }
-             else {
+             } else {
                self.map.setCenter(place.geometry.location);
                self.map.setZoom(19);
              }
@@ -228,6 +226,7 @@ export default {
       });
 
       var selectDiv = document.createElement('div');
+      selectDiv.setAttribute('id', 'type-selector');
       selectDiv.style.color = '#fff';
       selectDiv.style.backgroundColor = '#4d90fe';
       selectDiv.style.padding = '5px 11px 5px 11px';
@@ -237,6 +236,7 @@ export default {
       radio1.setAttribute('type', 'radio');
       radio1.setAttribute('name', 'type');
       radio1.setAttribute('id', 'establishment');
+      radio1.setAttribute('checked', 'checked');
       var label1 = document.createElement('label');
       label1.setAttribute('for', 'radio1');
       label1.appendChild(document.createTextNode('Establishments'));
@@ -345,7 +345,7 @@ export default {
           this.setListeners(marker, circle);
           this.markers.push(marker);
           this.circles.push(circle);
-          this.$http.post('marker', {
+          this.$http.post('map/marker', {
             lat: window.lat,
             lng: window.lng
           }).then((response) => {
@@ -437,7 +437,7 @@ export default {
     },
 
     snackBarAction() {
-      this.$router.push('login');
+      this.$router.push('auth/login');
     },
 
     loadAllMarkers() {
@@ -475,7 +475,7 @@ export default {
             if(self.map.getBounds().contains(marker.getPosition())) {
               marker.setMap(self.map);
             }
-        }
+          }
         }
       );
     },
