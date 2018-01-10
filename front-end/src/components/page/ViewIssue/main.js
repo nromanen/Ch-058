@@ -26,11 +26,6 @@ export default {
       clickDisabled : false,
       typeId: -1,
       marker : null,
-
-      menuVisible: false,
-      authDialog: false,
-      userEmail: null,
-      snackBarText: null
     }
   },
 
@@ -154,76 +149,9 @@ export default {
         this.countDislike = data.body.data[0].dislikeVote;
       })
     },
-
-    logout() {
-      this.$http.post('auth/logout').then(
-        response => {
-          let json = response.body;
-
-          if (!json.errors && json.data[0].logged_in === false) {
-            this.userEmail = null;
-
-            resetLocalUser();
-          } else if (json.errors.length) {
-            this.snackBarText = getErrorMessage(json.errors[0]);
-          } else {
-            this.snackBarText = getErrorMessage(UNEXPECTED);
-          }
-        }, error => {
-          switch (error.status) {
-            case 400:
-            case 500:
-              let json = error.body;
-
-              if (json.errors) {
-                this.snackBarText = getErrorMessage(json.errors[0]);
-              }
-          }
-
-          if (!this.errors.length) {
-            this.errors.push('HTTP error (' + error.status + ': ' + error.statusText + ')');
-          }
-        }
-      )
-    },
-
-    hideSnackBar() {
-      this.snackBarText = null;
-    }
   },
 
   mounted: function () {
     this.loadIssue(), this.loadVote(), this.calculateVote();
-  },
-
-  created: function () {
-    Vue.http.get('users/get/' + getLocalUser().id)
-      .then(
-        response => {
-          let json = response.body;
-
-          if (!json.errors) {
-            this.userEmail = json.data[0].email;
-          } else if (json.errors.length) {
-            this.snackBarText = getErrorMessage(json.errors[0]);
-          } else {
-            this.snackBarText = getErrorMessage(UNEXPECTED);
-          }
-        }, error => {
-          switch (error.status) {
-            case 400:
-            case 500:
-              let json = error.body;
-
-              if (json.errors) {
-                this.snackBarText = getErrorMessage(json.errors[0]);
-              }
-          }
-
-          if (!this.errors.length) {
-            this.errors.push('HTTP error (' + error.status + ': ' + error.statusText + ')');
-          }
-        }
-      )
   }
 }
