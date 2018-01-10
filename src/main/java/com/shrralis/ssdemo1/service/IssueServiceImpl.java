@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
@@ -52,6 +53,10 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
     @Override
+    public Issue getById(Integer id) {
+        return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
+    }
+
     public Issue saveIssue(MapDataDTO dto, MultipartFile file)  {
 
 		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
@@ -100,4 +105,9 @@ public class IssueServiceImpl implements IIssueService {
 		        .setUpdatedAt(LocalDateTime.now())
 		        .build());
     }
+
+	@Override
+	public List<Issue> getAllIssueByMapMarker(int mapMarkerId) {
+		return issuesRepository.findByMapMarker_Id(mapMarkerId);
+	}
 }

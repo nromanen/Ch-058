@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -16,13 +15,13 @@ public class IssueVotesServiceImpl implements IIssueVotesService {
     private IssuesVotesRepository issuesVotesRepository;
 
     @Override
-    public Optional<IssueVote> getByVoterIdAndIssueId(int voterId, int issueId) {
-        return issuesVotesRepository.getByVoterIdAndIssueId(voterId, issueId);
+    public IssueVote getByVoterIdAndIssueId(int voterId, int issueId) {
+        return issuesVotesRepository.findByVoter_IdAndIssue_Id(voterId, issueId).orElseThrow(NullPointerException::new);
     }
 
     @Override
     public void deleteByVoterIdAndIssueId(int voterId, int issueID) {
-        issuesVotesRepository.deleteAllByVoterIdAndIssueId(voterId, issueID);
+        issuesVotesRepository.deleteAllByVoter_IdAndIssue_Id(voterId, issueID);
     }
 
     @Override
@@ -31,7 +30,7 @@ public class IssueVotesServiceImpl implements IIssueVotesService {
     }
 
     @Override
-    public Integer countByVoteAndIssue(boolean vote, int issueId) {
-        return issuesVotesRepository.countByVoteAndIssue(vote, issueId);
+    public long countByVoteAndIssue(boolean vote, int issueId) {
+        return issuesVotesRepository.countByVoteAndIssue_Id(vote, issueId);
     }
 }
