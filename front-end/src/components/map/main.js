@@ -141,10 +141,9 @@ export default {
          if (!place.geometry) {
            window.alert("No details available for input: '" + place.name + "'");
            return;
-         }
-         else {
+         } else {
            var s = window.select;
-           self.$http.get('marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
+           self.$http.get('map/marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
              .then((response) => {
              if(response.body.data[0] == null) {
                self.map.setCenter(place.geometry.location);
@@ -208,10 +207,14 @@ export default {
 
     addSearchField() {
       var self = this;
+
+      var controlDiv = document.createElement('div');
+
       var input = document.createElement('input');
       input.setAttribute('placeholder', 'Enter a location');
       input.setAttribute('id', 'pac-input');
       input.setAttribute('type', 'text');
+
       input.style.marginTop = '10px';
       input.style.border = '1px solid transparent';
       input.style.borderRadius = '2px 0 0 2px';
@@ -220,10 +223,41 @@ export default {
       input.style.padding = '0 11px 0 13px';
       input.style.fontSize = '15px';
       input.style.borderColor = '#4d90fe';
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
       input.addEventListener('click', function() {
         self.search()
       });
+
+      var selectDiv = document.createElement('div');
+      selectDiv.style.color = '#fff';
+      selectDiv.style.backgroundColor = '#4d90fe';
+      selectDiv.style.padding = '5px 11px 5px 11px';
+      selectDiv.style.fontSize = '13px';
+
+      var radio1 = document.createElement('input');
+      radio1.setAttribute('type', 'radio');
+      radio1.setAttribute('name', 'type');
+      radio1.setAttribute('id', 'establishment');
+      var label1 = document.createElement('label');
+      label1.setAttribute('for', 'radio1');
+      label1.appendChild(document.createTextNode('Establishments'));
+
+      var radio2 = document.createElement('input');
+      radio2.setAttribute('type', 'radio');
+      radio2.setAttribute('name', 'type');
+      radio1.setAttribute('id', 'addresses');
+      var label2 = document.createElement('label2');
+      label2.setAttribute('for', 'radio2');
+      label2.appendChild(document.createTextNode('Addresses'));
+
+      selectDiv.appendChild(radio1);
+      selectDiv.appendChild(label1);
+      selectDiv.appendChild(radio2);
+      selectDiv.appendChild(label2);
+
+      controlDiv.appendChild(input);
+      controlDiv.appendChild(selectDiv);
+
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlDiv);
     },
 
     addYourLocationButton() {
@@ -292,7 +326,7 @@ export default {
       if(window.isPlaced) {
         formData.append('markerId', window.id);
         this.setMarkerType(window.marker, '4');
-        this.$http.post('issue', formData).then((response) => {console.log(response.body)
+        this.$http.post('map/issue', formData).then((response) => {console.log(response.body)
         });
       } else {
           var marker = new google.maps.Marker({
@@ -316,7 +350,7 @@ export default {
             lng: window.lng
           }).then((response) => {
             formData.append('markerId', response.body.data[0].id);
-            this.$http.post('issue', formData).then((response) => {console.log(response.body)
+            this.$http.post('map/issue', formData).then((response) => {console.log(response.body)
             });
           });
       }
@@ -386,7 +420,7 @@ export default {
     },
 
     getMarkerByCoords(lat, lng) {
-      this.$http.get('marker/' + lat + "/" + lng + "/").then((response) => {
+      this.$http.get('map/marker/' + lat + "/" + lng + "/").then((response) => {
         window.id = response.body.data[0].id;
         console.log(response.body);
       });
@@ -408,7 +442,7 @@ export default {
 
     loadAllMarkers() {
       let self = this;
-      this.$http.get('').then((response) => {
+      this.$http.get('map').then((response) => {
         for (var i = 0; i < response.body.data.length; i++) {
 
               var lat = parseFloat(response.body.data[i].lat);
@@ -423,7 +457,9 @@ export default {
               });
               var circle = new google.maps.Circle({
                 map: this.map,
-                radius: 20
+                radius: 20,
+                /*fillOpacity: 0.0,
+                strokeOpacity: 0.0*/
               });
               circle.bindTo('center', marker, 'position');
 
