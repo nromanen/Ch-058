@@ -22,6 +22,7 @@
 	 - `url` - the same as `db.url` but for _Liquibase_ (read below);
 	 - `username` - the same as `db.username` but for _Liquibase_;
 	 - `password` - the same as `db.password` but for _Liquibase_;
+	 - `imageStorage` - here you can specify folder where images will be store (`'/'` at the end is **required**).
 1) Build and deploy the __back-end__ _.war_-file:
 	```bash
 	# Generate our .war.
