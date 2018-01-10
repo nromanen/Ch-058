@@ -72,6 +72,8 @@ public class ChatController {
             notificationService.addNotification(notification);
         else if(notification.getText().equals("Accept"))
             notificationService.removeNotification(notification);
+        else if(notification.getText().equals("Notification timed out"))
+            notificationService.setWaiting(notification);
         return notification;
     }
 }

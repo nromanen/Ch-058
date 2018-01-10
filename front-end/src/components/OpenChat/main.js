@@ -34,7 +34,7 @@ export default {
     },
     notificateAdmins: function (login) {
       this.stompClient.send("/app/connect", {}, JSON.stringify({text: "Alert", login: login,
-        issueId: 3, userId: getLocalUser().id}));
+        issueId: 3, userId: getLocalUser().id, waiting: true}));
     },
     openChat: function(){
       this.$http.get('http://localhost:8080/3/' + getLocalUser().id + '/chat').then( data => {
@@ -52,10 +52,10 @@ export default {
           _this.waiting = true;
           function func() {
             _this.noAdmins = true;
+            _this.stompClient.send("/app/connect",  {},
+              JSON.stringify({text: "Notification timed out", login: _this.login, issueId: 3, userId: getLocalUser().id, waiting: false}));
           }
           var timerId = setTimeout(func, 60000);
-          _this.stompClient.send("/app/connect",  {},
-            JSON.stringify({text: "Notification timed out", login: login, issueId: 3, userId: getLocalUser().id}));
         }
       })
     }

@@ -35,9 +35,9 @@ import java.util.Properties;
 @ComponentScan(basePackages = "com.shrralis.ssdemo1")
 @PropertySource("classpath:application.properties")
 @Import(value = {
+		WebSocketConfig.class,
 		DatabaseConfig.class,
-		SecurityConfig.class,
-		WebSocketConfig.class
+		SecurityConfig.class
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
 

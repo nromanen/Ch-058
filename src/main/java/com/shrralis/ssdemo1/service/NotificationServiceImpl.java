@@ -32,11 +32,12 @@ public class NotificationServiceImpl implements INotificationService{
     }
 
     @Override
-    public Notification setWaiting(Notification notification, Boolean waiting) {
+    public Notification setWaiting(Notification notification) {
+
         Notification getedNot = notificationRepository.findByIssueIdAndUserId(notification.getIssueId(),
                 notification.getUserId());
 
-        getedNot.setWaiting(waiting);
+        getedNot.setWaiting(notification.getWaiting());
 
         return notificationRepository.save(getedNot);
     }
