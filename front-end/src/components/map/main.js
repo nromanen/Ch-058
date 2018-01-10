@@ -18,7 +18,8 @@ export default {
     isPlaced: false,
     sending: false,
     showSnackBar: false,
-    markers: []
+    markers: [],
+    circles: []
   }),
   validations: {
     form: {
@@ -70,7 +71,8 @@ export default {
       this.form.title = null;
       this.form.desc = null;
       this.form.type = null;
-      this.form.image = null
+      this.form.image = null;
+      document.getElementById("uploadImage").value = null
     },
 
     initMap() {
@@ -93,11 +95,14 @@ export default {
         this.map.addListener('idle', function () {
           for (var i = 0; i < self.markers.length; i++) {
             var marker = self.markers[i];
+            var circle = self.circles[i];
             if(self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
               marker.setMap(self.map);
+              circle.setMap(self.map);
             }
             if(!self.map.getBounds().contains(marker.getPosition())) {
               marker.setMap(null);
+              circle.setMap(null);
             }
           }
         });
@@ -295,11 +300,17 @@ export default {
             position: {
               lat: window.lat,
               lng: window.lng
-            },
+            }
           });
+          var circle = new google.maps.Circle({
+            map: this.map,
+            radius: 20
+          });
+          circle.bindTo('center', marker, 'position');
           this.setMarkerType(marker, type);
-          this.setListeners(marker);
-
+          this.setListeners(marker, circle);
+          this.markers.push(marker);
+          this.circles.push(circle);
           this.$http.post('marker', {
             lat: window.lat,
             lng: window.lng
@@ -335,29 +346,29 @@ export default {
       }
       var icon = {
         url: url,
-        scaledSize: new google.maps.Size(200, 200),
-        anchor: new google.maps.Point(100, 120)
-
+        scaledSize: new google.maps.Size(50, 50),
       };
       marker.setIcon(icon);
     },
 
-    setListeners(marker) {
+    setListeners(marker, circle) {
       var self = this;
       var timer = 0;
       var delay = 300;
       var prevent = false;
+      var elements = [marker, circle];
 
-      marker.addListener('click', function() {
-        timer = setTimeout(function() {
-          if (!prevent) {
+      for(var i = 0; i < elements.length; i++) {
+        elements[i].addListener('click', function() {
+          timer = setTimeout(function() {
+            if (!prevent) {
 
-          }
-          prevent = false;
-        }, delay);
+            }
+            prevent = false;
+          }, delay);
 
-      });
-      marker.addListener('dblclick', function() {
+        });
+        elements[i].addListener('dblclick', function() {
           clearTimeout(timer);
           prevent = true;
 
@@ -370,7 +381,8 @@ export default {
           span.onclick = function() {
             modal.style.display = "none";
           };
-      });
+        });
+      }
     },
 
     getMarkerByCoords(lat, lng) {
@@ -407,12 +419,19 @@ export default {
                 position: {
                   lat: lat,
                   lng: lng
-                },
+                }
               });
-              this.setListeners(marker);
+              var circle = new google.maps.Circle({
+                map: this.map,
+                radius: 20
+              });
+              circle.bindTo('center', marker, 'position');
+
+              this.setListeners(marker, circle);
               this.setMarkerType(marker, type);
 
               this.markers.push(marker);
+              this.circles.push(circle);
           }
 
           for (var i = 0; i < this.markers.length; i++) {
