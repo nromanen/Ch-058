@@ -1,10 +1,6 @@
 <div id="authorization">
   <form novalidate class="md-layout-row md-gutter" @submit.prevent="validateCredentials()">
     <md-card class="md-flex50 md-flex-small-100">
-      <md-card-header>
-        <div class="md-title">Sign in</div>
-      </md-card-header>
-
       <md-card-content>
         <div class="md-layout-row md-layout-wrap md-gutter">
           <div class="md-flex md-flex-small-100">
@@ -45,7 +41,7 @@
       <md-progress-bar md-mode="indeterminate" v-if="sending"/>
 
       <md-card-actions>
-        <md-button type="button" class="md-primary" to="/">Home</md-button>
+        <md-button type="button" class="md-primary" to="/">Cancel</md-button>
 
         <md-button type="submit" class="md-primary" :disabled="sending">Log in</md-button>
       </md-card-actions>

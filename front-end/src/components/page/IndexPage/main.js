@@ -10,35 +10,37 @@ export default {
     userEmail: null,
     snackBarText: null
   }),
-  created: function () {
-    Vue.http.get('users/get/' + getLocalUser().id)
-      .then(
-        response => {
-          let json = response.body;
+  created: () => {
+    if (getLocalUser()) {
+      Vue.http.get('users/get/' + getLocalUser().id)
+        .then(
+          response => {
+            let json = response.body;
 
-          if (!json.errors) {
-            this.userEmail = json.data[0].email;
-          } else if (json.errors.length) {
-            this.snackBarText = getErrorMessage(json.errors[0]);
-          } else {
-            this.snackBarText = getErrorMessage(UNEXPECTED);
-          }
-        }, error => {
-          switch (error.status) {
-            case 400:
-            case 500:
-              let json = error.body;
+            if (!json.errors) {
+              this.userEmail = json.data[0].email;
+            } else if (json.errors.length) {
+              this.snackBarText = getErrorMessage(json.errors[0]);
+            } else {
+              this.snackBarText = getErrorMessage(UNEXPECTED);
+            }
+          }, error => {
+            switch (error.status) {
+              case 400:
+              case 500:
+                let json = error.body;
 
-              if (json.errors) {
-                this.snackBarText = getErrorMessage(json.errors[0]);
-              }
-          }
+                if (json.errors) {
+                  this.snackBarText = getErrorMessage(json.errors[0]);
+                }
+            }
 
-          if (!this.errors.length) {
-            this.errors.push('HTTP error (' + error.status + ': ' + error.statusText + ')');
+            if (!this.errors.length) {
+              this.errors.push('HTTP error (' + error.status + ': ' + error.statusText + ')');
+            }
           }
-        }
-      )
+        );
+    }
   },
   methods: {
     logout() {

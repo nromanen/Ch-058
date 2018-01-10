@@ -4,9 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shrralis.ssdemo1.security.exception.interfaces.ICitizenAuthenticationException;
 import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,17 +27,30 @@ public class CitizenAuthenticationFailureHandler extends SimpleUrlAuthentication
 
 	private static final ObjectMapper MAPPER = new ObjectMapper();
 
+	private MessageSource messageSource;
+	private LocaleResolver localeResolver;
+
+	@Autowired
+	public CitizenAuthenticationFailureHandler(MessageSource messageSource, LocaleResolver localeResolver) {
+		this.messageSource = messageSource;
+		this.localeResolver = localeResolver;
+	}
+
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request,
 	                                    HttpServletResponse response,
 	                                    AuthenticationException e
 	) throws IOException, ServletException {
-		if (e.getClass().isAssignableFrom(ICitizenAuthenticationException.class)) {
+		response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+
+		if (ICitizenAuthenticationException.class.isAssignableFrom(e.getClass())) {
 			logger.error(e.getClass().getName() + ": {}", e);
-			MAPPER.writeValue(response.getWriter(), new JsonResponse(((ICitizenAuthenticationException) e).getError()));
+			MAPPER.writeValue(response.getWriter(), new JsonResponse(((ICitizenAuthenticationException) e).getError(),
+					localeResolver.resolveLocale(request), messageSource));
 		} else {
 			logger.error("AuthenticationException: {}", e);
-			MAPPER.writeValue(response.getWriter(), new JsonResponse(new JsonError(e.getMessage())));
+			MAPPER.writeValue(response.getWriter(), new JsonResponse(new JsonError(
+					e.getMessage()).translateErrmsg(localeResolver.resolveLocale(request), messageSource)));
 		}
 	}
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -34,10 +35,11 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler
 
 	@Override
 	public void onLogoutSuccess(
-			HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse,
+			HttpServletRequest request,
+			HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
-		MAPPER.writeValue(httpServletResponse.getWriter(), new JsonResponse(authService.getCurrentSession()));
-		httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+		response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+		response.setStatus(HttpServletResponse.SC_OK);
+		MAPPER.writeValue(response.getWriter(), new JsonResponse(authService.getCurrentSession()));
 	}
 }

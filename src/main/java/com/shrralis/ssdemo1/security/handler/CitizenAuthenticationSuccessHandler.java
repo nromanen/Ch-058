@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -58,8 +59,9 @@ public class CitizenAuthenticationSuccessHandler implements AuthenticationSucces
             HttpServletResponse response,
             Authentication authentication
     ) throws IOException {
-	    MAPPER.writeValue(response.getWriter(), new JsonResponse(authService.getCurrentSession()));
+	    response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 	    response.setStatus(HttpServletResponse.SC_OK);
+	    MAPPER.writeValue(response.getWriter(), new JsonResponse(authService.getCurrentSession()));
     }
 
 	private void clearAuthenticationAttributes(HttpServletRequest request) {
