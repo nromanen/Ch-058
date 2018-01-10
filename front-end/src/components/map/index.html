@@ -76,9 +76,9 @@
   <md-dialog :md-active.sync="showDialog" @md-closed="onCancelIssuesDialog" :md-fullscreen="false"
              class="issuesByMarker">
     <md-dialog-title>
-      All issues by marker:
+      All issues:
+      <span class="close1" @click="showDialog = false">&times;</span>
     </md-dialog-title>
-    <br>
     <md-dialog-content>
       <div v-for="issue in issues" :key="issue.id">
         <div class="md-layout md-gutter">
@@ -90,7 +90,7 @@
             <hr align="center" width="100%" size="2" color="grey">
           </div>
           <div class="md-layout-item md-size-30">
-            <div class="myImage">
+            <div class="logo">
               <div v-if="issue.typeId===1">
                 <div style="text-align: center">
                   <img src="../../assets/caution-large.png" width="50px" height="50px">

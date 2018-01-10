@@ -26,7 +26,8 @@ export default {
         id: 0,
         lat: 0,
         lng: 0
-      }
+      },
+    map:null
   }),
   validations: {
     form: {
@@ -83,7 +84,7 @@ export default {
 
     initMap() {
       var self = this;
-      this.map = new google.maps.Map(document.getElementById('map'), {
+      self.map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 48.29149, lng: 25.94034},
         zoom: 15,
         maxZoom: 19,
@@ -103,7 +104,7 @@ export default {
           lng: self.activeMarker.lng
         };
         self.map.setCenter(pos);
-        self.map.setZoom(19);
+        self.map.setZoom(parseInt(localStorage.getItem('zoom')));
       } else {
         this.getUserLocation();
       }
@@ -374,6 +375,7 @@ export default {
       this.issues = []
       localStorage.removeItem('redirectFromIssue')
       localStorage.removeItem('activeMarker')
+      localStorage.removeItem('zoom')
     },
 
     setListeners(marker) {
@@ -387,7 +389,6 @@ export default {
           if (!prevent) {
             self.$http.get('marker/' + marker.getPosition().lat() + "/" + marker.getPosition().lng() + "/")
               .then((response) => {
-                console.log(response.body);
                 self.activeMarker.id = response.body.data[0].id;
                 self.activeMarker.lat = parseFloat(response.body.data[0].lat);
                 self.activeMarker.lng = parseFloat(response.body.data[0].lng);
@@ -453,6 +454,7 @@ export default {
     redirectToIssue(issueId, marker) {
       localStorage.setItem('redirectFromIssue', true);
       localStorage.setItem('activeMarker', JSON.stringify(marker));
+      localStorage.setItem('zoom', this.map.getZoom());
       this.$router.push('issue/' + issueId);
     },
 
