@@ -3,7 +3,7 @@ import {getLocalUser} from "../../router/index";
 
 export default {
   name: 'Map',
-  data: () => ({
+  data: ()=> ({
     form: {
       title: null,
       desc: null,
@@ -26,7 +26,8 @@ export default {
         id: 0,
         lat: 0,
         lng: 0
-      }
+      },
+    circles: []
   }),
   validations: {
     form: {
@@ -78,7 +79,8 @@ export default {
       this.form.title = null;
       this.form.desc = null;
       this.form.type = null;
-      this.form.image = null
+      this.form.image = null;
+      document.getElementById("uploadImage").value = null
     },
 
     initMap() {
@@ -109,32 +111,35 @@ export default {
       }
       this.loadAllMarkers();
 
-      this.map.addListener('idle', function () {
-        for (var i = 0; i < self.markers.length; i++) {
-          var marker = self.markers[i];
-          if (self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
-            marker.setMap(self.map);
+        this.map.addListener('idle', function () {
+          for (var i = 0; i < self.markers.length; i++) {
+            var marker = self.markers[i];
+            var circle = self.circles[i];
+            if(self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
+              marker.setMap(self.map);
+              circle.setMap(self.map);
+            }
+            if(!self.map.getBounds().contains(marker.getPosition())) {
+              marker.setMap(null);
+              circle.setMap(null);
+            }
           }
-          if (!self.map.getBounds().contains(marker.getPosition())) {
-            marker.setMap(null);
-          }
-        }
-      });
+        });
 
-      this.map.addListener('dblclick', function (e) {
-        if (getLocalUser()) {
-          self.saveCoords(e.latLng.lat(), e.latLng.lng())
-        } else {
-          self.showSnackBar = true
-        }
-      });
+        this.map.addListener('dblclick', function(e) {
+          if(getLocalUser()) {
+            self.saveCoords(e.latLng.lat(), e.latLng.lng())
+          } else {
+            self.showSnackBar = true
+          }
+        });
     },
 
     search() {
       var self = this;
       var pos;
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
+        navigator.geolocation.getCurrentPosition(function(position) {
           pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -150,51 +155,50 @@ export default {
           radius: 10000,
         });
       autocomplete.bindTo('bounds', self.map);
-      autocomplete.addListener('place_changed', function () {
-        var place = autocomplete.getPlace();
-        if (!place.geometry) {
-          window.alert("No details available for input: '" + place.name + "'");
-          return;
-        }
-        else {
-          var s = window.select;
-          self.$http.get('marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
-            .then((response) => {
-              if (response.body.data[0] == null) {
-                self.map.setCenter(place.geometry.location);
-                self.map.setZoom(19);
-                s = new google.maps.Marker({
-                  map: self.map,
-                  position: {
-                    lat: place.geometry.location.lat(),
-                    lng: place.geometry.location.lng()
-                  },
-                  animation: google.maps.Animation.DROP
-                });
-                self.setMarkerType(s, '5');
-                if (getLocalUser()) {
-                  setTimeout(function () {
-                    self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
-                    s.setMap(null);
-                  }, 1200)
-                } else {
-                  self.showSnackBar = true;
-                  document.getElementById('pac-input').value = '';
-                }
-              }
-              else {
-                self.map.setCenter(place.geometry.location);
-                self.map.setZoom(19);
-              }
-            })
-        }
+      autocomplete.addListener('place_changed', function() {
+         var place = autocomplete.getPlace();
+         if (!place.geometry) {
+           window.alert("No details available for input: '" + place.name + "'");
+           return;
+         } else {
+           var s = window.select;
+           self.$http.get('map/marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
+             .then((response) => {
+             if(response.body.data[0] == null) {
+               self.map.setCenter(place.geometry.location);
+               self.map.setZoom(19);
+               s = new google.maps.Marker({
+                 map: self.map,
+                 position: {
+                   lat: place.geometry.location.lat(),
+                   lng: place.geometry.location.lng()
+                 },
+                 animation: google.maps.Animation.DROP
+               });
+               self.setMarkerType(s, '5');
+               if(getLocalUser()) {
+                 setTimeout(function() {
+                   self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+                   s.setMap(null);
+                 }, 1200)
+               } else {
+                 self.showSnackBar = true;
+                 document.getElementById('pac-input').value = '';
+               }
+             }
+             else {
+               self.map.setCenter(place.geometry.location);
+               self.map.setZoom(19);
+             }
+           })
+         }
       });
     },
 
     getUserLocation() {
       var self = this;
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
+        navigator.geolocation.getCurrentPosition(function(position) {
           var pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -204,10 +208,8 @@ export default {
           var infoWindow = new google.maps.InfoWindow({map: self.map});
           infoWindow.setPosition(pos);
           infoWindow.setContent('<b>Your location</b>');
-          setTimeout(function () {
-            infoWindow.close();
-          }, 2000)
-        }, function () {
+          setTimeout(function() { infoWindow.close(); }, 2000)
+        }, function() {
           self.handleLocationError(true)
         })
       }
@@ -224,10 +226,14 @@ export default {
 
     addSearchField() {
       var self = this;
+
+      var controlDiv = document.createElement('div');
+
       var input = document.createElement('input');
       input.setAttribute('placeholder', 'Enter a location');
       input.setAttribute('id', 'pac-input');
       input.setAttribute('type', 'text');
+
       input.style.marginTop = '10px';
       input.style.border = '1px solid transparent';
       input.style.borderRadius = '2px 0 0 2px';
@@ -236,10 +242,41 @@ export default {
       input.style.padding = '0 11px 0 13px';
       input.style.fontSize = '15px';
       input.style.borderColor = '#4d90fe';
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-      input.addEventListener('click', function () {
+      input.addEventListener('click', function() {
         self.search()
       });
+
+      var selectDiv = document.createElement('div');
+      selectDiv.style.color = '#fff';
+      selectDiv.style.backgroundColor = '#4d90fe';
+      selectDiv.style.padding = '5px 11px 5px 11px';
+      selectDiv.style.fontSize = '13px';
+
+      var radio1 = document.createElement('input');
+      radio1.setAttribute('type', 'radio');
+      radio1.setAttribute('name', 'type');
+      radio1.setAttribute('id', 'establishment');
+      var label1 = document.createElement('label');
+      label1.setAttribute('for', 'radio1');
+      label1.appendChild(document.createTextNode('Establishments'));
+
+      var radio2 = document.createElement('input');
+      radio2.setAttribute('type', 'radio');
+      radio2.setAttribute('name', 'type');
+      radio1.setAttribute('id', 'addresses');
+      var label2 = document.createElement('label2');
+      label2.setAttribute('for', 'radio2');
+      label2.appendChild(document.createTextNode('Addresses'));
+
+      selectDiv.appendChild(radio1);
+      selectDiv.appendChild(label1);
+      selectDiv.appendChild(radio2);
+      selectDiv.appendChild(label2);
+
+      controlDiv.appendChild(input);
+      controlDiv.appendChild(selectDiv);
+
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlDiv);
     },
 
     addYourLocationButton() {
@@ -269,7 +306,7 @@ export default {
       secondChild.style.backgroundPosition = '0px 0px';
       firstChild.appendChild(secondChild);
 
-      firstChild.addEventListener('click', function () {
+      firstChild.addEventListener('click', function() {
         self.getUserLocation()
       });
       this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
@@ -285,7 +322,7 @@ export default {
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
       modal.style.display = "table";
-      span.onclick = function () {
+      span.onclick = function() {
         modal.style.display = "none";
         document.getElementById('pac-input').value = '';
         document.getElementById("preview").hidden = true;
@@ -298,7 +335,6 @@ export default {
       var title = this.form.title;
       var desc = this.form.desc;
       var type = this.form.type;
-      var image = this.form.image;
 
       var formData = new FormData();
       formData.append('title', title);
@@ -306,30 +342,36 @@ export default {
       formData.append('typeId', type);
       formData.append('file', document.getElementById("uploadImage").files[0]);
 
-      if (window.isPlaced) {
+      if(window.isPlaced) {
         formData.append('markerId', window.id);
         this.setMarkerType(window.marker, '4');
-        this.$http.post('issue', formData).then((response) => {
+        this.$http.post('map/issue', formData).then((response) => {console.log(response.body)
         });
       } else {
-        var marker = new google.maps.Marker({
-          map: this.map,
-          position: {
+          var marker = new google.maps.Marker({
+            map: this.map,
+            position: {
+              lat: window.lat,
+              lng: window.lng
+            }
+          });
+          var circle = new google.maps.Circle({
+            map: this.map,
+            radius: 20
+          });
+          circle.bindTo('center', marker, 'position');
+          this.setMarkerType(marker, type);
+          this.setListeners(marker, circle);
+          this.markers.push(marker);
+          this.circles.push(circle);
+          this.$http.post('marker', {
             lat: window.lat,
             lng: window.lng
-          },
-        });
-        this.setMarkerType(marker, type);
-        this.setListeners(marker);
-
-        this.$http.post('marker', {
-          lat: window.lat,
-          lng: window.lng
-        }).then((response) => {
-          formData.append('markerId', response.body.data[0].id);
-          this.$http.post('issue', formData).then((response) => {
+          }).then((response) => {
+            formData.append('markerId', response.body.data[0].id);
+            this.$http.post('map/issue', formData).then((response) => {console.log(response.body)
+            });
           });
-        });
       }
 
       document.getElementById('myModal').style.display = "none";
@@ -342,30 +384,22 @@ export default {
 
     setMarkerType(marker, type) {
       var url;
-      switch (type) {
-        case '1':
-          url = '/src/assets/caution.png';
+      switch(type) {
+        case '1': url = '/src/assets/caution.png';
           break;
-        case '2':
-          url = '/src/assets/info.png';
+        case '2': url = '/src/assets/info.png';
           break;
-        case '3':
-          url = '/src/assets/feedback.png';
+        case '3': url ='/src/assets/feedback.png';
           break;
-        case '4':
-          url = '/src/assets/multiple.png';
+        case '4': url ='/src/assets/multiple.png';
           break;
-        case '5':
-          url = '/src/assets/select.png';
+        case '5': url ='/src/assets/select.png';
           break;
-        default:
-          url = ''
+        default: url = ''
       }
       var icon = {
         url: url,
-        scaledSize: new google.maps.Size(200, 200),
-        anchor: new google.maps.Point(100, 120)
-
+        scaledSize: new google.maps.Size(50, 50),
       };
       marker.setIcon(icon);
     },
@@ -376,12 +410,14 @@ export default {
       localStorage.removeItem('activeMarker')
     },
 
-    setListeners(marker) {
+    setListeners(marker, circle) {
       var self = this;
       var timer = 0;
       var delay = 300;
       var prevent = false;
+      var elements = [marker, circle];
 
+      for(var i = 0; i < elements.length; i++) {
       marker.addListener('click', function () {
         timer = setTimeout(function () {
           if (!prevent) {
@@ -396,11 +432,10 @@ export default {
           }
           prevent = false;
         }, delay);
-
-      });
-      marker.addListener('dblclick', function () {
-        clearTimeout(timer);
-        prevent = true;
+        });
+        elements[i].addListener('dblclick', function() {
+          clearTimeout(timer);
+          prevent = true;
 
         self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
         window.marker = marker;
@@ -408,10 +443,11 @@ export default {
         var span = document.getElementsByClassName("close")[0];
         modal.style.display = "table";
 
-        span.onclick = function () {
-          modal.style.display = "none";
-        };
-      });
+          span.onclick = function() {
+            modal.style.display = "none";
+          };
+        });
+      }
     },
 
     showAllIssuesByMarker(markerId) {
@@ -431,7 +467,7 @@ export default {
     },
 
     getMarkerByCoords(lat, lng) {
-      this.$http.get('marker/' + lat + "/" + lng + "/").then((response) => {
+      this.$http.get('map/marker/' + lat + "/" + lng + "/").then((response) => {
         window.id = response.body.data[0].id;
       });
       window.isPlaced = true;
@@ -458,8 +494,8 @@ export default {
 
     loadAllMarkers() {
       let self = this;
-      this.$http.get('').then((response) => {
-          for (var i = 0; i < response.body.data.length; i++) {
+      this.$http.get('map').then((response) => {
+        for (var i = 0; i < response.body.data.length; i++) {
 
             var lat = parseFloat(response.body.data[i].lat);
             var lng = parseFloat(response.body.data[i].lng);
@@ -473,12 +509,29 @@ export default {
             });
             this.setListeners(marker);
             this.setMarkerType(marker, type);
+              var marker = new google.maps.Marker({
+                position: {
+                  lat: lat,
+                  lng: lng
+                }
+              });
+              var circle = new google.maps.Circle({
+                map: this.map,
+                radius: 20,
+                /*fillOpacity: 0.0,
+                strokeOpacity: 0.0*/
+              });
+              circle.bindTo('center', marker, 'position');
 
-            this.markers.push(marker);
+              this.setListeners(marker, circle);
+              this.setMarkerType(marker, type);
+
+              this.markers.push(marker);
+              this.circles.push(circle);
           }
           for (var i = 0; i < this.markers.length; i++) {
             var marker = this.markers[i];
-            if (self.map.getBounds().contains(marker.getPosition())) {
+            if(self.map.getBounds().contains(marker.getPosition())) {
               marker.setMap(self.map);
             }
           }
