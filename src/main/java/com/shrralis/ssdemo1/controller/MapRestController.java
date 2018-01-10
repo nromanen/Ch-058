@@ -62,4 +62,9 @@ public class MapRestController {
 		}
 		return new JsonResponse(JsonError.Error.IMAGE_NOT_EXIST);
 	}
+
+	@GetMapping(value = "/issues/mapMarker/{mapMarkerId}")
+	public JsonResponse getIssueByMapMarker(@PathVariable("mapMarkerId") int mapMarkerId) {
+		return new JsonResponse(issueService.getAllIssueByMapMarker(mapMarkerId));
+	}
 }

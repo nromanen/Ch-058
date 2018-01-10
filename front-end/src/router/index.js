@@ -40,6 +40,10 @@ const router = new Router({
       path: '/adminChatPage/:issueId/:userId',
       name: 'AdminChatPage',
       component: AdminChatPage
+    },
+    {
+      path: '/issue/:id',
+      component: Issue
     }
   ]
 })
