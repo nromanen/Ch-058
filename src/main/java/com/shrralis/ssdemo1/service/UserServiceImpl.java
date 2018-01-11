@@ -12,6 +12,7 @@
 
 package com.shrralis.ssdemo1.service;
 
+import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 @Transactional
@@ -34,5 +36,46 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public JsonResponse getUser(int id) {
 		return new JsonResponse(repository.getOne(id));
+	}
+
+	@Override
+	public User findById(Integer id) {
+		return repository.findById(id).orElseThrow(() -> new NullPointerException());
+	}
+
+	@Override
+	public User findByLogin(String login) {
+		return repository.findByLogin(login).orElseThrow(() -> new NullPointerException());
+	}
+
+	@Override
+	public List<User> findByLoginOrEmailContainingAllIgnoreCase(String login, String email) {
+		List<User> res = repository.findByLoginOrEmailContainingAllIgnoreCase(login, email);
+		if (res.isEmpty()) {
+			throw new NullPointerException();
+		} else {
+			return res;
+		}
+	}
+
+	@Override
+	public List<User> findAll() {
+		List<User> res = repository.findAll();
+		if (res.isEmpty()) {
+			throw new NullPointerException();
+		} else {
+			return res;
+		}
+	}
+
+	@Override
+	@Transactional
+	public void setStatus(User.Type type, Integer id) {
+		repository.setStatus(type, id);
+	}
+
+	@Override
+	public List<User> findByType(User.Type type) {
+		return repository.findByType(type);
 	}
 }

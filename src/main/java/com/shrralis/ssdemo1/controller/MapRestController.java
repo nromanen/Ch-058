@@ -25,6 +25,7 @@ import javax.validation.Valid;
 
 
 @RestController
+@RequestMapping("/map")
 public class MapRestController {
 
 	private final IMapMarkersService markerService;

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import IndexPage from '@/components/page/IndexPage/IndexPage'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
 import Issue from '@/components/page/ViewIssue/App'
+import AdminPage from '@/components/page/AdminPage/AdminPage'
 
 Vue.use(Router)
 
@@ -21,7 +22,12 @@ const router = new Router({
     {
       path: '/issue/:id',
       component: Issue
-    }
+    },
+    {
+      path: '/admin',
+      name: 'AdminPage',
+      component: AdminPage
+    },
   ]
 })
 

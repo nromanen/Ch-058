@@ -1,6 +1,9 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
+import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.tools.model.JsonResponse;
+
+import java.util.List;
 
 /**
  * Interface for getting user accounts information.
@@ -10,6 +13,11 @@ import com.shrralis.tools.model.JsonResponse;
  */
 public interface IUserService {
 	JsonResponse getAllUsers();
-
 	JsonResponse getUser(int id);
+	User findById(Integer id);
+	User findByLogin(String login);
+	List<User> findByLoginOrEmailContainingAllIgnoreCase(String login, String email);
+	List<User> findAll();
+	void setStatus(User.Type userType, Integer id);
+	List<User> findByType(User.Type type);
 }

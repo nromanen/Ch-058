@@ -110,4 +110,58 @@ public class IssueServiceImpl implements IIssueService {
 	public List<Issue> getAllIssueByMapMarker(int mapMarkerId) {
 		return issuesRepository.findByMapMarker_Id(mapMarkerId);
 	}
+
+	@Override
+	public Issue findById(Integer id) {
+		return issuesRepository.findById(id).orElseThrow(() -> new NullPointerException());
+	}
+
+	@Override
+	public List<Issue> findByTitleOrTextContainingAllIgnoreCase(String title, String text) {
+		List<Issue> res = issuesRepository.findByTitleOrTextContainingAllIgnoreCase(title, title);
+		if (res.isEmpty()) {
+			throw new NullPointerException();
+		} else {
+			return res;
+		}
+	}
+
+	@Override
+	public List<Issue> findByAuthor_Id(Integer id) {
+		List<Issue> res = issuesRepository.findByAuthor_Id(id);
+		if (res.isEmpty()) {
+			throw new NullPointerException();
+		} else {
+			return res;
+		}
+	}
+
+	@Override
+	public List<Issue> findAll() {
+		List<Issue> res = issuesRepository.findAll();
+		if (res.isEmpty()) {
+			throw new NullPointerException();
+		} else {
+			return res;
+		}
+	}
+
+	@Override
+	public void deleteById(Integer id) {
+		issuesRepository.deleteById(id);
+	}
+
+	@Override
+	@Transactional
+	public void setStatus(Boolean closed, Integer id) {
+		issuesRepository.setStatus(closed, id);
+	}
+
+	public List<Issue> findByClosedTrue() {
+		return issuesRepository.findByClosedTrue();
+	}
+
+	public List<Issue> findByClosedFalse() {
+		return issuesRepository.findByClosedFalse();
+	}
 }
