@@ -47,6 +47,7 @@ public class RegisterUserDTO implements Serializable {
 	private String email;
 
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
+	@Pattern(regexp = User.PASS_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	@Size(
 			min = User.MIN_PASSWORD_LENGTH, max = User.MAX_PASSWORD_LENGTH,
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)

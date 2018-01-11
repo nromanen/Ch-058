@@ -18,7 +18,7 @@ import javax.mail.internet.MimeMessage;
 @Service
 public class MailCitizenService implements IMailCitizenService {
 
-	private JavaMailSender mailSender;
+	private final JavaMailSender mailSender;
 
 	@Autowired
 	public MailCitizenService(JavaMailSender mailSender) {

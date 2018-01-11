@@ -1,4 +1,4 @@
-import {minLength, maxLength, required} from 'vuelidate/lib/validators'
+import {maxLength, minLength, required} from 'vuelidate/lib/validators';
 import {getLocalUser} from "../../router/index";
 
 export default {
@@ -23,10 +23,10 @@ export default {
     showSnackBar: false,
     markers: [],
     activeMarker: {
-        id: 0,
-        lat: 0,
-        lng: 0
-      }
+      id: 0,
+      lat: 0,
+      lng: 0
+    }
   }),
   validations: {
     form: {
