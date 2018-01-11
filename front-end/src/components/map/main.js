@@ -123,13 +123,33 @@ export default {
           }
         });
 
-        this.map.addListener('dblclick', function(e) {
+        /*this.map.addListener('dblclick', function(e) {
           if(getLocalUser()) {
             self.saveCoords(e.latLng.lat(), e.latLng.lng())
           } else {
             self.showSnackBar = true
           }
-        });
+        });*/
+
+        var geocoder = new google.maps.Geocoder();
+        this.map.addListener('dblclick', function(e) {
+            geocoder.geocode({
+              'latLng': e.latLng
+            }, function(results, status) {
+              if (status === google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                  // var latitude = results[0].geometry.location.lat();
+                  // var longitude = results[0].geometry.location.lng();
+                  window.alert(results[0].formatted_address);
+                  /*if(getLocalUser()) {
+                    self.saveCoords(results[0].geometry.location.lat(), results[0].geometry.location.lng())
+                  } else {
+                    self.showSnackBar = true
+                  }*/
+                }
+              }
+            });
+        })
     },
 
     search() {
@@ -346,8 +366,7 @@ export default {
       if(window.isPlaced) {
         formData.append('markerId', window.id);
         this.setMarkerType(window.marker, '4');
-        this.$http.post('map/issue', formData).then((response) => {console.log(response.body)
-        });
+        this.$http.post('map/issue', formData).then((response) => {});
       } else {
           var marker = new google.maps.Marker({
             map: this.map,
@@ -364,8 +383,7 @@ export default {
             lng: window.lng
           }).then((response) => {
             formData.append('markerId', response.body.data[0].id);
-            this.$http.post('map/issue', formData).then((response) => {console.log(response.body)
-            });
+            this.$http.post('map/issue', formData).then((response) => {});
           });
       }
 
@@ -481,7 +499,6 @@ export default {
       localStorage.setItem('redirectFromIssue', true);
       localStorage.setItem('activeMarker', JSON.stringify(marker));
       this.$router.push('issue/' + issueId);
-      this.$router.push('auth/login');
     },
 
     loadAllMarkers() {

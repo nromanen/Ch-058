@@ -58,7 +58,7 @@ public class IssueServiceImpl implements IIssueService {
         return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
     }
 
-    public Issue saveIssue(MapDataDTO dto, MultipartFile file)  {
+    public Issue saveIssue(MapDataDTO dto, MultipartFile file) {
 
 		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
 

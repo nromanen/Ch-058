@@ -55,5 +55,4 @@ public class IssueRestController {
         map.put("dislikeVote", issueVotesService.countByVoteAndIssue(false, issueId));
         return new JsonResponse(map);
     }
-
 }
