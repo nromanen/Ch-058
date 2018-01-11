@@ -57,9 +57,8 @@ public class UserServiceImpl implements IUserService {
 		List<User> res = repository.findByLoginOrEmailContainingAllIgnoreCase(login, email);
 		if (res.isEmpty()) {
 			throw new NullPointerException();
-		} else {
-			return res;
 		}
+		return res;
 	}
 
 	@Override
@@ -67,9 +66,8 @@ public class UserServiceImpl implements IUserService {
 		List<User> res = repository.findAll();
 		if (res.isEmpty()) {
 			throw new NullPointerException();
-		} else {
-			return res;
 		}
+		return res;
 	}
 
 	@Override

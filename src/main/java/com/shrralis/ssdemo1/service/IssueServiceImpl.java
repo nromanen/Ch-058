@@ -121,9 +121,8 @@ public class IssueServiceImpl implements IIssueService {
 		List<Issue> res = issuesRepository.findByTitleOrTextContainingAllIgnoreCase(title, title);
 		if (res.isEmpty()) {
 			throw new NullPointerException();
-		} else {
-			return res;
 		}
+		return res;
 	}
 
 	@Override
@@ -131,9 +130,8 @@ public class IssueServiceImpl implements IIssueService {
 		List<Issue> res = issuesRepository.findByAuthor_Id(id);
 		if (res.isEmpty()) {
 			throw new NullPointerException();
-		} else {
-			return res;
 		}
+		return res;
 	}
 
 	@Override
@@ -141,9 +139,8 @@ public class IssueServiceImpl implements IIssueService {
 		List<Issue> res = issuesRepository.findAll();
 		if (res.isEmpty()) {
 			throw new NullPointerException();
-		} else {
-			return res;
 		}
+		return res;
 	}
 
 	@Override
