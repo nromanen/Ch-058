@@ -1,7 +1,7 @@
 import {validationMixin} from "vuelidate";
 import {maxLength, minLength, required, sameAs} from "vuelidate/lib/validators/index";
-import {LoginValidator, MAX_LOGIN_LENGTH, MIN_LOGIN_LENGTH} from "../../_validator/LoginValidator";
-import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
+import {LoginValidator, MAX_LOGIN_LENGTH, MIN_LOGIN_LENGTH} from "../../../_validator/LoginValidator";
+import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: "password-recovery-form",

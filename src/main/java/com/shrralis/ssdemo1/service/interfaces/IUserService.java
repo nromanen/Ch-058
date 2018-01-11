@@ -1,6 +1,8 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
-import com.shrralis.tools.model.JsonResponse;
+import com.shrralis.ssdemo1.entity.User;
+
+import java.util.List;
 
 /**
  * Interface for getting user accounts information.
@@ -9,7 +11,8 @@ import com.shrralis.tools.model.JsonResponse;
  * @version 1.0 Created 12/24/17 at 1:29 AM
  */
 public interface IUserService {
-	JsonResponse getAllUsers();
 
-	JsonResponse getUser(int id);
+	List<User> getAllUsers();
+
+	User getUser(int id);
 }

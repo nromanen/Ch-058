@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import VueMaterial from './../../../../node_modules/vue-material'
-import './../../../../node_modules/vue-material/dist/vue-material.css'
+import VueMaterial from './../../../../node_modules/vue-material';
+import './../../../../node_modules/vue-material/dist/vue-material.css';
 import VueResource from 'vue-resource';
 import { VTooltip } from 'v-tooltip'
 import openChat from '@/components/OpenChat/OpenChat.vue'
@@ -10,21 +10,20 @@ Vue.directive('my-tooltip', VTooltip);
 Vue.use(VueMaterial);
 Vue.use(VueResource);
 
-
 export default {
-  data () {
+  data() {
     return {
       center: {lat: 0, lng: 0},
       markerPosition: {lat: 0, lng: 0},
-      title:'',
-      text:'',
-      isLiked : false,
-      isUnliked : false,
-      countLike : 0,
+      title: '',
+      text: '',
+      isLiked: false,
+      isUnliked: false,
+      countLike: 0,
       countDislike: 0,
-      clickDisabled : false,
+      clickDisabled: false,
       typeId: -1,
-      marker : null,
+      marker: null,
       issueId: -1,
       userId: -1
     }
@@ -38,13 +37,13 @@ export default {
       var issueId = this.$route.params.id;
       this.$http.get('issues/' + issueId).then(data=>{
         console.log(data.body);
-          this.markerPosition.lat = parseFloat(data.body.data[0].mapMarker.lat);
-          this.markerPosition.lng = parseFloat(data.body.data[0].mapMarker.lng);
-          this.center.lat = parseFloat(data.body.data[0].mapMarker.lat);
-          this.center.lng = parseFloat(data.body.data[0].mapMarker.lng);
-          this.title = data.body.data[0].title;
-          this.text = data.body.data[0].text;
-          this.typeId = data.body.data[0].typeId;
+        this.markerPosition.lat = parseFloat(data.body.data[0].mapMarker.lat);
+        this.markerPosition.lng = parseFloat(data.body.data[0].mapMarker.lng);
+        this.center.lat = parseFloat(data.body.data[0].mapMarker.lat);
+        this.center.lng = parseFloat(data.body.data[0].mapMarker.lng);
+        this.title = data.body.data[0].title;
+        this.text = data.body.data[0].text;
+        this.typeId = data.body.data[0].typeId;
 
         this.map = new google.maps.Map(document.getElementById('issueMap'), {
           center: self.markerPosition,
@@ -75,7 +74,7 @@ export default {
           position: self.markerPosition,
           animation: google.maps.Animation.DROP,
           icon: {
-            url:url,
+            url: url,
             scaledSize: new google.maps.Size(50, 50)
           }
         });
@@ -151,7 +150,7 @@ export default {
         this.countLike = data.body.data[0].likeVote;
         this.countDislike = data.body.data[0].dislikeVote;
       })
-    },
+    }
   },
 
   mounted: function () {

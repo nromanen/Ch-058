@@ -1,4 +1,4 @@
-import {minLength, maxLength, required} from 'vuelidate/lib/validators'
+import {maxLength, minLength, required} from 'vuelidate/lib/validators';
 import {getLocalUser} from "../../router/index";
 
 export default {
@@ -510,9 +510,7 @@ export default {
                 lng: lng
               },
             });
-            //this.setListeners(marker);
-            // this.setMarkerType(marker, type);
-              var marker = new google.maps.Marker({
+            var marker = new google.maps.Marker({
                 position: {
                   lat: lat,
                   lng: lng
