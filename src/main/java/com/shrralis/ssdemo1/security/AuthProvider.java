@@ -35,9 +35,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class AuthProvider implements AuthenticationProvider, InitializingBean {
 
-    private PasswordEncoder passwordEncoder;
+	private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+	private PasswordEncoder passwordEncoder;
 	private ICitizenUserDetailsService userDetailsService;
-    private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
 	@Override
     public void afterPropertiesSet() {

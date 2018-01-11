@@ -45,8 +45,8 @@ public class ExceptionHandlerControllerAdvice {
 
 	private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerControllerAdvice.class);
 
-	private MessageSource messageSource;
-	private Function<FieldError, JsonError> mapFieldError = fieldError ->
+	private final MessageSource messageSource;
+	private final Function<FieldError, JsonError> mapFieldError = fieldError ->
 			new JsonError(JsonError.Error.valueOf(fieldError.getDefaultMessage()).forField(fieldError.getField()));
 
 	@Autowired

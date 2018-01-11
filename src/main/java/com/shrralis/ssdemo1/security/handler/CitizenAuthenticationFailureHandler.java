@@ -27,8 +27,8 @@ public class CitizenAuthenticationFailureHandler extends SimpleUrlAuthentication
 
 	private static final ObjectMapper MAPPER = new ObjectMapper();
 
-	private MessageSource messageSource;
-	private LocaleResolver localeResolver;
+	private final MessageSource messageSource;
+	private final LocaleResolver localeResolver;
 
 	@Autowired
 	public CitizenAuthenticationFailureHandler(MessageSource messageSource, LocaleResolver localeResolver) {

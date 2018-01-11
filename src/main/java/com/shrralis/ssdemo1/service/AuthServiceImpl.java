@@ -48,12 +48,12 @@ import java.time.LocalDateTime;
 @Transactional
 public class AuthServiceImpl implements IAuthService {
 
-	private UsersRepository repository;
-	private RecoveryTokensRepository tokensRepository;
-	private PasswordEncoder passwordEncoder;
-	private RegisteredUserMapper userToRegisteredUserDto;
-	private IMailCitizenService mailService;
-	private AuthenticationTrustResolver authTrustResolver;
+	private final UsersRepository repository;
+	private final RecoveryTokensRepository tokensRepository;
+	private final PasswordEncoder passwordEncoder;
+	private final RegisteredUserMapper userToRegisteredUserDto;
+	private final IMailCitizenService mailService;
+	private final AuthenticationTrustResolver authTrustResolver;
 
 	@Autowired
 	public AuthServiceImpl(

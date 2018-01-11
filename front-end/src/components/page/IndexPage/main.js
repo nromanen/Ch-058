@@ -1,6 +1,7 @@
+import Vue from 'vue';
 import {getLocalUser, resetLocalUser} from "../../../router";
-import Vue from 'vue'
-import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
+import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
+import {switchLang} from "../../../i18n";
 
 export default {
   name: "index-page",
@@ -35,14 +36,17 @@ export default {
                 }
             }
 
-            if (!this.errors.length) {
-              this.errors.push('HTTP error (' + error.status + ': ' + error.statusText + ')');
+            if (!this.snackBarText) {
+              this.snackBarText = 'HTTP error (' + error.status + ': ' + error.statusText + ')';
             }
           }
         );
     }
   },
   methods: {
+    switchLang(lang) {
+      switchLang(lang);
+    },
     logout() {
       this.$http.post('auth/logout').then(
         response => {
@@ -68,8 +72,8 @@ export default {
               }
           }
 
-          if (!this.errors.length) {
-            this.errors.push('HTTP error (' + error.status + ': ' + error.statusText + ')');
+          if (!this.snackBarText) {
+            this.snackBarText = 'HTTP error (' + error.status + ': ' + error.statusText + ')';
           }
         }
       )

@@ -37,7 +37,7 @@ public class CitizenAuthenticationSuccessHandler implements AuthenticationSucces
 
 	private static final ObjectMapper MAPPER = new ObjectMapper();
 
-	private IAuthService authService;
+	private final IAuthService authService;
 
 	@Autowired
 	public CitizenAuthenticationSuccessHandler(IAuthService authService) {

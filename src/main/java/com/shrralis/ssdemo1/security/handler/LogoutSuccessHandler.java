@@ -25,7 +25,7 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler
 
 	private static final ObjectMapper MAPPER = new ObjectMapper();
 
-	private IAuthService authService;
+	private final IAuthService authService;
 
 	@Autowired
 	public LogoutSuccessHandler(

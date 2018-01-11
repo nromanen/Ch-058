@@ -12,14 +12,36 @@
 
         <div class="md-toolbar-section-end">
           <md-button to="/auth" v-if="!userEmail">
-            Login
+            {{ $t('button.login') }}
           </md-button>
 
           <md-menu md-size="auto" md-align-trigger v-else>
-            <md-button md-menu-trigger>{{userEmail}}</md-button>
+            <md-button md-menu-trigger>{{ userEmail }}</md-button>
 
             <md-menu-content>
-              <md-menu-item @click="logout()">Logout</md-menu-item>
+              <md-menu-item @click="logout()">{{ $t('button.logout') }}</md-menu-item>
+            </md-menu-content>
+          </md-menu>
+
+          <md-menu md-size="auto" md-align-trigger>
+            <md-button class="md-icon-button" md-menu-trigger>
+              <md-icon>more_vert</md-icon>
+            </md-button>
+
+            <md-menu-content>
+              <md-menu-item>
+                <md-menu md-size="auto" md-align-trigger>
+                  <md-button md-menu-trigger>{{ $t('button.choose_lang') }}</md-button>
+
+                  <md-menu-content>
+                    <md-menu-item class="md-primary" @click="switchLang('en')">EN</md-menu-item>
+
+                    <md-menu-item class="md-primary" @click="switchLang('ru')">RU</md-menu-item>
+
+                    <md-menu-item class="md-primary" @click="switchLang('uk')">UA</md-menu-item>
+                  </md-menu-content>
+                </md-menu>
+              </md-menu-item>
             </md-menu-content>
           </md-menu>
         </div>
@@ -58,7 +80,7 @@
       <map-page></map-page>
 
       <md-snackbar md-position="center" :md-duration="Infinity" :md-active.sync="snackBarText" md-persistent>
-        <span>{snackBarText}</span>
+        <span>{{ snackBarText }}</span>
 
         <md-button class="md-primary" @click="hideSnackBar()">OK</md-button>
       </md-snackbar>
