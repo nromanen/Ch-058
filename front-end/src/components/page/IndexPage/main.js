@@ -11,15 +11,17 @@ export default {
     userEmail: null,
     snackBarText: null
   }),
-  created: () => {
+  created: function () {
     if (getLocalUser()) {
       Vue.http.get('users/get/' + getLocalUser().id)
         .then(
           response => {
             let json = response.body;
 
-            if (!json.errors && json.data[0].logged_in) {
-              this.userEmail = json.data[0].email;
+            if (!json.errors) {
+              if (json.data[0]) {
+                this.userEmail = json.data[0].email;
+              }
             } else if (json.errors.length) {
               this.snackBarText = getErrorMessage(json.errors[0]);
             } else {
