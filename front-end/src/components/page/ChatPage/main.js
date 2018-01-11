@@ -9,7 +9,8 @@ export default {
       messages: [],
       newMessageText: '',
       stompClient: null,
-      userId: -1
+      userId: -1,
+      issueId: -1
     }
   },
   components: {
@@ -17,7 +18,7 @@ export default {
   },
   methods: {
     sendMes: function (event) {
-      this.stompClient.send("/app/message" + "/3/" + this.userId, {},
+      this.stompClient.send("/app/message/" + this.issueId + "/" + this.userId, {},
         JSON.stringify({text: this.newMessageText, authorId: this.userId}));
       this.newMessageText = '';
     },
@@ -28,7 +29,6 @@ export default {
         authorId: message.authorId
       }
       this.messages.push(result);
-      console.log(this.messages);
     },
     showMessages: function (messages) {
       for(var i = 0; i < messages.length; i++) {
@@ -41,15 +41,16 @@ export default {
       console.log(this.messages);
     },
     getAllMessages: function () {
-      this.$http.get('http://localhost:8080/message/all/3/' + this.userId).then( data => {
+      this.$http.get('http://localhost:8080/message/all/' + this.issueId + '/' + this.userId).then( data => {
         console.log(data.body);
         this.showMessages(data.body);
       });
     }
   },
   created: function () {
-    if(this.userId == -1)
-      this.userId = getLocalUser().id;
+    this.issueId = this.$route.params.issueId;
+    this.userId = this.$route.params.userId;
+
     console.log('started');
     let _this = this;
 
@@ -61,7 +62,7 @@ export default {
 
     stompClient.connect({}, function (frame) {
       console.log('Connected: ' + frame);
-      stompClient.subscribe('/topic/broadcast' + '/3/' + _this.userId, function (greeting) {
+      stompClient.subscribe('/topic/broadcast/' + _this.issueId + '/' + _this.userId, function (greeting) {
         console.log(greeting);
         _this.showMessage(JSON.parse(greeting.body));
       });

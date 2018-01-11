@@ -11,7 +11,7 @@ export default {
       stompClient: null,
       adminId: -1,
       userId: -1,
-      issueId: 1
+      issueId: -1
     }
   },
   components: {

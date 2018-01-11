@@ -6,6 +6,7 @@ import Chat from '@/components/page/ChatPage/ChatPage'
 import AdminChatNotification from '@/components/AdminChatNotification/AdminChatNotification'
 import OpenChat from '@/components/OpenChat/OpenChat'
 import AdminChatPage from '@/components/page/AdminChatPage/AdminChatPage'
+import Issue from '@/components/page/ViewIssue/App'
 
 Vue.use(Router)
 
@@ -22,7 +23,7 @@ const router = new Router({
       component: AuthPage
     },
     {
-      path: '/chat',
+      path: '/chat/:issueId/:userId',
       name: 'ChatPage',
       component: Chat
     },

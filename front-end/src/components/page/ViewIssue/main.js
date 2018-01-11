@@ -3,6 +3,8 @@ import VueMaterial from './../../../../node_modules/vue-material'
 import './../../../../node_modules/vue-material/dist/vue-material.css'
 import VueResource from 'vue-resource';
 import { VTooltip } from 'v-tooltip'
+import openChat from '@/components/OpenChat/OpenChat.vue'
+import {getLocalUser} from "../../../router";
 
 Vue.directive('my-tooltip', VTooltip);
 Vue.use(VueMaterial);
@@ -23,9 +25,13 @@ export default {
       clickDisabled : false,
       typeId: -1,
       marker : null,
+      issueId: -1,
+      userId: -1
     }
   },
-
+  components:{
+    openChat
+  },
   methods: {
     loadIssue() {
       var self = this;
@@ -150,5 +156,10 @@ export default {
 
   mounted: function () {
     this.loadIssue(), this.loadVote(), this.calculateVote();
+  },
+
+  created: function () {
+    this.issueId = this.$route.params.id;
+    this.userId = getLocalUser().id;
   }
 }

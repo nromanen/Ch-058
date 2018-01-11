@@ -3,7 +3,7 @@
   <div class="messageList">
     <div v-for="message in messages" class="row">
       <div>
-        <div v-if="message.authorId === userId" >
+        <div v-if="message.authorId == userId" >
           <message :text="message.text" :author="message.author" class="innerMes"></message>
         </div>
         <div v-else>

@@ -9,9 +9,15 @@ export default {
       socket: null,
       stompClient: null,
       waiting: false,
-      noAdmins: false
+      noAdmins: false,
+      dataUserId: -1,
+      dataIssueId: -1
     }
   },
+  props: [
+    'issueId', 'userId'
+  ],
+
   methods: {
     socketConnect: function () {
       console.log('started');
@@ -26,25 +32,27 @@ export default {
         stompClient.subscribe('/checkTopic/broadcast', function (responseForChat) {
           console.log(responseForChat);
           var user = JSON.parse(responseForChat.body);
-          if(user.text == 'Accept' && user.userId == getLocalUser().id && user.issueId == 3){
-            window.location.href = "http://localhost:8081/#/chat";
+          if(user.text == 'Accept' && user.userId == _this.dataUserId && user.issueId == _this.dataIssueId){
+            window.location.href = "http://localhost:8081/#/chat/" + _this.dataIssueId + "/" + _this.dataUserId;
           }
         });
       })
     },
     notificateAdmins: function (login) {
       this.stompClient.send("/app/connect", {}, JSON.stringify({text: "Alert", login: login,
-        issueId: 3, userId: getLocalUser().id, waiting: true}));
+        issueId: this.issueId, userId: this.userId, waiting: true}));
     },
     openChat: function(){
-      this.$http.get('http://localhost:8080/3/' + getLocalUser().id + '/chat').then( data => {
+      this.dataIssueId = this.$props['issueId'];
+      this.dataUserId = this.$props['userId'];
+      let _this = this;
+      this.$http.get('http://localhost:8080/' + _this.dataIssueId + '/' + _this.dataUserId + '/chat').then( data => {
         console.log(data.body);
         if(data.body) {
-          let _this = this;
           _this.stompClient.disconnect();
           _this.socket._close();
 
-          window.location.href = "http://localhost:8081/#/chat";
+          window.location.href = "http://localhost:8081/#/chat/" + _this.dataIssueId + "/" + _this.dataUserId;
         }
         else{
           let _this = this;
@@ -53,7 +61,8 @@ export default {
           function func() {
             _this.noAdmins = true;
             _this.stompClient.send("/app/connect",  {},
-              JSON.stringify({text: "Notification timed out", login: _this.login, issueId: 3, userId: getLocalUser().id, waiting: false}));
+              JSON.stringify({text: "Notification timed out", login: _this.login,
+                issueId: _this.dataIssueId, userId: _this.dataUserId, waiting: false}));
           }
           var timerId = setTimeout(func, 60000);
         }

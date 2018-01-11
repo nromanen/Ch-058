@@ -25,7 +25,11 @@
                height="32" width="32"/>
         </a>
         {{countDislike}}
+        <div class="openChatDiv">
+          <openChat :issueId="issueId" :userId="userId"></openChat>
+        </div>
       </div>
+
     </div>
 
     <div class="md-layout-item md-size-45">
@@ -33,5 +37,6 @@
     </div>
     <div class="md-layout-item md-size-7"></div>
   </div>
+
 </div>
 

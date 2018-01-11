@@ -364,7 +364,7 @@ export default {
           this.setListeners(marker, circle);
           this.markers.push(marker);
           this.circles.push(circle);
-          this.$http.post('marker', {
+          this.$http.post('map/marker', {
             lat: window.lat,
             lng: window.lng
           }).then((response) => {
@@ -418,10 +418,10 @@ export default {
       var elements = [marker, circle];
 
       for(var i = 0; i < elements.length; i++) {
-      marker.addListener('click', function () {
+        elements[i].addListener('click', function () {
         timer = setTimeout(function () {
           if (!prevent) {
-            self.$http.get('marker/' + marker.getPosition().lat() + "/" + marker.getPosition().lng() + "/")
+            self.$http.get('map/marker/' + marker.getPosition().lat() + "/" + marker.getPosition().lng() + "/")
               .then((response) => {
                 console.log(response.body);
                 self.activeMarker.id = response.body.data[0].id;
@@ -437,22 +437,22 @@ export default {
           clearTimeout(timer);
           prevent = true;
 
-        self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
-        window.marker = marker;
-        var modal = document.getElementById('myModal');
-        var span = document.getElementsByClassName("close")[0];
-        modal.style.display = "table";
-
+          self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
+          window.marker = marker;
+          var modal = document.getElementById('myModal');
+          var span = document.getElementsByClassName("close")[0];
+          modal.style.display = "table";
           span.onclick = function() {
             modal.style.display = "none";
           };
+
         });
       }
     },
 
     showAllIssuesByMarker(markerId) {
       var self = this;
-      self.$http.get("issues/mapMarker/" + markerId).then(response => {
+      self.$http.get("map/issues/mapMarker/" + markerId).then(response => {
         var i;
         for (i = 0; i < response.body.data.length; i++) {
           self.issues.push({
@@ -507,8 +507,8 @@ export default {
                 lng: lng
               },
             });
-            this.setListeners(marker);
-            this.setMarkerType(marker, type);
+            //this.setListeners(marker);
+            // this.setMarkerType(marker, type);
               var marker = new google.maps.Marker({
                 position: {
                   lat: lat,
