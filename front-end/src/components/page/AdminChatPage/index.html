@@ -1,8 +1,8 @@
-<div id="app">
+<div>
   <h1>Chat room</h1>
-  <div class="messageList">
-    <div v-for="message in messages" class="row">
-      <div>
+  <div class="messageBl" id="style-6">
+    <div class="messageList">
+      <div v-for="message in messages" class="row">
         <div v-if="message.authorId === adminId" >
           <message :text="message.text" :author="message.author" class="innerMes"></message>
         </div>
@@ -11,14 +11,14 @@
         </div>
       </div>
     </div>
-    <div class="messageManagment">
-      <md-field class="messageText">
-        <label>Write a message</label>
-        <md-textarea v-model="newMessageText" md-counter=275></md-textarea>
-      </md-field>
-      <div class="messageSend">
-        <md-button class="md-raised" @click="sendMes">Send</md-button>
-      </div>
+  </div>
+  <div class="messageManagment">
+    <md-field class="messageText">
+      <label>Write a message</label>
+      <md-textarea v-model="newMessageText" md-counter=275></md-textarea>
+    </md-field>
+    <div class="messageSend">
+      <md-button class="md-raised" @click="sendMes">Send</md-button>
     </div>
   </div>
 </div>

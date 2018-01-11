@@ -33,12 +33,35 @@ export default {
         authorId: message.authorId
       }
       this.messages.push(result);
+      var _this = this;
+      this.$nextTick(function () {
+        _this.scrollDown();
+      })
+      console.log(this.messages);
+    },
+    showMessages: function (messages) {
+      for(var i = 0; i < messages.length; i++) {
+        var result = {
+          text: messages[i].text,
+          authorId: messages[i].authorId
+        }
+        this.messages.push(result);
+        var _this = this;
+        this.$nextTick(function () {
+          _this.scrollDown();
+        })
+      }
       console.log(this.messages);
     },
     getAllMessages: function () {
       this.$http.get('http://localhost:8080/message/all/' + this.issueId + '/' + this.userId).then( data => {
         console.log(data.body);
+        this.showMessages(data.body);
       });
+    },
+    scrollDown: function () {
+      var elem = document.getElementById('style-6');
+      elem.scrollTop = elem.scrollHeight;
     }
   },
   created: function () {

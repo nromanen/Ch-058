@@ -29,6 +29,10 @@ export default {
         authorId: message.authorId
       }
       this.messages.push(result);
+      var _this = this;
+      this.$nextTick(function () {
+        _this.scrollDown();
+      })
     },
     showMessages: function (messages) {
       for(var i = 0; i < messages.length; i++) {
@@ -37,6 +41,10 @@ export default {
           authorId: messages[i].authorId
         }
         this.messages.push(result);
+        var _this = this;
+        this.$nextTick(function () {
+          _this.scrollDown();
+        })
       }
       console.log(this.messages);
     },
@@ -45,6 +53,10 @@ export default {
         console.log(data.body);
         this.showMessages(data.body);
       });
+    },
+    scrollDown: function () {
+      var elem = document.getElementById('style-6');
+      elem.scrollTop = elem.scrollHeight;
     }
   },
   created: function () {
@@ -66,6 +78,6 @@ export default {
         console.log(greeting);
         _this.showMessage(JSON.parse(greeting.body));
       });
-    })
+    });
   }
 }
