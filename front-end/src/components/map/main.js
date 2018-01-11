@@ -18,11 +18,10 @@ export default {
     isPlaced: false,
     sending: false,
     showDialog: false,
-    showIssueDialog: true,
-    issues: [],
     showSnackBar: false,
-    markers: [],
-    circles: [],
+    showIssueDialog: true,
+    searchParam: 'establishment',
+    issues: [],
     markers: [],
     activeMarker: {
         id: 0,
@@ -115,14 +114,11 @@ export default {
         this.map.addListener('idle', function () {
           for (var i = 0; i < self.markers.length; i++) {
             var marker = self.markers[i];
-            var circle = self.circles[i];
             if(self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
               marker.setMap(self.map);
-              circle.setMap(self.map);
             }
             if(!self.map.getBounds().contains(marker.getPosition())) {
               marker.setMap(null);
-              circle.setMap(null);
             }
           }
         });
@@ -152,46 +148,44 @@ export default {
       var autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('pac-input'), {
           location: pos,
-          radius: 10000
+          radius: 10000,
         });
+      autocomplete.setTypes([self.searchParam]);
       autocomplete.bindTo('bounds', self.map);
       autocomplete.addListener('place_changed', function() {
-         var place = autocomplete.getPlace();
-         if (!place.geometry) {
-           window.alert("No details available for input: '" + place.name + "'");
-           return;
+       var place = autocomplete.getPlace();
+
+       var s = window.select;
+       self.$http.get('map/marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
+         .then((response) => {
+         if(response.body.data[0] == null) {
+           self.map.setCenter(place.geometry.location);
+           self.map.setZoom(19);
+           s = new google.maps.Marker({
+             map: self.map,
+             position: {
+               lat: place.geometry.location.lat(),
+               lng: place.geometry.location.lng()
+             },
+             animation: google.maps.Animation.DROP
+           });
+           self.setMarkerType(s, '5');
+           if(getLocalUser()) {
+             setTimeout(function() {
+               self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+               s.setMap(null);
+             }, 1200)
+           } else {
+             self.showSnackBar = true;
+             document.getElementById('pac-input').value = '';
+           }
          } else {
-           var s = window.select;
-           self.$http.get('map/marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
-             .then((response) => {
-             if(response.body.data[0] == null) {
-               self.map.setCenter(place.geometry.location);
-               self.map.setZoom(19);
-               s = new google.maps.Marker({
-                 map: self.map,
-                 position: {
-                   lat: place.geometry.location.lat(),
-                   lng: place.geometry.location.lng()
-                 },
-                 animation: google.maps.Animation.DROP
-               });
-               self.setMarkerType(s, '5');
-               if(getLocalUser()) {
-                 setTimeout(function() {
-                   self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
-                   s.setMap(null);
-                 }, 1200)
-               } else {
-                 self.showSnackBar = true;
-                 document.getElementById('pac-input').value = '';
-               }
-             } else {
-               self.map.setCenter(place.geometry.location);
-               self.map.setZoom(19);
-             }
-           })
+           self.map.setCenter(place.geometry.location);
+           self.map.setZoom(19);
          }
-      });
+       })
+
+    });
     },
 
     getUserLocation() {
@@ -257,8 +251,10 @@ export default {
       var radio1 = document.createElement('input');
       radio1.setAttribute('type', 'radio');
       radio1.setAttribute('name', 'type');
-      radio1.setAttribute('id', 'establishment');
       radio1.setAttribute('checked', 'checked');
+      radio1.addEventListener('click', function() {
+        self.searchParam = 'establishment';
+      });
       var label1 = document.createElement('label');
       label1.setAttribute('for', 'radio1');
       label1.appendChild(document.createTextNode('Establishments'));
@@ -266,7 +262,9 @@ export default {
       var radio2 = document.createElement('input');
       radio2.setAttribute('type', 'radio');
       radio2.setAttribute('name', 'type');
-      radio1.setAttribute('id', 'addresses');
+      radio2.addEventListener('click', function() {
+        self.searchParam = 'address';
+      });
       var label2 = document.createElement('label2');
       label2.setAttribute('for', 'radio2');
       label2.appendChild(document.createTextNode('Addresses'));
@@ -358,15 +356,9 @@ export default {
               lng: window.lng
             }
           });
-          var circle = new google.maps.Circle({
-            map: this.map,
-            radius: 20
-          });
-          circle.bindTo('center', marker, 'position');
           this.setMarkerType(marker, type);
-          this.setListeners(marker, circle);
+          this.setListeners(marker);
           this.markers.push(marker);
-          this.circles.push(circle);
           this.$http.post('map/marker', {
             lat: window.lat,
             lng: window.lng
@@ -407,64 +399,51 @@ export default {
       marker.setIcon(icon);
     },
 
-    setListeners(marker, circle) {
     onCancelIssuesDialog: function () {
-      this.issues = []
-      localStorage.removeItem('redirectFromIssue')
+      this.issues = [];
+      localStorage.removeItem('redirectFromIssue');
       localStorage.removeItem('activeMarker')
     },
 
     setListeners(marker) {
-      var self = this;
-      var timer = 0;
-      var delay = 300;
-      var prevent = false;
-      var elements = [marker, circle];
+        var self = this;
+        var timer = 0;
+        var delay = 300;
+        var prevent = false;
 
-      for(var i = 0; i < elements.length; i++) {
-        elements[i].addListener('click', function() {
-          timer = setTimeout(function() {
+        marker.addListener('click', function() {
+          timer = setTimeout(function () {
             if (!prevent) {
-
+              self.$http.get('map/marker/' + marker.getPosition().lat() + "/" + marker.getPosition().lng() + "/")
+                .then((response) => {
+                  self.activeMarker.id = response.body.data[0].id;
+                  self.activeMarker.lat = parseFloat(response.body.data[0].lat);
+                  self.activeMarker.lng = parseFloat(response.body.data[0].lng);
+                  self.showAllIssuesByMarker(self.activeMarker.id);
+                });
             }
             prevent = false;
           }, delay);
-      marker.addListener('click', function () {
-        timer = setTimeout(function () {
-          if (!prevent) {
-            self.$http.get('marker/' + marker.getPosition().lat() + "/" + marker.getPosition().lng() + "/")
-              .then((response) => {
-                console.log(response.body);
-                self.activeMarker.id = response.body.data[0].id;
-                self.activeMarker.lat = parseFloat(response.body.data[0].lat);
-                self.activeMarker.lng = parseFloat(response.body.data[0].lng);
-                self.showAllIssuesByMarker(self.activeMarker.id);
-              });
-          }
-          prevent = false;
-        }, delay);
 
-        });
-        elements[i].addListener('dblclick', function() {
-          clearTimeout(timer);
-          prevent = true;
+          marker.addListener('dblclick', function () {
+            clearTimeout(timer);
+            prevent = true;
 
-          self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
-          window.marker = marker;
-          var modal = document.getElementById('myModal');
-          var span = document.getElementsByClassName("close")[0];
-          modal.style.display = "table";
-
-          span.onclick = function() {
-            modal.style.display = "none";
-          };
-        });
-      }
+            self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
+            window.marker = marker;
+            var modal = document.getElementById('myModal');
+            var span = document.getElementsByClassName("close")[0];
+            modal.style.display = "table";
+            span.onclick = function () {
+              modal.style.display = "none";
+            };
+          });
+      })
     },
 
     showAllIssuesByMarker(markerId) {
       var self = this;
-      self.$http.get("issues/mapMarker/" + markerId).then(response => {
+      self.$http.get("map/issues/mapMarker/" + markerId).then(response => {
         var i;
         for (i = 0; i < response.body.data.length; i++) {
           self.issues.push({
@@ -520,28 +499,18 @@ export default {
                   lng: lng
                 }
               });
-              var circle = new google.maps.Circle({
-                map: this.map,
-                radius: 20,
-                /*fillOpacity: 0.0,
-                strokeOpacity: 0.0*/
-              });
-              circle.bindTo('center', marker, 'position');
-
-              this.setListeners(marker, circle);
+              this.setListeners(marker);
               this.setMarkerType(marker, type);
 
               this.markers.push(marker);
-              this.circles.push(circle);
           }
           for (var i = 0; i < this.markers.length; i++) {
             var marker = this.markers[i];
             if(self.map.getBounds().contains(marker.getPosition())) {
               marker.setMap(self.map);
             }
-        }
-        }
-      );
+          }
+        });
     },
   },
 
