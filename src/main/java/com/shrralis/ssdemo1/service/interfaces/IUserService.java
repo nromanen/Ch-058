@@ -1,7 +1,6 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
 import com.shrralis.ssdemo1.entity.User;
-import com.shrralis.tools.model.JsonResponse;
 
 import java.util.List;
 
@@ -12,12 +11,20 @@ import java.util.List;
  * @version 1.0 Created 12/24/17 at 1:29 AM
  */
 public interface IUserService {
-	JsonResponse getAllUsers();
-	JsonResponse getUser(int id);
-	User findById(Integer id);
-	User findByLogin(String login);
-	List<User> findByLoginOrEmailContainingAllIgnoreCase(String login, String email);
-	List<User> findAll();
-	void setStatus(User.Type userType, Integer id);
-	List<User> findByType(User.Type type);
+
+	List<User> getAllUsers();
+
+	User getUser(int id);
+
+    User findById(Integer id);
+
+    User findByLogin(String login);
+
+    List<User> findByLoginOrEmailContainingAllIgnoreCase(String login, String email);
+
+    List<User> findAll();
+
+    void setStatus(User.Type userType, Integer id);
+
+    List<User> findByType(User.Type type);
 }

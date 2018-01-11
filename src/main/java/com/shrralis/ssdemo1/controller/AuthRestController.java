@@ -33,7 +33,7 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 public class AuthRestController {
 
-	private IAuthService service;
+	private final IAuthService service;
 
 	@Autowired
 	public AuthRestController(IAuthService service) {

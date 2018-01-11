@@ -15,27 +15,31 @@ package com.shrralis.ssdemo1.service;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
-import com.shrralis.tools.model.JsonResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 @Transactional
 public class UserServiceImpl implements IUserService {
-    @Resource
-    private UsersRepository repository;
 
-	@Override
-	public JsonResponse getAllUsers() {
-		return new JsonResponse(repository.findAll());
+	private final UsersRepository repository;
+
+	@Autowired
+	public UserServiceImpl(UsersRepository repository) {
+		this.repository = repository;
 	}
 
 	@Override
-	public JsonResponse getUser(int id) {
-		return new JsonResponse(repository.getOne(id));
+	public List<User> getAllUsers() {
+		return repository.findAll();
+	}
+
+	@Override
+	public User getUser(int id) {
+		return repository.getOne(id);
 	}
 
 	@Override
