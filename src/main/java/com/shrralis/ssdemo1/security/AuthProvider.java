@@ -84,18 +84,18 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
     private void additionalAuthenticationChecks(
 		    AuthorizedUser userDetails,
 		    UsernamePasswordAuthenticationToken authentication) {
-        if (authentication.getCredentials() != null) {
-            String password = authentication.getCredentials().toString();
+	    if (authentication.getCredentials() == null) {
+		    throw new CitizenBadCredentialsException(userDetails.getUsername());
+	    }
 
-	        if (password.length() < User.MIN_PASSWORD_LENGTH
-			        || !passwordEncoder.matches(password, userDetails.getPassword())) {
-		        userDetailsService.increaseUserFailedAttempts(userDetails);
-		        throw new CitizenBadCredentialsException(
-				        userDetails.getUsername(), userDetails.getFailedAuthCount() + 1);
-            }
-        } else {
-	        throw new BadCredentialsException(userDetails.getUsername());
-        }
+	    String password = authentication.getCredentials().toString();
+
+	    if (password.length() < User.MIN_PASSWORD_LENGTH
+			    || !passwordEncoder.matches(password, userDetails.getPassword())) {
+		    userDetailsService.increaseUserFailedAttempts(userDetails);
+		    throw new CitizenBadCredentialsException(
+				    userDetails.getUsername(), userDetails.getFailedAuthCount() + 1);
+	    }
 	    userDetailsService.resetUserFailedAttempts(userDetails);
     }
 

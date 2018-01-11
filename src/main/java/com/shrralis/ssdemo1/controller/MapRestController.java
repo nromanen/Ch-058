@@ -66,4 +66,9 @@ public class MapRestController {
 		}
 		return new JsonResponse(issueService.saveIssue(dto, image));
 	}
+
+	@GetMapping(value = "/issues/mapMarker/{mapMarkerId}")
+	public JsonResponse getIssueByMapMarker(@PathVariable("mapMarkerId") int mapMarkerId) {
+		return new JsonResponse(issueService.getAllIssueByMapMarker(mapMarkerId));
+	}
 }

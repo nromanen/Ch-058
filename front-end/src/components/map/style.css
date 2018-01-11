@@ -66,3 +66,15 @@
   max-height: 200px;
   min-height: 200px;
 }
+
+a {
+  cursor: pointer;
+}
+
+.myImage {
+  margin-top:20px;
+}
+
+.issuesByMarker {
+  max-height: 400px;
+}

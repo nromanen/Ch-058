@@ -17,9 +17,18 @@ export default {
     select: null,
     isPlaced: false,
     sending: false,
+    showDialog: false,
+    showIssueDialog: true,
+    issues: [],
     showSnackBar: false,
     markers: [],
-    circles: []
+    circles: [],
+    markers: [],
+    activeMarker: {
+        id: 0,
+        lat: 0,
+        lng: 0
+      }
   }),
   validations: {
     form: {
@@ -77,20 +86,31 @@ export default {
 
     initMap() {
       var self = this;
-        this.map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 48.29149, lng: 25.94034},
-          zoom: 15,
-          maxZoom: 19,
-          minZoom: 15,
-          disableDefaultUI: true,
-          disableDoubleClickZoom: true,
-          zoomControl: true,
-          mapTypeControl: true,
-        });
-        this.addYourLocationButton();
-        this.addSearchField();
+      this.map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 48.29149, lng: 25.94034},
+        zoom: 15,
+        maxZoom: 19,
+        minZoom: 15,
+        disableDefaultUI: true,
+        disableDoubleClickZoom: true,
+        zoomControl: true,
+        mapTypeControl: true,
+      });
+      this.addYourLocationButton();
+      this.addSearchField();
+      if (localStorage.getItem('redirectFromIssue')) {
+        self.activeMarker = JSON.parse(localStorage.getItem('activeMarker'))
+        self.showAllIssuesByMarker(self.activeMarker.id);
+        var pos = {
+          lat: self.activeMarker.lat,
+          lng: self.activeMarker.lng
+        };
+        self.map.setCenter(pos);
+        self.map.setZoom(19);
+      } else {
         this.getUserLocation();
-        this.loadAllMarkers();
+      }
+      this.loadAllMarkers();
 
         this.map.addListener('idle', function () {
           for (var i = 0; i < self.markers.length; i++) {
@@ -120,7 +140,7 @@ export default {
       var self = this;
       var pos;
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -177,7 +197,7 @@ export default {
     getUserLocation() {
       var self = this;
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           var pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -187,8 +207,10 @@ export default {
           var infoWindow = new google.maps.InfoWindow({map: self.map});
           infoWindow.setPosition(pos);
           infoWindow.setContent('<b>Your location</b>');
-          setTimeout(function() { infoWindow.close(); }, 2000)
-        }, function() {
+          setTimeout(function () {
+            infoWindow.close();
+          }, 2000)
+        }, function () {
           self.handleLocationError(true)
         })
       }
@@ -287,7 +309,7 @@ export default {
       secondChild.style.backgroundPosition = '0px 0px';
       firstChild.appendChild(secondChild);
 
-      firstChild.addEventListener('click', function() {
+      firstChild.addEventListener('click', function () {
         self.getUserLocation()
       });
       this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
@@ -303,7 +325,7 @@ export default {
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
       modal.style.display = "table";
-      span.onclick = function() {
+      span.onclick = function () {
         modal.style.display = "none";
         document.getElementById('pac-input').value = '';
         document.getElementById("preview").hidden = true;
@@ -386,6 +408,13 @@ export default {
     },
 
     setListeners(marker, circle) {
+    onCancelIssuesDialog: function () {
+      this.issues = []
+      localStorage.removeItem('redirectFromIssue')
+      localStorage.removeItem('activeMarker')
+    },
+
+    setListeners(marker) {
       var self = this;
       var timer = 0;
       var delay = 300;
@@ -400,6 +429,20 @@ export default {
             }
             prevent = false;
           }, delay);
+      marker.addListener('click', function () {
+        timer = setTimeout(function () {
+          if (!prevent) {
+            self.$http.get('marker/' + marker.getPosition().lat() + "/" + marker.getPosition().lng() + "/")
+              .then((response) => {
+                console.log(response.body);
+                self.activeMarker.id = response.body.data[0].id;
+                self.activeMarker.lat = parseFloat(response.body.data[0].lat);
+                self.activeMarker.lng = parseFloat(response.body.data[0].lng);
+                self.showAllIssuesByMarker(self.activeMarker.id);
+              });
+          }
+          prevent = false;
+        }, delay);
 
         });
         elements[i].addListener('dblclick', function() {
@@ -419,10 +462,25 @@ export default {
       }
     },
 
+    showAllIssuesByMarker(markerId) {
+      var self = this;
+      self.$http.get("issues/mapMarker/" + markerId).then(response => {
+        var i;
+        for (i = 0; i < response.body.data.length; i++) {
+          self.issues.push({
+            id: response.body.data[i].id,
+            title: response.body.data[i].title,
+            description: response.body.data[i].text,
+            typeId: response.body.data[i].typeId
+          });
+        }
+        self.showDialog = true;
+      })
+    },
+
     getMarkerByCoords(lat, lng) {
       this.$http.get('map/marker/' + lat + "/" + lng + "/").then((response) => {
         window.id = response.body.data[0].id;
-        console.log(response.body);
       });
       window.isPlaced = true;
     },
@@ -437,6 +495,13 @@ export default {
     },
 
     snackBarAction() {
+      this.$router.push('auth/login');
+    },
+
+    redirectToIssue(issueId, marker) {
+      localStorage.setItem('redirectFromIssue', true);
+      localStorage.setItem('activeMarker', JSON.stringify(marker));
+      this.$router.push('issue/' + issueId);
       this.$router.push('auth/login');
     },
 
@@ -469,13 +534,12 @@ export default {
               this.markers.push(marker);
               this.circles.push(circle);
           }
-
           for (var i = 0; i < this.markers.length; i++) {
             var marker = this.markers[i];
             if(self.map.getBounds().contains(marker.getPosition())) {
               marker.setMap(self.map);
             }
-          }
+        }
         }
       );
     },

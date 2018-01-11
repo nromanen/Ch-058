@@ -22,17 +22,13 @@ import java.util.Optional;
 
 @Repository
 public interface IssuesVotesRepository extends JpaRepository<IssueVote, IssueVote.Id> {
-    @Query(value = "SELECT * FROM issues_votes WHERE voter_id = ?1 AND issue_id=?2", nativeQuery = true)
-    Optional<IssueVote> getByVoterIdAndIssueId(Integer voterId, Integer issueId);
+    Optional<IssueVote> findByVoter_IdAndIssue_Id(int voterId, int issueId);
 
-    @Modifying(clearAutomatically = true)
-    @Query(value = "DELETE FROM issues_votes WHERE voter_id=?1 AND issue_id=?2", nativeQuery = true)
-    void deleteAllByVoterIdAndIssueId(Integer voterId, Integer issueId);
+    void deleteAllByVoter_IdAndIssue_Id(int voterId, int issueId);
+
+    long countByVoteAndIssue_Id(Boolean vote, int issueId);
 
     @Modifying
     @Query(value = "INSERT INTO issues_votes(issue_id, voter_id, vote) VALUES(?1, ?2, ?3)", nativeQuery = true)
     void insertLikeOrDislike(Integer issueId, Integer voterId, Boolean vote);
-
-    @Query(value = "SELECT COUNT(vote) FROM issues_votes WHERE vote=?1 AND issue_id=?2", nativeQuery = true)
-    Integer countByVoteAndIssue(Boolean vote, Integer issueId);
 }

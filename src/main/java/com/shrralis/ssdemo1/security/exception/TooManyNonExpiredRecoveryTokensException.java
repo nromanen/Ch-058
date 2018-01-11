@@ -1,5 +1,7 @@
 package com.shrralis.ssdemo1.security.exception;
 
+import com.shrralis.ssdemo1.security.exception.interfaces.ICitizenAuthenticationException;
+import com.shrralis.tools.model.JsonError;
 import org.springframework.security.core.AuthenticationException;
 
 /**
@@ -7,7 +9,8 @@ import org.springframework.security.core.AuthenticationException;
  * @version 1.0
  * Created 1/4/18 at 1:40 PM
  */
-public class TooManyNonExpiredRecoveryTokensException extends AuthenticationException {
+public class TooManyNonExpiredRecoveryTokensException extends AuthenticationException
+		implements ICitizenAuthenticationException {
 
 	/**
 	 * Constructs a <code>EmailNotFoundException</code> with the specified message.
@@ -30,5 +33,10 @@ public class TooManyNonExpiredRecoveryTokensException extends AuthenticationExce
 	 */
 	public TooManyNonExpiredRecoveryTokensException(String msg, Throwable t) {
 		super(msg, t);
+	}
+
+	@Override
+	public JsonError.Error getError() {
+		return JsonError.Error.USER_BLOCKED_BY_MAX_FAILED_AUTH;
 	}
 }
