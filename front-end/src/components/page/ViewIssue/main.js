@@ -6,6 +6,9 @@ import { VTooltip } from 'v-tooltip'
 import openChat from '@/components/OpenChat/OpenChat.vue'
 import {getLocalUser} from "../../../router";
 
+import {getLocalUser, resetLocalUser} from "../../../router";
+import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
+
 Vue.directive('my-tooltip', VTooltip);
 Vue.use(VueMaterial);
 Vue.use(VueResource);
@@ -151,7 +154,7 @@ export default {
         this.countLike = data.body.data[0].likeVote;
         this.countDislike = data.body.data[0].dislikeVote;
       })
-    }
+    },
   },
 
   mounted: function () {

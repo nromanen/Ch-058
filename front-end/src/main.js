@@ -13,6 +13,7 @@ import SignUpForm from '@/components/_form/SignUpForm/SignUpForm'
 import PassRecoveryForm from '@/components/_form/PassRecoveryForm/PassRecoveryForm'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
 import GoogleMap from '@/components/map/GoogleMap'
+import Header from '@/components/header/Header'
 import router from './router/index'
 
 Vue.use(VueResource)
@@ -29,6 +30,7 @@ Vue.component('sign-up-form', SignUpForm)
 Vue.component('password-recovery-form', PassRecoveryForm)
 Vue.component('auth-page', AuthPage)
 Vue.component('map-page', GoogleMap)
+Vue.component('header-page', Header)
 
 /* eslint-disable no-new */
 new Vue({
