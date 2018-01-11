@@ -34,11 +34,11 @@
                   <md-button md-menu-trigger>{{ $t('button.choose_lang') }}</md-button>
 
                   <md-menu-content>
-                    <md-menu-item class="md-primary" @click="switchLang('en')">EN</md-menu-item>
+                    <md-menu-item :class="getLangClass('en')" @click="switchLang('en')">EN</md-menu-item>
 
-                    <md-menu-item class="md-primary" @click="switchLang('ru')">RU</md-menu-item>
+                    <md-menu-item :class="getLangClass('ru')" @click="switchLang('ru')">RU</md-menu-item>
 
-                    <md-menu-item class="md-primary" @click="switchLang('uk')">UA</md-menu-item>
+                    <md-menu-item :class="getLangClass('uk')" @click="switchLang('uk')">UA</md-menu-item>
                   </md-menu-content>
                 </md-menu>
               </md-menu-item>

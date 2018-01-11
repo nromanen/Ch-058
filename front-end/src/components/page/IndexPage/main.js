@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {getLocalUser, resetLocalUser} from "../../../router";
 import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
-import {switchLang} from "../../../i18n";
+import {getCurrentLang, switchLang} from "../../../i18n";
 
 export default {
   name: "index-page",
@@ -80,6 +80,9 @@ export default {
     },
     hideSnackBar() {
       this.snackBarText = null;
+    },
+    getLangClass(lang) {
+      return getCurrentLang() === lang ? 'md-primary' : '';
     }
   }
 }
