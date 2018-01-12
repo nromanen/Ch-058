@@ -20,6 +20,7 @@ import javax.servlet.ServletRegistration;
 import java.io.File;
 
 public class WebSpringInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
     protected Class<?>[] getRootConfigClasses() {
 	    return new Class[] { AppConfig.class };
     }

@@ -1,4 +1,7 @@
 import Vue from 'vue';
+import {getLocalUser, resetLocalUser} from "../../router";
+import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
+import {getCurrentLang, switchLang} from "../../i18n";
 
 export default {
   name: "index-page",
@@ -8,32 +11,15 @@ export default {
     userEmail: null,
     snackBarText: null
   }),
-  created: function () {
+  created: () => {
     if (getLocalUser()) {
-      Vue.http.get('auth/getCurrentSession')
+      Vue.http.get('users/get/' + getLocalUser().id)
         .then(
           response => {
             let json = response.body;
 
-            if (!json.errors) {
-              if (json.data[0].logged_in) {
-                Vue.http.get('users/get/' + getLocalUser().id)
-                  .then(
-                    response => {
-                      let json = response.body;
-
-                      if (!json.errors) {
-                        if (json.data[0]) {
-                          this.userEmail = json.data[0].email;
-                        }
-                      } else if (json.errors.length) {
-                        this.snackBarText = getErrorMessage(json.errors[0]);
-                      } else {
-                        this.snackBarText = getErrorMessage(UNEXPECTED);
-                      }
-                    }
-                  )
-              }
+            if (!json.errors && json.data[0].logged_in) {
+              this.userEmail = json.data[0].email;
             } else if (json.errors.length) {
               this.snackBarText = getErrorMessage(json.errors[0]);
             } else {
@@ -91,9 +77,6 @@ export default {
           }
         }
       )
-    },
-    hideSnackBar() {
-      this.snackBarText = null;
     },
     getLangClass(lang) {
       return getCurrentLang() === lang ? 'md-primary' : '';

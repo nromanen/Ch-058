@@ -16,6 +16,8 @@ public class IssueRestController {
 
     private final IIssueService issueService;
     private final IIssueVotesService issueVotesService;
+    private static final String LIKE = "likeVote";
+    private static final String DISLIKE = "dislikeVote";
 
     @Autowired
     public IssueRestController(IIssueService issueService,IIssueVotesService issueVotesService) {
@@ -51,8 +53,8 @@ public class IssueRestController {
     @GetMapping(value = "/issues/{issueId}/votes")
     public JsonResponse calculateVote(@PathVariable("issueId") Integer issueId) {
         Map<String, Long> map = new HashMap<>();
-        map.put("likeVote", issueVotesService.countByVoteAndIssue(true, issueId));
-        map.put("dislikeVote", issueVotesService.countByVoteAndIssue(false, issueId));
+        map.put(LIKE, issueVotesService.countByVoteAndIssue(true, issueId));
+        map.put(DISLIKE, issueVotesService.countByVoteAndIssue(false, issueId));
         return new JsonResponse(map);
     }
 }
