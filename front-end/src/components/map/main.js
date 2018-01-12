@@ -194,7 +194,14 @@ export default {
            self.map.setZoom(19);
            if(getLocalUser()) {
              setTimeout(function() {
-               self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+               self.getMarkerByCoords(place.geometry.location.lat(), place.geometry.location.lng());
+               window.marker = self.marker;
+               var modal = document.getElementById('myModal');
+               var span = document.getElementsByClassName("close")[0];
+               modal.style.display = "table";
+               span.onclick = function () {
+                 modal.style.display = "none";
+               };
              }, 1200)
            } else {
              self.showSnackBar = true;
