@@ -29,11 +29,6 @@ public class UserManagementController {
 		return new JsonResponse(userService.findByLoginOrEmailContainingAllIgnoreCase(q, q));
 	}
 
-	@GetMapping({"/"})
-	public JsonResponse getUsers() {
-		return new JsonResponse(userService.findAll());
-	}
-
 	@PutMapping({"/{id}/{t}"})
 	public void setStatus(@PathVariable Integer id, @PathVariable String t) {
 		userService.setStatus(User.Type.valueOf(t.toUpperCase()), id);

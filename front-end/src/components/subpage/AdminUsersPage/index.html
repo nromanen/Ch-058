@@ -1,0 +1,34 @@
+<div id="admin-users-page">
+  <md-table v-model="searched" md-sort="id" md-card>
+    <md-table-toolbar>
+      <h1 class="md-title">Users</h1>
+
+      <md-field md-clearable class="md-toolbar-section-end">
+        <md-input placeholder="Search..." v-model="searchString" @input="searchOnTable" />
+      </md-field>
+    </md-table-toolbar>
+
+    <md-table-empty-state
+      md-label="No users found"
+      :md-description="`No user found for this '${searchString}' query. Try a different search term or create a new user.`">
+    </md-table-empty-state>
+
+    <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single" @md-selected="onSelect">
+      <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
+      <md-table-cell md-label="Login" md-sort-by="login">{{ item.login }}</md-table-cell>
+      <md-table-cell md-label="Email" md-sort-by="email">{{ item.email }}</md-table-cell>
+      <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
+      <md-table-cell md-label="Surname" md-sort-by="surname">{{ item.surname }}</md-table-cell>
+      <md-table-cell md-label="Type" md-sort-by="type">{{ item.type }}</md-table-cell>
+      <md-table-cell md-label="Is blocked for auth" md-sort-by="title">{{ item.failed_auth_count >= 5 ? 'Yes' : 'No' }}</md-table-cell>
+    </md-table-row>
+  </md-table>
+
+  <md-dialog-confirm
+    :md-active.sync="showBanUserDialog"
+    md-title="Ban user"
+    md-content="Are you sure that you want to ban the user?"
+    md-confirm-text="Ban"
+    md-cancel-text="Cancel"
+    @md-confirm="onConfirmBanUser" />
+</div>

@@ -1,49 +1,10 @@
-.md-display-1 {
-  text-align: center;
-}
-.container
-{
-  position: relative;
+.md-app {
+  min-height: 100vh;
+  border: 1px solid rgba(#000, .12);
 }
 
-.container .content
-{
-  position: absolute;
-  bottom: 0px;
-}
-img {
-  cursor: pointer;
-}
-
-#issueMap {
-  position: -webkit-sticky;
-  position: sticky;
-  margin-top: 40px;
-  width: 100%;
-  height: 400px
-}
-
-@media (min-width:100px) and (max-width:768px) {
-  #issueMap {
-    position: -webkit-sticky;
-    position: sticky;
-    margin-top: 40px;
-    width: 100%;
-    height: 200px
-  }
-}
-
-@media (min-width:100px) and (max-width:1024px) {
-  #issueMap {
-    position: -webkit-sticky;
-    position: sticky;
-    margin-top: 40px;
-    width: 100%;
-    height: 200px
-  }
-}
-
-.mytext {
-  font-size:20px;
-  padding: 5px 10px 10px 10px;
+// Demo purposes only
+.md-drawer {
+  width: 230px;
+  max-width: calc(100vw - 125px);
 }
