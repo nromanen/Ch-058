@@ -133,6 +133,41 @@ export default {
           }
         });
 
+        // var geocoder = new google.maps.Geocoder();
+        // this.map.addListener('dblclick', function(e) {
+        //     geocoder.geocode({
+        //       'latLng': e.latLng
+        //     }, function(results, status) {
+        //       if (status === google.maps.GeocoderStatus.OK) {
+        //         if (results[0]) {
+        //           // var latitude = results[0].geometry.location.lat();
+        //           // var longitude = results[0].geometry.location.lng();
+        //           window.alert(results[0].address);
+        //           /*if(getLocalUser()) {
+        //             self.saveCoords(results[0].geometry.location.lat(), results[0].geometry.location.lng())
+        //           } else {
+        //             self.showSnackBar = true
+        //           }*/
+        //         }
+        //       }
+        //     });
+        //})
+
+      /*var service = new google.maps.places.PlacesService(self.map);
+      this.map.addListener('dblclick', function(e) {
+        if(getLocalUser()) {
+          var location = {
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng()
+          };
+          service.nearbySearch({
+            location: location,
+            radius: 5,
+          }, self.callback);
+        } else {
+          self.showSnackBar = true
+        }
+      });*/
     },
 
     callback(results, status) {
@@ -454,17 +489,23 @@ export default {
           }, delay);
 
           marker.addListener('dblclick', function () {
+
             clearTimeout(timer);
             prevent = true;
 
-            self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
-            window.marker = marker;
-            var modal = document.getElementById('myModal');
-            var span = document.getElementsByClassName("close")[0];
-            modal.style.display = "table";
-            span.onclick = function () {
-              modal.style.display = "none";
-            };
+            if(getLocalUser()) {
+                self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
+                window.marker = marker;
+                var modal = document.getElementById('myModal');
+                var span = document.getElementsByClassName("close")[0];
+                modal.style.display = "table";
+                span.onclick = function () {
+                  modal.style.display = "none";
+                };
+            } else {
+              self.showSnackBar = true;
+              document.getElementById('pac-input').value = '';
+            }
           });
       })
     },
