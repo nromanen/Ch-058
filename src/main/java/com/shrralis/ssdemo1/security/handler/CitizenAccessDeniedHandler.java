@@ -5,6 +5,7 @@ import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,7 +42,8 @@ public class CitizenAccessDeniedHandler implements AccessDeniedHandler {
 					+ " attempted to access the protected URL: "
 					+ request.getRequestURI());
 		}
-		MAPPER.writeValue(response.getWriter(), new JsonResponse(JsonError.Error.ACCESS_DENIED));
+		response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		MAPPER.writeValue(response.getWriter(), new JsonResponse(JsonError.Error.ACCESS_DENIED));
 	}
 }

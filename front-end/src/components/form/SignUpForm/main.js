@@ -2,9 +2,9 @@ import {email, maxLength, minLength, required, sameAs} from "vuelidate/lib/valid
 import {validationMixin} from "vuelidate";
 import {
   LoginValidator, MAX_LOGIN_LENGTH, MAX_NAME_LENGTH, MAX_SURNAME_LENGTH, MIN_LOGIN_LENGTH, MIN_NAME_LENGTH,
-  MIN_SURNAME_LENGTH, NameValidator
-} from "../../_validator/index";
-import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
+  MIN_SURNAME_LENGTH, NameValidator, PasswordValidator
+} from "../../../_validator/index";
+import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: "SignUpPage",
@@ -32,7 +32,8 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(8)
+        minLength: minLength(8),
+        PasswordValidator
       },
       confirmPassword: {
         required,

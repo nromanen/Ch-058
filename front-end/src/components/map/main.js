@@ -1,5 +1,6 @@
 import {minLength, maxLength, required} from 'vuelidate/lib/validators'
-import {getLocalUser} from "../../router/index";
+import {getLocalUser} from "../../router/index"
+import Vue from 'vue'
 
 export default {
   name: 'Map',
@@ -19,6 +20,7 @@ export default {
     sending: false,
     showDialog: false,
     showSnackBar: false,
+
     showIssueDialog: true,
     searchParam: 'establishment',
     issues: [],
@@ -66,7 +68,7 @@ export default {
         var fileSize = document.getElementById("uploadImage").files[0].size;
         if(fileSize > 1024 * 1024 * 5) // 5 MB
         {
-          window.alert('Image size cannot be bigger then 5 MB');
+          window.alert(this.$t('message.image_size'));
         } else {
           this.saveIssue();
         }
@@ -98,7 +100,7 @@ export default {
       this.addYourLocationButton();
       this.addSearchField();
       if (localStorage.getItem('redirectFromIssue')) {
-        self.activeMarker = JSON.parse(localStorage.getItem('activeMarker'))
+        self.activeMarker = JSON.parse(localStorage.getItem('activeMarker'));
         self.showAllIssuesByMarker(self.activeMarker.id);
         var pos = {
           lat: self.activeMarker.lat,
@@ -123,33 +125,33 @@ export default {
           }
         });
 
-        /*this.map.addListener('dblclick', function(e) {
+        this.map.addListener('dblclick', function(e) {
           if(getLocalUser()) {
             self.saveCoords(e.latLng.lat(), e.latLng.lng())
           } else {
             self.showSnackBar = true
           }
-        });*/
+        });
 
-        var geocoder = new google.maps.Geocoder();
-        this.map.addListener('dblclick', function(e) {
-            geocoder.geocode({
-              'latLng': e.latLng
-            }, function(results, status) {
-              if (status === google.maps.GeocoderStatus.OK) {
-                if (results[0]) {
-                  // var latitude = results[0].geometry.location.lat();
-                  // var longitude = results[0].geometry.location.lng();
-                  window.alert(results[0].formatted_address);
-                  /*if(getLocalUser()) {
-                    self.saveCoords(results[0].geometry.location.lat(), results[0].geometry.location.lng())
-                  } else {
-                    self.showSnackBar = true
-                  }*/
-                }
-              }
-            });
-        })
+        // var geocoder = new google.maps.Geocoder();
+        // this.map.addListener('dblclick', function(e) {
+        //     geocoder.geocode({
+        //       'latLng': e.latLng
+        //     }, function(results, status) {
+        //       if (status === google.maps.GeocoderStatus.OK) {
+        //         if (results[0]) {
+        //           // var latitude = results[0].geometry.location.lat();
+        //           // var longitude = results[0].geometry.location.lng();
+        //           window.alert(results[0].address);
+        //           /*if(getLocalUser()) {
+        //             self.saveCoords(results[0].geometry.location.lat(), results[0].geometry.location.lng())
+        //           } else {
+        //             self.showSnackBar = true
+        //           }*/
+        //         }
+        //       }
+        //     });
+        //})
     },
 
     search() {
@@ -202,6 +204,14 @@ export default {
          } else {
            self.map.setCenter(place.geometry.location);
            self.map.setZoom(19);
+           if(getLocalUser()) {
+             setTimeout(function() {
+               self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+             }, 1200)
+           } else {
+             self.showSnackBar = true;
+             document.getElementById('pac-input').value = '';
+           }
          }
        })
 
@@ -210,33 +220,26 @@ export default {
 
     getUserLocation() {
       var self = this;
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          var pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          self.map.setCenter(pos);
-          self.map.setZoom(19);
-          var infoWindow = new google.maps.InfoWindow({map: self.map});
-          infoWindow.setPosition(pos);
-          infoWindow.setContent('<b>Your location</b>');
-          setTimeout(function () {
-            infoWindow.close();
-          }, 2000)
-        }, function () {
-          self.handleLocationError(true)
-        })
-      }
-      else {
-        self.handleLocationError(false)
-      }
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        self.map.setCenter(pos);
+        self.map.setZoom(19);
+        var infoWindow = new google.maps.InfoWindow({map: self.map});
+        infoWindow.setPosition(pos);
+        infoWindow.setContent('<b>' + self.$t('message.user_location') + '</b>');
+        setTimeout(function () {
+          infoWindow.close();
+        }, 2000)
+      }, function () {
+        self.handleLocationError()
+      })
     },
 
-    handleLocationError(browserHasGeolocation) {
-      window.alert(browserHasGeolocation ?
-        'Error: The Geolocation service failed.' :
-        'Error: Your browser doesn\'t support geolocation.');
+    handleLocationError() {
+      window.alert(this.$t('message.geolocation'));
     },
 
     addSearchField() {
@@ -245,7 +248,7 @@ export default {
       var controlDiv = document.createElement('div');
 
       var input = document.createElement('input');
-      input.setAttribute('placeholder', 'Enter a location');
+      input.setAttribute('placeholder', this.$t('label.input_location'));
       input.setAttribute('id', 'pac-input');
       input.setAttribute('type', 'text');
 
@@ -277,7 +280,7 @@ export default {
       });
       var label1 = document.createElement('label');
       label1.setAttribute('for', 'radio1');
-      label1.appendChild(document.createTextNode('Establishments'));
+      label1.appendChild(document.createTextNode(this.$t('label.establishments')));
 
       var radio2 = document.createElement('input');
       radio2.setAttribute('type', 'radio');
@@ -287,7 +290,7 @@ export default {
       });
       var label2 = document.createElement('label2');
       label2.setAttribute('for', 'radio2');
-      label2.appendChild(document.createTextNode('Addresses'));
+      label2.appendChild(document.createTextNode(this.$t('label.addresses')));
 
       selectDiv.appendChild(radio1);
       selectDiv.appendChild(label1);
@@ -353,6 +356,7 @@ export default {
     },
 
     saveIssue() {
+      var self = this;
       var title = this.form.title;
       var desc = this.form.desc;
       var type = this.form.type;
@@ -366,6 +370,14 @@ export default {
       if(window.isPlaced) {
         formData.append('markerId', window.id);
         this.setMarkerType(window.marker, '4');
+        this.map.setCenter(window.marker.getPosition());
+
+        var infoWindow = new google.maps.InfoWindow({
+          content: self.$t('message.new_issue')});
+        infoWindow.open(self.map, window.marker);
+        setTimeout(function () {
+          infoWindow.close();
+        }, 2000);
         this.$http.post('map/issue', formData).then((response) => {});
       } else {
           var marker = new google.maps.Marker({
@@ -378,6 +390,15 @@ export default {
           this.setMarkerType(marker, type);
           this.setListeners(marker);
           this.markers.push(marker);
+          this.map.setCenter(marker.getPosition());
+
+          var infoWindow = new google.maps.InfoWindow({
+            content: self.$t('message.new_issue')});
+          infoWindow.open(self.map, marker);
+          setTimeout(function () {
+            infoWindow.close();
+          }, 2000);
+
           this.$http.post('map/marker', {
             lat: window.lat,
             lng: window.lng

@@ -8,12 +8,13 @@ import Vuelidate from 'vuelidate'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default-dark.css'
 import App from './App'
-import SignInForm from '@/components/_form/SignInForm/SignInForm'
-import SignUpForm from '@/components/_form/SignUpForm/SignUpForm'
-import PassRecoveryForm from '@/components/_form/PassRecoveryForm/PassRecoveryForm'
+import SignInForm from '@/components/form/SignInForm/SignInForm'
+import SignUpForm from '@/components/form/SignUpForm/SignUpForm'
+import PassRecoveryForm from '@/components/form/PassRecoveryForm/PassRecoveryForm'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
 import GoogleMap from '@/components/map/GoogleMap'
-import router from './router/index'
+import router from './router'
+import i18n from './i18n'
 
 Vue.use(VueResource)
 Vue.use(VueCookie)
@@ -34,6 +35,7 @@ Vue.component('map-page', GoogleMap)
 new Vue({
   el: '#app',
   router,
+  i18n,
   template: '<App/>',
   components: {App}
 })
