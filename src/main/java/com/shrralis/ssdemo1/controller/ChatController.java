@@ -21,11 +21,15 @@ import java.util.List;
 @RestController
 public class ChatController {
 
-    @Autowired
-    INotificationService notificationService;
+    private final INotificationService notificationService;
+
+    private final IMessageService messageService;
 
     @Autowired
-    IMessageService messageService;
+    public ChatController(INotificationService notificationService, IMessageService messageService){
+        this.notificationService = notificationService;
+        this.messageService = messageService;
+    }
 
     private static final Logger logger =
             LoggerFactory.getLogger(ChatController.class);
@@ -55,25 +59,24 @@ public class ChatController {
     @SendTo("/topic/broadcast/{issueId}/{userId}")
     public Message messaging(Message input, @DestinationVariable Long userId,
                          @DestinationVariable Long issueId) {
-        FullMessage fullMessage = new FullMessage();
-        fullMessage.setText(input.getText());
-        fullMessage.setIssueId(issueId);
-        fullMessage.setUserId(userId);
-        fullMessage.setAuthorId(input.getAuthorId());
-        fullMessage.setDate(LocalDateTime.now());
-        messageService.saveMessage(fullMessage);
+        messageService.saveMessage(
+                FullMessage.messageBuilder(input, userId, issueId)
+        );
         return input;
     }
 
     @MessageMapping("/connect")
     @SendTo("/checkTopic/broadcast")
     public Notification notificateAdmins(Notification notification){
-        if(notification.getText().equals("Alert"))
+        if(notification.getText().equals("Alert")) {
             notificationService.addNotification(notification);
-        else if(notification.getText().equals("Accept"))
+        }
+        else if(notification.getText().equals("Accept")) {
             notificationService.removeNotification(notification);
-        else if(notification.getText().equals("Notification timed out"))
+        }
+        else if(notification.getText().equals("Notification timed out")) {
             notificationService.setWaiting(notification);
+        }
         return notification;
     }
 }

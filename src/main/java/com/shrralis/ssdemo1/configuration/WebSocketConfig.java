@@ -12,36 +12,17 @@ import java.util.List;
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
+    @Override
     public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
         stompEndpointRegistry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
     }
-
-    public void configureWebSocketTransport(WebSocketTransportRegistration webSocketTransportRegistration) {
-
-    }
-
-    public void configureClientInboundChannel(ChannelRegistration channelRegistration) {
-
-    }
-
-    public void configureClientOutboundChannel(ChannelRegistration channelRegistration) {
-
-    }
-
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> list) {
-
-    }
-
-    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> list) {
-
-    }
-
+    @Override
     public boolean configureMessageConverters(List<MessageConverter> list) {
         return true;
     }
-
+    @Override
     public void configureMessageBroker(MessageBrokerRegistry messageBrokerRegistry) {
         messageBrokerRegistry.setApplicationDestinationPrefixes("/app");
         messageBrokerRegistry.enableSimpleBroker("/topic", "/checkTopic");

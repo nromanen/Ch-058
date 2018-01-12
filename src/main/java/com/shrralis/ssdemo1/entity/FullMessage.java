@@ -73,4 +73,14 @@ public class FullMessage {
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
     }
+
+    public static FullMessage messageBuilder(Message input, Long userId, Long issueId){
+        FullMessage message = new FullMessage();
+        message.setText(input.getText());
+        message.setIssueId(issueId);
+        message.setUserId(userId);
+        message.setAuthorId(input.getAuthorId());
+        message.setDate(LocalDateTime.now());
+        return message;
+    }
 }
