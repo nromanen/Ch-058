@@ -7,7 +7,9 @@
     "log_in": "Log in",
     "sign_up": "Sign up",
     "request_recovery_token": "Request recovery token",
-    "recover": "Recover"
+    "recover": "Recover",
+    "snackbar_redirect": "Login",
+    "create_issue": "Create"
   },
   "label": {
     "sign_in": "Sign in",
@@ -20,7 +22,18 @@
     "email": "E-Mail",
     "first_name": "First name",
     "last_name": "Last name",
-    "recovery_token": "Recovery token from E-Mail"
+    "recovery_token": "Recovery token from E-Mail",
+    "form_title": "Create new issue",
+    "issue_title": "Title",
+    "issue_desc": "Description",
+    "issue_type": "Type",
+    "issue_type_problem": "Problem",
+    "issue_type_info": "Info",
+    "issue_type_feedback": "Feedback",
+    "image": "Add an image",
+    "input_location": "Enter a location",
+    "establishments": "Establishments",
+    "addresses": "Addresses"
   },
   "error": {
     "required": "Required",
@@ -35,10 +48,23 @@
     "different_passwords": "The passwords are different",
     "not_email": "Bad E-Mail format",
     "not_first_name": "It doesn't look like a real name (real name e.g.: L'uke, Dart)",
-    "not_last_name": "It doesn't look like a real surname (real surname e.g.: Vader, O'Connor)"
+    "not_last_name": "It doesn't look like a real surname (real surname e.g.: Vader, O'Connor)",
+    "req_title": "Title is required",
+    "title_short": "Title must be at least 4 characters length",
+    "title_long": "Title can't be longer than 32 characters",
+    "req_desc": "Description is required",
+    "desc_short": "Description must be at least 8 characters length",
+    "desc_long": "Description cannot be longer than 2048 characters",
+    "req_type": "Please, choose the type",
+    "req_image": "Please, attach an image"
   },
   "message": {
     "successful_register": "You have been successfully registered!",
-    "successful_recovering": "You have been successfully changed your password!"
+    "successful_recovering": "You have been successfully changed your password!",
+    "snackbar": "Please, log in to create an issue",
+    "user_location": "Your location",
+    "image_size": "Image size cannot be bigger then 5 Mb",
+    "geolocation": "Geolocation is turned off for this page",
+    "new_issue": "You just created a new issue"
   }
 }
