@@ -93,7 +93,6 @@ public class IssueServiceImpl implements IIssueService {
 	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(fileBytes));
 
 	    if(duplicateImage == null) {
-
 		    Image image = new Image();
 
 		    String uniqueFileName = UUID.randomUUID().toString().replace("-", "");
