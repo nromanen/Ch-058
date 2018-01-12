@@ -132,7 +132,6 @@ export default {
             self.showSnackBar = true
           }
         });
-
     },
 
     callback(results, status) {
@@ -454,17 +453,23 @@ export default {
           }, delay);
 
           marker.addListener('dblclick', function () {
+
             clearTimeout(timer);
             prevent = true;
 
-            self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
-            window.marker = marker;
-            var modal = document.getElementById('myModal');
-            var span = document.getElementsByClassName("close")[0];
-            modal.style.display = "table";
-            span.onclick = function () {
-              modal.style.display = "none";
-            };
+            if(getLocalUser()) {
+                self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
+                window.marker = marker;
+                var modal = document.getElementById('myModal');
+                var span = document.getElementsByClassName("close")[0];
+                modal.style.display = "table";
+                span.onclick = function () {
+                  modal.style.display = "none";
+                };
+            } else {
+              self.showSnackBar = true;
+              document.getElementById('pac-input').value = '';
+            }
           });
       })
     },
