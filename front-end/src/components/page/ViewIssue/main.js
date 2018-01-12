@@ -2,7 +2,9 @@ import Vue from 'vue';
 import VueMaterial from './../../../../node_modules/vue-material';
 import './../../../../node_modules/vue-material/dist/vue-material.css';
 import VueResource from 'vue-resource';
-import {VTooltip} from 'v-tooltip';
+import { VTooltip } from 'v-tooltip'
+import openChat from '@/components/OpenChat/OpenChat.vue'
+import {getLocalUser} from "../../../router";
 
 Vue.directive('my-tooltip', VTooltip);
 Vue.use(VueMaterial);
@@ -22,14 +24,18 @@ export default {
       clickDisabled: false,
       typeId: -1,
       marker: null,
+      issueId: -1,
+      userId: -1
     }
   },
-
+  components:{
+    openChat
+  },
   methods: {
     loadIssue() {
       var self = this;
       var issueId = this.$route.params.id;
-      this.$http.get('issues/' + issueId).then(data => {
+      this.$http.get('issues/' + issueId).then(data=>{
         console.log(data.body);
         this.markerPosition.lat = parseFloat(data.body.data[0].mapMarker.lat);
         this.markerPosition.lng = parseFloat(data.body.data[0].mapMarker.lng);
@@ -77,7 +83,7 @@ export default {
 
     loadVote() {
       var issueId = this.$route.params.id;
-      this.$http.get('issues/' + issueId + '/is-vote-exist').then(data => {
+      this.$http.get('issues/' + issueId + '/is-vote-exist').then(data=> {
         if (data.body.data[0].vote !== null) {
           data.body.data[0] ? this.isLiked = true : this.isUnliked = true;
         }
@@ -90,23 +96,23 @@ export default {
       var issueId = this.$route.params.id;
       if (this.clickDisabled)
         return;
-      if (isLiked) {
-        this.$http.delete('issues/' + issueId + '/vote').then(data => {
+      if(isLiked) {
+        this.$http.delete('issues/' + issueId + '/vote').then(data=>{
           this.calculateVote();
         })
-      } else if (!isLiked) {
-        if (isUnliked) {
-          this.$http.delete('issues/' + issueId + '/vote').then(data => {
+      } else if(!isLiked) {
+        if(isUnliked){
+          this.$http.delete('issues/' + issueId + '/vote').then(data=>{
           })
           this.isUnliked = !isUnliked;
         }
-        this.$http.post('issues/' + issueId + '/' + true).then(data => {
+        this.$http.post('issues/' + issueId +'/' + true).then(data=>{
           this.calculateVote();
         })
       }
       this.isLiked = !isLiked;
       this.clickDisabled = true;
-      setTimeout(() => {
+      setTimeout(() =>{
         this.clickDisabled = false
       }, 2000)
     },
@@ -117,30 +123,30 @@ export default {
       var issueId = this.$route.params.id;
       if (this.clickDisabled)
         return;
-      if (isUnliked) {
-        this.$http.delete('issues/' + issueId + '/vote').then(data => {
+      if(isUnliked) {
+        this.$http.delete('issues/' + issueId + '/vote').then(data=>{
           this.calculateVote();
         })
-      } else if (!isUnliked) {
-        if (isLiked) {
-          this.$http.delete('issues/' + issueId + '/vote').then(data => {
+      } else if(!isUnliked) {
+        if(isLiked){
+          this.$http.delete('issues/' + issueId + '/vote').then(data=>{
           });
           this.isLiked = !isLiked;
         }
-        this.$http.post('issues/' + issueId + '/' + false).then(data => {
+        this.$http.post('issues/' + issueId +'/' + false).then(data=>{
           this.calculateVote();
         })
       }
       this.isUnliked = !isUnliked;
       this.clickDisabled = true;
-      setTimeout(() => {
+      setTimeout(() =>{
         this.clickDisabled = false
       }, 2000)
     },
 
     calculateVote() {
       var issueId = this.$route.params.id;
-      this.$http.get('issues/' + issueId + '/votes').then(data => {
+      this.$http.get('issues/' + issueId + '/votes').then(data=>{
         this.countLike = data.body.data[0].likeVote;
         this.countDislike = data.body.data[0].dislikeVote;
       })
@@ -149,5 +155,10 @@ export default {
 
   mounted: function () {
     this.loadIssue(), this.loadVote(), this.calculateVote();
+  },
+
+  created: function () {
+    this.issueId = this.$route.params.id;
+    this.userId = getLocalUser().id;
   }
 }

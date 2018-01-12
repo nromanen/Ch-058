@@ -42,9 +42,7 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 		List<MarkerDTO> list = new ArrayList<>();
         List<MapMarker> markers = markerRepository.findAll();
         for(MapMarker m : markers) {
-        	MarkerDTO dto = new MarkerDTO();
-        	dto.setLat(m.getLat());
-        	dto.setLng(m.getLng());
+        	MarkerDTO dto = new MarkerDTO(m.getLat(), m.getLng());
         	int[] types = issuesRepository.getIssueTypeById(m.getId());
         	if(types.length == 1) {
 		        dto.setType(types[0]);
