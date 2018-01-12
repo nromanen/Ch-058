@@ -92,3 +92,7 @@ a {
   text-decoration: none;
   cursor: pointer;
 }
+
+.md-primary {
+  background-color: #ffffff;
+}

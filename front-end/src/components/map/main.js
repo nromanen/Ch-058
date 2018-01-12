@@ -133,25 +133,14 @@ export default {
           }
         });
 
-        // var geocoder = new google.maps.Geocoder();
-        // this.map.addListener('dblclick', function(e) {
-        //     geocoder.geocode({
-        //       'latLng': e.latLng
-        //     }, function(results, status) {
-        //       if (status === google.maps.GeocoderStatus.OK) {
-        //         if (results[0]) {
-        //           // var latitude = results[0].geometry.location.lat();
-        //           // var longitude = results[0].geometry.location.lng();
-        //           window.alert(results[0].address);
-        //           /*if(getLocalUser()) {
-        //             self.saveCoords(results[0].geometry.location.lat(), results[0].geometry.location.lng())
-        //           } else {
-        //             self.showSnackBar = true
-        //           }*/
-        //         }
-        //       }
-        //     });
-        //})
+    },
+
+    callback(results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          window.alert(results[i].geometry.location);
+        }
+      }
     },
 
     search() {
@@ -172,9 +161,9 @@ export default {
           location: pos,
           radius: 10000,
         });
-      autocomplete.setTypes([self.searchParam]);
-      autocomplete.bindTo('bounds', self.map);
-      autocomplete.addListener('place_changed', function() {
+        autocomplete.setTypes([self.searchParam]);
+        autocomplete.bindTo('bounds', self.map);
+        autocomplete.addListener('place_changed', function() {
        var place = autocomplete.getPlace();
 
        var s = window.select;
@@ -259,7 +248,7 @@ export default {
       input.style.boxShadow = '0 1px 4px rgba(0, 0, 0, 0.3)';
       input.style.padding = '0 11px 0 13px';
       input.style.fontSize = '15px';
-      input.style.borderColor = '#4d90fe';
+      input.style.borderColor = '#323232';
       input.addEventListener('click', function() {
         self.search()
       });
@@ -267,7 +256,7 @@ export default {
       var selectDiv = document.createElement('div');
       selectDiv.setAttribute('id', 'type-selector');
       selectDiv.style.color = '#fff';
-      selectDiv.style.backgroundColor = '#4d90fe';
+      selectDiv.style.backgroundColor = '#323232';
       selectDiv.style.padding = '5px 11px 5px 11px';
       selectDiv.style.fontSize = '13px';
 

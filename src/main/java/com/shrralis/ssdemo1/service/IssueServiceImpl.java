@@ -83,6 +83,7 @@ public class IssueServiceImpl implements IIssueService {
 
     private Image parseImage(MultipartFile file) {
 	    byte[] fileBytes = {};
+
 	    try {
 		    fileBytes = file.getBytes();
 	    } catch (IOException e) {
@@ -90,7 +91,9 @@ public class IssueServiceImpl implements IIssueService {
 	    }
 
 	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(fileBytes));
+
 	    if(duplicateImage == null) {
+
 		    Image image = new Image();
 
 		    String uniqueFileName = UUID.randomUUID().toString().replace("-", "");
@@ -101,15 +104,16 @@ public class IssueServiceImpl implements IIssueService {
 		    image.setHash(DigestUtils.md5Hex(fileBytes));
 
 		    File newFile = new File(imageStorage + uniqueFile);
+
 		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
 			    stream.write(fileBytes);
 		    } catch (IOException e) {
 			    logger.info("Error while file saving", e);
 		    }
 		    return image;
-	    } else {
-		    return duplicateImage;
 	    }
+
+	    return duplicateImage;
     }
 
 	@Override
