@@ -13,6 +13,7 @@ import SignUpForm from '@/components/form/SignUpForm/SignUpForm'
 import PassRecoveryForm from '@/components/form/PassRecoveryForm/PassRecoveryForm'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
 import GoogleMap from '@/components/map/GoogleMap'
+import AdminUserActionsDialog from '@/components/dialog/AdminUserActionsDialog/AdminUserActionsDialog'
 import router from './router'
 import i18n from './i18n'
 
@@ -30,6 +31,7 @@ Vue.component('sign-up-form', SignUpForm)
 Vue.component('password-recovery-form', PassRecoveryForm)
 Vue.component('auth-page', AuthPage)
 Vue.component('map-page', GoogleMap)
+Vue.component('admin-user-actions-dialog', AdminUserActionsDialog)
 
 /* eslint-disable no-new */
 new Vue({

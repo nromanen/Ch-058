@@ -24,7 +24,7 @@ public interface IUserService {
 
     List<User> findAll();
 
-    void setStatus(User.Type userType, Integer id);
+	User setStatus(User.Type userType, Integer id);
 
     List<User> findByType(User.Type type);
 }

@@ -30,8 +30,8 @@ public class UserManagementController {
 	}
 
 	@PutMapping({"/{id}/{t}"})
-	public void setStatus(@PathVariable Integer id, @PathVariable String t) {
-		userService.setStatus(User.Type.valueOf(t.toUpperCase()), id);
+	public JsonResponse setStatus(@PathVariable Integer id, @PathVariable String t) {
+		return new JsonResponse(userService.setStatus(User.Type.valueOf(t.toUpperCase()), id));
 	}
 
 	@GetMapping({"/type/{t}"})

@@ -72,8 +72,9 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	@Transactional
-	public void setStatus(User.Type type, Integer id) {
+	public User setStatus(User.Type type, Integer id) {
 		repository.setStatus(type, id);
+		return repository.getOne(id);
 	}
 
 	@Override

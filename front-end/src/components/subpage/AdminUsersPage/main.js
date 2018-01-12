@@ -4,18 +4,18 @@ const toLower = text => {
   return text.toString().toLowerCase()
 }
 
-const searchByName = (items, term) => {
-  if (term) {
-    return items.filter(item => toLower(
-      item.login
-      + item.email
-      + item.name
-      + item.surname
-      + item.type
-    ).includes(toLower(term)))
+const search = (users, str) => {
+  if (str) {
+    return users.filter(user => toLower(
+      user.login
+      + user.email
+      + user.name
+      + user.surname
+      + user.type
+    ).includes(toLower(str)))
   }
 
-  return items
+  return users
 }
 
 export default {
@@ -24,8 +24,7 @@ export default {
     searchString: null,
     selected: null,
     searched: [],
-    users: [],
-    showBanUserDialog: false
+    users: []
   }),
   created: function() {
     Vue.http.get('users/getAll')
@@ -34,37 +33,29 @@ export default {
 
         if (!json.errors) {
           this.users = json.data;
-          this.searched = this.users
+          this.searched = this.users;
         } else if (json.errors.length) {
           // TODO: show error in snackBar
+          console.log(JSON.stringify(json.errors));
         } else {
           // TODO: show Unexpected error in snackbar
+          console.log('UNEXPECTED');
         }
       }, error => {
         // TODO: implement this shit, pls
+        console.log(JSON.stringify(error.body));
       });
   },
   methods: {
-    onSelect (item) {
-      if (this.selected !== item) {
-        this.showBanUserDialog = true;
-        this.selected = item;
+    onSelect(user) {
+      if (user) {
+        this.$refs.aUserActionsDialog.show(user);
+
+        this.selected = user;
       }
     },
-    onConfirmBanUser() {
-      this.$http.put('admin/ban', null, {
-        params: {
-          id: this.selected.id
-        }
-      })
-        .then(response => {
-
-        }, error => {
-
-        });
-    },
-    searchOnTable () {
-      this.searched = searchByName(this.users, this.searchString);
+    searchOnTable() {
+      this.searched = search(this.users, this.searchString);
     }
   }
-};
+}

@@ -1,0 +1,52 @@
+<div id="admin-user-actions-dialog">
+  <md-dialog :md-active.sync="showDialog">
+    <md-dialog-title>Management</md-dialog-title>
+
+    <md-list>
+      <md-list-item md-expand>
+        <md-icon>security</md-icon>
+
+        <span class="md-list-item-text">Manage</span>
+
+        <md-card slot="md-expand">
+          <md-card-header>
+            Admin restrictions
+          </md-card-header>
+
+          <md-card-content>
+            <md-button class="md-raised md-primary">
+              Grant
+            </md-button>
+          </md-card-content>
+        </md-card>
+        <!--<md-list slot="md-expand">-->
+        <!--<md-list-item class="md-inset">World</md-list-item>-->
+        <!--<md-list-item class="md-inset">Europe</md-list-item>-->
+        <!--<md-list-item class="md-inset">South America</md-list-item>-->
+        <!--</md-list>-->
+      </md-list-item>
+
+      <md-list-item>
+        <md-icon>place</md-icon>
+
+        <span class="md-list-item-text">View user's issues</span>
+      </md-list-item>
+
+      <md-list-item id="ban" v-if="user && user.type !== 'BANNED'" @click="banUser(true)">
+        <md-icon>gavel</md-icon>
+
+        <span class="md-list-item-text">Ban</span>
+      </md-list-item>
+
+      <md-list-item id="unban" v-else @click="banUser(false)">
+        <md-icon>gavel</md-icon>
+
+        <span class="md-list-item-text">Unban</span>
+      </md-list-item>
+    </md-list>
+
+    <md-dialog-actions>
+      <md-button class="md-primary" @click="showDialog = false">Close</md-button>
+    </md-dialog-actions>
+  </md-dialog>
+</div>
