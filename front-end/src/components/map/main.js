@@ -452,7 +452,6 @@ export default {
     },
 
     redirectToIssue(issueId, marker) {
-      localStorage.setItem('redirectFromIssue', true);
       localStorage.setItem('activeMarker', JSON.stringify(marker));
       localStorage.setItem('zoom', this.map.getZoom());
       this.$router.push('issue/' + issueId);
@@ -491,5 +490,9 @@ export default {
 
   mounted: function () {
     this.initMap();
+  },
+
+  destroyed: function () {
+    localStorage.removeItem('redirectFromIssue');
   }
 }

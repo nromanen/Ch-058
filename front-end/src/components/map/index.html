@@ -82,13 +82,13 @@
     <md-dialog-content>
       <div v-for="issue in issues" :key="issue.id">
         <div class="md-layout md-gutter">
-          <div class="md-layout-item md-size-70">
+          <div class="md-layout-item md-size-65">
             <a @click="redirectToIssue(issue.id, activeMarker)">
               <h2>{{ issue.title }}</h2>
             </a>
             <p>{{issue.description.substring(0,20)}}...</p>
           </div>
-          <div class="md-layout-item md-size-30">
+          <div class="md-layout-item md-size-35">
             <div class="logo">
               <div v-if="issue.typeId===1">
                 <div style="text-align: center">

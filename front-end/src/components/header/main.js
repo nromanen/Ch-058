@@ -11,6 +11,7 @@ export default {
     snackBarText: null
   }),
   created: function () {
+    if(getLocalUser() !== null) {
     Vue.http.get('users/get/' + getLocalUser().id)
       .then(
         response => {
@@ -39,6 +40,7 @@ export default {
           }
         }
       )
+    }
   },
   methods: {
     logout() {
