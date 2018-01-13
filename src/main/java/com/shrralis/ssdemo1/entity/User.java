@@ -15,6 +15,7 @@ package com.shrralis.ssdemo1.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
 import com.shrralis.ssdemo1.util.PsqlEnum;
+import com.shrralis.tools.model.JsonError;
 import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.TypeDef;
 
@@ -33,7 +34,9 @@ import static com.shrralis.ssdemo1.entity.User.TABLE_NAME;
 public class User implements Identifiable<Integer> {
 
 	public static final String LOGIN_PATTERN = "^[A-Za-z_\\-.0-9]+$";
-	public static final String NAME_PATTERN = "^[A-ZА-Я]['a-zа-я]+$";
+	public static final String PASS_PATTERN = "^(?=.*\\d)(?=.*[a-zа-яіїє])(?=.*[A-ZА-ЯІЇЄ])" +
+			"(?=.*[-`!@#$%^&*()_+=\"'<>,./|\\\\?]).*$";
+	public static final String NAME_PATTERN = "^[A-ZА-ЯІЇЄ]('?[a-zа-яіїє])+?(-[A-ZА-ЯІЇЄ]('?[a-zа-яіїє])+)?$";
     public static final String TABLE_NAME = "users";
     public static final String ID_COLUMN_NAME = "id";
     public static final String LOGIN_COLUMN_NAME = "login";
@@ -86,6 +89,7 @@ public class User implements Identifiable<Integer> {
 	@JsonIgnore
 	@NotNull
 	@NotBlank
+	@Pattern(regexp = User.PASS_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	@Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
 	@Column(name = PASS_COLUMN_NAME, nullable = false, length = MAX_PASSWORD_LENGTH)
 	private String password;

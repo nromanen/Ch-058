@@ -2,24 +2,24 @@ import Vue from 'vue';
 import VueMaterial from './../../../../node_modules/vue-material'
 import './../../../../node_modules/vue-material/dist/vue-material.css'
 import VueResource from 'vue-resource';
-import {VTooltip} from 'v-tooltip'
+import { VTooltip } from 'v-tooltip'
+import openChat from '@/components/OpenChat/OpenChat.vue'
 import {getLocalUser} from "../../../router";
 
 Vue.directive('my-tooltip', VTooltip);
 Vue.use(VueMaterial);
 Vue.use(VueResource);
 
-
 export default {
   data() {
     return {
       center: {lat: 0, lng: 0},
       markerPosition: {lat: 0, lng: 0},
-      title: '',
-      text: '',
-      isLiked: false,
-      isUnliked: false,
-      countLike: 0,
+      title:'',
+      text:'',
+      isLiked : false,
+      isUnliked : false,
+      countLike : 0,
       countDislike: 0,
       clickDisabled: false,
       typeId: -1,
@@ -30,7 +30,9 @@ export default {
       showSnackBar: false
     }
   },
-
+  components:{
+    openChat
+  },
   methods: {
     loadIssue() {
       var self = this;
@@ -83,7 +85,7 @@ export default {
 
     loadVote() {
       var issueId = this.$route.params.id;
-      this.$http.get('issues/' + issueId + '/is-vote-exist').then(data => {
+      this.$http.get('issues/' + issueId + '/is-vote-exist').then(data=> {
         if (data.body.data[0].vote !== null) {
           data.body.data[0] ? this.isLiked = true : this.isUnliked = true;
         }
@@ -151,7 +153,7 @@ export default {
     backToMap() {
       localStorage.setItem('redirectFromIssue', true);
       this.$router.push('/');
-    }
+    },
   },
 
   mounted: function () {

@@ -12,9 +12,13 @@
 
 package com.shrralis.tools.model;
 
+import org.springframework.context.MessageSource;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
@@ -33,6 +37,14 @@ public class JsonResponse {
 		setData(data);
 	}
 
+	public JsonResponse(JsonError.Error error) {
+		addError(error);
+	}
+
+	public JsonResponse(JsonError.Error error, Locale locale, MessageSource messageSource) {
+		addError(error, locale, messageSource);
+	}
+
 	private void setData(Object data) {
 		this.data = new ArrayList<>();
 
@@ -45,16 +57,11 @@ public class JsonResponse {
 		count = this.data.size();
 	}
 
-	public JsonResponse(JsonError.Error error) {
-
-		addError(error);
-	}
-
-	private void addError(JsonError.Error error) {
+	private void addError(JsonError.Error error, Locale locale, MessageSource messageSource) {
 		if (errors == null) {
 			errors = new ArrayList<>();
 		}
-		this.errors.add(new JsonError(error));
+		this.errors.add(new JsonError(error).translateErrmsg(locale, messageSource));
 
 		count = null;
 	}
@@ -71,6 +78,19 @@ public class JsonResponse {
 		setErrors(errors);
 	}
 
+	private void addError(JsonError.Error error) {
+		if (errors == null) {
+			errors = new ArrayList<>();
+		}
+		this.errors.add(new JsonError(error));
+
+		count = null;
+	}
+
+	public JsonResponse(List<JsonError> errors, Locale locale, MessageSource messageSource) {
+		setErrors(errors, locale, messageSource);
+	}
+
 	public List<JsonError> getErrors() {
 		return errors;
 	}
@@ -80,6 +100,14 @@ public class JsonResponse {
 		count = null;
 
 		this.errors.addAll(errors);
+	}
+
+	private void setErrors(List<JsonError> errors, Locale locale, MessageSource messageSource) {
+		this.errors = new ArrayList<>();
+		count = null;
+
+		this.errors.addAll(errors.stream().map(jErr -> jErr.translateErrmsg(locale, messageSource))
+				.collect(Collectors.toList()));
 	}
 
 	public List<Object> getData() {

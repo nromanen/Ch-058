@@ -18,6 +18,11 @@ public class MarkerDTO {
 
 	private Integer type;
 
+	public MarkerDTO(double lat, double lng) {
+		this.lat = lat;
+		this.lng = lng;
+	}
+
 	public Double getLat() {
 		return lat;
 	}

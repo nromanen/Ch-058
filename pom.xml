@@ -380,15 +380,18 @@
             <artifactId>commons-io</artifactId>
             <version>${apache.commons.io}</version>
         </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.5</version>
-        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>5.0.2.RELEASE</version>
+            <artifactId>spring-websocket</artifactId>
+            <version>4.3.13.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-messaging -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+            <version>4.3.13.RELEASE</version>
         </dependency>
     </dependencies>
 

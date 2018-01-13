@@ -23,10 +23,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 
-	private AuthenticationSuccessHandler authSuccessHandler;
-	private CitizenAuthenticationFailureHandler authFailureHandler;
-	private CitizenAccessDeniedHandler accessDeniedHandler;
-	private LogoutSuccessHandler logoutSuccessHandler;
+	private final AuthenticationSuccessHandler authSuccessHandler;
+	private final CitizenAuthenticationFailureHandler authFailureHandler;
+	private final CitizenAccessDeniedHandler accessDeniedHandler;
+	private final LogoutSuccessHandler logoutSuccessHandler;
 
 	@Autowired
 	public SecurityConfigAdapter(AuthenticationSuccessHandler authSuccessHandler,
@@ -53,7 +53,6 @@ public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/auth/logout").authenticated()
 				.antMatchers("/admin**/**").access("hasRole('ADMIN')")
-				.antMatchers("/user**/**").access("hasRole('ADMIN') or hasRole('USER')")
 				.and()
 				.formLogin()
 				.loginPage("/auth/login")

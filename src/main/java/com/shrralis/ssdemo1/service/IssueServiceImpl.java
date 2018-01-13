@@ -31,6 +31,7 @@ import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 @Service
 @Transactional
 public class IssueServiceImpl implements IIssueService {
+	public static final int OPENED_TYPE = 1;
 
 	@Value("${imageStorage}")
 	private String imageStorage;
@@ -64,35 +65,9 @@ public class IssueServiceImpl implements IIssueService {
 
 	    User user = usersRepository.findOne(getCurrent().getId());
 
-	    boolean closed = dto.getTypeId() != 1;
+	    boolean closed = dto.getTypeId() != OPENED_TYPE;
 
-	    Image image;
-	    byte[] fileBytes = {};
-	    try {
-		    fileBytes = file.getBytes();
-	    } catch (IOException e) {
-		    logger.info("Error while file encoding", e);
-	    }
-	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(fileBytes));
-	    if(duplicateImage != null) {
-			image = duplicateImage;
-	    } else {
-		    image = new Image();
-
-		    String uniqueFileName = UUID.randomUUID().toString().replace("-", "");
-			String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-			String uniqueFile = uniqueFileName + "." + extension;
-
-		    image.setSrc(uniqueFile);
-		    image.setHash(DigestUtils.md5Hex(fileBytes));
-
-		    File newFile = new File(System.getProperty("catalina.home") + File.separator + uniqueFile);
-		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
-			    stream.write(fileBytes);
-		    } catch (IOException e) {
-			    logger.info("Error while file saving", e);
-		    }
-	    }
+	    Image image = parseImage(file);
 
 	    return issuesRepository.save(Issue.Builder.anIssue()
 		        .setMapMarker(marker)
@@ -105,6 +80,37 @@ public class IssueServiceImpl implements IIssueService {
 		        .setCreatedAt(LocalDateTime.now())
 		        .setUpdatedAt(LocalDateTime.now())
 		        .build());
+    }
+
+    private Image parseImage(MultipartFile file) {
+	    byte[] fileBytes = {};
+	    try {
+		    fileBytes = file.getBytes();
+	    } catch (IOException e) {
+		    logger.info("Error while file encoding", e);
+	    }
+
+	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(fileBytes));
+	    if(duplicateImage == null) {
+		    Image image = new Image();
+
+		    String uniqueFileName = UUID.randomUUID().toString().replace("-", "");
+		    String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		    String uniqueFile = uniqueFileName + "." + extension;
+
+		    image.setSrc(uniqueFile);
+		    image.setHash(DigestUtils.md5Hex(fileBytes));
+
+		    File newFile = new File(System.getProperty("catalina.home") + File.separator + uniqueFile);
+		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
+			    stream.write(fileBytes);
+		    } catch (IOException e) {
+			    logger.info("Error while file saving", e);
+		    }
+		    return image;
+	    } else {
+		    return duplicateImage;
+	    }
     }
 
 	@Override

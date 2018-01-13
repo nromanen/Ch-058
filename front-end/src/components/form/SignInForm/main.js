@@ -1,7 +1,7 @@
-import {validationMixin} from 'vuelidate'
-import {minLength, required} from 'vuelidate/lib/validators'
-import {LoginOrEmailValidator, MIN_LOGIN_LENGTH} from "../../_validator";
-import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
+import {validationMixin} from 'vuelidate';
+import {minLength, required} from 'vuelidate/lib/validators';
+import {LoginOrEmailValidator, MIN_LOGIN_LENGTH} from "../../../_validator";
+import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: 'SignInPage',
