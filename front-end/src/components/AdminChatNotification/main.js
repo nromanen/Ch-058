@@ -2,6 +2,9 @@ import {getLocalUser} from "../../router";
 import 'stompjs/lib/stomp.js';
 import * as SockJS from 'sockjs-client/dist/sockjs.min.js'
 import chatPage from '@/components/page/ChatPage/ChatPage.vue'
+import {getCurrentLang, switchLang} from "../../i18n";
+
+
 export default {
   name: 'AdminChatNotification',
   data: function(){
@@ -32,6 +35,12 @@ export default {
         }
       }
       _this.users.splice(index, 1);
+    },
+    switchLang(lang) {
+      switchLang(lang);
+    },
+    getLangClass(lang) {
+      return getCurrentLang() === lang ? 'md-primary' : '';
     }
   },
   created: function () {

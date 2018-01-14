@@ -2,6 +2,7 @@ import message from '@/components/Message/Message.vue'
 import {getLocalUser} from "../../../router";
 import 'stompjs/lib/stomp.js';
 import * as SockJS from 'sockjs-client/dist/sockjs.min.js'
+import {getCurrentLang, switchLang} from "../../../i18n";
 export default {
   name: 'ChatPage',
   data() {
@@ -18,6 +19,9 @@ export default {
   },
   methods: {
     sendMes: function (event) {
+      if(this.newMessageText == '' || this.newMessageText.match(/^\s+$/)) {
+        return;
+      }
       this.stompClient.send("/app/message/" + this.issueId + "/" + this.userId, {},
         JSON.stringify({text: this.newMessageText, authorId: this.userId}));
       this.newMessageText = '';
@@ -57,6 +61,12 @@ export default {
     scrollDown: function () {
       var elem = document.getElementById('style-6');
       elem.scrollTop = elem.scrollHeight;
+    },
+    getLangClass(lang) {
+      return getCurrentLang() === lang ? 'md-primary' : '';
+    },
+    switchLang(lang) {
+      switchLang(lang);
     }
   },
   created: function () {

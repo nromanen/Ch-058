@@ -1,6 +1,8 @@
 import {getLocalUser} from "../../router";
 import 'stompjs/lib/stomp.js';
 import * as SockJS from 'sockjs-client/dist/sockjs.min.js'
+import {getCurrentLang, switchLang} from "../../i18n";
+
 export default {
   name: 'OpenChat',
   data() {
@@ -37,6 +39,12 @@ export default {
           }
         });
       })
+    },
+    switchLang(lang) {
+      switchLang(lang);
+    },
+    getLangClass(lang) {
+      return getCurrentLang() === lang ? 'md-primary' : '';
     },
     notificateAdmins: function (login) {
       this.stompClient.send("/app/connect", {}, JSON.stringify({text: "Alert", login: login,

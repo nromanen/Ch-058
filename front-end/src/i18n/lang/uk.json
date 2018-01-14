@@ -7,7 +7,11 @@
     "log_in": "Увійти",
     "sign_up": "Зареєструватися",
     "request_recovery_token": "Отримати відновлювальний токен",
-    "recover": "Відновити"
+    "recover": "Відновити",
+    "openChat": "Відкрити чат",
+    "answerNotification": "Відповісти",
+    "closeNotification": "звертався до вас",
+    "sendMessage": "Надіслати"
   },
   "label": {
     "sign_in": "Увійти",
@@ -20,7 +24,13 @@
     "email": "E-Mail",
     "first_name": "Ім'я",
     "last_name": "Прізвище",
-    "recovery_token": "Відновлювальний токен з E-Mail'у"
+    "recovery_token": "Відновлювальний токен з E-Mail'у",
+    "projectTitle": "Гео громадянин",
+    "waitHint": "Будь ласка, зачекайте хвилину для відповіді від адміністратора",
+    "noAdminAnswer": "Вибачте, але наразі немає адміністраторів. Будь ласка, зв'яжіться пізніше",
+    "notifications": "Сповіщення:",
+    "chatRoom": "Чат кімната",
+    "messageHint": "Напишіть повідомлення"
   },
   "error": {
     "required": "Обов'язково",
