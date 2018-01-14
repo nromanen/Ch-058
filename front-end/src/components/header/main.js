@@ -11,15 +11,32 @@ export default {
     userEmail: null,
     snackBarText: null
   }),
-  created: () => {
+  created: function () {
     if (getLocalUser()) {
-      Vue.http.get('users/get/' + getLocalUser().id)
+      Vue.http.get('auth/getCurrentSession')
         .then(
           response => {
             let json = response.body;
 
-            if (!json.errors && json.data[0].logged_in) {
-              this.userEmail = json.data[0].email;
+            if (!json.errors) {
+              if (json.data[0].logged_in) {
+                Vue.http.get('users/get/' + getLocalUser().id)
+                  .then(
+                    response => {
+                      let json = response.body;
+
+                      if (!json.errors) {
+                        if (json.data[0]) {
+                          this.userEmail = json.data[0].email;
+                        }
+                      } else if (json.errors.length) {
+                        this.snackBarText = getErrorMessage(json.errors[0]);
+                      } else {
+                        this.snackBarText = getErrorMessage(UNEXPECTED);
+                      }
+                    }
+                  )
+              }
             } else if (json.errors.length) {
               this.snackBarText = getErrorMessage(json.errors[0]);
             } else {
@@ -77,6 +94,9 @@ export default {
           }
         }
       )
+    },
+    hideSnackBar() {
+      this.snackBarText = null;
     },
     getLangClass(lang) {
       return getCurrentLang() === lang ? 'md-primary' : '';
