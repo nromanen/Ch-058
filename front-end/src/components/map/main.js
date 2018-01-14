@@ -1,5 +1,6 @@
-import {maxLength, minLength, required} from 'vuelidate/lib/validators';
-import {getLocalUser} from "../../router/index";
+import {minLength, maxLength, required} from 'vuelidate/lib/validators'
+import {getLocalUser} from "../../router/index"
+import Vue from 'vue'
 
 export default {
   name: 'Map',
@@ -19,6 +20,7 @@ export default {
     sending: false,
     showDialog: false,
     showIssueDialog: true,
+    searchParam: 'establishment',
     issues: [],
     showSnackBar: false,
     markers: [],
@@ -26,9 +28,7 @@ export default {
         id: 0,
         lat: 0,
         lng: 0
-      },
-    map:null,
-    circles: [],
+      }
   }),
   validations: {
     form: {
@@ -65,9 +65,9 @@ export default {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         var fileSize = document.getElementById("uploadImage").files[0].size;
-        if (fileSize > 1024 * 1024 * 5) // 5 MB
+        if(fileSize > 1024 * 1024 * 5) // 5 MB
         {
-          window.alert('Image size cannot be bigger then 5 MB');
+          window.alert(this.$t('message.image_size'));
         } else {
           this.saveIssue();
         }
@@ -86,7 +86,7 @@ export default {
 
     initMap() {
       var self = this;
-      self.map = new google.maps.Map(document.getElementById('map'), {
+      this.map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 48.29149, lng: 25.94034},
         zoom: 15,
         maxZoom: 19,
@@ -99,14 +99,14 @@ export default {
       this.addYourLocationButton();
       this.addSearchField();
       if (localStorage.getItem('redirectFromIssue')) {
-        self.activeMarker = JSON.parse(localStorage.getItem('activeMarker'))
+        self.activeMarker = JSON.parse(localStorage.getItem('activeMarker'));
         self.showAllIssuesByMarker(self.activeMarker.id);
         var pos = {
           lat: self.activeMarker.lat,
           lng: self.activeMarker.lng
         };
         self.map.setCenter(pos);
-        self.map.setZoom(parseInt(localStorage.getItem('zoom')));
+        self.map.setZoom(19);
       } else {
         this.getUserLocation();
       }
@@ -115,14 +115,11 @@ export default {
         this.map.addListener('idle', function () {
           for (var i = 0; i < self.markers.length; i++) {
             var marker = self.markers[i];
-            var circle = self.circles[i];
             if(self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
               marker.setMap(self.map);
-              circle.setMap(self.map);
             }
             if(!self.map.getBounds().contains(marker.getPosition())) {
               marker.setMap(null);
-              circle.setMap(null);
             }
           }
         });
@@ -136,11 +133,19 @@ export default {
         });
     },
 
+    callback(results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          window.alert(results[i].geometry.location);
+        }
+      }
+    },
+
     search() {
       var self = this;
       var pos;
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -151,78 +156,76 @@ export default {
       }
       var autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('pac-input'), {
-          types: ['establishment'],
           location: pos,
           radius: 10000,
         });
-      autocomplete.bindTo('bounds', self.map);
-      autocomplete.addListener('place_changed', function() {
-         var place = autocomplete.getPlace();
-         if (!place.geometry) {
-           window.alert("No details available for input: '" + place.name + "'");
-           return;
-         } else {
-           var s = window.select;
-           self.$http.get('map/marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
-             .then((response) => {
-             if(response.body.data[0] == null) {
-               self.map.setCenter(place.geometry.location);
-               self.map.setZoom(19);
-               s = new google.maps.Marker({
-                 map: self.map,
-                 position: {
-                   lat: place.geometry.location.lat(),
-                   lng: place.geometry.location.lng()
-                 },
-                 animation: google.maps.Animation.DROP
-               });
-               self.setMarkerType(s, '5');
-               if(getLocalUser()) {
-                 setTimeout(function() {
-                   self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
-                   s.setMap(null);
-                 }, 1200)
-               } else {
-                 self.showSnackBar = true;
-                 document.getElementById('pac-input').value = '';
-               }
+        autocomplete.setTypes([self.searchParam]);
+        autocomplete.bindTo('bounds', self.map);
+        autocomplete.addListener('place_changed', function() {
+       var place = autocomplete.getPlace();
+
+       var s = window.select;
+       self.$http.get('map/marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
+         .then((response) => {
+           if (response.body.data[0] == null) {
+             self.map.setCenter(place.geometry.location);
+             self.map.setZoom(19);
+             s = new google.maps.Marker({
+               map: self.map,
+               position: {
+                 lat: place.geometry.location.lat(),
+                 lng: place.geometry.location.lng()
+               },
+               animation: google.maps.Animation.DROP
+             });
+             self.setMarkerType(s, '5');
+             if (getLocalUser()) {
+               setTimeout(function () {
+                 self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+                 s.setMap(null);
+               }, 1200)
+             } else {
+               self.showSnackBar = true;
+               document.getElementById('pac-input').value = '';
              }
-             else {
-               self.map.setCenter(place.geometry.location);
-               self.map.setZoom(19);
+           } else {
+             self.map.setCenter(place.geometry.location);
+             self.map.setZoom(19);
+             if (getLocalUser()) {
+               setTimeout(function () {
+                 self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+               }, 1200)
+             } else {
+               self.showSnackBar = true;
+               document.getElementById('pac-input').value = '';
              }
-           })
-         }
+           }
+         })
       });
     },
 
     getUserLocation() {
       var self = this;
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          var pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          self.map.setCenter(pos);
-          self.map.setZoom(19);
-          var infoWindow = new google.maps.InfoWindow({map: self.map});
-          infoWindow.setPosition(pos);
-          infoWindow.setContent('<b>Your location</b>');
-          setTimeout(function() { infoWindow.close(); }, 2000)
-        }, function() {
-          self.handleLocationError(true)
-        })
-      }
-      else {
-        self.handleLocationError(false)
-      }
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        self.map.setCenter(pos);
+        self.map.setZoom(19);
+        var infoWindow = new google.maps.InfoWindow({map: self.map});
+        infoWindow.setPosition(pos);
+        infoWindow.setContent('<b>' + self.$t('message.user_location') + '</b>');
+        setTimeout(function () {
+          infoWindow.close();
+        }, 2000)
+      }, function () {
+        self.handleLocationError()
+      })
     },
 
-    handleLocationError(browserHasGeolocation) {
-      window.alert(browserHasGeolocation ?
-        'Error: The Geolocation service failed.' :
-        'Error: Your browser doesn\'t support geolocation.');
+    handleLocationError() {
+      window.alert(this.$t('message.geolocation'));
     },
 
     addSearchField() {
@@ -231,7 +234,7 @@ export default {
       var controlDiv = document.createElement('div');
 
       var input = document.createElement('input');
-      input.setAttribute('placeholder', 'Enter a location');
+      input.setAttribute('placeholder', this.$t('label.input_location'));
       input.setAttribute('id', 'pac-input');
       input.setAttribute('type', 'text');
 
@@ -242,32 +245,38 @@ export default {
       input.style.boxShadow = '0 1px 4px rgba(0, 0, 0, 0.3)';
       input.style.padding = '0 11px 0 13px';
       input.style.fontSize = '15px';
-      input.style.borderColor = '#4d90fe';
+      input.style.borderColor = '#323232';
       input.addEventListener('click', function() {
         self.search()
       });
 
       var selectDiv = document.createElement('div');
+      selectDiv.setAttribute('id', 'type-selector');
       selectDiv.style.color = '#fff';
-      selectDiv.style.backgroundColor = '#4d90fe';
+      selectDiv.style.backgroundColor = '#323232';
       selectDiv.style.padding = '5px 11px 5px 11px';
       selectDiv.style.fontSize = '13px';
 
       var radio1 = document.createElement('input');
       radio1.setAttribute('type', 'radio');
       radio1.setAttribute('name', 'type');
-      radio1.setAttribute('id', 'establishment');
+      radio1.setAttribute('checked', 'checked');
+      radio1.addEventListener('click', function() {
+        self.searchParam = 'establishment';
+      });
       var label1 = document.createElement('label');
       label1.setAttribute('for', 'radio1');
-      label1.appendChild(document.createTextNode('Establishments'));
+      label1.appendChild(document.createTextNode(this.$t('label.establishments')));
 
       var radio2 = document.createElement('input');
       radio2.setAttribute('type', 'radio');
       radio2.setAttribute('name', 'type');
-      radio1.setAttribute('id', 'addresses');
+      radio2.addEventListener('click', function() {
+        self.searchParam = 'address';
+      });
       var label2 = document.createElement('label2');
       label2.setAttribute('for', 'radio2');
-      label2.appendChild(document.createTextNode('Addresses'));
+      label2.appendChild(document.createTextNode(this.$t('label.addresses')));
 
       selectDiv.appendChild(radio1);
       selectDiv.appendChild(label1);
@@ -307,7 +316,7 @@ export default {
       secondChild.style.backgroundPosition = '0px 0px';
       firstChild.appendChild(secondChild);
 
-      firstChild.addEventListener('click', function() {
+      firstChild.addEventListener('click', function () {
         self.getUserLocation()
       });
       this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
@@ -323,7 +332,7 @@ export default {
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
       modal.style.display = "table";
-      span.onclick = function() {
+      span.onclick = function () {
         modal.style.display = "none";
         document.getElementById('pac-input').value = '';
         document.getElementById("preview").hidden = true;
@@ -333,6 +342,7 @@ export default {
     },
 
     saveIssue() {
+      var self = this;
       var title = this.form.title;
       var desc = this.form.desc;
       var type = this.form.type;
@@ -346,8 +356,15 @@ export default {
       if(window.isPlaced) {
         formData.append('markerId', window.id);
         this.setMarkerType(window.marker, '4');
-        this.$http.post('map/issue', formData).then((response) => {console.log(response.body)
-        });
+        this.map.setCenter(window.marker.getPosition());
+
+        var infoWindow = new google.maps.InfoWindow({
+          content: self.$t('message.new_issue')});
+        infoWindow.open(self.map, window.marker);
+        setTimeout(function () {
+          infoWindow.close();
+        }, 2000);
+        this.$http.post('map/issue', formData).then((response) => {});
       } else {
           var marker = new google.maps.Marker({
             map: this.map,
@@ -356,22 +373,24 @@ export default {
               lng: window.lng
             }
           });
-          var circle = new google.maps.Circle({
-            map: this.map,
-            radius: 20
-          });
-          circle.bindTo('center', marker, 'position');
           this.setMarkerType(marker, type);
-          this.setListeners(marker, circle);
+          this.setListeners(marker);
           this.markers.push(marker);
-          this.circles.push(circle);
+          this.map.setCenter(marker.getPosition());
+
+          var infoWindow = new google.maps.InfoWindow({
+            content: self.$t('message.new_issue')});
+          infoWindow.open(self.map, marker);
+          setTimeout(function () {
+            infoWindow.close();
+          }, 2000);
+
           this.$http.post('map/marker', {
             lat: window.lat,
             lng: window.lng
           }).then((response) => {
             formData.append('markerId', response.body.data[0].id);
-            this.$http.post('map/issue', formData).then((response) => {console.log(response.body)
-            });
+            this.$http.post('map/issue', formData).then((response) => {});
           });
       }
 
@@ -406,50 +425,52 @@ export default {
     },
 
     onCancelIssuesDialog: function () {
-      this.issues = []
-      localStorage.removeItem('redirectFromIssue')
+      this.issues = [];
+      localStorage.removeItem('redirectFromIssue');
       localStorage.removeItem('activeMarker')
       localStorage.removeItem('zoom')
     },
 
-    setListeners(marker, circle) {
-      var self = this;
-      var timer = 0;
-      var delay = 300;
-      var prevent = false;
-      var elements = [marker, circle];
+    setListeners(marker) {
+        var self = this;
+        var timer = 0;
+        var delay = 300;
+        var prevent = false;
 
-      for(var i = 0; i < elements.length; i++) {
-        elements[i].addListener('click', function () {
-        timer = setTimeout(function () {
-          if (!prevent) {
-            self.$http.get('map/marker/' + marker.getPosition().lat() + "/" + marker.getPosition().lng() + "/")
-              .then((response) => {
-                self.activeMarker.id = response.body.data[0].id;
-                self.activeMarker.lat = parseFloat(response.body.data[0].lat);
-                self.activeMarker.lng = parseFloat(response.body.data[0].lng);
-                self.showAllIssuesByMarker(self.activeMarker.id);
-              });
-          }
-          prevent = false;
-        }, delay);
+        marker.addListener('click', function() {
+          timer = setTimeout(function () {
+            if (!prevent) {
+              self.$http.get('map/marker/' + marker.getPosition().lat() + "/" + marker.getPosition().lng() + "/")
+                .then((response) => {
+                  self.activeMarker.id = response.body.data[0].id;
+                  self.activeMarker.lat = parseFloat(response.body.data[0].lat);
+                  self.activeMarker.lng = parseFloat(response.body.data[0].lng);
+                  self.showAllIssuesByMarker(self.activeMarker.id);
+                });
+            }
+            prevent = false;
+          }, delay);
 
-      });
-      marker.addListener('dblclick', function () {
-        clearTimeout(timer);
-        prevent = true;
+          marker.addListener('dblclick', function () {
 
-          self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
-          window.marker = marker;
-          var modal = document.getElementById('myModal');
-          var span = document.getElementsByClassName("close")[0];
-          modal.style.display = "table";
-          span.onclick = function() {
-            modal.style.display = "none";
-          };
+            clearTimeout(timer);
+            prevent = true;
 
-        });
-      }
+            if(getLocalUser()) {
+                self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
+                window.marker = marker;
+                var modal = document.getElementById('myModal');
+                var span = document.getElementsByClassName("close")[0];
+                modal.style.display = "table";
+                span.onclick = function () {
+                  modal.style.display = "none";
+                };
+            } else {
+              self.showSnackBar = true;
+              document.getElementById('pac-input').value = '';
+            }
+          });
+      })
     },
 
     showAllIssuesByMarker(markerId) {
@@ -499,35 +520,20 @@ export default {
       this.$http.get('map').then((response) => {
         for (var i = 0; i < response.body.data.length; i++) {
 
-            var lat = parseFloat(response.body.data[i].lat);
-            var lng = parseFloat(response.body.data[i].lng);
-            var type = response.body.data[i].type.toString();
+              var lat = parseFloat(response.body.data[i].lat);
+              var lng = parseFloat(response.body.data[i].lng);
+              var type = response.body.data[i].type.toString();
 
-            var marker = new google.maps.Marker({
-              position: {
-                lat: lat,
-                lng: lng
-              },
-            });
-            var marker = new google.maps.Marker({
+              var marker = new google.maps.Marker({
                 position: {
                   lat: lat,
                   lng: lng
                 }
               });
-              var circle = new google.maps.Circle({
-                map: this.map,
-                radius: 20,
-                /*fillOpacity: 0.0,
-                strokeOpacity: 0.0*/
-              });
-              circle.bindTo('center', marker, 'position');
-
-              this.setListeners(marker, circle);
+              this.setListeners(marker);
               this.setMarkerType(marker, type);
 
               this.markers.push(marker);
-              this.circles.push(circle);
           }
           for (var i = 0; i < this.markers.length; i++) {
             var marker = this.markers[i];
@@ -535,12 +541,12 @@ export default {
               marker.setMap(self.map);
             }
           }
-        }
-      );
+        });
     },
   },
 
   mounted: function () {
+      this.initMap();
     this.initMap();
   },
 

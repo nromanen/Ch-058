@@ -12,14 +12,31 @@ export default {
     snackBarText: null
   }),
   created: function () {
-    if(getLocalUser() !== null) {
-    Vue.http.get('users/get/' + getLocalUser().id)
-      .then(
-        response => {
-          let json = response.body;
+    if (getLocalUser()) {
+      Vue.http.get('auth/getCurrentSession')
+        .then(
+          response => {
+            let json = response.body;
 
             if (!json.errors) {
-              this.userEmail = json.data[0].email;
+              if (json.data[0].logged_in) {
+                Vue.http.get('users/get/' + getLocalUser().id)
+                  .then(
+                    response => {
+                      let json = response.body;
+
+                      if (!json.errors) {
+                        if (json.data[0]) {
+                          this.userEmail = json.data[0].email;
+                        }
+                      } else if (json.errors.length) {
+                        this.snackBarText = getErrorMessage(json.errors[0]);
+                      } else {
+                        this.snackBarText = getErrorMessage(UNEXPECTED);
+                      }
+                    }
+                  )
+              }
             } else if (json.errors.length) {
               this.snackBarText = getErrorMessage(json.errors[0]);
             } else {
@@ -36,11 +53,11 @@ export default {
                 }
             }
 
-          if (!this.snackBarText) {
-            this.snackBarText = 'HTTP error (' + error.status + ': ' + error.statusText + ')';
+            if (!this.snackBarText) {
+              this.snackBarText = 'HTTP error (' + error.status + ': ' + error.statusText + ')';
+            }
           }
-        }
-      )
+        );
     }
   },
   methods: {
@@ -78,12 +95,11 @@ export default {
         }
       )
     },
-    getLangClass(lang) {
-      return getCurrentLang() === lang ? 'md-primary' : '';
-    },
-
     hideSnackBar() {
       this.snackBarText = null;
+    },
+    getLangClass(lang) {
+      return getCurrentLang() === lang ? 'md-primary' : '';
     }
   }
 }

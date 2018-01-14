@@ -17,7 +17,6 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.System.in;
 
 
 @RestController
