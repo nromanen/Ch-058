@@ -32,9 +32,6 @@ import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 public class IssueServiceImpl implements IIssueService {
 	public static final int OPENED_TYPE = 1;
 
-	@Value("${imageStorage}")
-	private String imageStorage;
-
 	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
 
     private final IssuesRepository issuesRepository;
@@ -102,7 +99,7 @@ public class IssueServiceImpl implements IIssueService {
 		    image.setSrc(uniqueFile);
 		    image.setHash(DigestUtils.md5Hex(fileBytes));
 
-		    File newFile = new File(imageStorage + uniqueFile);
+		    File newFile = new File(System.getProperty("catalina.home") + File.separator + uniqueFile);
 
 		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
 			    stream.write(fileBytes);

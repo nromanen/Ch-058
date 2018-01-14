@@ -1,6 +1,5 @@
 import {minLength, maxLength, required} from 'vuelidate/lib/validators'
 import {getLocalUser} from "../../router/index"
-import Vue from 'vue'
 
 export default {
   name: 'Map',
@@ -20,23 +19,26 @@ export default {
     sending: false,
     showDialog: false,
     showSnackBar: false,
-
     showIssueDialog: true,
     searchParam: 'establishment',
-    issues: [],
     markers: [],
+    issues: [],
+    lats: [],
+    lngs: [],
     activeMarker: {
         id: 0,
         lat: 0,
         lng: 0
       }
   }),
+
   validations: {
     form: {
       title: {
         required,
         minLength: minLength(4),
-        maxLength: maxLength(32)
+        maxLength: maxLength(32),
+
       },
       desc: {
         required,
@@ -51,22 +53,21 @@ export default {
       }
     }
   },
+
   methods: {
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
+
       if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty
-        }
+        return {'md-invalid': field.$invalid && field.$dirty}
       }
     },
 
-    // calling when submit input form
     validateData() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         var fileSize = document.getElementById("uploadImage").files[0].size;
-        if(fileSize > 1024 * 1024 * 5) // 5 MB
+        if(fileSize > 1024 * 1024 * 5)
         {
           window.alert(this.$t('message.image_size'));
         } else {
@@ -75,7 +76,6 @@ export default {
       }
     },
 
-    // calling when exit popup window
     clearForm() {
       this.$v.$reset();
       this.form.title = null;
@@ -89,9 +89,9 @@ export default {
       var self = this;
       this.map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 48.29149, lng: 25.94034},
-        zoom: 15,
-        maxZoom: 19,
-        minZoom: 15,
+        zoom: 16,
+        maxZoom: 20,
+        minZoom: 14,
         disableDefaultUI: true,
         disableDoubleClickZoom: true,
         zoomControl: true,
@@ -99,6 +99,8 @@ export default {
       });
       this.addYourLocationButton();
       this.addSearchField();
+      this.loadAllMarkers();
+
       if (localStorage.getItem('redirectFromIssue')) {
         self.activeMarker = JSON.parse(localStorage.getItem('activeMarker'));
         self.showAllIssuesByMarker(self.activeMarker.id);
@@ -107,37 +109,97 @@ export default {
           lng: self.activeMarker.lng
         };
         self.map.setCenter(pos);
-        self.map.setZoom(19);
+        self.map.setZoom(20);
       } else {
         this.getUserLocation();
       }
-      this.loadAllMarkers();
 
-        this.map.addListener('idle', function () {
-          for (var i = 0; i < self.markers.length; i++) {
-            var marker = self.markers[i];
-            if(self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
-              marker.setMap(self.map);
-            }
-            if(!self.map.getBounds().contains(marker.getPosition())) {
-              marker.setMap(null);
+      this.map.addListener('idle', function () {
+      for (var i = 0; i < self.markers.length; i++) {
+        var marker = self.markers[i];
+        if(self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
+          marker.setMap(self.map);
+        }
+        if(!self.map.getBounds().contains(marker.getPosition())) {
+          marker.setMap(null);
+        }
+      }
+      });
+
+      this.map.addListener('click', function(e) {
+        if(getLocalUser()) {
+          self.clickHandler(e, self.map);
+        } else {
+          e.stop();
+          self.showSnackBar = true
+        }
+      });
+  },
+
+    clickHandler(e, map) {
+      var self = this;
+      var k = 0;
+      var placesService = new google.maps.places.PlacesService(map);
+
+      if (e.placeId) {
+        placesService.getDetails({
+            placeId: e.placeId
+        }, function(place) {
+          for (var i = 0; i < self.lats.length; i++) {
+            if (self.lats[i] === place.geometry.location.lat()
+              && self.lngs[i] === place.geometry.location.lng()) {
+              k++;
             }
           }
-        });
-
-        this.map.addListener('dblclick', function(e) {
-          if(getLocalUser()) {
-            self.saveCoords(e.latLng.lat(), e.latLng.lng())
-          } else {
-            self.showSnackBar = true
+          if(k === 0) {
+            self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
           }
         });
+        e.stop();
+      } else {
+        self.saveCoords(e.latLng.lat(), e.latLng.lng())
+      }
     },
 
-    callback(results, status) {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          window.alert(results[i].geometry.location);
+    searchHandler(lat, lng, s, place) {
+      var self = this;
+      var k = 0;
+      for (var i = 0; i < self.lats.length; i++) {
+        if (self.lats[i] === lat && self.lngs[i] === lng) {
+          k++;
+        }
+      }
+
+      if(k === 0) {
+        self.map.setCenter(place.geometry.location);
+        self.map.setZoom(20);
+        s = new google.maps.Marker({
+          map: self.map,
+          position: {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng()
+          },
+          animation: google.maps.Animation.DROP
+        });
+        self.setMarkerType(s, '5');
+
+        if(getLocalUser()) {
+          setTimeout(function() {
+            self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+            s.setMap(null);
+          }, 1200)
+        } else {
+          self.showSnackBar = true;
+          document.getElementById('pac-input').value = '';
+        }
+      } else {
+        self.map.setCenter(place.geometry.location);
+        self.map.setZoom(20);
+        document.getElementById('pac-input').value = '';
+
+        if(!getLocalUser()) {
+          self.showSnackBar = true;
+          document.getElementById('pac-input').value = '';
         }
       }
     },
@@ -145,6 +207,7 @@ export default {
     search() {
       var self = this;
       var pos;
+
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
           pos = {
@@ -162,55 +225,12 @@ export default {
         });
         autocomplete.setTypes([self.searchParam]);
         autocomplete.bindTo('bounds', self.map);
+
         autocomplete.addListener('place_changed', function() {
-       var place = autocomplete.getPlace();
-
-       var s = window.select;
-       self.$http.get('map/marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
-         .then((response) => {
-         if(response.body.data[0] == null) {
-           self.map.setCenter(place.geometry.location);
-           self.map.setZoom(19);
-           s = new google.maps.Marker({
-             map: self.map,
-             position: {
-               lat: place.geometry.location.lat(),
-               lng: place.geometry.location.lng()
-             },
-             animation: google.maps.Animation.DROP
-           });
-           self.setMarkerType(s, '5');
-           if(getLocalUser()) {
-             setTimeout(function() {
-               self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
-               s.setMap(null);
-             }, 1200)
-           } else {
-             self.showSnackBar = true;
-             document.getElementById('pac-input').value = '';
-           }
-         } else {
-           self.map.setCenter(place.geometry.location);
-           self.map.setZoom(19);
-           if(getLocalUser()) {
-             setTimeout(function() {
-               self.getMarkerByCoords(place.geometry.location.lat(), place.geometry.location.lng());
-               window.marker = self.marker;
-               var modal = document.getElementById('myModal');
-               var span = document.getElementsByClassName("close")[0];
-               modal.style.display = "table";
-               span.onclick = function () {
-                 modal.style.display = "none";
-               };
-             }, 1200)
-           } else {
-             self.showSnackBar = true;
-             document.getElementById('pac-input').value = '';
-           }
-         }
-       })
-
-    });
+         var place = autocomplete.getPlace();
+         var s = window.select;
+         self.searchHandler(place.geometry.location.lat(), place.geometry.location.lng(), s, place);
+      });
     },
 
     getUserLocation() {
@@ -221,7 +241,7 @@ export default {
           lng: position.coords.longitude
         };
         self.map.setCenter(pos);
-        self.map.setZoom(19);
+        self.map.setZoom(20);
         var infoWindow = new google.maps.InfoWindow({map: self.map});
         infoWindow.setPosition(pos);
         infoWindow.setContent('<b>' + self.$t('message.user_location') + '</b>');
@@ -246,7 +266,6 @@ export default {
       input.setAttribute('placeholder', this.$t('label.input_location'));
       input.setAttribute('id', 'pac-input');
       input.setAttribute('type', 'text');
-
       input.style.marginTop = '10px';
       input.style.border = '1px solid transparent';
       input.style.borderRadius = '2px 0 0 2px';
@@ -273,9 +292,6 @@ export default {
       radio1.addEventListener('click', function() {
         self.searchParam = 'establishment';
       });
-      var label1 = document.createElement('label');
-      label1.setAttribute('for', 'radio1');
-      label1.appendChild(document.createTextNode(this.$t('label.establishments')));
 
       var radio2 = document.createElement('input');
       radio2.setAttribute('type', 'radio');
@@ -283,6 +299,11 @@ export default {
       radio2.addEventListener('click', function() {
         self.searchParam = 'address';
       });
+
+      var label1 = document.createElement('label');
+      label1.setAttribute('for', 'radio1');
+      label1.appendChild(document.createTextNode(this.$t('label.establishments')));
+
       var label2 = document.createElement('label2');
       label2.setAttribute('for', 'radio2');
       label2.appendChild(document.createTextNode(this.$t('label.addresses')));
@@ -300,6 +321,7 @@ export default {
 
     addYourLocationButton() {
       var self = this;
+
       var controlDiv = document.createElement('div');
 
       var firstChild = document.createElement('button');
@@ -323,11 +345,13 @@ export default {
       secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)';
       secondChild.style.backgroundSize = '180px 18px';
       secondChild.style.backgroundPosition = '0px 0px';
+
       firstChild.appendChild(secondChild);
 
       firstChild.addEventListener('click', function () {
         self.getUserLocation()
       });
+
       this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
     },
 
@@ -366,13 +390,13 @@ export default {
         formData.append('markerId', window.id);
         this.setMarkerType(window.marker, '4');
         this.map.setCenter(window.marker.getPosition());
-
         var infoWindow = new google.maps.InfoWindow({
           content: self.$t('message.new_issue')});
         infoWindow.open(self.map, window.marker);
         setTimeout(function () {
           infoWindow.close();
         }, 2000);
+
         this.$http.post('map/issue', formData).then((response) => {});
       } else {
           var marker = new google.maps.Marker({
@@ -385,15 +409,16 @@ export default {
           this.setMarkerType(marker, type);
           this.setListeners(marker);
           this.markers.push(marker);
+          this.lats.push(marker.getPosition().lat());
+          this.lngs.push(marker.getPosition().lng());
           this.map.setCenter(marker.getPosition());
-
+          self.map.setZoom(20);
           var infoWindow = new google.maps.InfoWindow({
             content: self.$t('message.new_issue')});
           infoWindow.open(self.map, marker);
           setTimeout(function () {
             infoWindow.close();
           }, 2000);
-
           this.$http.post('map/marker', {
             lat: window.lat,
             lng: window.lng
@@ -403,12 +428,12 @@ export default {
           });
       }
 
-      document.getElementById('myModal').style.display = "none";
       this.clearForm();
-      window.isPlaced = false;
       window.marker = null;
+      window.isPlaced = false;
       document.getElementById('pac-input').value = '';
       document.getElementById("preview").hidden = true;
+      document.getElementById('myModal').style.display = "none";
     },
 
     setMarkerType(marker, type) {
@@ -433,7 +458,7 @@ export default {
       marker.setIcon(icon);
     },
 
-    onCancelIssuesDialog: function () {
+    onCancelIssuesDialog() {
       this.issues = [];
       localStorage.removeItem('redirectFromIssue');
       localStorage.removeItem('activeMarker')
@@ -442,11 +467,11 @@ export default {
     setListeners(marker) {
         var self = this;
         var timer = 0;
-        var delay = 300;
         var prevent = false;
 
         marker.addListener('click', function() {
           timer = setTimeout(function () {
+
             if (!prevent) {
               self.$http.get('map/marker/' + marker.getPosition().lat() + "/" + marker.getPosition().lng() + "/")
                 .then((response) => {
@@ -457,10 +482,9 @@ export default {
                 });
             }
             prevent = false;
-          }, delay);
+          }, 300);
 
           marker.addListener('dblclick', function () {
-
             clearTimeout(timer);
             prevent = true;
 
@@ -540,11 +564,13 @@ export default {
               });
               this.setListeners(marker);
               this.setMarkerType(marker, type);
-
+              this.lats.push(marker.getPosition().lat());
+              this.lngs.push(marker.getPosition().lng());
               this.markers.push(marker);
           }
           for (var i = 0; i < this.markers.length; i++) {
             var marker = this.markers[i];
+
             if(self.map.getBounds().contains(marker.getPosition())) {
               marker.setMap(self.map);
             }
