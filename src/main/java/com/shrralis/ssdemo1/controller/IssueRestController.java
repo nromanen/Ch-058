@@ -1,5 +1,6 @@
 package com.shrralis.ssdemo1.controller;
 
+import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.ssdemo1.service.interfaces.IIssueVotesService;
@@ -24,17 +25,14 @@ public class IssueRestController {
 
     private final IIssueService issueService;
     private final IIssueVotesService issueVotesService;
-    private final IAuthService authService;
     private static final String LIKE = "likeVote";
     private static final String DISLIKE = "dislikeVote";
 
 	@Autowired
     public IssueRestController(IIssueService issueService,
-	                           IIssueVotesService issueVotesService,
-	                           IAuthService authService) {
+	                           IIssueVotesService issueVotesService) {
         this.issueService = issueService;
         this.issueVotesService = issueVotesService;
-        this.authService = authService;
     }
 
     @GetMapping(value = "/issues/{issueId}")
@@ -44,14 +42,14 @@ public class IssueRestController {
 
     @GetMapping(value = "/issues/{issueId}/is-vote-exist")
     public JsonResponse getVote(@PathVariable("issueId") Integer issueId, HttpServletResponse response) {
-        int userId = authService.getCurrentSession() != null ? authService.getCurrentSession().getId() : -1;
+        int userId = AuthorizedUser.getCurrent() != null ? AuthorizedUser.getCurrent().getId() : -1;
         Boolean vote = issueVotesService.getByVoterIdAndIssueId(userId, issueId).getVote();
         return new JsonResponse(vote);
     }
 
     @DeleteMapping(value = "/issues/{issueId}/vote")
     public void deleteLike(@PathVariable("issueId") Integer issueId) {
-	    int userId = authService.getCurrentSession() != null ? authService.getCurrentSession().getId() : -1;
+	    int userId = AuthorizedUser.getCurrent() != null ? AuthorizedUser.getCurrent().getId() : -1;
         issueVotesService.deleteByVoterIdAndIssueId(userId, issueId);
     }
 
@@ -59,7 +57,7 @@ public class IssueRestController {
     @PostMapping(value = "/issues/{issueId}/{vote}")
     public void addVote(@PathVariable("issueId") Integer issueId,
                         @PathVariable("vote")Boolean vote) {
-		int userId = authService.getCurrentSession() != null ? authService.getCurrentSession().getId() : -1;
+		int userId = AuthorizedUser.getCurrent() != null ? AuthorizedUser.getCurrent().getId() : -1;
         issueVotesService.insertIssueVote(issueId, userId, vote);
     }
 

@@ -5,6 +5,7 @@ import VueResource from 'vue-resource';
 import { VTooltip } from 'v-tooltip'
 import openChat from '@/components/OpenChat/OpenChat.vue'
 import {getLocalUser} from "../../../router";
+import {getCurrentLang, switchLang} from "../../../i18n";
 
 Vue.directive('my-tooltip', VTooltip);
 Vue.use(VueMaterial);
@@ -153,6 +154,14 @@ export default {
     backToMap() {
       localStorage.setItem('redirectFromIssue', true);
       this.$router.push('/');
+    },
+
+    switchLang(lang) {
+      switchLang(lang);
+    },
+
+    getLangClass(lang) {
+      return getCurrentLang() === lang ? 'md-primary' : '';
     },
   },
 

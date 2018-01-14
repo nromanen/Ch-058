@@ -18,7 +18,7 @@ export default {
         response => {
           let json = response.body;
 
-            if (!json.errors && json.data[0].logged_in) {
+            if (!json.errors) {
               this.userEmail = json.data[0].email;
             } else if (json.errors.length) {
               this.snackBarText = getErrorMessage(json.errors[0]);
