@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +33,7 @@ import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 @Transactional
 public class IssueServiceImpl implements IIssueService {
 	public static final int OPENED_TYPE = 1;
+	private static final String CATALINA_HOME_NAME = "catalina.home";
 
 	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
 
@@ -52,7 +55,7 @@ public class IssueServiceImpl implements IIssueService {
 
     @Override
     public Issue getById(Integer id) {
-        return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
+	    return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
     }
 
     public Issue saveIssue(MapDataDTO dto, MultipartFile file) {
@@ -99,8 +102,7 @@ public class IssueServiceImpl implements IIssueService {
 		    image.setSrc(uniqueFile);
 		    image.setHash(DigestUtils.md5Hex(blob));
 
-		    File newFile = new File(System.getProperty("catalina.home") + File.separator + uniqueFile);
-
+		    File newFile = new File(System.getProperty(CATALINA_HOME_NAME) + File.separator + uniqueFile);
 		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
 			    stream.write(blob);
 		    } catch (IOException e) {
@@ -108,12 +110,25 @@ public class IssueServiceImpl implements IIssueService {
 		    }
 		    return image;
 	    }
+	        return duplicateImage;
 
-	    return duplicateImage;
     }
 
 	@Override
 	public List<Issue> getAllIssueByMapMarker(int mapMarkerId) {
 		return issuesRepository.findByMapMarker_Id(mapMarkerId);
+	}
+
+	@Override
+	public byte[] getImageInByte(Integer issueId) throws IOException {
+		String fileName = System.getProperty(CATALINA_HOME_NAME) + File.separator + issuesRepository.findOne(issueId).getImage().getSrc();
+		String extension = FilenameUtils.getExtension(fileName);
+		BufferedImage image = ImageIO.read(new File(fileName));
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(image, extension, baos);
+		baos.flush();
+		byte[] imageInByte = baos.toByteArray();
+		baos.close();
+		return imageInByte;
 	}
 }

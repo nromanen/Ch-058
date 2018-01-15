@@ -101,7 +101,7 @@ export default {
       this.addSearchField();
       this.loadAllMarkers();
 
-      if (localStorage.getItem('redirectFromIssue')) {
+      if (localStorage.getItem('redirectFromIssue') && localStorage.getItem('activeMarker') !== null) {
         self.activeMarker = JSON.parse(localStorage.getItem('activeMarker'));
         self.showAllIssuesByMarker(self.activeMarker.id);
         var pos = {
@@ -462,6 +462,7 @@ export default {
       this.issues = [];
       localStorage.removeItem('redirectFromIssue');
       localStorage.removeItem('activeMarker')
+      localStorage.removeItem('zoom')
     },
 
     setListeners(marker) {
@@ -542,8 +543,8 @@ export default {
     },
 
     redirectToIssue(issueId, marker) {
-      localStorage.setItem('redirectFromIssue', true);
       localStorage.setItem('activeMarker', JSON.stringify(marker));
+      localStorage.setItem('zoom', this.map.getZoom());
       this.$router.push('issue/' + issueId);
     },
 
@@ -581,5 +582,9 @@ export default {
 
   mounted: function () {
       this.initMap();
+  },
+
+  destroyed: function () {
+    localStorage.removeItem('redirectFromIssue');
   }
 }
