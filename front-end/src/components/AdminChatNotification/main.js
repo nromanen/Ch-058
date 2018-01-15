@@ -57,7 +57,7 @@ export default {
       stompClient.subscribe('/checkTopic/broadcast', function (input) {
         console.log(input.body);
         var user = JSON.parse(input.body);
-        if(user.text == "Accept"){
+        if(user.text == "Accept" || user.text == "Cancel notification"){
           var index = -1;
           for(var i = 0; i < _this.users.length; i++){
             if(_this.users[i].userId == user.userId && _this.users[i].issueId == user.issueId){

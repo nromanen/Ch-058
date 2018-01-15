@@ -13,7 +13,8 @@ export default {
       waiting: false,
       noAdmins: false,
       dataUserId: -1,
-      dataIssueId: -1
+      dataIssueId: -1,
+      timerId: -1
     }
   },
   props: [
@@ -35,6 +36,7 @@ export default {
           console.log(responseForChat);
           var user = JSON.parse(responseForChat.body);
           if(user.text == 'Accept' && user.userId == _this.dataUserId && user.issueId == _this.dataIssueId){
+            clearTimeout(_this.timerId);
             window.location.href = "http://localhost:8081/#/chat/" + _this.dataIssueId + "/" + _this.dataUserId;
           }
         });
@@ -50,7 +52,17 @@ export default {
       this.stompClient.send("/app/connect", {}, JSON.stringify({text: "Alert", login: login,
         issueId: this.issueId, userId: this.userId, waiting: true}));
     },
+    cancelWaiting: function () {
+      this.stompClient.send("/app/connect", {}, JSON.stringify({text: "Cancel notification", login: this.login,
+        issueId: this.issueId, userId: this.userId, waiting: false}));
+      this.waiting = false;
+      this.noAdmins = false;
+      clearTimeout(this.timerId);
+    },
     openChat: function(){
+      if(getLocalUser() == null)
+        alert("Please login to open chat");
+
       this.dataIssueId = this.$props['issueId'];
       this.dataUserId = this.$props['userId'];
       let _this = this;
@@ -73,6 +85,7 @@ export default {
                 issueId: _this.dataIssueId, userId: _this.dataUserId, waiting: false}));
           }
           var timerId = setTimeout(func, 60000);
+          _this.timerId = timerId;
         }
       })
     }
