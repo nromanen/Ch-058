@@ -547,7 +547,6 @@ export default {
 
   mounted: function () {
       this.initMap();
-    this.initMap();
   },
 
   destroyed: function () {

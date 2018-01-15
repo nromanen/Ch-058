@@ -7,10 +7,7 @@
     <md-app-content class="app-content">
       <div class="md-layout md-gutter new">
         <div class="md-layout-item md-size-8">
-          <md-button class="md-raised md-primary" @click="backToMap">{{ $t('button.back') }}</md-button>
-          <div class="openChatDiv">
-            <openChat :issueId="issueId" :userId="userId"></openChat>
-          </div>
+
         </div>
         <div id="parent" class="md-layout-item md-size-45 container">
           <div class="md-display-1">
@@ -21,7 +18,7 @@
             <img :src="imageSrc">
             <p v-html="text" style="white-space: pre-line;">
               {{text}}</p>
-            <br><br><br>
+            <br><br><br><br><br>
           </div>
           <div id="child" class="content">
             <a @click="like">
@@ -41,6 +38,9 @@
                    height="32" width="32"/>
             </a>
             {{countDislike}}
+            <div class="openChatDiv">
+              <openChat :issueId="issueId" :userId="userId"></openChat>
+            </div>
           </div>
         </div>
 

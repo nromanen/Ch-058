@@ -5,6 +5,7 @@ import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +17,5 @@ public interface IIssueService {
 
     List<Issue> getAllIssueByMapMarker(int mapMarkerId);
 
-    String getImageSrc(Integer issueId);
+    byte[] getImageInByte(Integer issueId) throws IOException;
 }

@@ -39,7 +39,8 @@
     "image": "Add an image",
     "input_location": "Enter a location",
     "establishments": "Establishments",
-    "addresses": "Addresses"
+    "addresses": "Addresses",
+    "issues_modal_title": "All issues"
   },
   "error": {
     "required": "Required",
@@ -63,6 +64,7 @@
     "desc_long": "Description cannot be longer than 2048 characters",
     "req_type": "Please, choose the type",
     "req_image": "Please, attach an image"
+
   },
   "message": {
     "successful_register": "You have been successfully registered!",

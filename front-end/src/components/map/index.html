@@ -76,7 +76,7 @@
   <md-dialog :md-active.sync="showDialog" @md-closed="onCancelIssuesDialog" :md-fullscreen="false"
              class="issuesByMarker">
     <md-dialog-title>
-      All issues:
+      {{ $t('label.issues_modal_title') }}
       <span class="close1" @click="showDialog = false">&times;</span>
     </md-dialog-title>
     <md-dialog-content>
@@ -94,19 +94,19 @@
                 <div style="text-align: center">
                   <img src="../../assets/caution-large.png" width="50px" height="50px">
                 </div>
-                <div style="text-align: center">Problem</div>
+                <div style="text-align: center">{{ $t('label.issue_type_problem') }}</div>
               </div>
               <div v-else-if="issue.typeId===2">
                 <div style="text-align: center">
                   <img src="../../assets/info-large.png" width="50px" height="50px">
                 </div>
-                <div style="text-align: center">Info</div>
+                <div style="text-align: center">{{ $t('label.issue_type_info') }}</div>
               </div>
               <div v-else-if="issue.typeId===3">
                 <div style="text-align: center">
                   <img src="../../assets/feedback-large.png" width="50px" height="50px">
                 </div>
-                <div style="text-align: center">Feedback</div>
+                <div style="text-align: center">{{ $t('label.issue_type_feedback') }}</div>
               </div>
             </div>
           </div>

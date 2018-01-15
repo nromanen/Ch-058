@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -120,7 +122,15 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
 	@Override
-	public String getImageSrc(Integer issueId) {
-		return System.getProperty("catalina.home") + File.separator + issuesRepository.findOne(issueId).getImage().getSrc();
+	public byte[] getImageInByte(Integer issueId) throws IOException {
+		String fileName = System.getProperty("catalina.home") + File.separator + issuesRepository.findOne(issueId).getImage().getSrc();
+		String extension = FilenameUtils.getExtension(fileName);
+		BufferedImage image = ImageIO.read(new File(fileName));
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(image, extension, baos);
+		baos.flush();
+		byte[] imageInByte = baos.toByteArray();
+		baos.close();
+		return imageInByte;
 	}
 }

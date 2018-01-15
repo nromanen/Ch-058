@@ -70,12 +70,6 @@ public class IssueRestController {
 
     @GetMapping(value = "/images/{issueId}", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] testphoto(@PathVariable("issueId") Integer issueId) throws IOException {
-	    BufferedImage image = ImageIO.read(new File(issueService.getImageSrc(issueId)));
-	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    ImageIO.write(image, "jpg", baos);
-	    baos.flush();
-	    byte[] imageInByte = baos.toByteArray();
-	    baos.close();
-		return imageInByte;
+		return issueService.getImageInByte(issueId);
 	}
 }

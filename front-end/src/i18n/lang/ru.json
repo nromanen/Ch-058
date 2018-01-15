@@ -39,7 +39,8 @@
     "add_like": "Мне нравится ",
     "add_dislike": "Мне не нравиться",
     "cancel_like": "Больше не нравиться",
-    "cancel_dislike": "Отменить не нравится"
+    "cancel_dislike": "Отменить не нравится",
+    "issues_modal_title": "Все вопросы"
   },
   "error": {
     "required": "Обязательно",

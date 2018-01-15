@@ -28,7 +28,8 @@ export default {
       issueId: -1,
       userId: -1,
       imageSrc: '',
-      showSnackBar: false
+      showSnackBar: false,
+      showBack: true
     }
   },
   components:{
@@ -101,17 +102,18 @@ export default {
         this.showSnackBar = true;
       } else {
         if (isLiked) {
+          this.countLike--;
           this.$http.delete('issues/' + issueId + '/vote').then(data => {
-            this.calculateVote();
           })
         } else if (!isLiked) {
+          this.countLike++;
           if (isUnliked) {
+            this.countDislike--;
             this.$http.delete('issues/' + issueId + '/vote').then(data => {
             })
             this.isUnliked = !isUnliked;
           }
           this.$http.post('issues/' + issueId + '/' + true).then(data => {
-            this.calculateVote();
           })
         }
         this.isLiked = !isLiked;
@@ -126,17 +128,18 @@ export default {
         this.showSnackBar = true;
       } else {
         if (isUnliked) {
+          this.countDislike--;
           this.$http.delete('issues/' + issueId + '/vote').then(data => {
-            this.calculateVote();
           })
         } else if (!isUnliked) {
+          this.countDislike++;
           if (isLiked) {
+            this.countLike--;
             this.$http.delete('issues/' + issueId + '/vote').then(data => {
             });
             this.isLiked = !isLiked;
           }
           this.$http.post('issues/' + issueId + '/' + false).then(data => {
-            this.calculateVote();
           })
         }
         this.isUnliked = !isUnliked;
@@ -174,6 +177,6 @@ export default {
     if (getLocalUser()) {
       this.userId = getLocalUser().id;
     }
-    this.imageSrc = 'http://localhost:8181/images/' + this.$route.params.id
+    this.imageSrc = 'http://localhost:8181/images/' + this.$route.params.id;
   }
 }
