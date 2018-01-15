@@ -10,45 +10,45 @@
             <span class="close" @click="clearForm">&times;</span>
 
             <md-card-header>
-              <div class="md-title">Create new issue</div>
+              <div class="md-title">{{ $t('label.form_title') }}</div>
             </md-card-header>
 
             <md-card-content>
 
               <md-field :class="getValidationClass('title')">
-                <label for="title">Title</label>
+                <label for="title">{{ $t('label.issue_title') }}</label>
                 <md-input name="title" id="title" :disabled="sending" v-model.trim="form.title"/>
-                <span class="md-error" v-if="!$v.form.title.required">Title is required</span>
+                <span class="md-error" v-if="!$v.form.title.required">{{ $t('error.req_title') }}</span>
                 <span class="md-error"
-                      v-else-if="!$v.form.title.minLength">Title must be at least 4 characters length</span>
+                      v-else-if="!$v.form.title.minLength">{{ $t('error.title_short') }}</span>
                 <span class="md-error"
-                      v-else-if="!$v.form.title.maxLength">Title can't be longer than 32 characters</span>
+                      v-else-if="!$v.form.title.maxLength">{{ $t('error.title_long') }}</span>
               </md-field>
 
               <md-field :class="getValidationClass('desc')">
-                <label>Description</label>
+                <label>{{ $t('label.issue_desc') }}</label>
                 <md-textarea id="desc" v-model.trim="form.desc"></md-textarea>
-                <span class="md-error" v-if="!$v.form.desc.required">Description is required</span>
+                <span class="md-error" v-if="!$v.form.desc.required">{{ $t('error.req_desc') }}</span>
                 <span class="md-error"
-                      v-if="!$v.form.desc.minLength">Description must be at least 8 characters length</span>
+                      v-if="!$v.form.desc.minLength">{{ $t('error.desc_short') }}</span>
                 <span class="md-error"
-                      v-if="!$v.form.desc.maxLength">Description cannot be longer than 2048 characters</span>
+                      v-if="!$v.form.desc.maxLength">{{ $t('error.desc_long') }}</span>
               </md-field>
 
               <md-field :class="getValidationClass('type')">
-                <label for="type">Type</label>
+                <label for="type">{{ $t('label.issue_type') }}</label>
                 <md-select id="type" name="type" v-model="form.type">
-                  <md-option value="1">Problem</md-option>
-                  <md-option value="2">Info</md-option>
-                  <md-option value="3">Feedback</md-option>
+                  <md-option value="1">{{ $t('label.issue_type_problem') }}</md-option>
+                  <md-option value="2">{{ $t('label.issue_type_info') }}</md-option>
+                  <md-option value="3">{{ $t('label.issue_type_feedback') }}</md-option>
                 </md-select>
-                <span class="md-error" v-if="!$v.form.type.required">Please, choose the type</span>
+                <span class="md-error" v-if="!$v.form.type.required">{{ $t('error.req_type') }}</span>
               </md-field>
 
               <md-field :class="getValidationClass('image')">
-                <label>Add an image</label>
+                <label>{{ $t('label.image') }}</label>
                 <md-file v-model="form.image" accept="image/*" id="uploadImage" @change="previewImage"/>
-                <span class="md-error" v-if="!$v.form.image.required">Please, attach an image</span>
+                <span class="md-error" v-if="!$v.form.image.required">{{ $t('error.req_image') }}</span>
               </md-field>
 
               <img src="" id="preview" hidden>
@@ -56,7 +56,7 @@
             </md-card-content>
 
             <md-card-actions>
-              <md-button type="submit" class="md-raised md-primary" :disabled="sending" id="save">Create</md-button>
+              <md-button type="submit" class="md-raised md-primary" :disabled="sending" id="save">{{ $t('button.create_issue') }}</md-button>
             </md-card-actions>
 
           </md-card>
@@ -66,8 +66,8 @@
   </div>
 
   <md-snackbar :md-duration=5000 :md-active.sync="showSnackBar" md-persistent>
-    <span>Please, log in to create an issue</span>
-    <md-button class="md-primary" @click="snackBarAction()">Login</md-button>
+    <span>{{ $t('message.snackbar') }}</span>
+    <md-button class="md-primary" @click="snackBarAction()">{{ $t('button.snackbar_redirect') }}</md-button>
   </md-snackbar>
 
   <div id="map"></div>
@@ -76,9 +76,9 @@
   <md-dialog :md-active.sync="showDialog" @md-closed="onCancelIssuesDialog" :md-fullscreen="false"
              class="issuesByMarker">
     <md-dialog-title>
-      All issues by marker:
+      All issues:
+      <span class="close1" @click="showDialog = false">&times;</span>
     </md-dialog-title>
-    <br>
     <md-dialog-content>
       <div v-for="issue in issues" :key="issue.id">
         <div class="md-layout md-gutter">
@@ -87,10 +87,9 @@
               <h2>{{ issue.title }}</h2>
             </a>
             <p>{{issue.description.substring(0,20)}}...</p>
-            <hr align="center" width="100%" size="2" color="grey">
           </div>
           <div class="md-layout-item md-size-30">
-            <div class="myImage">
+            <div class="logo">
               <div v-if="issue.typeId===1">
                 <div style="text-align: center">
                   <img src="../../assets/caution-large.png" width="50px" height="50px">
@@ -111,6 +110,7 @@
               </div>
             </div>
           </div>
+          <hr align="center" width="100%" size="2" color="grey">
         </div>
       </div>
     </md-dialog-content>

@@ -1,8 +1,7 @@
 .md-display-1 {
   text-align: center;
 }
-.container
-{
+.container {
   position: relative;
 }
 
@@ -46,4 +45,9 @@ img {
 .mytext {
   font-size:20px;
   padding: 5px 10px 10px 10px;
+}
+
+.someId {
+  overflow: hidden;
+  min-height: 100%;
 }

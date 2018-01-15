@@ -71,10 +71,28 @@ a {
   cursor: pointer;
 }
 
-.myImage {
+.logo {
   margin-top:20px;
 }
 
 .issuesByMarker {
   max-height: 400px;
+}
+
+.close1 {
+  color: #ccc;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close1:hover,
+.close1:focus {
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.md-primary {
+  background-color: #ffffff;
 }
