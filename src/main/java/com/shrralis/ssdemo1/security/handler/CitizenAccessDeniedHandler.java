@@ -36,7 +36,7 @@ public class CitizenAccessDeniedHandler implements AccessDeniedHandler {
 	) throws IOException, ServletException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		if (auth instanceof AnonymousAuthenticationToken) {
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			LOGGER.debug("User: " + auth.getName()
 					+ " attempted to access the protected URL: "
 					+ request.getRequestURI());

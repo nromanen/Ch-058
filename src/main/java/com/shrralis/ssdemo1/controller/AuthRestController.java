@@ -14,6 +14,7 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.PasswordRecoveryDTO;
 import com.shrralis.ssdemo1.dto.RegisterUserDTO;
+import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import com.shrralis.tools.model.JsonResponse;
@@ -60,4 +61,11 @@ public class AuthRestController {
 	public JsonResponse signUp(@RequestBody @Valid RegisterUserDTO user) throws AbstractCitizenException {
 		return new JsonResponse(service.signUp(user));
     }
+
+    @PostMapping("/update")
+	public JsonResponse updateUser(@RequestBody @Valid RegisterUserDTO user) {
+		return new JsonResponse(service.update(user));
+	}
+
+
 }

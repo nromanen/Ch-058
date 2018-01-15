@@ -33,7 +33,7 @@ import static com.shrralis.ssdemo1.entity.User.TABLE_NAME;
 public class User implements Identifiable<Integer> {
 
 	public static final String LOGIN_PATTERN = "^[A-Za-z_\\-.0-9]+$";
-	public static final String NAME_PATTERN = "^[A-ZА-Я]['a-zа-я]+$";
+	public static final String NAME_PATTERN = "^[A-ZА-ЯІЇЄ]['a-zа-яіїє]+$";
     public static final String TABLE_NAME = "users";
     public static final String ID_COLUMN_NAME = "id";
     public static final String LOGIN_COLUMN_NAME = "login";

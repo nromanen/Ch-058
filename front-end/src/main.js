@@ -5,10 +5,14 @@ import VueResource from 'vue-resource'
 import VueCookie from 'vue-cookie'
 import VueMaterial from 'vue-material'
 import Vuelidate from 'vuelidate'
+// import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-social/bootstrap-social.css'
+import 'bootstrap-social/assets/css/font-awesome.css'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default-dark.css'
 import App from './App'
 import SignInForm from '@/components/_form/SignInForm/SignInForm'
+import SignInSocial from '@/components/_form/SignInSocial/SignInSocial'
 import SignUpForm from '@/components/_form/SignUpForm/SignUpForm'
 import PassRecoveryForm from '@/components/_form/PassRecoveryForm/PassRecoveryForm'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
@@ -25,6 +29,7 @@ Vue.http.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
 Vue.http.headers.common['Access-Control-Allow-Credentials'] = 'true'
 Vue.http.options.credentials = true
 Vue.component('sign-in-form', SignInForm)
+Vue.component('sign-in-social', SignInSocial)
 Vue.component('sign-up-form', SignUpForm)
 Vue.component('password-recovery-form', PassRecoveryForm)
 Vue.component('auth-page', AuthPage)

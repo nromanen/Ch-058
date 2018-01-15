@@ -79,7 +79,7 @@ public class UserDetailsServiceImpl implements ICitizenUserDetailsService {
 		usersRepository.save(user);
 	}
 
-	private Set<GrantedAuthority> getAuthorities(User user) {
+	public static Set<GrantedAuthority> getAuthorities(User user) {
         Set<GrantedAuthority> authorities = new HashSet<>();
 
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getType().toString()));

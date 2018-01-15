@@ -147,6 +147,17 @@ public class AuthServiceImpl implements IAuthService {
 		return userToRegisteredUserDto.userToRegisteredUserDto(savedUser);
 	}
 
+	@Override
+	public RegisteredUserDTO update(final RegisterUserDTO user) {
+		final User savedUser = repository.getByEmail(user.getEmail());
+		savedUser.setName(user.getName());
+		savedUser.setSurname(user.getSurname());
+		savedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+		savedUser.setLogin(user.getLogin());
+		repository.save(savedUser);
+		return userToRegisteredUserDto.userToRegisteredUserDto(savedUser);
+	}
+
 	private boolean isCurrentAuthenticationAnonymous(final Authentication auth,
 	                                                 final AuthenticationTrustResolver authTrustResolver) {
 		return authTrustResolver.isAnonymous(auth);

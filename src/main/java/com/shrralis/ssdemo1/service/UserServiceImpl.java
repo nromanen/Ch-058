@@ -12,6 +12,8 @@
 
 package com.shrralis.ssdemo1.service;
 
+import com.shrralis.ssdemo1.dto.RegisterUserDTO;
+import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
@@ -32,7 +34,8 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public JsonResponse getUser(int id) {
-		return new JsonResponse(repository.getOne(id));
+	public User getUser(Integer id) {
+		return repository.getOne(id);
 	}
+
 }

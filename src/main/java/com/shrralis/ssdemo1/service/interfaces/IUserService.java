@@ -1,5 +1,7 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
+import com.shrralis.ssdemo1.dto.RegisterUserDTO;
+import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.tools.model.JsonResponse;
 
 /**
@@ -11,5 +13,6 @@ import com.shrralis.tools.model.JsonResponse;
 public interface IUserService {
 	JsonResponse getAllUsers();
 
-	JsonResponse getUser(int id);
+	User getUser(Integer id);
+
 }
