@@ -79,15 +79,15 @@ public class IssueServiceImpl implements IIssueService {
     }
 
     private Image parseImage(MultipartFile file) {
-	    byte[] fileBytes = {};
+	    byte[] blob = {};
 
 	    try {
-		    fileBytes = file.getBytes();
+		    blob = file.getBytes();
 	    } catch (IOException e) {
 		    logger.info("Error while file encoding", e);
 	    }
 
-	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(fileBytes));
+	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(blob));
 
 	    if(duplicateImage == null) {
 		    Image image = new Image();
@@ -97,12 +97,12 @@ public class IssueServiceImpl implements IIssueService {
 		    String uniqueFile = uniqueFileName + "." + extension;
 
 		    image.setSrc(uniqueFile);
-		    image.setHash(DigestUtils.md5Hex(fileBytes));
+		    image.setHash(DigestUtils.md5Hex(blob));
 
 		    File newFile = new File(System.getProperty("catalina.home") + File.separator + uniqueFile);
 
 		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
-			    stream.write(fileBytes);
+			    stream.write(blob);
 		    } catch (IOException e) {
 			    logger.info("Error while file saving", e);
 		    }
