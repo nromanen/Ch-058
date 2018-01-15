@@ -1,7 +1,10 @@
 package com.shrralis.tools.model;
 
+import org.springframework.context.MessageSource;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -49,6 +52,12 @@ public class JsonError {
 		return field;
 	}
 
+	public JsonError translateErrmsg(Locale locale, MessageSource messageSource) {
+		errmsg = messageSource.getMessage(errmsg, null, locale);
+
+		return this;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(errno, errmsg, field);
@@ -86,7 +95,7 @@ public class JsonError {
 		MISSING_FIELD(6, "Missing field"),
 		BAD_FIELD_FORMAT(7, "Bad field format"),
 		USER_NOT_EXIST(8, "User with current login doesn't exist"),
-		BAD_CREDENTIALS(9, "Password is wrong"),
+		BAD_CREDENTIALS(9, "wrong_password"),
 		RECOVERY_TOKEN_EXPIRED(10, "The recovery token is expired"),
 		IMAGE_NOT_EXIST(11, "Image doesn't exist"),
 		MAP_MARKER_NOT_EXIST(12, "Map marker doesn't exist"),

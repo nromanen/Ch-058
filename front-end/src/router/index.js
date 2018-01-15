@@ -2,6 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import IndexPage from '@/components/page/IndexPage/IndexPage'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
+import Chat from '@/components/page/ChatPage/ChatPage'
+import AdminChatNotification from '@/components/AdminChatNotification/AdminChatNotification'
+import OpenChat from '@/components/OpenChat/OpenChat'
+import AdminChatPage from '@/components/page/AdminChatPage/AdminChatPage'
+import Issue from '@/components/page/ViewIssue/App'
 import SocialSuccessPage from '@/components/page/SocialSuccessPage/SocialSuccessPage'
 
 Vue.use(Router)
@@ -28,6 +33,31 @@ const router = new Router({
       path: '/socialSuccess**',
       name: 'SocialSuccessPage',
       component: SocialSuccessPage
+      component: AuthPage
+    },
+    {
+      path: '/chat/:issueId/:userId',
+      name: 'ChatPage',
+      component: Chat
+    },
+    {
+      path: '/notification',
+      name: 'AdminChatNotification',
+      component: AdminChatNotification
+    },
+    {
+      path: '/openChat',
+      name: 'OpenChat',
+      component: OpenChat
+    },
+    {
+      path: '/adminChatPage/:issueId/:userId',
+      name: 'AdminChatPage',
+      component: AdminChatPage
+    },
+    {
+      path: '/issue/:id',
+      component: Issue
     }
   ]
 })

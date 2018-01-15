@@ -36,7 +36,7 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements ICitizenUserDetailsService {
 
-	private UsersRepository usersRepository;
+	private final UsersRepository usersRepository;
 
 	@Autowired
 	public UserDetailsServiceImpl(UsersRepository usersRepository) {

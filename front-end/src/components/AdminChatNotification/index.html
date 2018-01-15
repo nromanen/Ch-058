@@ -1,0 +1,7 @@
+<div class="notification">
+  <p>Notifications from:</p>
+  <div v-for="user in users" class="row">
+    <md-button style="display: inline-block;" @click="answer(user.userId, user.issueId)" v-if="user.waiting">Answer to {{user.login}}</md-button>
+    <md-button style="display: inline-block;" @click="markAsReaded(user.userId, user.issueId)" v-else>{{user.login}} wanted to chat</md-button>
+  </div>
+</div>

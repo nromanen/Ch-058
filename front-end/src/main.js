@@ -9,15 +9,20 @@ import Vuelidate from 'vuelidate'
 import 'bootstrap-social/bootstrap-social.css'
 import 'bootstrap-social/assets/css/font-awesome.css'
 import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/default-dark.css'
+import 'vue-material/dist/theme/black-green-light.css'
 import App from './App'
 import SignInForm from '@/components/_form/SignInForm/SignInForm'
 import SignInSocial from '@/components/_form/SignInSocial/SignInSocial'
 import SignUpForm from '@/components/_form/SignUpForm/SignUpForm'
 import PassRecoveryForm from '@/components/_form/PassRecoveryForm/PassRecoveryForm'
+import SignInForm from '@/components/form/SignInForm/SignInForm'
+import SignUpForm from '@/components/form/SignUpForm/SignUpForm'
+import PassRecoveryForm from '@/components/form/PassRecoveryForm/PassRecoveryForm'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
 import GoogleMap from '@/components/map/GoogleMap'
-import router from './router/index'
+import Header from '@/components/header/Header'
+import router from './router'
+import i18n from './i18n'
 
 Vue.use(VueResource)
 Vue.use(VueCookie)
@@ -34,11 +39,13 @@ Vue.component('sign-up-form', SignUpForm)
 Vue.component('password-recovery-form', PassRecoveryForm)
 Vue.component('auth-page', AuthPage)
 Vue.component('map-page', GoogleMap)
+Vue.component('header-page', Header)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  i18n,
   template: '<App/>',
   components: {App}
 })

@@ -16,17 +16,25 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.util.Locale;
 import java.util.Properties;
 
 @Configuration
@@ -36,6 +44,7 @@ import java.util.Properties;
 @Import(value = {
 		DatabaseConfig.class,
 		SecurityConfig.class,
+        WebSocketConfig.class
 		SocialConfig.class
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
@@ -58,6 +67,12 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 				.allowedOrigins("http://localhost:8081")
 				.allowedMethods("*")
 				.allowCredentials(true);
+	}
+
+	// The next bean is needed if we define messageSource bean
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
 	}
 
 	@Override
@@ -94,6 +109,44 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		return new MappingJackson2HttpMessageConverter(mapper);
+	}
+
+	@Bean
+	public StandardServletMultipartResolver resolver() {
+		return new StandardServletMultipartResolver();
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(localeChangeInterceptor());
+	}
+
+	@Bean
+	public LocaleChangeInterceptor localeChangeInterceptor() {
+		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+
+		interceptor.setParamName("lang");
+		return interceptor;
+	}
+
+	@Bean
+	public LocaleResolver localeResolver() {
+		CookieLocaleResolver localeResolver = new CookieLocaleResolver();
+
+		localeResolver.setDefaultLocale(Locale.US);
+		localeResolver.setCookieName("lang");
+		localeResolver.setCookieMaxAge(100000);
+		return localeResolver;
+	}
+
+	@Bean
+	public ReloadableResourceBundleMessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+
+		messageSource.setBasenames("classpath:i18n/messages");
+		messageSource.setDefaultEncoding("UTF-8");
+		messageSource.setUseCodeAsDefaultMessage(true);
+		return messageSource;
 	}
 
 }
