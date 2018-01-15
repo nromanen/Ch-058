@@ -98,7 +98,7 @@ export default {
       });
       this.addYourLocationButton();
       this.addSearchField();
-      if (localStorage.getItem('redirectFromIssue')) {
+      if (localStorage.getItem('redirectFromIssue') && localStorage.getItem('activeMarker') !== null) {
         self.activeMarker = JSON.parse(localStorage.getItem('activeMarker'));
         self.showAllIssuesByMarker(self.activeMarker.id);
         var pos = {

@@ -39,25 +39,24 @@ public class IssueRestController {
         return new JsonResponse(issueService.getById(issueId));
     }
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping(value = "/issues/{issueId}/is-vote-exist")
     public JsonResponse getVote(@PathVariable("issueId") Integer issueId, HttpServletResponse response) {
-        int userId = AuthorizedUser.getCurrent() != null ? AuthorizedUser.getCurrent().getId() : -1;
-        Boolean vote = issueVotesService.getByVoterIdAndIssueId(userId, issueId).getVote();
+        Boolean vote = issueVotesService.getByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId).getVote();
         return new JsonResponse(vote);
     }
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
     @DeleteMapping(value = "/issues/{issueId}/vote")
     public void deleteLike(@PathVariable("issueId") Integer issueId) {
-	    int userId = AuthorizedUser.getCurrent() != null ? AuthorizedUser.getCurrent().getId() : -1;
-        issueVotesService.deleteByVoterIdAndIssueId(userId, issueId);
+        issueVotesService.deleteByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId);
     }
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PostMapping(value = "/issues/{issueId}/{vote}")
     public void addVote(@PathVariable("issueId") Integer issueId,
                         @PathVariable("vote")Boolean vote) {
-		int userId = AuthorizedUser.getCurrent() != null ? AuthorizedUser.getCurrent().getId() : -1;
-        issueVotesService.insertIssueVote(issueId, userId, vote);
+        issueVotesService.insertIssueVote(issueId, AuthorizedUser.getCurrent().getId(), vote);
     }
 
     @GetMapping(value = "/issues/{issueId}/votes")

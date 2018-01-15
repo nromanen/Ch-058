@@ -33,6 +33,7 @@ import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 @Transactional
 public class IssueServiceImpl implements IIssueService {
 	public static final int OPENED_TYPE = 1;
+	private static final String CATALINA_HOME_NAME = "catalina.home";
 
 	@Value("${imageStorage}")
 	private String imageStorage;
@@ -104,7 +105,7 @@ public class IssueServiceImpl implements IIssueService {
 		    image.setSrc(uniqueFile);
 		    image.setHash(DigestUtils.md5Hex(fileBytes));
 
-		    File newFile = new File(System.getProperty("catalina.home") + File.separator + uniqueFile);
+		    File newFile = new File(System.getProperty(CATALINA_HOME_NAME) + File.separator + uniqueFile);
 		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
 			    stream.write(fileBytes);
 		    } catch (IOException e) {
@@ -123,7 +124,7 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public byte[] getImageInByte(Integer issueId) throws IOException {
-		String fileName = System.getProperty("catalina.home") + File.separator + issuesRepository.findOne(issueId).getImage().getSrc();
+		String fileName = System.getProperty(CATALINA_HOME_NAME) + File.separator + issuesRepository.findOne(issueId).getImage().getSrc();
 		String extension = FilenameUtils.getExtension(fileName);
 		BufferedImage image = ImageIO.read(new File(fileName));
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
