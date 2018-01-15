@@ -30,11 +30,11 @@ const router = new Router({
       name: 'ChatPage',
       component: Chat
     },
-    {
-      path: '/notification',
-      name: 'AdminChatNotification',
-      component: AdminChatNotification
-    },
+    // {
+    //   path: '/notification',
+    //   name: 'AdminChatNotification',
+    //   component: AdminChatNotification
+    // },
     {
       path: '/openChat',
       name: 'OpenChat',
@@ -61,6 +61,10 @@ const router = new Router({
         {
           path: 'issues',
           component: AdminIssuesPage
+        },
+        {
+          path: 'notification',
+          component: AdminChatNotification
         }
       ]
     }

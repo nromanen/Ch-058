@@ -45,8 +45,8 @@ public class IssueManagementController {
         issueService.setStatus(b, id);
     }
 
-    @GetMapping({"/type/{t}"})
-    public JsonResponse  getByType(@PathVariable String t) {
+    @GetMapping({"/open"})
+    public JsonResponse  getOpened(@PathVariable String t) {
         switch (t.toLowerCase()) {
             case "open":
                 return new JsonResponse(issueService.findByClosedFalse());

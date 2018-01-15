@@ -37,7 +37,7 @@ public class UsersRestController {
 		this.localeResolver = localeResolver;
 	}
 
-//	@Secured("ROLE_ADMIN")
+	@Secured("ROLE_ADMIN")
 	@RequestMapping("/getAll")
 	public JsonResponse getAllUsers() {
 		return new JsonResponse(service.getAllUsers());
