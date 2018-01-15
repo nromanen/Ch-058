@@ -46,7 +46,7 @@ export default {
       this.dataIssueId = this.$props['issueId'];
       this.dataUserId = this.$props['userId'];
       let _this = this;
-      this.$http.get('http://localhost:8080/' + _this.dataIssueId + '/' + _this.dataUserId + '/chat').then( data => {
+      this.$http.get(_this.dataIssueId + '/' + _this.dataUserId + '/chat').then( data => {
         console.log(data.body);
         if(data.body) {
           _this.stompClient.disconnect();

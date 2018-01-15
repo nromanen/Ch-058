@@ -3,7 +3,9 @@
     <!--<md-button class="md-icon-button" @click="menuVisible = !menuVisible">
       <md-icon>menu</md-icon>
     </md-button>-->
-
+    <md-button class="md-icon-button" @click="backToMap" v-if="showBack">
+      <md-icon>arrow_back</md-icon>
+    </md-button>
     <span class="md-title">Geo Citizen</span>
   </div>
 

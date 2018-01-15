@@ -14,6 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@stomp/stompjs": "^4.0.0",
     "node-waves": "^0.7.5",
     "stompjs": "^2.3.3",
     "v-tooltip": "^2.0.0-rc.25",

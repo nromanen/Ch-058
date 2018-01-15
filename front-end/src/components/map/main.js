@@ -19,11 +19,10 @@ export default {
     isPlaced: false,
     sending: false,
     showDialog: false,
-    showSnackBar: false,
-
     showIssueDialog: true,
     searchParam: 'establishment',
     issues: [],
+    showSnackBar: false,
     markers: [],
     activeMarker: {
         id: 0,
@@ -99,7 +98,7 @@ export default {
       });
       this.addYourLocationButton();
       this.addSearchField();
-      if (localStorage.getItem('redirectFromIssue')) {
+      if (localStorage.getItem('redirectFromIssue') && localStorage.getItem('activeMarker') !== null) {
         self.activeMarker = JSON.parse(localStorage.getItem('activeMarker'));
         self.showAllIssuesByMarker(self.activeMarker.id);
         var pos = {
@@ -168,42 +167,41 @@ export default {
        var s = window.select;
        self.$http.get('map/marker/' + place.geometry.location.lat() + "/" + place.geometry.location.lng() + "/")
          .then((response) => {
-         if(response.body.data[0] == null) {
-           self.map.setCenter(place.geometry.location);
-           self.map.setZoom(19);
-           s = new google.maps.Marker({
-             map: self.map,
-             position: {
-               lat: place.geometry.location.lat(),
-               lng: place.geometry.location.lng()
-             },
-             animation: google.maps.Animation.DROP
-           });
-           self.setMarkerType(s, '5');
-           if(getLocalUser()) {
-             setTimeout(function() {
-               self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
-               s.setMap(null);
-             }, 1200)
+           if (response.body.data[0] == null) {
+             self.map.setCenter(place.geometry.location);
+             self.map.setZoom(19);
+             s = new google.maps.Marker({
+               map: self.map,
+               position: {
+                 lat: place.geometry.location.lat(),
+                 lng: place.geometry.location.lng()
+               },
+               animation: google.maps.Animation.DROP
+             });
+             self.setMarkerType(s, '5');
+             if (getLocalUser()) {
+               setTimeout(function () {
+                 self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+                 s.setMap(null);
+               }, 1200)
+             } else {
+               self.showSnackBar = true;
+               document.getElementById('pac-input').value = '';
+             }
            } else {
-             self.showSnackBar = true;
-             document.getElementById('pac-input').value = '';
+             self.map.setCenter(place.geometry.location);
+             self.map.setZoom(19);
+             if (getLocalUser()) {
+               setTimeout(function () {
+                 self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+               }, 1200)
+             } else {
+               self.showSnackBar = true;
+               document.getElementById('pac-input').value = '';
+             }
            }
-         } else {
-           self.map.setCenter(place.geometry.location);
-           self.map.setZoom(19);
-           if(getLocalUser()) {
-             setTimeout(function() {
-               self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
-             }, 1200)
-           } else {
-             self.showSnackBar = true;
-             document.getElementById('pac-input').value = '';
-           }
-         }
-       })
-
-    });
+         })
+      });
     },
 
     getUserLocation() {
@@ -430,6 +428,7 @@ export default {
       this.issues = [];
       localStorage.removeItem('redirectFromIssue');
       localStorage.removeItem('activeMarker')
+      localStorage.removeItem('zoom')
     },
 
     setListeners(marker) {
@@ -511,8 +510,8 @@ export default {
     },
 
     redirectToIssue(issueId, marker) {
-      localStorage.setItem('redirectFromIssue', true);
       localStorage.setItem('activeMarker', JSON.stringify(marker));
+      localStorage.setItem('zoom', this.map.getZoom());
       this.$router.push('issue/' + issueId);
     },
 
@@ -548,5 +547,9 @@ export default {
 
   mounted: function () {
       this.initMap();
+  },
+
+  destroyed: function () {
+    localStorage.removeItem('redirectFromIssue');
   }
 }

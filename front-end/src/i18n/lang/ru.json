@@ -8,6 +8,7 @@
     "sign_up": "Зарегистрироваться",
     "request_recovery_token": "Запросить восстановительный токен",
     "recover": "Восстановить",
+    "back": "Назад",
     "snackbar_redirect": "Войти",
     "create_issue": "Создать"
   },
@@ -33,7 +34,13 @@
     "image": "Добавьте изображение",
     "input_location": "Введите адрес",
     "establishments": "Заведения",
-    "addresses": "Адреса"
+    "addresses": "Адреса",
+    "add_vote_fail": "Пожалуйста, войдите в аккаунт, чтобы поставить отметку.",
+    "add_like": "Мне нравится ",
+    "add_dislike": "Мне не нравиться",
+    "cancel_like": "Больше не нравиться",
+    "cancel_dislike": "Отменить не нравится",
+    "issues_modal_title": "Все вопросы"
   },
   "error": {
     "required": "Обязательно",

@@ -9,9 +9,11 @@ export default {
     menuVisible: false,
     authDialog: false,
     userEmail: null,
-    snackBarText: null
+    snackBarText: null,
+    showBack: false
   }),
   created: function () {
+    this.showBack = this.$parent.$parent.$parent.$parent.showBack;
     if (getLocalUser()) {
       Vue.http.get('auth/getCurrentSession')
         .then(
@@ -100,6 +102,11 @@ export default {
     },
     getLangClass(lang) {
       return getCurrentLang() === lang ? 'md-primary' : '';
-    }
+    },
+
+    backToMap() {
+      localStorage.setItem('redirectFromIssue', true);
+      this.$router.push('/');
+    },
   }
 }
