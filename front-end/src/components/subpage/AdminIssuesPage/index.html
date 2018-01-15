@@ -1,3 +1,27 @@
 <div id="admin-issues-page">
-  Test issues
+  <md-table v-model="searched" md-sort="id" md-card>
+    <md-table-toolbar>
+      <h1 class="md-title">Issues</h1>
+
+      <md-field md-clearable class="md-toolbar-section-end">
+        <md-input placeholder="Search..." v-model="searchString" @input="searchOnTable" />
+      </md-field>
+    </md-table-toolbar>
+
+    <md-table-empty-state
+      md-label="No issues found"
+      :md-description="`No issues found for this '${searchString}' query.`">
+    </md-table-empty-state>
+
+    <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single" @md-selected="onSelect">
+      <md-table-cell md-label="title" md-numeric>{{ item.id }}</md-table-cell>
+      <md-table-cell md-label="text" md-sort-by="text">{{ item.login }}</md-table-cell>
+      <md-table-cell md-label="type" md-sort-by="type">{{ item.email }}</md-table-cell>
+      <md-table-cell md-label="closed" md-sort-by="closed">{{ item.name }}</md-table-cell>
+      <md-table-cell md-label="created at" md-sort-by="created at">{{ item.surname }}</md-table-cell>
+      </md-table-cell>
+    </md-table-row>
+  </md-table>
+
+  <admin-user-actions-dialog ref="aIssueActionsDialog"></admin-user-actions-dialog>
 </div>
