@@ -23,6 +23,12 @@ public class MarkerDTO {
 		this.lng = lng;
 	}
 
+	public MarkerDTO(double lat, double lng, int type) {
+		this.lat = lat;
+		this.lng = lng;
+		this.type = type;
+	}
+
 	public Double getLat() {
 		return lat;
 	}
