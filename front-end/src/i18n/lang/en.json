@@ -11,7 +11,10 @@
     "openChat": "Open chat",
     "answerNotification": "Answer to",
     "closeNotification": "wanted to chat",
-    "sendMessage": "Send"
+    "sendMessage": "Send",
+    "snackbar_redirect": "Login",
+    "create_issue": "Create",
+    "back": "Back"
   },
   "label": {
     "sign_in": "Sign in",
@@ -25,6 +28,23 @@
     "first_name": "First name",
     "last_name": "Last name",
     "recovery_token": "Recovery token from E-Mail",
+    "add_vote_fail": "Please, log in to make your opinion count.",
+    "add_like": "I like this",
+    "add_dislike": "I dislike this",
+    "cancel_like": "Unlike",
+    "cancel_dislike": "Cancel dislike",
+    "form_title": "Create new issue",
+    "issue_title": "Title",
+    "issue_desc": "Description",
+    "issue_type": "Type",
+    "issue_type_problem": "Problem",
+    "issue_type_info": "Info",
+    "issue_type_feedback": "Feedback",
+    "image": "Add an image",
+    "input_location": "Enter a location",
+    "establishments": "Establishments",
+    "addresses": "Addresses",
+    "issues_modal_title": "All issues",
     "projectTitle": "Geo citizen",
     "waitHint": "Please wait for a minute for an answer from admin",
     "noAdminAnswer": "Sorry, but there are no administrators currently available. Please contact later",
@@ -45,7 +65,16 @@
     "different_passwords": "The passwords are different",
     "not_email": "Bad E-Mail format",
     "not_first_name": "It doesn't look like a real name (real name e.g.: L'uke, Dart)",
-    "not_last_name": "It doesn't look like a real surname (real surname e.g.: Vader, O'Connor)"
+    "not_last_name": "It doesn't look like a real surname (real surname e.g.: Vader, O'Connor)",
+    "req_title": "Title is required",
+    "title_short": "Title must be at least 4 characters length",
+    "title_long": "Title can't be longer than 32 characters",
+    "req_desc": "Description is required",
+    "desc_short": "Description must be at least 8 characters length",
+    "desc_long": "Description cannot be longer than 2048 characters",
+    "req_type": "Please, choose the type",
+    "req_image": "Please, attach an image"
+
   },
   "message": {
     "successful_register": "You have been successfully registered!",
