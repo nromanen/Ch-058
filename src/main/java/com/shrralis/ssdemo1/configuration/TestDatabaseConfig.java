@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.shrralis.ssdemo1")
 @EnableJpaRepositories("com.shrralis.ssdemo1.repository")
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:testdb.properties")
 public class TestDatabaseConfig {
 
 	@Value("${h2-jdbc.driverClassName}")

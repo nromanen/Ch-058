@@ -37,6 +37,7 @@ public class IssueServiceTest {
 
 	@Before
 	public void setup() {
+
 		MockitoAnnotations.initMocks(this);
 
 		Issue testIssue = Issue.Builder.anIssue()

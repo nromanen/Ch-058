@@ -1,5 +1,6 @@
 import {minLength, maxLength, required} from 'vuelidate/lib/validators'
 import {getLocalUser} from "../../router/index"
+import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
 
 export default {
   name: 'Map',
@@ -128,7 +129,18 @@ export default {
 
       this.map.addListener('click', function(e) {
         if(getLocalUser()) {
-          self.clickHandler(e, self.map);
+          self.$http.get('auth/getCurrentSession')
+            .then(response => {
+                let json = response.body;
+
+                if (json.data[0].logged_in) {
+                  self.clickHandler(e, self.map);
+                }
+                else {
+                  e.stop();
+                  self.showSnackBar = true
+                }
+              });
         } else {
           e.stop();
           self.showSnackBar = true
@@ -184,10 +196,21 @@ export default {
         self.setMarkerType(s, '5');
 
         if(getLocalUser()) {
-          setTimeout(function() {
-            self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
-            s.setMap(null);
-          }, 1200)
+          self.$http.get('auth/getCurrentSession')
+            .then(response => {
+              let json = response.body;
+
+              if (json.data[0].logged_in) {
+                setTimeout(function() {
+                  self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
+                  s.setMap(null);
+                }, 1200)
+              }
+              else {
+                self.showSnackBar = true
+              }
+            });
+
         } else {
           self.showSnackBar = true;
           document.getElementById('pac-input').value = '';
@@ -490,14 +513,25 @@ export default {
             prevent = true;
 
             if(getLocalUser()) {
-                self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
-                window.marker = marker;
-                var modal = document.getElementById('myModal');
-                var span = document.getElementsByClassName("close")[0];
-                modal.style.display = "table";
-                span.onclick = function () {
-                  modal.style.display = "none";
-                };
+              self.$http.get('auth/getCurrentSession')
+                .then(response => {
+                  let json = response.body;
+
+                  if (json.data[0].logged_in) {
+                    self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
+                    window.marker = marker;
+                    var modal = document.getElementById('myModal');
+                    var span = document.getElementsByClassName("close")[0];
+                    modal.style.display = "table";
+                    span.onclick = function () {
+                      modal.style.display = "none";
+                    };
+                  }
+                  else {
+                    self.showSnackBar = true
+                  }
+                });
+
             } else {
               self.showSnackBar = true;
               document.getElementById('pac-input').value = '';

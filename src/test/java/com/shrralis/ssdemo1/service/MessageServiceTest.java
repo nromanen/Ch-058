@@ -35,6 +35,7 @@ public class MessageServiceTest {
 
 	@Before
 	public void setup() {
+
 		MockitoAnnotations.initMocks(this);
 
 		testMessage = new FullMessage();

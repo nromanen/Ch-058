@@ -35,7 +35,7 @@ public class ImagesRepositoryTest extends TestCase {
 	}
 
 	@Test
-	public void testGetByHash() throws Exception{
+	public void testGetByHash() throws Exception {
 
 		Image image = repository.getByHash(testImage.getHash());
 		assertNotNull(image);

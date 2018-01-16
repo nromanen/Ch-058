@@ -46,6 +46,7 @@ public class UserServiceTest {
 				.setType(User.Type.USER)
 				.setFailedAuthCount(0)
 				.build();
+
 		when(repository.getOne(1)).thenReturn(testUser);
 		User user = service.getUser(1);
 		assertNotNull(user);

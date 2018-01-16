@@ -33,6 +33,7 @@ public class NotificationServiceTest {
 
 	@Before
 	public void setup() {
+
 		MockitoAnnotations.initMocks(this);
 
 		testNotification = new Notification();
@@ -45,7 +46,6 @@ public class NotificationServiceTest {
 
 	@Test
 	public void testRemoveNotification() throws Exception {
-
 
 		when(repository.deleteByIssueIdAndUserId(testNotification.getIssueId(), testNotification.getUserId()))
 				.thenReturn(1L);
