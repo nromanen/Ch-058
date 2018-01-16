@@ -1,5 +1,5 @@
 <div class="center" v-if="!waiting">
-  <md-button @click="openChat" id="button">{{ $t('button.openChat') }}</md-button>
+  <md-button @click="openChat" id="button"><md-icon>chat</md-icon> {{ $t('button.openChat') }}</md-button>
 </div>
 <div class="center" v-else-if="waiting && !noAdmins">
   <p id="hint">{{ $t('label.waitHint') }}</p>
