@@ -1,6 +1,6 @@
 package com.shrralis.ssdemo1.repository;
 
-import com.shrralis.ssdemo1.configuration.DatabaseConfig;
+import com.shrralis.ssdemo1.configuration.TestDatabaseConfig;
 import com.shrralis.ssdemo1.entity.*;
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {DatabaseConfig.class})
+@ContextConfiguration(classes = {TestDatabaseConfig.class})
 @WebAppConfiguration
 @Transactional
 public class IssueRepositoryTest extends TestCase {

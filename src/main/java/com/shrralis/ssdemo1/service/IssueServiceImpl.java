@@ -32,7 +32,7 @@ import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 @Service
 @Transactional
 public class IssueServiceImpl implements IIssueService {
-	public static final int OPENED_TYPE = 1;
+	private static final int OPENED_TYPE = 1;
 	private static final String CATALINA_HOME_NAME = "catalina.home";
 
 	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);

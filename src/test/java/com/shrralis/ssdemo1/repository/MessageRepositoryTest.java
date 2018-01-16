@@ -1,6 +1,6 @@
 package com.shrralis.ssdemo1.repository;
 
-import com.shrralis.ssdemo1.configuration.DatabaseConfig;
+import com.shrralis.ssdemo1.configuration.TestDatabaseConfig;
 import com.shrralis.ssdemo1.entity.FullMessage;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {DatabaseConfig.class})
+@ContextConfiguration(classes = {TestDatabaseConfig.class})
 @WebAppConfiguration
 @Transactional
 public class MessageRepositoryTest extends TestCase {

@@ -1,6 +1,6 @@
 package com.shrralis.ssdemo1.repository;
 
-import com.shrralis.ssdemo1.configuration.DatabaseConfig;
+import com.shrralis.ssdemo1.configuration.TestDatabaseConfig;
 import com.shrralis.ssdemo1.entity.MapMarker;
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -14,7 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import javax.transaction.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {DatabaseConfig.class})
+@ContextConfiguration(classes = {TestDatabaseConfig.class})
 @WebAppConfiguration
 @Transactional
 public class MapMarkersRepositoryTest extends TestCase {
