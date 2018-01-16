@@ -93,7 +93,7 @@ export default {
       console.log('Connected: ' + frame);
       stompClient.subscribe('/topic/broadcast' + '/' + _this.issueId + '/' + _this.userId, function (greeting) {
         console.log(greeting);
-        _this.showMessage(JSON.parse(greeting.body));
+        _this.showMessage(JSON.parse(greeting.body).data[0]);
       });
     })
   }

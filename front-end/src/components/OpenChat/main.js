@@ -33,8 +33,7 @@ export default {
       stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/checkTopic/broadcast', function (responseForChat) {
-          console.log(responseForChat);
-          var user = JSON.parse(responseForChat.body);
+          var user = JSON.parse(responseForChat.body).data[0];
           if(user.text == 'Accept' && user.userId == _this.dataUserId && user.issueId == _this.dataIssueId){
             clearTimeout(_this.timerId);
             window.location.href = "http://localhost:8081/#/chat/" + _this.dataIssueId + "/" + _this.dataUserId;
@@ -67,8 +66,8 @@ export default {
       this.dataUserId = this.$props['userId'];
       let _this = this;
       this.$http.get('http://localhost:8080/' + _this.dataIssueId + '/' + _this.dataUserId + '/chat').then( data => {
-        console.log(data.body);
-        if(data.body) {
+        console.log(data.body.data[0]);
+        if(data.body.data[0]) {
           _this.stompClient.disconnect();
           _this.socket._close();
 

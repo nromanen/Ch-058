@@ -12,10 +12,7 @@
 
 package com.shrralis.ssdemo1.controller.system;
 
-import com.shrralis.ssdemo1.exception.BadFieldFormatException;
-import com.shrralis.ssdemo1.exception.EntityNotUniqueException;
-import com.shrralis.ssdemo1.exception.ExpiredRecoveryTokenException;
-import com.shrralis.ssdemo1.exception.IllegalParameterException;
+import com.shrralis.ssdemo1.exception.*;
 import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensException;
 import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonResponse;
@@ -117,6 +114,13 @@ public class ExceptionHandlerControllerAdvice {
 		logger.error("MissingServletRequestParameterException: {}", e);
 		return new JsonResponse(JsonError.Error.MISSING_FIELD.forField(e.getParameterName()), locale, messageSource);
     }
+
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+	@ExceptionHandler(value = AccessDeniedException.class)
+	public JsonResponse accessDeniedExceptionHandler(AccessDeniedException e, Locale locale) {
+		logger.error("AccessDeniedException: {}", e);
+		return new JsonResponse(JsonError.Error.ACCESS_DENIED);
+	}
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
