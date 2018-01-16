@@ -72,7 +72,7 @@ router.beforeEach((to, from, next) => {
       let json = response.body
 
       if (!json.errors && json.data[0].logged_in && !json.data[0].login.match(/.*(google)|(facebook).*/)) {
-        localStorage.setItem('user', JSON.stringify(json.data[0]));
+        localStorage.setItem('user', JSON.stringify(json.data[0]))
         next({
           path: '/',
           query: {
