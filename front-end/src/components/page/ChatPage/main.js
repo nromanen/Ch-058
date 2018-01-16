@@ -3,6 +3,8 @@ import {getLocalUser} from "../../../router";
 import 'stompjs/lib/stomp.js';
 import * as SockJS from 'sockjs-client/dist/sockjs.min.js'
 import {getCurrentLang, switchLang} from "../../../i18n";
+import {getServerAddress} from "../../../main";
+
 export default {
   name: 'ChatPage',
   data() {
@@ -53,7 +55,7 @@ export default {
       console.log(this.messages);
     },
     getAllMessages: function () {
-      this.$http.get('http://localhost:8080/message/all/' + this.issueId + '/' + this.userId).then( data => {
+      this.$http.get('message/all/' + this.issueId + '/' + this.userId).then( data => {
         console.log(data.body);
         this.showMessages(data.body);
       });
@@ -78,7 +80,7 @@ export default {
 
     _this.getAllMessages();
 
-    var socket = new SockJS("http://localhost:8080/chat");
+    var socket = new SockJS(getServerAddress() + "/chat");
     var stompClient = Stomp.over(socket);
     this.stompClient = stompClient;
 

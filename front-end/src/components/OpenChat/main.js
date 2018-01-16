@@ -2,6 +2,7 @@ import {getLocalUser} from "../../router";
 import 'stompjs/lib/stomp.js';
 import * as SockJS from 'sockjs-client/dist/sockjs.min.js'
 import {getCurrentLang, switchLang} from "../../i18n";
+import {getServerAddress} from "../../main";
 
 export default {
   name: 'OpenChat',
@@ -26,7 +27,7 @@ export default {
       console.log('started');
       this.login = getLocalUser().login;
       let _this = this;
-      var socket = new SockJS("http://localhost:8080/chat");
+      var socket = new SockJS(getServerAddress() + "/chat");
       this.socket = socket;
       var stompClient = Stomp.over(socket);
       this.stompClient = stompClient;
@@ -36,7 +37,7 @@ export default {
           var user = JSON.parse(responseForChat.body).data[0];
           if(user.text == 'Accept' && user.userId == _this.dataUserId && user.issueId == _this.dataIssueId){
             clearTimeout(_this.timerId);
-            window.location.href = "http://localhost:8081/#/chat/" + _this.dataIssueId + "/" + _this.dataUserId;
+            window.location.href = "#/chat/" + _this.dataIssueId + "/" + _this.dataUserId;
           }
         });
       })
@@ -65,13 +66,13 @@ export default {
       this.dataIssueId = this.$props['issueId'];
       this.dataUserId = this.$props['userId'];
       let _this = this;
-      this.$http.get('http://localhost:8080/' + _this.dataIssueId + '/' + _this.dataUserId + '/chat').then( data => {
+      this.$http.get(_this.dataIssueId + '/' + _this.dataUserId + '/chat').then( data => {
         console.log(data.body.data[0]);
         if(data.body.data[0]) {
           _this.stompClient.disconnect();
           _this.socket._close();
 
-          window.location.href = "http://localhost:8081/#/chat/" + _this.dataIssueId + "/" + _this.dataUserId;
+          window.location.href = "#/chat/" + _this.dataIssueId + "/" + _this.dataUserId;
         }
         else{
           let _this = this;

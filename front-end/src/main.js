@@ -41,3 +41,8 @@ new Vue({
   template: '<App/>',
   components: {App}
 })
+
+// eslint-disable-next-line
+export function getServerAddress(){
+  return 'http://localhost:8080'
+}

@@ -3,7 +3,7 @@ import 'stompjs/lib/stomp.js';
 import * as SockJS from 'sockjs-client/dist/sockjs.min.js'
 import chatPage from '@/components/page/ChatPage/ChatPage.vue'
 import {getCurrentLang, switchLang} from "../../i18n";
-
+import {getServerAddress} from "../../main";
 
 export default {
   name: 'AdminChatNotification',
@@ -20,7 +20,7 @@ export default {
     answer: function (userId, issueId) {
       this.stompClient.send("/app/connect", {},
         JSON.stringify({text: 'Accept', login: "", issueId: issueId, userId: userId, waiting: true}));
-      window.location.href = "http://localhost:8081/#/adminChatPage/" + issueId + "/" + userId;
+      window.location.href = "/#/adminChatPage/" + issueId + "/" + userId;
     },
     markAsReaded: function (userId, issueId) {
       var _this = this;
@@ -47,7 +47,7 @@ export default {
     this.login = getLocalUser().login;
     let _this = this;
 
-    var socket = new SockJS("http://localhost:8080/chat");
+    var socket = new SockJS(getServerAddress() + "/chat");
     var stompClient = Stomp.over(socket);
     this.stompClient = stompClient;
 
@@ -92,7 +92,7 @@ export default {
       });
     })
 
-    this.$http.get('http://localhost:8080/notification/all').then( data => {
+    this.$http.get('notification/all').then( data => {
       console.log(data.body.data);
       var charRequestArray = data.body.data;
       for(var i = 0; i < charRequestArray.length; i++) {
