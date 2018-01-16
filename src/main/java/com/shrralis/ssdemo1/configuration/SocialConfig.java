@@ -69,14 +69,15 @@ public class SocialConfig implements SocialConfigurer {
     public ProviderSignInController providerSignInController(
             ConnectionFactoryLocator connectionFactoryLocator,
             UsersConnectionRepository usersConnectionRepository,
-            SpringSecuritySignInAdapter adapter/*, SocialInterceptor socialInterceptor*/) {
+            SpringSecuritySignInAdapter adapter) {
         ProviderSignInController psic =  new ProviderSignInController(
                 connectionFactoryLocator,
                 usersConnectionRepository,
                 adapter);
-        psic.setPostSignInUrl("http://localhost:8081/#/");
+        psic.setPostSignInUrl("http://localhost:8081/#/socialSuccess");
         return psic;
     }
+
 
     @Bean
     public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator,

@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import {email, maxLength, minLength, required, sameAs} from "vuelidate/lib/validators/index";
+import {email, maxLength, minLength, required, sameAs} from "vuelidate/lib/validators/";
 import {validationMixin} from "vuelidate";
 import {
   LoginValidator, MAX_LOGIN_LENGTH, MAX_NAME_LENGTH, MAX_SURNAME_LENGTH, MIN_LOGIN_LENGTH, MIN_NAME_LENGTH,
   MIN_SURNAME_LENGTH, NameValidator
-} from "../../_validator/index";
-import router, {getLocalUser, resetLocalUser} from "../../../router/index";
-import {getErrorMessage} from "../../_sys/json-errors";
+} from "../../../_validator/";
+import router, {getLocalUser, resetLocalUser} from "../../../router/";
+import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: "SocialSuccessPage",
@@ -62,7 +62,9 @@ export default {
         let json = response.body;
 
         if (!json.errors) {
+          console.log(json.data[0]);
           localStorage.setItem('user', JSON.stringify(json.data[0]));
+          console.log(getLocalUser());
 
           this.$http.get('users/get/' + json.data[0].id)
             .then(response => {
@@ -139,7 +141,7 @@ export default {
           if (!json.errors) {
             let user = getLocalUser();
             user.login = this.form.login;
-            // localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('user', JSON.stringify(user));
             router.push('/');
           } else if (json.errors.length) {
             this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));

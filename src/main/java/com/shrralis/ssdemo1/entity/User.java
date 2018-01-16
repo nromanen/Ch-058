@@ -89,7 +89,6 @@ public class User implements Identifiable<Integer> {
 	@JsonIgnore
 	@NotNull
 	@NotBlank
-	@Pattern(regexp = User.PASS_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	@Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
 	@Column(name = PASS_COLUMN_NAME, nullable = false, length = MAX_PASSWORD_LENGTH)
 	private String password;
