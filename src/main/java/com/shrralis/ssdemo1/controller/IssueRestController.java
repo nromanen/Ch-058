@@ -17,9 +17,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 @RestController
+@RequestMapping("/issues")
 public class IssueRestController {
 
     private final IIssueService issueService;
@@ -34,32 +33,37 @@ public class IssueRestController {
         this.issueVotesService = issueVotesService;
     }
 
-    @GetMapping(value = "/issues/{issueId}")
+    @GetMapping(value = "/")
+    public JsonResponse all() {
+        return new JsonResponse(issueService.findAll());
+    }
+
+    @GetMapping(value = "/{issueId}")
     public JsonResponse getIssue(@PathVariable("issueId") Integer issueId) {
         return new JsonResponse(issueService.getById(issueId));
     }
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @GetMapping(value = "/issues/{issueId}/is-vote-exist")
+    @GetMapping(value = "/{issueId}/is-vote-exist")
     public JsonResponse getVote(@PathVariable("issueId") Integer issueId, HttpServletResponse response) {
         Boolean vote = issueVotesService.getByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId).getVote();
         return new JsonResponse(vote);
     }
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @DeleteMapping(value = "/issues/{issueId}/vote")
+    @DeleteMapping(value = "/{issueId}/vote")
     public void deleteLike(@PathVariable("issueId") Integer issueId) {
         issueVotesService.deleteByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId);
     }
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @PostMapping(value = "/issues/{issueId}/{vote}")
+    @PostMapping(value = "/{issueId}/{vote}")
     public void addVote(@PathVariable("issueId") Integer issueId,
                         @PathVariable("vote")Boolean vote) {
         issueVotesService.insertIssueVote(issueId, AuthorizedUser.getCurrent().getId(), vote);
     }
 
-    @GetMapping(value = "/issues/{issueId}/votes")
+    @GetMapping(value = "/{issueId}/votes")
     public JsonResponse calculateVote(@PathVariable("issueId") Integer issueId) {
         Map<String, Long> map = new HashMap<>();
         map.put(LIKE, issueVotesService.countByVoteAndIssue(true, issueId));

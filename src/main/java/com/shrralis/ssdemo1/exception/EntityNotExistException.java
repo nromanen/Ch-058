@@ -42,6 +42,7 @@ public class EntityNotExistException extends AbstractCitizenException {
 		IMAGE,
 		MAP_MARKER,
 		USER,
+		ISSUE,
 		RECOVERY_TOKEN;
 
 		private static final Map<Entity, JsonError.Error> ENTITY_ERROR_MAP;
@@ -52,6 +53,7 @@ public class EntityNotExistException extends AbstractCitizenException {
 			ENTITY_ERROR_MAP.put(IMAGE, JsonError.Error.IMAGE_NOT_EXIST);
 			ENTITY_ERROR_MAP.put(MAP_MARKER, JsonError.Error.MAP_MARKER_NOT_EXIST);
 			ENTITY_ERROR_MAP.put(USER, JsonError.Error.USER_NOT_EXIST);
+			ENTITY_ERROR_MAP.put(ISSUE, JsonError.Error.ISSUE_NOT_EXIST);
 			ENTITY_ERROR_MAP.put(RECOVERY_TOKEN, JsonError.Error.RECOVERY_TOKEN_EXPIRED);
 		}
 

@@ -7,6 +7,9 @@ import AdminChatNotification from '@/components/AdminChatNotification/AdminChatN
 import OpenChat from '@/components/OpenChat/OpenChat'
 import AdminChatPage from '@/components/page/AdminChatPage/AdminChatPage'
 import Issue from '@/components/page/ViewIssue/App'
+import AdminPage from '@/components/page/AdminPage/AdminPage'
+import AdminUsersPage from '@/components/subpage/AdminUsersPage/AdminUsersPage'
+import AdminIssuesPage from '@/components/subpage/AdminIssuesPage/AdminIssuesPage'
 
 Vue.use(Router)
 
@@ -28,11 +31,6 @@ const router = new Router({
       component: Chat
     },
     {
-      path: '/notification',
-      name: 'AdminChatNotification',
-      component: AdminChatNotification
-    },
-    {
       path: '/openChat',
       name: 'OpenChat',
       component: OpenChat
@@ -45,6 +43,34 @@ const router = new Router({
     {
       path: '/issue/:id',
       component: Issue
+    },
+    {
+      path: '/admin',
+      name: 'AdminPage',
+      component: AdminPage,
+      children: [
+        {
+          path: '/',
+          component: AdminUsersPage
+        },
+        {
+          path: 'users',
+          component: AdminUsersPage
+        },
+        {
+          path: 'issues',
+          component: AdminIssuesPage
+        },
+        {
+          path: 'issues/:user',
+          component: AdminIssuesPage,
+          props: true
+        },
+        {
+          path: 'notification',
+          component: AdminChatNotification
+        }
+      ]
     }
   ]
 })
