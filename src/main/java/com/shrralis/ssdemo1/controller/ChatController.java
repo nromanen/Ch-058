@@ -27,6 +27,9 @@ import java.util.List;
 @RestController
 public class ChatController {
 
+    private final String ADMIN_ROLE = "ROLE_ADMIN";
+    private final String USER_ROLE = "ROLE_USER";
+
     private final INotificationService notificationService;
     private final IMessageService messageService;
 
@@ -37,21 +40,21 @@ public class ChatController {
         this.messageService = messageService;
     }
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({USER_ROLE, ADMIN_ROLE})
     @RequestMapping("/{issueId}/{userId}/chat")
     public JsonResponse checkChatExist(@PathVariable("issueId") Long issueId, @PathVariable("userId") Long userId)
             throws AccessDeniedException {
         return new JsonResponse(messageService.checkChat(issueId, userId));
     }
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({USER_ROLE, ADMIN_ROLE})
     @RequestMapping("/message/all/{issueId}/{userId}")
     public JsonResponse getMessages(@PathVariable("issueId") Long issueId,
                                          @PathVariable("userId") Long userId) throws AccessDeniedException {
         return new JsonResponse(messageService.getAllMessagesForChat(issueId, userId));
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured(ADMIN_ROLE)
     @RequestMapping("/notification/all")
     public JsonResponse getNotifications(){
         return new JsonResponse(notificationService.getAllNotifications());
@@ -69,24 +72,24 @@ public class ChatController {
         return new JsonResponse(input);
     }
 
-    @MessageMapping("/connect")
+    @MessageMapping("/connect/wait")
     @SendTo("/checkTopic/broadcast")
-    public JsonResponse notificateAdmins(Notification notification) {
-        if(notification.getText().equals("Alert")) {
-            notificationService.addNotification(notification);
-        }
-        if(notification.getText().equals("Accept")) {
-            notificationService.removeNotification(notification);
-        }
-        if(notification.getText().equals("Notification timed out")) {
-            notificationService.setWaiting(notification);
-        }
-        if(notification.getText().equals("Cancel notification")){
-            notificationService.removeNotification(notification);
-        }
-        if(notification.getText().equals("Delete")){
-            notificationService.removeNotification(notification);
-        }
+    public JsonResponse notificationWait(Notification notification) {
+        notificationService.setWaiting(notification);
+        return new JsonResponse(notification);
+    }
+
+    @MessageMapping({"/connect/cancelNotification", "/connect/accept", "/connect/delete"})
+    @SendTo("/checkTopic/broadcast")
+    public JsonResponse notificationDelete(Notification notification) {
+        notificationService.removeNotification(notification);
+        return new JsonResponse(notification);
+    }
+
+    @MessageMapping("/connect/alert")
+    @SendTo("/checkTopic/broadcast")
+    public JsonResponse notificationAdd(Notification notification) {
+        notificationService.addNotification(notification);
         return new JsonResponse(notification);
     }
 }

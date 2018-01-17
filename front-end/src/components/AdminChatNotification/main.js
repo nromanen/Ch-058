@@ -18,13 +18,13 @@ export default {
   },
   methods: {
     answer: function (userId, issueId) {
-      this.stompClient.send("/app/connect", {},
+      this.stompClient.send("/app/connect/accept", {},
         JSON.stringify({text: 'Accept', login: "", issueId: issueId, userId: userId, waiting: true}));
       window.location.href = "/#/adminChatPage/" + issueId + "/" + userId;
     },
     markAsReaded: function (userId, issueId) {
       var _this = this;
-      _this.stompClient.send('/app/connect', {},
+      _this.stompClient.send('/app/connect/delete', {},
         JSON.stringify({text: 'Delete', login: '', issueId: issueId, userId: userId, waiting: false}));
       var index = -1;
       for(var i = 0; i < _this.users.length; i++){

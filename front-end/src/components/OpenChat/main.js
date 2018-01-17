@@ -49,11 +49,11 @@ export default {
       return getCurrentLang() === lang ? 'md-primary' : '';
     },
     notificateAdmins: function (login) {
-      this.stompClient.send("/app/connect", {}, JSON.stringify({text: "Alert", login: login,
+      this.stompClient.send("/app/connect/alert", {}, JSON.stringify({text: "Alert", login: login,
         issueId: this.issueId, userId: this.userId, waiting: true}));
     },
     cancelWaiting: function () {
-      this.stompClient.send("/app/connect", {}, JSON.stringify({text: "Cancel notification", login: this.login,
+      this.stompClient.send("/app/connect/cancelNotification", {}, JSON.stringify({text: "Cancel notification", login: this.login,
         issueId: this.issueId, userId: this.userId, waiting: false}));
       this.waiting = false;
       this.noAdmins = false;
@@ -80,7 +80,7 @@ export default {
           _this.waiting = true;
           function func() {
             _this.noAdmins = true;
-            _this.stompClient.send("/app/connect",  {},
+            _this.stompClient.send("/app/connect/wait",  {},
               JSON.stringify({text: "Notification timed out", login: _this.login,
                 issueId: _this.dataIssueId, userId: _this.dataUserId, waiting: false}));
           }
