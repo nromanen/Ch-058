@@ -74,6 +74,9 @@ export default {
     },
     switchLang(lang) {
       switchLang(lang);
+    },
+    backToAdmin() {
+      this.$router.push('/admin/messages');
     }
   },
   created: function () {

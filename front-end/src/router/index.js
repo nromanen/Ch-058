@@ -89,7 +89,7 @@ const router = new Router({
         {
           path: 'messages',
           component: AdminMessagesPage
-        },
+        }
       ]
     }
   ]

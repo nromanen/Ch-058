@@ -69,6 +69,9 @@ export default {
     },
     switchLang(lang) {
       switchLang(lang);
+    },
+    backToIssue() {
+      this.$router.push('../../issue/' + this.issueId);
     }
   },
   created: function () {
