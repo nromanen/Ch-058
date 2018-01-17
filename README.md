@@ -16,7 +16,9 @@
 	nano ./src/main/resources/application.properties
 	```
 	There are the properties, below are described just that you have to know:
-	 - `db.url` - address to your created database (create if you haven't yet) for __back-end__;
+	 - `front.url` - url address where _front-end_ will be deployed (_for redirecting to, __with `#` at the end___);
+     - `front-end.url` - the same as `front.url` but __without `#` at the end__;
+	 - `db.url` - address to your created database (__create if you haven't yet__) for __back-end__;
 	 - `db.username` - login for the database, for __back-end__;
 	 - `db.password` - password for the database, for __back-end__;
 	 - `url` - the same as `db.url` but for _Liquibase_ (read below);
@@ -24,12 +26,12 @@
 	 - `password` - the same as `db.password` but for _Liquibase_;
 	 - `referenceUsername` - the same as `db.username` but for _Liquibase_ (__for devs only__);
 	 - `referencePassword` - the same as `db.password` but for _Liquibase_ (__for devs only__);
-	 - `front.url` - url address where _front-end_ will be deployed (_for redirecting to, __with `#` at the end___);
-	 - `front-end.url` - the same as `front.url` but __without `#` at the end__;
 1) Build and deploy the __back-end__ _.war_-file:
 	```bash
 	# Generate our .war.
 	mvn install
+	# Optional: if you have test errors, then use the next instead of above:
+	mvn install -Dmaven.test.skip=true
 	# Move generated WAR into your Tomcat webapps directory
 	# (/usr/share/tomcat9/webapps/ in my case)
 	mv ./target/citizen.war /usr/share/tomcat9/webapps/
