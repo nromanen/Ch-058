@@ -10,6 +10,7 @@ import Issue from '@/components/page/ViewIssue/App'
 import AdminPage from '@/components/page/AdminPage/AdminPage'
 import AdminUsersPage from '@/components/subpage/AdminUsersPage/AdminUsersPage'
 import AdminIssuesPage from '@/components/subpage/AdminIssuesPage/AdminIssuesPage'
+import AdminMessagesPage from '@/components/subpage/AdminMessagesPage/AdminMessagesPage'
 
 Vue.use(Router)
 
@@ -69,7 +70,11 @@ const router = new Router({
         {
           path: 'notification',
           component: AdminChatNotification
-        }
+        },
+        {
+          path: 'messages',
+          component: AdminMessagesPage
+        },
       ]
     }
   ]
