@@ -71,6 +71,6 @@ public interface IAuthService {
 	 */
 	RegisteredUserDTO signUp(final RegisterUserDTO user) throws AbstractCitizenException;
 
-	RegisteredUserDTO update(RegisterUserDTO user);
+	RegisteredUserDTO update(RegisterUserDTO user) throws AbstractCitizenException;
 
 }

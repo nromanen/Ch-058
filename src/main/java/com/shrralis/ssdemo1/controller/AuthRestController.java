@@ -63,7 +63,7 @@ public class AuthRestController {
     }
 
     @PostMapping("/update")
-	public JsonResponse updateUser(@RequestBody @Valid RegisterUserDTO user) {
+	public JsonResponse updateUser(@RequestBody @Valid RegisterUserDTO user) throws AbstractCitizenException{
 		return new JsonResponse(service.update(user));
 	}
 

@@ -152,7 +152,10 @@ public class AuthServiceImpl implements IAuthService {
 	}
 
 	@Override
-	public RegisteredUserDTO update(final RegisterUserDTO user) {
+	public RegisteredUserDTO update(final RegisterUserDTO user) throws AbstractCitizenException {
+		if (repository.getByLogin(user.getLogin()) != null) {
+			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "login");
+		}
 		final User savedUser = repository.getByEmail(user.getEmail());
 		savedUser.setName(user.getName());
 		savedUser.setSurname(user.getSurname());
