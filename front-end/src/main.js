@@ -24,11 +24,13 @@ import Header from '@/components/header/Header'
 import router from './router'
 import i18n from './i18n'
 
+export const backEndUrl = 'http://localhost:8080/citizen'
+
 Vue.use(VueResource)
 Vue.use(VueCookie)
 Vue.use(Vuelidate)
 Vue.use(VueMaterial)
-Vue.http.options.root = 'http://localhost:8080/citizen'
+Vue.http.options.root = backEndUrl
 Vue.http.headers.common['Accept'] = 'application/json;charset=UTF-8'
 Vue.http.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
 Vue.http.headers.common['Access-Control-Allow-Credentials'] = 'true'
@@ -55,5 +57,5 @@ new Vue({
 
 // eslint-disable-next-line
 export function getServerAddress(){
-  return 'http://localhost:8080/citizen'
+  return backEndUrl
 }

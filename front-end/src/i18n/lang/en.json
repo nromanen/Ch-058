@@ -24,7 +24,9 @@
     "revoke": "Revoke",
     "view_user_issues": "View user's issues",
     "ban": "Ban",
-    "unban": "Unban"
+    "unban": "Unban",
+    "sign_in_fb": "Sign in with Facebook",
+    "sign_in_gp": "Sign in with Google+"
   },
   "label": {
     "sign_in": "Sign in",
@@ -80,7 +82,8 @@
     "waitHint": "Please wait for a minute for an answer from admin",
     "noAdminAnswer": "Sorry, but there are no administrators currently available. Please contact later",
     "chatRoom": "Chat room",
-    "messageHint": "Write a message"
+    "messageHint": "Write a message",
+    "finish_registration": "Finish registration"
   },
   "error": {
     "required": "Required",

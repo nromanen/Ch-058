@@ -22,13 +22,17 @@
 	 - `url` - the same as `db.url` but for _Liquibase_ (read below);
 	 - `username` - the same as `db.username` but for _Liquibase_;
 	 - `password` - the same as `db.password` but for _Liquibase_;
+	 - `referenceUsername` - the same as `db.username` but for _Liquibase_ (__for devs only__);
+	 - `referencePassword` - the same as `db.password` but for _Liquibase_ (__for devs only__);
+	 - `front.url` - url address where _front-end_ will be deployed (_for redirecting to, __with `#` at the end___);
+	 - `front-end.url` - the same as `front.url` but __without `#` at the end__;
 1) Build and deploy the __back-end__ _.war_-file:
 	```bash
 	# Generate our .war.
 	mvn install
 	# Move generated WAR into your Tomcat webapps directory
 	# (/usr/share/tomcat9/webapps/ in my case)
-	mv ./target/ss*.war /usr/share/tomcat9/webapps/
+	mv ./target/citizen.war /usr/share/tomcat9/webapps/
 	```
 1) Restore necessary __database__ with _Liquibase_:
 	```bash
@@ -44,8 +48,8 @@
 	# Edit the main.js file with nano or any other text processor
 	nano ./front-end/src/main.js
 	```
-	Find the line with `...'http://...'` and replace it with your address from _Tomcat_.
-	The result will be `http://localhost:8080/ss-demo1-0.0.2-SNAPSHOT` in my case.
+	Find the line with `export const backEndUrl = 'http://...'` and replace it with your address from _Tomcat_.
+	The result will be `http://localhost:8080/citizen` in my case.
 1) Install __front-end__ dependencies:
 	```bash
 	# Go to front-end directory

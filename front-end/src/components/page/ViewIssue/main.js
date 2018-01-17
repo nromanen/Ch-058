@@ -2,10 +2,11 @@ import Vue from 'vue';
 import VueMaterial from './../../../../node_modules/vue-material'
 import './../../../../node_modules/vue-material/dist/vue-material.css'
 import VueResource from 'vue-resource';
-import { VTooltip } from 'v-tooltip'
+import {VTooltip} from 'v-tooltip'
 import openChat from '@/components/OpenChat/OpenChat.vue'
 import {getLocalUser} from "../../../router";
 import {getCurrentLang, switchLang} from "../../../i18n";
+import {getServerAddress} from "../../../main";
 
 Vue.directive('my-tooltip', VTooltip);
 Vue.use(VueMaterial);
@@ -177,6 +178,6 @@ export default {
     if (getLocalUser()) {
       this.userId = getLocalUser().id;
     }
-    this.imageSrc = 'http://localhost:8080/citizen/issues/images/' + this.$route.params.id;
+    this.imageSrc = getServerAddress() + '/issues/images/' + this.$route.params.id;
   }
 }

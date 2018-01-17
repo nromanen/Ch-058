@@ -2,11 +2,19 @@ import Vue from 'vue';
 import {email, maxLength, minLength, required, sameAs} from "vuelidate/lib/validators/";
 import {validationMixin} from "vuelidate";
 import {
-  LoginValidator, MAX_LOGIN_LENGTH, MAX_NAME_LENGTH, MAX_SURNAME_LENGTH, MIN_LOGIN_LENGTH, MIN_NAME_LENGTH,
-  MIN_SURNAME_LENGTH, NameValidator
+  LoginValidator,
+  MAX_LOGIN_LENGTH,
+  MAX_NAME_LENGTH,
+  MAX_SURNAME_LENGTH,
+  MIN_LOGIN_LENGTH,
+  MIN_NAME_LENGTH,
+  MIN_SURNAME_LENGTH,
+  NameValidator
 } from "../../../_validator/";
 import {getLocalUser, resetLocalUser} from "../../../router/";
 import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
+import {PasswordValidator} from "../../../_validator";
+import {getCurrentLang, switchLang} from "../../../i18n";
 
 export default {
   name: "SocialSuccessPage",
@@ -15,13 +23,14 @@ export default {
     form: {
       login: null,
       password: null,
+      confirmPassword: null,
       email: null,
       name: null,
       surname: null,
     },
     sending: false,
     errors: null,
-    socialNetwork: null,
+    socialNetwork: null
   }),
   validations: {
     form: {
@@ -33,7 +42,12 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(8)
+        minLength: minLength(8),
+        PasswordValidator
+      },
+      confirmPassword: {
+        required,
+        sameAs: sameAs('password')
       },
       email: {
         required,
@@ -65,24 +79,24 @@ export default {
           localStorage.setItem('user', JSON.stringify(json.data[0]));
 
           this.$http.get('users/get/' + json.data[0].id)
-            .then(response => {
-              let json = response.body;
+            .then(
+              response => {
+                let json = response.body;
 
-              if (!json.data[0].login.match(/.*(facebook)|(google).*/)) {
-                Vue.router.push('/');
-              }
+                if (!json.data[0].login.match(/.*(facebook)|(google).*/)) {
+                  Vue.router.push('/');
+                }
 
-              this.form.email = json.data[0].email;
+                this.form.email = json.data[0].email;
 
-              if (!json.data[0].name.match(/(Name)/)) {
-                this.form.name = json.data[0].name;
-              }
+                if (!json.data[0].name.match(/(Name)/)) {
+                  this.form.name = json.data[0].name;
+                }
 
-              if (!json.data[0].surname.match(/(Surname)/)) {
-                this.form.surname = json.data[0].surname;
-              }
-            });
-
+                if (!json.data[0].surname.match(/(Surname)/)) {
+                  this.form.surname = json.data[0].surname;
+                }
+              });
         } else if (json.errors.length > 0) {
           this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
         } else {
@@ -169,16 +183,23 @@ export default {
       );
     },
     validateCredentials() {
+      // this.$v.$touch();
+
+      // if (!this.$v.$invalid) {
       this.register();
+      // }
     },
     cancel() {
-      this.$http.post('auth/logout').then(
-        response => {
-
-          resetLocalUser();
-          this.$router.push('/');
-        }
-      )
+      this.$http.post('auth/logout').then(() => {
+        resetLocalUser();
+        this.$router.push('/');
+      });
+    },
+    switchLang(lang) {
+      switchLang(lang);
+    },
+    getLangClass(lang) {
+      return getCurrentLang() === lang ? 'md-primary' : '';
     }
   }
 }
