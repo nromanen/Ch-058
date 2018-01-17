@@ -32,11 +32,8 @@ import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 @Service
 @Transactional
 public class IssueServiceImpl implements IIssueService {
-	public static final int OPENED_TYPE = 1;
+	private static final int OPENED_TYPE = 1;
 	private static final String CATALINA_HOME_NAME = "catalina.home";
-
-	@Value("${imageStorage}")
-	private String imageStorage;
 
 	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
 
@@ -85,15 +82,15 @@ public class IssueServiceImpl implements IIssueService {
     }
 
     private Image parseImage(MultipartFile file) {
-	    byte[] fileBytes = {};
+	    byte[] blob = {};
 
 	    try {
-		    fileBytes = file.getBytes();
+		    blob = file.getBytes();
 	    } catch (IOException e) {
 		    logger.info("Error while file encoding", e);
 	    }
 
-	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(fileBytes));
+	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(blob));
 
 	    if(duplicateImage == null) {
 		    Image image = new Image();
@@ -103,18 +100,18 @@ public class IssueServiceImpl implements IIssueService {
 		    String uniqueFile = uniqueFileName + "." + extension;
 
 		    image.setSrc(uniqueFile);
-		    image.setHash(DigestUtils.md5Hex(fileBytes));
+		    image.setHash(DigestUtils.md5Hex(blob));
 
 		    File newFile = new File(System.getProperty(CATALINA_HOME_NAME) + File.separator + uniqueFile);
 		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
-			    stream.write(fileBytes);
+			    stream.write(blob);
 		    } catch (IOException e) {
 			    logger.info("Error while file saving", e);
 		    }
 		    return image;
-	    } else {
-		    return duplicateImage;
 	    }
+	        return duplicateImage;
+
     }
 
 	@Override

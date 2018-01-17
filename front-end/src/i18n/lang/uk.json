@@ -3,14 +3,18 @@
     "login": "Вхід",
     "logout": "Вихід",
     "choose_lang": "Обрати мову",
-    "cancel": "Відміна",
+    "cancel": "Відмінити",
     "log_in": "Увійти",
     "sign_up": "Зареєструватися",
     "request_recovery_token": "Отримати відновлювальний токен",
     "recover": "Відновити",
     "back": "Назад",
     "snackbar_redirect": "Увійти",
-    "create_issue": "Створити"
+    "create_issue": "Створити",
+    "openChat": "Відкрити чат",
+    "answerNotification": "Відповісти",
+    "closeNotification": "звертався до вас",
+    "sendMessage": "Надіслати"
   },
   "label": {
     "sign_in": "Увійти",
@@ -40,7 +44,13 @@
     "add_dislike": "Мені не подобається",
     "cancel_like": "Більше не подобається",
     "cancel_dislike": "Відмінити не подобається",
-    "issues_modal_title": "Всі питання"
+    "issues_modal_title": "Всі питання",
+    "projectTitle": "Гео громадянин",
+    "waitHint": "Будь ласка, зачекайте хвилину для відповіді від адміністратора",
+    "noAdminAnswer": "Вибачте, але наразі немає адміністраторів. Будь ласка, зв'яжіться пізніше",
+    "notifications": "Сповіщення:",
+    "chatRoom": "Чат кімната",
+    "messageHint": "Напишіть повідомлення"
   },
   "error": {
     "required": "Обов'язково",
@@ -68,7 +78,7 @@
   "message": {
     "successful_register": "Ви успішно зареєструвалися!",
     "successful_recovering": "Ви успішно змінили Ваш пароль!",
-    "snackbar": "Увійдіть, щоб створити питання",
+    "snackbar": "Авторизуйтесь, щоб створити питання",
     "user_location": "Ваше місцезнаходження",
     "image_size": "Розмір зображення не повинен перевищювати 5 Мб",
     "geolocation": "Геолокація вимкнена для цієї сторінки",
