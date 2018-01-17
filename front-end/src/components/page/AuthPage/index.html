@@ -2,6 +2,7 @@
   <md-tabs md-sync-route md-dynamic-height>
     <md-tab id="tab-login" :md-label="$t('label.sign_in')" to="/auth/login">
       <sign-in-form ref="signInForm"></sign-in-form>
+      <sign-in-social></sign-in-social>
     </md-tab>
 
     <md-tab id="tab-sign-up" :md-label="$t('label.sign_up')" to="/auth/signUp">
