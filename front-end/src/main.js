@@ -9,7 +9,7 @@ import Vuelidate from 'vuelidate'
 import 'bootstrap-social/bootstrap-social.css'
 import 'bootstrap-social/assets/css/font-awesome.css'
 import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/black-green-light.css'
+import 'vue-material/dist/theme/default-dark.css'
 import App from './App'
 import SignInSocial from '@/components/form/SignInSocial/SignInSocial'
 import SignInForm from '@/components/form/SignInForm/SignInForm'
@@ -17,6 +17,9 @@ import SignUpForm from '@/components/form/SignUpForm/SignUpForm'
 import PassRecoveryForm from '@/components/form/PassRecoveryForm/PassRecoveryForm'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
 import GoogleMap from '@/components/map/GoogleMap'
+import AdminUserActionsDialog from '@/components/dialog/AdminUserActionsDialog/AdminUserActionsDialog'
+import AdminIssueActionsDialog from '@/components/dialog/AdminIssueActionsDialog/AdminIssueActionsDialog'
+import AdminChatNotification from '@/components/AdminChatNotification/AdminChatNotification'
 import Header from '@/components/header/Header'
 import router from './router'
 import i18n from './i18n'
@@ -25,7 +28,7 @@ Vue.use(VueResource)
 Vue.use(VueCookie)
 Vue.use(Vuelidate)
 Vue.use(VueMaterial)
-Vue.http.options.root = 'https://immense-scrubland-81496.herokuapp.com'
+Vue.http.options.root = 'http://localhost:8080/'
 Vue.http.headers.common['Accept'] = 'application/json;charset=UTF-8'
 Vue.http.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
 Vue.http.headers.common['Access-Control-Allow-Credentials'] = 'true'
@@ -37,6 +40,9 @@ Vue.component('password-recovery-form', PassRecoveryForm)
 Vue.component('auth-page', AuthPage)
 Vue.component('map-page', GoogleMap)
 Vue.component('header-page', Header)
+Vue.component('admin-user-actions-dialog', AdminUserActionsDialog)
+Vue.component('admin-issue-actions-dialog', AdminIssueActionsDialog)
+Vue.component('admin-chat-notifications', AdminChatNotification)
 
 /* eslint-disable no-new */
 new Vue({
