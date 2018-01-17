@@ -81,12 +81,15 @@ export default {
     var userId = this.$route.params.userId;
     this.issueId = issueId;
     this.userId = userId;
-    console.log('started');
+
     this.adminId = getLocalUser().id;
+
     let _this = this;
 
     _this.getAllMessages();
 
+    var socket = new SockJS("http://localhost:8080/chat");
+    console.log('prrrrr');
     var socket = new SockJS(getServerAddress() + "/chat");
     var stompClient = Stomp.over(socket);
     this.stompClient = stompClient;

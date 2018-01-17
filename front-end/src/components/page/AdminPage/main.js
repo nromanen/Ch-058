@@ -1,19 +1,15 @@
-import Vue from 'vue';
-import {getLocalUser, resetLocalUser} from "../../router";
-import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
-import {getCurrentLang, switchLang} from "../../i18n";
+import {getLocalUser, resetLocalUser} from "../../../router";
+import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
+import Vue from "vue";
+import {getCurrentLang, switchLang} from "../../../i18n";
 
 export default {
-  name: "index-page",
+  name: 'AdminIndexPage',
   data: () => ({
     menuVisible: false,
-    authDialog: false,
-    userEmail: null,
-    snackBarText: null,
-    showBack: false
+    userEmail: null
   }),
-  created: function () {
-    this.showBack = this.$parent.$parent.$parent.$parent.showBack;
+  created: function() {
     if (getLocalUser()) {
       Vue.http.get('auth/getCurrentSession')
         .then(
@@ -97,15 +93,8 @@ export default {
         }
       )
     },
-    hideSnackBar() {
-      this.snackBarText = null;
-    },
     getLangClass(lang) {
       return getCurrentLang() === lang ? 'md-primary' : '';
     },
-    backToMap() {
-      localStorage.setItem('redirectFromIssue', true);
-      this.$router.push('/');
-    }
   }
 }
