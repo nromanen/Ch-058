@@ -165,7 +165,6 @@ public class JsonError {
 				case USER_ALREADY_EXISTS:
 				case BAD_CREDENTIALS:
 					this.field = field;
-
 					break;
 			}
 			return this;

@@ -8,6 +8,10 @@
     "sign_up": "Sign up",
     "request_recovery_token": "Request recovery token",
     "recover": "Recover",
+    "openChat": "Open chat",
+    "answerNotification": "Answer to",
+    "closeNotification": "wanted to chat",
+    "sendMessage": "Send",
     "snackbar_redirect": "Login",
     "create_issue": "Create",
     "back": "Back",
@@ -72,6 +76,13 @@
     "auth_block": "Auth block",
     "management": "Management",
     "admin_restriction": "Admin restrictions"
+    "issues_modal_title": "All issues",
+    "projectTitle": "Geo citizen",
+    "waitHint": "Please wait for a minute for an answer from admin",
+    "noAdminAnswer": "Sorry, but there are no administrators currently available. Please contact later",
+    "notifications": "Notifications:",
+    "chatRoom": "Chat room",
+    "messageHint": "Write a message"
   },
   "error": {
     "required": "Required",
@@ -109,5 +120,6 @@
     "BANNED": "Banned",
     "USER": "User",
     "ADMIN": "Admin"
+    "successful_recovering": "You have been successfully changed your password!"
   }
 }

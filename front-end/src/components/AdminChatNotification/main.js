@@ -2,6 +2,9 @@ import {getLocalUser} from "../../router";
 import 'stompjs/lib/stomp.js';
 import * as SockJS from 'sockjs-client/dist/sockjs.min.js'
 import chatPage from '@/components/page/ChatPage/ChatPage.vue'
+import {getCurrentLang, switchLang} from "../../i18n";
+import {getServerAddress} from "../../main";
+
 export default {
   name: 'AdminChatNotification',
   data: function(){
@@ -15,15 +18,14 @@ export default {
   },
   methods: {
     answer: function (userId, issueId) {
-      this.stompClient.send("/app/connect", {}, JSON.stringify({text: 'Accept', login: "", issueId: issueId, userId: userId, waiting:true}));
-      window.location.href = "http://localhost:8081/#/adminChatPage/" + issueId + "/" + userId;
+      this.stompClient.send("/app/connect/accept", {},
+        JSON.stringify({text: 'Accept', login: "", issueId: issueId, userId: userId, waiting: true}));
+      window.location.href = "/#/adminChatPage/" + issueId + "/" + userId;
     },
     markAsReaded: function (userId, issueId) {
       var _this = this;
-      this.$http.delete('http://localhost:8080/notification/' + issueId + '/' + userId,
-        JSON.stringify({text: 'Delete', login: "", issueId: issueId, userId: userId, waiting: false})).then( data => {
-          console.log(data.body);
-      });
+      _this.stompClient.send('/app/connect/delete', {},
+        JSON.stringify({text: 'Delete', login: '', issueId: issueId, userId: userId, waiting: false}));
       var index = -1;
       for(var i = 0; i < _this.users.length; i++){
         if(_this.users[i].userId == userId && _this.users[i].issueId == issueId){
@@ -32,6 +34,12 @@ export default {
         }
       }
       _this.users.splice(index, 1);
+    },
+    switchLang(lang) {
+      switchLang(lang);
+    },
+    getLangClass(lang) {
+      return getCurrentLang() === lang ? 'md-primary' : '';
     }
   },
   created: function () {
@@ -39,16 +47,16 @@ export default {
     this.login = getLocalUser().login;
     let _this = this;
 
-    var socket = new SockJS("http://localhost:8080/chat");
+    var socket = new SockJS(getServerAddress() + "/chat");
     var stompClient = Stomp.over(socket);
     this.stompClient = stompClient;
 
     stompClient.connect({}, function (frame) {
       console.log('Connected: ' + frame);
       stompClient.subscribe('/checkTopic/broadcast', function (input) {
-        console.log(input.body);
-        var user = JSON.parse(input.body);
-        if(user.text == "Accept"){
+        var user = JSON.parse(input.body).data[0];
+        console.log(user);
+        if(user.text == "Accept" || user.text == "Cancel notification"){
           var index = -1;
           for(var i = 0; i < _this.users.length; i++){
             if(_this.users[i].userId == user.userId && _this.users[i].issueId == user.issueId){
@@ -72,16 +80,21 @@ export default {
           }
           _this.users[i].waiting = false;
         }
+        else if(user.text == "Delete"){
+          console.log('deleted');
+        }
         else {
-          var user = JSON.parse(input.body);
+          var user = JSON.parse(input.body).data[0];
+          console.log(user);
           _this.users.push(user);
           console.log('received notification !');
         }
       });
     })
 
-    this.$http.get('http://localhost:8080/notification/all').then( data => {
-      var charRequestArray = data.body;
+    this.$http.get('notification/all').then( data => {
+      console.log(data.body.data);
+      var charRequestArray = data.body.data;
       for(var i = 0; i < charRequestArray.length; i++) {
         var user = charRequestArray[i];
         this.users.push(user);

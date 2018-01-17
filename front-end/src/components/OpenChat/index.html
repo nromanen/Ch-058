@@ -1,10 +1,11 @@
 <div class="center" v-if="!waiting">
-  <md-button @click="openChat" id="button">Open chat</md-button>
+  <md-button @click="openChat" id="button"><md-icon>chat</md-icon> {{ $t('button.openChat') }}</md-button>
 </div>
 <div class="center" v-else-if="waiting && !noAdmins">
-  <p id="hint">Please wait for a minute for an answer from admin</p>
+  <p id="hint">{{ $t('label.waitHint') }}</p>
   <div id="loader"></div>
+  <md-button @click="cancelWaiting" id="button">{{ $t('button.cancel') }}</md-button>
 </div>
 <div class="center" v-else>
-  <p>Sorry, but there are no administrators currently available. Please contact later</p>
+  <p>{{ $t('label.noAdminAnswer') }}</p>
 </div>
