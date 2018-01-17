@@ -14,7 +14,7 @@
     "openChat": "Відкрити чат",
     "answerNotification": "Відповісти",
     "closeNotification": "звертався до вас",
-    "sendMessage": "Надіслати"
+    "sendMessage": "Надіслати",
     "create_issue": "Створити",
     "close": "Закрити",
     "open": "Відкрити",
@@ -61,7 +61,7 @@
     "noAdminAnswer": "Вибачте, але наразі немає адміністраторів. Будь ласка, зв'яжіться пізніше",
     "notifications": "Сповіщення:",
     "chatRoom": "Чат кімната",
-    "messageHint": "Напишіть повідомлення"
+    "messageHint": "Напишіть повідомлення",
     "issues_modal_title": "Всі питання",
     "admin_page": "Сторінка адміністрації",
     "navigation": "Навігація",

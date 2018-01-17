@@ -75,7 +75,7 @@
     "type": "Type",
     "auth_block": "Auth block",
     "management": "Management",
-    "admin_restriction": "Admin restrictions"
+    "admin_restriction": "Admin restrictions",
     "issues_modal_title": "All issues",
     "projectTitle": "Geo citizen",
     "waitHint": "Please wait for a minute for an answer from admin",
@@ -119,7 +119,7 @@
   "type": {
     "BANNED": "Banned",
     "USER": "User",
-    "ADMIN": "Admin"
+    "ADMIN": "Admin",
     "successful_recovering": "You have been successfully changed your password!"
   }
 }
