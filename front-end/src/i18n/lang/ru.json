@@ -26,7 +26,8 @@
     "closeNotification": "обращался к вам",
     "sendMessage": "Отправить",
     "sign_in_fb": "Войти с помощью Facebook",
-    "sign_in_gp": "Войти с помощью Google+"
+    "sign_in_gp": "Войти с помощью Google+",
+    "home": "Главная"
   },
   "label": {
     "sign_in": "Войти",
@@ -54,7 +55,7 @@
     "projectTitle": "Гео гражданин",
     "waitHint": "Пожалуйста, подождите минуту для ответа от администратора",
     "noAdminAnswer": "Извините, но сейчас нет доступных администраторов. Пожалуйста, свяжитесь позже",
-    "notifications": "Уведомления:",
+    "notifications": "Уведомления",
     "chatRoom": "Чат комната",
     "messageHint": "Напишите сообщение",
     "add_vote_fail": "Пожалуйста, войдите в аккаунт, чтобы поставить отметку.",
@@ -63,7 +64,7 @@
     "cancel_like": "Больше не нравиться",
     "cancel_dislike": "Отменить не нравится",
     "issues_modal_title": "Все вопросы",
-    "admin_page": "Страница администрации",
+    "admin_page": "Администрирование",
     "navigation": "Навигация",
     "users_management": "Управление пользователями",
     "issues_management": "Управление вопросами",
@@ -83,7 +84,9 @@
     "auth_block": "Блок авторизации",
     "management": "Управление",
     "admin_restriction": "Права администратора",
-    "finish_registration": "Завершите регистрацию"
+    "finish_registration": "Завершите регистрацию",
+    "other": "Другое",
+    "messages": "Сообщения"
   },
   "error": {
     "required": "Обязательно",

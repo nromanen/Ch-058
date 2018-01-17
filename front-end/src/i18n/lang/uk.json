@@ -26,7 +26,8 @@
     "ban": "Забанити",
     "unban": "Розбанити",
     "sign_in_fb": "Увійти за допомогою Facebook",
-    "sign_in_gp": "Увійти за допомогою Google+"
+    "sign_in_gp": "Увійти за допомогою Google+",
+    "home": "Головна"
   },
   "label": {
     "sign_in": "Увійти",
@@ -60,10 +61,10 @@
     "projectTitle": "Гео громадянин",
     "waitHint": "Будь ласка, зачекайте хвилину для відповіді від адміністратора",
     "noAdminAnswer": "Вибачте, але наразі немає адміністраторів. Будь ласка, зв'яжіться пізніше",
-    "notifications": "Сповіщення:",
+    "notifications": "Сповіщення",
     "chatRoom": "Чат кімната",
     "messageHint": "Напишіть повідомлення",
-    "admin_page": "Сторінка адміністрації",
+    "admin_page": "Адміністрування",
     "navigation": "Навігація",
     "users_management": "Керування користувачами",
     "issues_management": "Керування питаннями",
@@ -83,7 +84,9 @@
     "auth_block": "Блок авторизації",
     "management": "Керування",
     "admin_restriction": "Права адміністратора",
-    "finish_registration": "Завершіть реєстрацію"
+    "finish_registration": "Завершіть реєстрацію",
+    "other": "Інше",
+    "messages": "Повідомлення"
   },
   "error": {
     "required": "Обов'язково",

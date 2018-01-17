@@ -26,7 +26,8 @@
     "ban": "Ban",
     "unban": "Unban",
     "sign_in_fb": "Sign in with Facebook",
-    "sign_in_gp": "Sign in with Google+"
+    "sign_in_gp": "Sign in with Google+",
+    "home": "Home"
   },
   "label": {
     "sign_in": "Sign in",
@@ -83,7 +84,9 @@
     "noAdminAnswer": "Sorry, but there are no administrators currently available. Please contact later",
     "chatRoom": "Chat room",
     "messageHint": "Write a message",
-    "finish_registration": "Finish registration"
+    "finish_registration": "Finish registration",
+    "other": "Other",
+    "messages": "Messages"
   },
   "error": {
     "required": "Required",
