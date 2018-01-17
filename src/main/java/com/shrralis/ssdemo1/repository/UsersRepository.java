@@ -13,10 +13,32 @@
 package com.shrralis.ssdemo1.repository;
 
 import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
+@Repository
 public interface UsersRepository extends JpaRepository<User, Integer> {
-	User findByLogin(String login);
+	Optional<User> findByEmail(String email);
 
-//	User getByLogin(String login);
+	Optional<User> findByLogin(String login);
+
+	User getByEmail(String email);
+
+	User getByLogin(String login);
+
+	Optional<User> findById(int id);
+
+	List<User> findByLoginOrEmailContainingAllIgnoreCase(String login, String email);
+
+	@Modifying
+	@Query("UPDATE User u SET u.type = ?1 WHERE u.id = ?2")
+	void setStatus(User.Type userType, Integer id);
+
+	List<User> findByType(User.Type type);
 }

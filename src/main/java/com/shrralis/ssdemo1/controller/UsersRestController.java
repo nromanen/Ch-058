@@ -12,33 +12,45 @@
 
 package com.shrralis.ssdemo1.controller;
 
-import com.shrralis.ssdemo1.entity.User;
-import com.shrralis.ssdemo1.service.UserService;
+import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.LocaleResolver;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UsersRestController {
-    @Autowired
-    private UserService service;
 
-    @RequestMapping(
-			value = "test",
-			method = RequestMethod.GET,
-            headers = "Accept=application/json",
-            produces = "application/json")
-	public JsonResponse sayHelloWorld() {
-		return new JsonResponse("Hello world!");
+	private final IUserService service;
+	private final LocaleResolver localeResolver;
+
+	@Autowired
+	public UsersRestController(IUserService service, LocaleResolver localeResolver) {
+		this.service = service;
+		this.localeResolver = localeResolver;
 	}
 
-	@RequestMapping("getAll")
-	public List<User> getAllUsers() {
-        return service.getAll();
-    }
+	@Secured("ROLE_ADMIN")
+	@RequestMapping("/getAll")
+	public JsonResponse getAllUsers() {
+		return new JsonResponse(service.getAllUsers());
+	}
+
+	@Secured({ "ROLE_USER", "ROLE_ADMIN" })
+	@RequestMapping("/get/{id}")
+	public JsonResponse getUserInfo(@PathVariable int id) {
+		return new JsonResponse(service.getUser(id));
+	}
+
+	@GetMapping("/currentLang")
+	public JsonResponse currentLang(HttpServletRequest request) {
+		return new JsonResponse(localeResolver.resolveLocale(request));
+	}
 }

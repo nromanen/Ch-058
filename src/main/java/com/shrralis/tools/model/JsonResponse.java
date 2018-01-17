@@ -12,24 +12,40 @@
 
 package com.shrralis.tools.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.context.MessageSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0 Created 12/20/17 at 1:10 AM
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JsonResponse {
-	public static final int OK = 0;
 
-	private Integer result;
-	private JsonError error;
-	private ArrayList<Object> data;
+	private List<JsonError> errors;
+	private List<Object> data;
+	private Integer count = 0;
+
+	private JsonResponse() {
+	}
 
 	public JsonResponse(Object data) {
+		setData(data);
+	}
+
+	public JsonResponse(JsonError.Error error) {
+		addError(error);
+	}
+
+	public JsonResponse(JsonError.Error error, Locale locale, MessageSource messageSource) {
+		addError(error, locale, messageSource);
+	}
+
+	private void setData(Object data) {
 		this.data = new ArrayList<>();
 
 		if (data instanceof Collection) {
@@ -38,26 +54,116 @@ public class JsonResponse {
 			this.data.add(data);
 		}
 
-		result = OK;
+		count = this.data.size();
 	}
 
-	public JsonResponse(int result) {
-		this.result = result;
+	private void addError(JsonError.Error error, Locale locale, MessageSource messageSource) {
+		if (errors == null) {
+			errors = new ArrayList<>();
+		}
+		this.errors.add(new JsonError(error).translateErrmsg(locale, messageSource));
+
+		count = null;
 	}
 
-	public JsonResponse(JsonError.Error error) {
-		this.error = new JsonError(error);
+	public JsonResponse(JsonError jsonError) {
+		errors = new ArrayList<>();
+
+		errors.add(jsonError);
+
+		count = null;
 	}
 
-	public Integer getResult() {
-		return result;
+	public JsonResponse(List<JsonError> errors) {
+		setErrors(errors);
 	}
 
-	public JsonError getError() {
-		return error;
+	private void addError(JsonError.Error error) {
+		if (errors == null) {
+			errors = new ArrayList<>();
+		}
+		this.errors.add(new JsonError(error));
+
+		count = null;
 	}
 
-	public ArrayList<Object> getData() {
+	public JsonResponse(List<JsonError> errors, Locale locale, MessageSource messageSource) {
+		setErrors(errors, locale, messageSource);
+	}
+
+	public List<JsonError> getErrors() {
+		return errors;
+	}
+
+	private void setErrors(List<JsonError> errors) {
+		this.errors = new ArrayList<>();
+		count = null;
+
+		this.errors.addAll(errors);
+	}
+
+	private void setErrors(List<JsonError> errors, Locale locale, MessageSource messageSource) {
+		this.errors = new ArrayList<>();
+		count = null;
+
+		this.errors.addAll(errors.stream().map(jErr -> jErr.translateErrmsg(locale, messageSource))
+				.collect(Collectors.toList()));
+	}
+
+	public List<Object> getData() {
 		return data;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
+	@Override
+	public String toString() {
+		return "JsonResponse{" +
+				"errors=" + errors +
+				", data=" + data +
+				", count=" + count +
+				'}';
+	}
+
+	public static final class Builder {
+		private JsonResponse jsonResponse;
+
+		private Builder() {
+			jsonResponse = new JsonResponse();
+		}
+
+		public static Builder aJsonResponse() {
+			return new Builder();
+		}
+
+		public Builder setData(Object data) {
+			jsonResponse.setData(data);
+			return this;
+		}
+
+		public Builder withError(JsonError.Error error) {
+			jsonResponse.addError(error);
+			return this;
+		}
+
+		public Builder setErrors(List<JsonError> errors) {
+			jsonResponse.setErrors(errors);
+			return this;
+		}
+
+		public Builder setCount(Integer count) {
+			jsonResponse.setCount(count);
+			return this;
+		}
+
+		public JsonResponse build() {
+			return jsonResponse;
+		}
 	}
 }
