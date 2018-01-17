@@ -10,7 +10,11 @@
     "recover": "Восстановить",
     "back": "Назад",
     "snackbar_redirect": "Войти",
-    "create_issue": "Создать"
+    "create_issue": "Создать",
+    "openChat": "Открыть чат",
+    "answerNotification": "Ответить ",
+    "closeNotification": "обращался к вам",
+    "sendMessage": "Отправить"
   },
   "label": {
     "sign_in": "Войти",
@@ -35,6 +39,12 @@
     "input_location": "Введите адрес",
     "establishments": "Заведения",
     "addresses": "Адреса",
+    "projectTitle": "Гео гражданин",
+    "waitHint": "Пожалуйста, подождите минуту для ответа от администратора",
+    "noAdminAnswer": "Извините, но сейчас нет доступных администраторов. Пожалуйста, свяжитесь позже",
+    "notifications": "Уведомления:",
+    "chatRoom": "Чат комната",
+    "messageHint": "Напишите сообщение",
     "add_vote_fail": "Пожалуйста, войдите в аккаунт, чтобы поставить отметку.",
     "add_like": "Мне нравится ",
     "add_dislike": "Мне не нравиться",

@@ -1,6 +1,7 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
 import com.shrralis.ssdemo1.entity.Notification;
+import com.shrralis.ssdemo1.exception.AccessDeniedException;
 
 import java.util.List;
 
