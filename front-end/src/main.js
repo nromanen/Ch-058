@@ -14,6 +14,8 @@ import PassRecoveryForm from '@/components/form/PassRecoveryForm/PassRecoveryFor
 import AuthPage from '@/components/page/AuthPage/AuthPage'
 import GoogleMap from '@/components/map/GoogleMap'
 import AdminUserActionsDialog from '@/components/dialog/AdminUserActionsDialog/AdminUserActionsDialog'
+import AdminIssueActionsDialog from '@/components/dialog/AdminIssueActionsDialog/AdminIssueActionsDialog'
+import AdminChatNotification from '@/components/AdminChatNotification/AdminChatNotification'
 import Header from '@/components/header/Header'
 import router from './router'
 import i18n from './i18n'
@@ -34,6 +36,8 @@ Vue.component('auth-page', AuthPage)
 Vue.component('map-page', GoogleMap)
 Vue.component('header-page', Header)
 Vue.component('admin-user-actions-dialog', AdminUserActionsDialog)
+Vue.component('admin-issue-actions-dialog', AdminIssueActionsDialog)
+Vue.component('admin-chat-notifications', AdminChatNotification)
 
 /* eslint-disable no-new */
 new Vue({

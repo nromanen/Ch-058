@@ -103,10 +103,9 @@ export default {
     getLangClass(lang) {
       return getCurrentLang() === lang ? 'md-primary' : '';
     },
-
     backToMap() {
       localStorage.setItem('redirectFromIssue', true);
       this.$router.push('/');
-    },
+    }
   }
 }

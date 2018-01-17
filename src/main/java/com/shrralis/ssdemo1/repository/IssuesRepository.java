@@ -36,7 +36,7 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 
     List<Issue> findByAuthor_Id(Integer id);
 
-    List<Issue> findAll();
+//    List<Issue> findAll();
 
     void deleteById(Integer id);
 

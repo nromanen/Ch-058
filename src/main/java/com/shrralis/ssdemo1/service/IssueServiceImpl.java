@@ -5,6 +5,8 @@ import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
 import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
+import com.shrralis.ssdemo1.exception.EntityNotExistException;
 import com.shrralis.ssdemo1.repository.ImagesRepository;
 import com.shrralis.ssdemo1.repository.IssuesRepository;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
@@ -123,35 +125,23 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
 	@Override
-	public Issue findById(Integer id) {
-		return issuesRepository.findById(id).orElseThrow(() -> new NullPointerException());
+	public Issue findById(Integer id) throws AbstractCitizenException {
+		return issuesRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
 	}
 
 	@Override
-	public List<Issue> findByTitleOrTextContainingAllIgnoreCase(String title, String text) {
-		List<Issue> res = issuesRepository.findByTitleOrTextContainingAllIgnoreCase(title, title);
-		if (res.isEmpty()) {
-			throw new NullPointerException();
-		}
-		return res;
+	public List<Issue> findTitleOrTextContaining(String title, String text) {
+		return issuesRepository.findByTitleOrTextContainingAllIgnoreCase(title, text);
 	}
 
 	@Override
-	public List<Issue> findByAuthor_Id(Integer id) {
-		List<Issue> res = issuesRepository.findByAuthor_Id(id);
-		if (res.isEmpty()) {
-			throw new NullPointerException();
-		}
-		return res;
+	public List<Issue> findAuthorId(Integer id) {
+		return issuesRepository.findByAuthor_Id(id);
 	}
 
 	@Override
 	public List<Issue> findAll() {
-		List<Issue> res = issuesRepository.findAll();
-		if (res.isEmpty()) {
-			throw new NullPointerException();
-		}
-		return res;
+		return issuesRepository.findAll();
 	}
 
 	@Override
@@ -161,15 +151,15 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	@Transactional
-	public void setStatus(Boolean closed, Integer id) {
-		issuesRepository.setStatus(closed, id);
+	public void setStatus(Boolean flag, Integer id) {
+		issuesRepository.setStatus(flag, id);
 	}
 
-	public List<Issue> findByClosedTrue() {
+	public List<Issue> findClosedTrue() {
 		return issuesRepository.findByClosedTrue();
 	}
 
-	public List<Issue> findByClosedFalse() {
+	public List<Issue> findClosedFalse() {
 		return issuesRepository.findByClosedFalse();
 	}
 

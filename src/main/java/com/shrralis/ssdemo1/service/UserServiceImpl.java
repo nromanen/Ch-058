@@ -13,6 +13,8 @@
 package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
+import com.shrralis.ssdemo1.exception.EntityNotExistException;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,32 +44,25 @@ public class UserServiceImpl implements IUserService {
 		return repository.getOne(id);
 	}
 
+
 	@Override
-	public User findById(Integer id) {
-		return repository.findById(id).orElseThrow(() -> new NullPointerException());
+	public User findById(Integer id) throws AbstractCitizenException {
+		return repository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.USER));
 	}
 
 	@Override
-	public User findByLogin(String login) {
-		return repository.findByLogin(login).orElseThrow(() -> new NullPointerException());
+	public User findByLogin(String login) throws AbstractCitizenException {
+		return repository.findByLogin(login).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.USER));
 	}
 
 	@Override
-	public List<User> findByLoginOrEmailContainingAllIgnoreCase(String login, String email) {
-		List<User> res = repository.findByLoginOrEmailContainingAllIgnoreCase(login, email);
-		if (res.isEmpty()) {
-			throw new NullPointerException();
-		}
-		return res;
+	public List<User> findByLoginOrEmailContaining(String login, String email) {
+		return repository.findByLoginOrEmailContainingAllIgnoreCase(login, email);
 	}
 
 	@Override
 	public List<User> findAll() {
-		List<User> res = repository.findAll();
-		if (res.isEmpty()) {
-			throw new NullPointerException();
-		}
-		return res;
+		return repository.findAll();
 	}
 
 	@Override

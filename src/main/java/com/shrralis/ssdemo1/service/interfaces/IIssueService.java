@@ -1,13 +1,12 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
-import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 public interface IIssueService {
 
@@ -17,21 +16,21 @@ public interface IIssueService {
 
     List<Issue> getAllIssueByMapMarker(int mapMarkerId);
 
-    Issue findById(Integer id);
+    Issue findById(Integer id) throws AbstractCitizenException;
 
-    List<Issue> findByTitleOrTextContainingAllIgnoreCase(String title, String text);
+    List<Issue> findTitleOrTextContaining(String title, String text);
 
-    List<Issue> findByAuthor_Id(Integer id);
+    List<Issue> findAuthorId(Integer id);
 
     List<Issue> findAll();
 
     void deleteById(Integer id);
 
-    void setStatus(Boolean closed, Integer id);
+    void setStatus(Boolean flag, Integer id);
 
-    List<Issue> findByClosedTrue();
+    List<Issue> findClosedTrue();
 
-    List<Issue> findByClosedFalse();
+    List<Issue> findClosedFalse();
 
     byte[] getImageInByte(Integer issueId) throws IOException;
 }

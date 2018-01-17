@@ -95,6 +95,7 @@ public class JsonError {
 		MISSING_FIELD(6, "Missing field"),
 		BAD_FIELD_FORMAT(7, "Bad field format"),
 		USER_NOT_EXIST(8, "User with current login doesn't exist"),
+		ISSUE_NOT_EXIST(9, "Issue with current id doesn't exist"),
 		BAD_CREDENTIALS(9, "wrong_password"),
 		RECOVERY_TOKEN_EXPIRED(10, "The recovery token is expired"),
 		IMAGE_NOT_EXIST(11, "Image doesn't exist"),

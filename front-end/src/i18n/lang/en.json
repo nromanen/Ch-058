@@ -10,7 +10,17 @@
     "recover": "Recover",
     "snackbar_redirect": "Login",
     "create_issue": "Create",
-    "back": "Back"
+    "back": "Back",
+    "close": "Close",
+    "open": "Open",
+    "close_issue": "Close issue",
+    "open_issue": "Open issue",
+    "manage": "Manage",
+    "grant": "Grant",
+    "revoke": "Revoke",
+    "view_user_issues": "View user's issues",
+    "ban": "Ban",
+    "unban": "Unban"
   },
   "label": {
     "sign_in": "Sign in",
@@ -40,7 +50,28 @@
     "input_location": "Enter a location",
     "establishments": "Establishments",
     "addresses": "Addresses",
-    "issues_modal_title": "All issues"
+    "issues_modal_title": "All issues",
+    "admin_page": "Admin page",
+    "navigation": "Navigation",
+    "users_management": "Users management",
+    "issues_management": "Issues management",
+    "notifications": "Notifications",
+    "issues": "Issues",
+    "no_issues_found": "No issues found",
+    "title": "Title",
+    "text": "Text",
+    "author": "Author",
+    "created": "Created",
+    "closed": "Closed",
+    "yes": "Yes",
+    "no": "No",
+    "search": "Search",
+    "users": "Users",
+    "no_users_found": "No users found",
+    "type": "Type",
+    "auth_block": "Auth block",
+    "management": "Management",
+    "admin_restriction": "Admin restrictions"
   },
   "error": {
     "required": "Required",
@@ -64,7 +95,6 @@
     "desc_long": "Description cannot be longer than 2048 characters",
     "req_type": "Please, choose the type",
     "req_image": "Please, attach an image"
-
   },
   "message": {
     "successful_register": "You have been successfully registered!",
@@ -74,5 +104,10 @@
     "image_size": "Image size cannot be bigger then 5 Mb",
     "geolocation": "Geolocation is turned off for this page",
     "new_issue": "You just created a new issue"
+  },
+  "type": {
+    "BANNED": "Banned",
+    "USER": "User",
+    "ADMIN": "Admin"
   }
 }

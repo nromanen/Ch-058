@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import router from "../../../router";
 
 const toLower = text => {
   return text.toString().toLowerCase()
@@ -9,11 +10,12 @@ const search = (issues, str) => {
     return issues.filter(issue => toLower(
       issue.title
       + issue.text
-      + issue.type
-      + issue.closed
+      + issue.author
       + issue.createdAt
+      + issue.type
     ).includes(toLower(str)))
   }
+
   return issues
 }
 
@@ -25,14 +27,16 @@ export default {
     searched: [],
     issues: []
   }),
+  props: ['user'],
   created: function() {
-    Vue.http.get('issues/getAll')
+    Vue.http.get('issues/')
       .then(response => {
         let json = response.body;
 
         if (!json.errors) {
           this.issues = json.data;
           this.searched = this.issues;
+          this.searchString = this.$route.params.user;
         } else if (json.errors.length) {
           // TODO: show error in snackBar
           console.log(JSON.stringify(json.errors));
