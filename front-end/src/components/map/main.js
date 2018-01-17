@@ -129,6 +129,7 @@ export default {
 
       this.map.addListener('click', function(e) {
         if(getLocalUser()) {
+          e.stop();
           self.$http.get('auth/getCurrentSession')
             .then(response => {
                 let json = response.body;
