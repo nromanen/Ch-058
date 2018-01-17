@@ -78,6 +78,11 @@
   },
   "message": {
     "successful_register": "You have been successfully registered!",
-    "successful_recovering": "You have been successfully changed your password!"
+    "successful_recovering": "You have been successfully changed your password!",
+    "snackbar": "Please, log in to create an issue",
+    "user_location": "Your location",
+    "image_size": "Image size cannot be bigger then 5 Mb",
+    "geolocation": "Geolocation is turned off for this page",
+    "new_issue": "You just created a new issue"
   }
 }

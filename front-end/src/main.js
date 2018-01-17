@@ -21,7 +21,7 @@ Vue.use(VueResource)
 Vue.use(VueCookie)
 Vue.use(Vuelidate)
 Vue.use(VueMaterial)
-Vue.http.options.root = 'https://immense-scrubland-81496.herokuapp.com'
+Vue.http.options.root = 'http://localhost:8080'
 Vue.http.headers.common['Accept'] = 'application/json;charset=UTF-8'
 Vue.http.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
 Vue.http.headers.common['Access-Control-Allow-Credentials'] = 'true'
@@ -44,5 +44,5 @@ new Vue({
 
 // eslint-disable-next-line
 export function getServerAddress(){
-  return 'https://immense-scrubland-81496.herokuapp.com'
+  return 'http://localhost:8080'
 }

@@ -57,7 +57,7 @@ export default {
     getAllMessages: function () {
       this.$http.get('message/all/' + this.issueId + '/' + this.userId).then( data => {
         console.log(data.body);
-        this.showMessages(data.body);
+        this.showMessages(data.body.data);
       });
     },
     scrollDown: function () {

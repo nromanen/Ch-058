@@ -4,6 +4,10 @@ h1{
   text-align: center;
 }
 
+.heighWrapper{
+  height: 99%;
+}
+
 .messageBl{
   width: 60%;
   height: 30em;

@@ -28,18 +28,16 @@ public class MessageServiceImpl implements IMessageService {
     public List<FullMessage> getAllMessages() throws AccessDeniedException {
         if(AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN)) {
             return messageRepository.findAll();
-        } else {
-            throw new AccessDeniedException();
         }
+        throw new AccessDeniedException();
     }
 
     @Override
     public FullMessage getMessage(Long id) throws AccessDeniedException {
         if(AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN)) {
             return messageRepository.findOne(id);
-        } else {
-            throw new AccessDeniedException();
         }
+        throw new AccessDeniedException();
     }
 
     @Override
@@ -47,9 +45,8 @@ public class MessageServiceImpl implements IMessageService {
         if( new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
                 AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN) ) {
             return messageRepository.existsByIssueIdAndUserId(issueId, userId);
-        } else {
-            throw new AccessDeniedException();
         }
+        throw new AccessDeniedException();
     }
 
     @Override
@@ -57,8 +54,7 @@ public class MessageServiceImpl implements IMessageService {
         if( new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
                 AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN) ) {
             return messageRepository.findAllByIssueIdAndUserId(issueId, userId);
-        } else {
-            throw new AccessDeniedException();
         }
+        throw new AccessDeniedException();
     }
 }

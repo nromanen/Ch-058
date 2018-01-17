@@ -15,7 +15,8 @@ export default {
       noAdmins: false,
       dataUserId: -1,
       dataIssueId: -1,
-      timerId: -1
+      timerId: -1,
+      userType: false
     }
   },
   props: [
@@ -25,7 +26,9 @@ export default {
   methods: {
     socketConnect: function () {
       console.log('started');
-      this.login = getLocalUser().login;
+      if(getLocalUser() != null) {
+        this.login = getLocalUser().login;
+      }
       let _this = this;
       var socket = new SockJS(getServerAddress() + "/chat");
       this.socket = socket;
@@ -92,6 +95,12 @@ export default {
   },
   created: function () {
     let _this = this;
+    if(getLocalUser() != null) {
+      console.log(getLocalUser().type);
+      if (getLocalUser().type == 'USER') {
+        _this.userType = true;
+      }
+    }
     _this.socketConnect();
   }
 }
