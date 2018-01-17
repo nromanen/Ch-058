@@ -24,6 +24,7 @@
     <description>Demo 1 project for Soft Serve</description>
 
     <properties>
+        <project.fileName>citizen</project.fileName>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	    <java.version>8</java.version>
@@ -442,6 +443,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.fileName}</finalName>
         <plugins>
 	        <plugin>
 		        <groupId>org.apache.maven.plugins</groupId>
