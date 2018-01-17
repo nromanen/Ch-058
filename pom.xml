@@ -229,7 +229,13 @@
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-facebook</artifactId>
-            <version>2.0.3.RELEASE</version>
+            <version>3.0.0.M3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-google</artifactId>
+            <version>1.0.0.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -502,6 +508,11 @@
     </build>
 
     <repositories>
+        <repository>
+            <id>org.springframework.maven.milestone</id>
+            <name>Spring Maven Milestone Repository</name>
+            <url>http://repo.spring.io/milestone</url>
+        </repository>
         <repository>
             <id>public</id>
             <url>http://maven.nuxeo.org/nexus/content/groups/public</url>
