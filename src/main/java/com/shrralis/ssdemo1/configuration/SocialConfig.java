@@ -5,6 +5,7 @@ import com.shrralis.ssdemo1.service.SocialService;
 import com.shrralis.ssdemo1.service.SpringSecuritySignInAdapter;
 import com.shrralis.ssdemo1.service.UserConnectionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.Encryptors;
@@ -29,6 +30,15 @@ import java.util.UUID;
 @EnableSocial
 public class SocialConfig implements SocialConfigurer {
 
+	@Value("${facebook.appKey}")
+	private String fbAppkey;
+	@Value("${facebook.appSecret}")
+	private String fbSecret;
+	@Value("${google.appKey}")
+	private String googleAppkey;
+	@Value("${google.appSecret}")
+	private String googleSecret;
+
     private final DataSource dataSource;
     private final ConnectionSignUp connectionSignUp;
 
@@ -40,13 +50,9 @@ public class SocialConfig implements SocialConfigurer {
 
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
-        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory(
-                environment.getRequiredProperty("facebook.appKey"),
-                environment.getRequiredProperty("facebook.appSecret"));
+        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory(fbAppkey, fbSecret);
         facebookConnectionFactory.setScope("public_profile,email");
-        GoogleConnectionFactory googleConnectionFactory = new GoogleConnectionFactory(
-                        environment.getRequiredProperty("google.appKey"),
-                        environment.getRequiredProperty("google.appSecret"));
+        GoogleConnectionFactory googleConnectionFactory = new GoogleConnectionFactory(googleAppkey, googleSecret);
         googleConnectionFactory.setScope("profile email");
         connectionFactoryConfigurer.addConnectionFactory(facebookConnectionFactory);
         connectionFactoryConfigurer.addConnectionFactory(googleConnectionFactory);

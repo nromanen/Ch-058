@@ -26,10 +26,13 @@ import com.shrralis.ssdemo1.repository.RecoveryTokensRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensException;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
+import com.shrralis.ssdemo1.security.service.UserDetailsServiceImpl;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
@@ -155,6 +159,12 @@ public class AuthServiceImpl implements IAuthService {
 		savedUser.setPassword(passwordEncoder.encode(user.getPassword()));
 		savedUser.setLogin(user.getLogin());
 		repository.save(savedUser);
+		AuthorizedUser authorizedUser = new AuthorizedUser(savedUser, UserDetailsServiceImpl.getAuthorities(savedUser));;
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(
+						authorizedUser, null, Collections.singleton(
+								new SimpleGrantedAuthority("ROLE_" + savedUser.getType().toString()))));
+
 		return userToRegisteredUserDto.userToRegisteredUserDto(savedUser);
 	}
 

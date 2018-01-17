@@ -15,6 +15,10 @@ import java.util.UUID;
 
 @Service
 public class SocialService {
+	public static final int MAX_NAME_LENGTH = 16;
+	public static final int MIN_NAME_LENGTH = 1;
+	public static final int MAX_SURNAME_LENGTH = 32;
+	public static final int MIN_SURNAME_LENGTH = 1;
 
     private final UsersRepository repository;
 
@@ -33,12 +37,11 @@ public class SocialService {
             user.setEmail(userProfile.getEmail());
             user.setLogin("facebook" + RandomStringUtils.randomAlphabetic(8));
             user.setPassword(UUID.randomUUID().toString());
-            String name  = userProfile.getName();
+            String name  = userProfile.getFirstName();
             String surname = userProfile.getLastName();
             SocialService.validateName(user, name);
             SocialService.validateSurname(user, surname);
-        }
-        else{
+        } else{
             if(user.getName().contains("Social")){
                 user.setName(userProfile.getFirstName());
             }
@@ -66,20 +69,18 @@ public class SocialService {
     }
 
     private static void validateName(User user, String name){
-        if((name.length() > 1 && name.length() < 16) && name.matches(NAME_PATTERN)){
+        if((name.length() > MIN_NAME_LENGTH && name.length() < MAX_NAME_LENGTH) && name.matches(NAME_PATTERN)){
             user.setName(name);
-        }
-        else{
-            user.setName("Social" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        } else{
+            user.setName("Name");
         }
     }
 
     private static void validateSurname(User user, String surname){
-        if((surname.length() > 1 && surname.length() < 32) && surname.matches(NAME_PATTERN)){
+        if((surname.length() > MIN_SURNAME_LENGTH && surname.length() < MAX_SURNAME_LENGTH) && surname.matches(NAME_PATTERN)){
             user.setSurname(surname);
-        }
-        else{
-            user.setSurname("Social" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        } else{
+            user.setSurname("Surname");
         }
     }
 

@@ -5,7 +5,7 @@ import {
   LoginValidator, MAX_LOGIN_LENGTH, MAX_NAME_LENGTH, MAX_SURNAME_LENGTH, MIN_LOGIN_LENGTH, MIN_NAME_LENGTH,
   MIN_SURNAME_LENGTH, NameValidator
 } from "../../../_validator/";
-import router, {getLocalUser, resetLocalUser} from "../../../router/";
+import {getLocalUser, resetLocalUser} from "../../../router/";
 import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
@@ -62,36 +62,34 @@ export default {
         let json = response.body;
 
         if (!json.errors) {
-          console.log(json.data[0]);
           localStorage.setItem('user', JSON.stringify(json.data[0]));
-          console.log(getLocalUser());
 
           this.$http.get('users/get/' + json.data[0].id)
             .then(response => {
               let json = response.body;
 
               if (!json.data[0].login.match(/.*(facebook)|(google).*/)) {
-                router.push('/');
+                Vue.router.push('/');
               }
 
               this.form.email = json.data[0].email;
 
-              if (!json.data[0].name.match(/(Social).*/)) {
+              if (!json.data[0].name.match(/(Name)/)) {
                 this.form.name = json.data[0].name;
               }
 
-              if (!json.data[0].surname.match(/(Social).*/)) {
+              if (!json.data[0].surname.match(/(Surname)/)) {
                 this.form.surname = json.data[0].surname;
               }
             });
 
         } else if (json.errors.length > 0) {
-          //this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
+          this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
         } else {
-          //this.errors.push(getErrorMessage(UNEXPECTED));
+          this.errors.push(getErrorMessage(UNEXPECTED));
         }
 
-        //this.sending = false;
+        this.sending = false;
       }, error => {
         switch (error.status) {
           case 400:
@@ -99,16 +97,16 @@ export default {
             let json = error.body;
 
             if (json.errors) {
-              //this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
+              this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
             }
             break;
         }
 
         if (this.errors.length <= 0) {
-          //this.errors.push('HTTP error (' + error.status + ': ' + error.statusText + ')');
+          this.errors.push('HTTP error (' + error.status + ': ' + error.statusText + ')');
         }
 
-        //this.sending = false;
+        this.sending = false;
       }
     );
   },
@@ -137,12 +135,12 @@ export default {
         response => {
           let json = response.body;
 
-
           if (!json.errors) {
             let user = getLocalUser();
             user.login = this.form.login;
+
             localStorage.setItem('user', JSON.stringify(user));
-            router.push('/');
+            this.$router.push('/');
           } else if (json.errors.length) {
             this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
           } else {
@@ -168,7 +166,7 @@ export default {
 
           this.sending = false;
         }
-      )
+      );
     },
     validateCredentials() {
       this.register();
@@ -178,7 +176,7 @@ export default {
         response => {
 
           resetLocalUser();
-          router.push('/');
+          this.$router.push('/');
         }
       )
     }
