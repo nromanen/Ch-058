@@ -10,7 +10,8 @@ export default {
     authDialog: false,
     userEmail: null,
     snackBarText: null,
-    showBack: false
+    showBack: false,
+    user: null
   }),
   created: function () {
     this.showBack = this.$parent.$parent.$parent.$parent.showBack;
@@ -22,6 +23,8 @@ export default {
 
             if (!json.errors) {
               if (json.data[0].logged_in) {
+                this.user = json.data[0];
+
                 Vue.http.get('users/get/' + getLocalUser().id)
                   .then(
                     response => {
