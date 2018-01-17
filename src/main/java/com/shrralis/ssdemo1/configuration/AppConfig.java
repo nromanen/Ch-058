@@ -37,9 +37,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.util.Locale;
 import java.util.Properties;
 
+import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
+
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "com.shrralis.ssdemo1")
+@ComponentScan(basePackages = "com.shrralis.ssdemo1",  excludeFilters = {
+		@ComponentScan.Filter(type = ASSIGNABLE_TYPE,
+				value = {
+						TestDatabaseConfig.class
+				})
+})
 @PropertySource("classpath:application.properties")
 @Import(value = {
 		DatabaseConfig.class,

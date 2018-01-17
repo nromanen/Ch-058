@@ -38,6 +38,8 @@ public class SocialConfig implements SocialConfigurer {
 	private String googleAppkey;
 	@Value("${google.appSecret}")
 	private String googleSecret;
+	@Value("${front.url}")
+	private String frontUrl;
 
     private final DataSource dataSource;
     private final ConnectionSignUp connectionSignUp;
@@ -80,7 +82,7 @@ public class SocialConfig implements SocialConfigurer {
                 connectionFactoryLocator,
                 usersConnectionRepository,
                 adapter);
-        psic.setPostSignInUrl("http://localhost:8081/#/socialSuccess");
+        psic.setPostSignInUrl(frontUrl + "/socialSuccess");
         return psic;
     }
 

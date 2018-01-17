@@ -1,6 +1,7 @@
 package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.tools.model.JsonResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,8 +13,12 @@ import java.io.IOException;
 
 @RestController
 public class FailedAccessSocialController {
-	@GetMapping(name = "/signin", params = {"error", "error_description"})
+
+	@Value("${front.url}")
+	private String frontUrl;
+
+	@GetMapping(value = "/signin", params = {"error"})
 	public void redirect(HttpServletResponse response) throws IOException {
-		response.sendRedirect("http://localhost:8081/#/auth");
+		response.sendRedirect(frontUrl + "/auth");
 	}
 }

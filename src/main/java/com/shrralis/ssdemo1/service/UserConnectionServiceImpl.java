@@ -34,7 +34,8 @@ public class UserConnectionServiceImpl implements ConnectionSignUp{
     @Override
     public String execute(Connection<?> connection) {
 
-        if(connection.getProfileUrl()!=null && connection.getProfileUrl().contains("facebook")){
+
+        if(StringUtils.contains(connection.getProfileUrl(), "facebook")){
             return String.valueOf(usersRepository.save(service.facebookProfileExtract((Connection<Facebook>)connection)).getId());
         }
 
