@@ -57,7 +57,7 @@ export default {
     getAllMessages: function () {
       this.$http.get('message/all/' + this.issueId + '/' + this.userId).then( data => {
         console.log(data.body);
-        this.showMessages(data.body);
+        this.showMessages(data.body.data);
       });
     },
     scrollDown: function () {
@@ -69,6 +69,9 @@ export default {
     },
     switchLang(lang) {
       switchLang(lang);
+    },
+    backToIssue() {
+      this.$router.push('../../issue/' + this.issueId);
     }
   },
   created: function () {

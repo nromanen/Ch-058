@@ -54,7 +54,6 @@
     "input_location": "Enter a location",
     "establishments": "Establishments",
     "addresses": "Addresses",
-    "issues_modal_title": "All issues",
     "admin_page": "Admin page",
     "navigation": "Navigation",
     "users_management": "Users management",
@@ -80,7 +79,6 @@
     "projectTitle": "Geo citizen",
     "waitHint": "Please wait for a minute for an answer from admin",
     "noAdminAnswer": "Sorry, but there are no administrators currently available. Please contact later",
-    "notifications": "Notifications:",
     "chatRoom": "Chat room",
     "messageHint": "Write a message"
   },

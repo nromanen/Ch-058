@@ -50,8 +50,14 @@ public class ChatController {
     @Secured({USER_ROLE, ADMIN_ROLE})
     @RequestMapping("/message/all/{issueId}/{userId}")
     public JsonResponse getMessages(@PathVariable("issueId") Long issueId,
-                                         @PathVariable("userId") Long userId) throws AccessDeniedException {
+                                    @PathVariable("userId") Long userId) throws AccessDeniedException {
         return new JsonResponse(messageService.getAllMessagesForChat(issueId, userId));
+    }
+
+    @Secured(ADMIN_ROLE)
+    @RequestMapping("/chat/room/all/{adminId}")
+    public JsonResponse getChatRooms(@PathVariable("adminId") Long adminId){
+        return new JsonResponse(messageService.getAllChatRooms(adminId));
     }
 
     @Secured(ADMIN_ROLE)

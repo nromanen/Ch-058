@@ -74,6 +74,12 @@
 
           <span class="md-list-item-text">{{ $t('label.notifications') }}</span>
         </md-list-item>
+
+        <md-list-item @click="menuVisible = false" to="/admin/messages">
+          <md-icon>notifications</md-icon>
+
+          <span class="md-list-item-text">messages</span>
+        </md-list-item>
       </md-list>
     </md-app-drawer>
 

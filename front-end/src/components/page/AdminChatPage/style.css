@@ -4,6 +4,12 @@ h1{
   text-align: center;
 }
 
+.buttonBack{
+  position: fixed;
+  top: 30px;
+  left: 30px;
+}
+
 .messageBl{
   width: 60%;
   height: 30em;
