@@ -1,7 +1,10 @@
 package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.entity.Notification;
+import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.exception.AccessDeniedException;
 import com.shrralis.ssdemo1.repository.NotificationRepository;
+import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.service.interfaces.INotificationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +25,7 @@ public class NotificationServiceImpl implements INotificationService{
     }
 
     @Override
-    public Long removeNotification(Notification notification) {
+    public Long removeNotification(Notification notification){
         return notificationRepository.deleteByIssueIdAndUserId(notification.getIssueId(), notification.getUserId());
     }
 
