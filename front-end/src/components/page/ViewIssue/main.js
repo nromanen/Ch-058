@@ -177,6 +177,6 @@ export default {
     if (getLocalUser()) {
       this.userId = getLocalUser().id;
     }
-    this.imageSrc = 'http://localhost:8080/images/' + this.$route.params.id;
+    this.imageSrc = 'http://localhost:8080/citizen/issues/images/' + this.$route.params.id;
   }
 }

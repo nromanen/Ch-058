@@ -53,7 +53,7 @@
 
 .close:hover,
 .close:focus {
-  color: #ffffff;
+  color: #000000;
   text-decoration: none;
   cursor: pointer;
 }
