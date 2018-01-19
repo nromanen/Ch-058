@@ -1,5 +1,6 @@
 package com.shrralis.ssdemo1.configuration;
 
+import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.security.handler.CitizenAccessDeniedHandler;
 import com.shrralis.ssdemo1.security.handler.CitizenAuthenticationFailureHandler;
 import com.shrralis.ssdemo1.security.handler.LogoutSuccessHandler;
@@ -51,7 +52,11 @@ public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 				.cors()
 				.and()
 				.authorizeRequests()
-				.antMatchers("/auth/logout").authenticated()
+				.antMatchers("/auth/getCurrentSession", "/issues**", "/issues/*/votes", "/images/*", "/map**").permitAll()
+				.antMatchers("/auth/logout", "/auth/update").authenticated()
+				.antMatchers("/issues/*/*", "/map/marker", "/map/issue", "/users/*").hasAnyRole(User.Type.USER.name(), User.Type.ADMIN.name())
+				.antMatchers("/users", "/admin/**").hasRole(User.Type.ADMIN.name())
+				.antMatchers("/auth/*", "/signin").anonymous()
 				.and()
 				.formLogin()
 				.loginPage("/auth/login")
