@@ -95,6 +95,7 @@ public class JsonError {
 		MISSING_FIELD(6, "Missing field"),
 		BAD_FIELD_FORMAT(7, "Bad field format"),
 		USER_NOT_EXIST(8, "User with current login doesn't exist"),
+		ISSUE_NOT_EXIST(9, "Issue with current id doesn't exist"),
 		BAD_CREDENTIALS(9, "wrong_password"),
 		RECOVERY_TOKEN_EXPIRED(10, "The recovery token is expired"),
 		IMAGE_NOT_EXIST(11, "Image doesn't exist"),
@@ -102,7 +103,8 @@ public class JsonError {
 		RECOVERY_TOKEN_NOT_EXIST(13, "Recovery token doesn't exist"),
 		ILLEGAL_PARAMETER(14, "The retrieved parameter is illegal"),
 		TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS(15, "There are too many non expired recovery tokens for the user"),
-		USER_BLOCKED_BY_MAX_FAILED_AUTH(16, "The user has been blocked because of failed authentication attempts"),;
+		USER_BLOCKED_BY_MAX_FAILED_AUTH(16, "The user has been blocked because of failed authentication attempts"),
+		INTERNAL_ERROR(17, "Internal server error"),;
 
 		public static final String NO_ERROR_NAME = "NO_ERROR";
 		public static final String UNEXPECTED_NAME = "UNEXPECTED";
@@ -121,6 +123,7 @@ public class JsonError {
 		public static final String ILLEGAL_PARAMETER_NAME = "ILLEGAL_PARAMETER";
 		public static final String TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS_NAME = "TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS";
 		public static final String USER_BLOCKED_BY_MAX_FAILED_AUTH_NAME = "USER_BLOCKED_BY_MAX_FAILED_AUTH";
+		public static final String INTERNAL_ERROR_NAME = "INTERNAL_ERROR";
 
 		private static final ArrayList<Error> lookup = new ArrayList<>();
 
@@ -164,7 +167,6 @@ public class JsonError {
 				case USER_ALREADY_EXISTS:
 				case BAD_CREDENTIALS:
 					this.field = field;
-
 					break;
 			}
 			return this;

@@ -1,5 +1,10 @@
 <div>
-  <h1>Chat room</h1>
+  <div class="buttonBack">
+    <md-button class="md-icon-button" @click="backToAdmin">
+      <md-icon>arrow_back</md-icon>
+    </md-button>
+  </div>
+  <h1>{{$t('label.chatRoom')}}</h1>
   <div class="messageBl" id="style-6">
     <div class="messageList">
       <div v-for="message in messages" class="row">
@@ -14,11 +19,11 @@
   </div>
   <div class="messageManagment">
     <md-field class="messageText">
-      <label>Write a message</label>
+      <label>{{$t('label.messageHint')}}</label>
       <md-textarea v-model="newMessageText" md-counter=275></md-textarea>
     </md-field>
     <div class="messageSend">
-      <md-button class="md-raised" @click="sendMes">Send</md-button>
+      <md-button class="md-raised" @click="sendMes">{{$t('button.sendMessage')}}</md-button>
     </div>
   </div>
 </div>

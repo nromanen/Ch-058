@@ -1,12 +1,9 @@
 <div class="md-toolbar-row">
   <div class="md-toolbar-section-start">
-    <!--<md-button class="md-icon-button" @click="menuVisible = !menuVisible">
-      <md-icon>menu</md-icon>
-    </md-button>-->
     <md-button class="md-icon-button" @click="backToMap" v-if="showBack">
       <md-icon>arrow_back</md-icon>
     </md-button>
-    <span class="md-title">Geo Citizen</span>
+    <span class="md-title">{{$t('label.projectTitle')}}</span>
   </div>
 
   <div class="md-toolbar-section-end">
@@ -18,6 +15,8 @@
       <md-button md-menu-trigger>{{ userEmail }}</md-button>
 
       <md-menu-content>
+        <md-menu-item to="/admin" v-if="user.type === 'ADMIN'">{{ $t('label.admin_page') }}</md-menu-item>
+
         <md-menu-item @click="logout()">{{ $t('button.logout') }}</md-menu-item>
       </md-menu-content>
     </md-menu>

@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
-@Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.shrralis.ssdemo1")
 @EnableJpaRepositories("com.shrralis.ssdemo1.repository")

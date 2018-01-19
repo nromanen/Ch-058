@@ -7,6 +7,11 @@ import AdminChatNotification from '@/components/AdminChatNotification/AdminChatN
 import OpenChat from '@/components/OpenChat/OpenChat'
 import AdminChatPage from '@/components/page/AdminChatPage/AdminChatPage'
 import Issue from '@/components/page/ViewIssue/App'
+import SocialSuccessPage from '@/components/page/SocialSuccessPage/SocialSuccessPage'
+import AdminPage from '@/components/page/AdminPage/AdminPage'
+import AdminUsersPage from '@/components/subpage/AdminUsersPage/AdminUsersPage'
+import AdminIssuesPage from '@/components/subpage/AdminIssuesPage/AdminIssuesPage'
+import AdminMessagesPage from '@/components/subpage/AdminMessagesPage/AdminMessagesPage'
 
 Vue.use(Router)
 
@@ -15,22 +20,31 @@ const router = new Router({
     {
       path: '/',
       name: 'IndexPage',
-      component: IndexPage
+      component: IndexPage,
+      meta: {
+        requiresSuccessRegistration: true
+      }
     },
     {
       path: '/auth**',
       name: 'AuthPage',
-      component: AuthPage
+      component: AuthPage,
+      meta: {
+        requiresAnonymous: true
+      }
+    },
+    {
+      path: '/socialSuccess**',
+      name: 'SocialSuccessPage',
+      component: SocialSuccessPage,
+      meta: {
+        requiresAnonymous: true
+      }
     },
     {
       path: '/chat/:issueId/:userId',
       name: 'ChatPage',
       component: Chat
-    },
-    {
-      path: '/notification',
-      name: 'AdminChatNotification',
-      component: AdminChatNotification
     },
     {
       path: '/openChat',
@@ -45,6 +59,41 @@ const router = new Router({
     {
       path: '/issue/:id',
       component: Issue
+    },
+    {
+      path: '/admin',
+      name: 'AdminPage',
+      component: AdminPage,
+      meta: {
+        requiresAdmin: true
+      },
+      children: [
+        {
+          path: '/',
+          component: AdminUsersPage
+        },
+        {
+          path: 'users',
+          component: AdminUsersPage
+        },
+        {
+          path: 'issues',
+          component: AdminIssuesPage
+        },
+        {
+          path: 'issues/:user',
+          component: AdminIssuesPage,
+          props: true
+        },
+        {
+          path: 'notification',
+          component: AdminChatNotification
+        },
+        {
+          path: 'messages',
+          component: AdminMessagesPage
+        }
+      ]
     }
   ]
 })
@@ -52,14 +101,14 @@ const router = new Router({
 export default router
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some(record => record.meta.requiresAnonymous)) {
     Vue.http.get('auth/getCurrentSession').then(response => {
       let json = response.body
 
-      if (!json.errors && json.data[0].login) {
+      if (!json.errors && json.data[0].logged_in && !json.data[0].login.match(/.*(google)|(facebook).*/)) {
         localStorage.setItem('user', JSON.stringify(json.data[0]))
         next({
-          path: '/auth/login',
+          path: '/',
           query: {
             redirect: to.fullPath
           }
@@ -67,6 +116,59 @@ router.beforeEach((to, from, next) => {
       } else {
         next()
       }
+    })
+  } else if (to.matched.some(record => record.meta.requiresAuth)) {
+    Vue.http.get('auth/getCurrentSession').then(response => {
+      let json = response.body
+
+      if (!json.errors && json.data[0].logged_in) {
+        localStorage.setItem('user', JSON.stringify(json.data[0]))
+        next()
+      } else {
+        next({
+          path: '/auth/login',
+          query: {
+            redirect: to.fullPath
+          }
+        })
+      }
+    })
+  } else if (to.matched.some(record => record.meta.requiresSuccessRegistration)) {
+    Vue.http.get('auth/getCurrentSession').then(response => {
+      let json = response.body
+
+      if (!json.errors && json.data[0].login) {
+        if (json.data[0].login.match(/.*(google)|(facebook).*/)) {
+          next({
+            path: '/socialSuccess',
+            query: {
+              redirect: to.fullPath
+            }
+          })
+        }
+      }
+      next()
+    }, error => {
+      console.log(error)
+      next()
+    })
+  } else if (to.matched.some(record => record.meta.requiresAdmin)) {
+    Vue.http.get('auth/getCurrentSession').then(response => {
+      let json = response.body
+
+      if (!json.errors && json.data[0].type === 'ADMIN') {
+        next()
+      } else {
+        next({
+          path: '/',
+          query: {
+            redirect: to.fullPath
+          }
+        })
+      }
+    }, error => {
+      console.log(error)
+      next()
     })
   } else {
     next()

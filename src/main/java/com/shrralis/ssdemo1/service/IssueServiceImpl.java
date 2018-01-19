@@ -9,6 +9,10 @@ import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.exception.BadFieldFormatException;
 import com.shrralis.ssdemo1.exception.EntityNotExistException;
 import com.shrralis.ssdemo1.repository.*;
+import com.shrralis.ssdemo1.repository.ImagesRepository;
+import com.shrralis.ssdemo1.repository.IssuesRepository;
+import com.shrralis.ssdemo1.repository.MapMarkersRepository;
+import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
@@ -89,6 +93,45 @@ public class IssueServiceImpl implements IIssueService {
 	@Override
 	public List<Issue> getAllIssueByMapMarker(int mapMarkerId) {
 		return issuesRepository.findByMapMarker_Id(mapMarkerId);
+	}
+
+	@Override
+	public Issue findById(Integer id) throws AbstractCitizenException {
+		return issuesRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
+	}
+
+	@Override
+	public List<Issue> findTitleOrTextContaining(String title, String text) {
+		return issuesRepository.findByTitleOrTextContainingAllIgnoreCase(title, text);
+	}
+
+	@Override
+	public List<Issue> findAuthorId(Integer id) {
+		return issuesRepository.findByAuthor_Id(id);
+	}
+
+	@Override
+	public List<Issue> findAll() {
+		return issuesRepository.findAll();
+	}
+
+	@Override
+	public void deleteById(Integer id) {
+		issuesRepository.deleteById(id);
+	}
+
+	@Override
+	@Transactional
+	public void setStatus(Boolean flag, Integer id) {
+		issuesRepository.setStatus(flag, id);
+	}
+
+	public List<Issue> findClosedTrue() {
+		return issuesRepository.findByClosedTrue();
+	}
+
+	public List<Issue> findClosedFalse() {
+		return issuesRepository.findByClosedFalse();
 	}
 
 	@Override

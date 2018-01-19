@@ -13,6 +13,7 @@
 package com.shrralis.ssdemo1.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
 import com.shrralis.ssdemo1.util.PsqlEnum;
 import com.shrralis.tools.model.JsonError;
@@ -89,7 +90,6 @@ public class User implements Identifiable<Integer> {
 	@JsonIgnore
 	@NotNull
 	@NotBlank
-	@Pattern(regexp = User.PASS_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	@Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
 	@Column(name = PASS_COLUMN_NAME, nullable = false, length = MAX_PASSWORD_LENGTH)
 	private String password;
@@ -112,6 +112,7 @@ public class User implements Identifiable<Integer> {
 	@Column(name = SURNAME_COLUMN_NAME, nullable = false, length = MAX_SURNAME_LENGTH)
 	private String surname;
 
+	@JsonProperty("failed_auth_count")
 	@NotNull
 	@Max(MAX_FAILED_AUTH_VALUE)
 	@Column(name = FAILED_AUTH_COUNT_COLUMN_NAME, nullable = false)

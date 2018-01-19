@@ -2,6 +2,9 @@ import message from '@/components/Message/Message.vue'
 import {getLocalUser} from "../../../router";
 import 'stompjs/lib/stomp.js';
 import * as SockJS from 'sockjs-client/dist/sockjs.min.js'
+import {getCurrentLang, switchLang} from "../../../i18n";
+import {getServerAddress} from "../../../main";
+
 export default {
   name: 'AdminChatPage',
   data() {
@@ -22,6 +25,9 @@ export default {
       this.userId = userId;
     },
     sendMes: function (event) {
+      if(this.newMessageText == '' || this.newMessageText.match(/^\s+$/)) {
+        return;
+      }
       this.stompClient.send("/app/message" + "/" + this.issueId + "/" + this.userId, {},
         JSON.stringify({text: this.newMessageText, authorId: this.adminId}));
       this.newMessageText = '';
@@ -54,14 +60,23 @@ export default {
       console.log(this.messages);
     },
     getAllMessages: function () {
-      this.$http.get('http://localhost:8080/message/all/' + this.issueId + '/' + this.userId).then( data => {
+      this.$http.get('message/all/' + this.issueId + '/' + this.userId).then( data => {
         console.log(data.body);
-        this.showMessages(data.body);
+        this.showMessages(data.body.data);
       });
     },
     scrollDown: function () {
       var elem = document.getElementById('style-6');
       elem.scrollTop = elem.scrollHeight;
+    },
+    getLangClass(lang) {
+      return getCurrentLang() === lang ? 'md-primary' : '';
+    },
+    switchLang(lang) {
+      switchLang(lang);
+    },
+    backToAdmin() {
+      this.$router.push('/admin/messages');
     }
   },
   created: function () {
@@ -69,13 +84,16 @@ export default {
     var userId = this.$route.params.userId;
     this.issueId = issueId;
     this.userId = userId;
-    console.log('started');
+
     this.adminId = getLocalUser().id;
+
     let _this = this;
 
     _this.getAllMessages();
 
-    var socket = new SockJS("http://localhost:8080/chat");
+    var socket = new SockJS(getServerAddress() + '/chat');
+    console.log('prrrrr');
+    var socket = new SockJS(getServerAddress() + "/chat");
     var stompClient = Stomp.over(socket);
     this.stompClient = stompClient;
 
@@ -83,7 +101,7 @@ export default {
       console.log('Connected: ' + frame);
       stompClient.subscribe('/topic/broadcast' + '/' + _this.issueId + '/' + _this.userId, function (greeting) {
         console.log(greeting);
-        _this.showMessage(JSON.parse(greeting.body));
+        _this.showMessage(JSON.parse(greeting.body).data[0]);
       });
     })
   }
