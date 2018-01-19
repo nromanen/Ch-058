@@ -41,18 +41,18 @@ public class IssueServiceImpl implements IIssueService {
 	private static final String OPENED_TYPE = "PROBLEM";
 	private static final String CATALINA_HOME_NAME = "catalina.home";
 
-    private final IssuesRepository issuesRepository;
-    private final MapMarkersRepository mapMarkersRepository;
-    private final UsersRepository usersRepository;
-    private final ImagesRepository imagesRepository;
-    private final IssueTypesRepository issueTypesRepository;
+	private final IssuesRepository issuesRepository;
+	private final MapMarkersRepository mapMarkersRepository;
+	private final UsersRepository usersRepository;
+	private final ImagesRepository imagesRepository;
+	private final IssueTypesRepository issueTypesRepository;
 
 	@Autowired
 	public IssueServiceImpl(IssuesRepository issuesRepository,
-	                        MapMarkersRepository mapMarkersRepository,
-	                        UsersRepository usersRepository,
-	                        ImagesRepository imagesRepository,
-	                        IssueTypesRepository issueTypesRepository) {
+							MapMarkersRepository mapMarkersRepository,
+							UsersRepository usersRepository,
+							ImagesRepository imagesRepository,
+							IssueTypesRepository issueTypesRepository) {
 		this.issuesRepository = issuesRepository;
 		this.mapMarkersRepository = mapMarkersRepository;
 		this.usersRepository = usersRepository;
@@ -60,35 +60,35 @@ public class IssueServiceImpl implements IIssueService {
 		this.issueTypesRepository = issueTypesRepository;
 	}
 
-    @Override
-    public Issue getById(Integer id) {
-	    return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
-    }
+	@Override
+	public Issue getById(Integer id) {
+		return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
+	}
 
-    public Issue saveIssue(MapDataDTO dto, MultipartFile file) throws BadFieldFormatException {
+	public Issue saveIssue(MapDataDTO dto, MultipartFile file) throws BadFieldFormatException {
 
 		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
 
-	    User user = usersRepository.findOne(getCurrent().getId());
+		User user = usersRepository.findOne(getCurrent().getId());
 
-	    boolean closed = !dto.getTypeName().equals(OPENED_TYPE);
+		boolean closed = !dto.getTypeName().equals(OPENED_TYPE);
 
-	    Image image = parseImage(file);
+		Image image = parseImage(file);
 
-	    Issue.Type type = getTypeByName(dto.getTypeName());
+		Issue.Type type = getTypeByName(dto.getTypeName());
 
-	    return issuesRepository.save(Issue.Builder.anIssue()
-		        .setMapMarker(marker)
-		        .setTitle(dto.getTitle())
-	            .setText(dto.getDesc())
-		        .setAuthor(user)
-		        .setImage(image)
-		        .setType(type)
-		        .setClosed(closed)
-	            .setCreatedAt(LocalDateTime.now())
-	            .setUpdatedAt(LocalDateTime.now())
-	            .build());
-    }
+		return issuesRepository.save(Issue.Builder.anIssue()
+				.setMapMarker(marker)
+				.setTitle(dto.getTitle())
+				.setText(dto.getDesc())
+				.setAuthor(user)
+				.setImage(image)
+				.setType(type)
+				.setClosed(closed)
+				.setCreatedAt(LocalDateTime.now())
+				.setUpdatedAt(LocalDateTime.now())
+				.build());
+	}
 
 	@Override
 	public List<Issue> getAllIssueByMapMarker(int mapMarkerId) {
@@ -157,7 +157,7 @@ public class IssueServiceImpl implements IIssueService {
 		}
 	}
 
-    private Image parseImage(MultipartFile file) throws BadFieldFormatException {
+	private Image parseImage(MultipartFile file) throws BadFieldFormatException {
 		try {
 			byte[] blob = file.getBytes();
 
@@ -186,9 +186,9 @@ public class IssueServiceImpl implements IIssueService {
 		} catch(IOException e) {
 			throw new BadFieldFormatException(e.getMessage());
 		}
-    }
+	}
 
-    private Issue.Type getTypeByName(String type) {
+	private Issue.Type getTypeByName(String type) {
 
 		Issue.Type issueType = issueTypesRepository.getByName(type);
 
@@ -198,5 +198,5 @@ public class IssueServiceImpl implements IIssueService {
 		}
 		return issueType;
 
-    }
+	}
 }

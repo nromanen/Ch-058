@@ -85,26 +85,26 @@ public class ExceptionHandlerControllerAdvice {
 						.collect(Collectors.toList()));
 	}
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = EntityNotUniqueException.class)
-    public JsonResponse entityNotUniqueExceptionHandler(EntityNotUniqueException e, Locale locale) {
-	    logger.error("EntityNotUniqueException:", e);
-	    return new JsonResponse(e.getError(), locale, messageSource);
-    }
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value = EntityNotUniqueException.class)
+	public JsonResponse entityNotUniqueExceptionHandler(EntityNotUniqueException e, Locale locale) {
+		logger.error("EntityNotUniqueException:", e);
+		return new JsonResponse(e.getError(), locale, messageSource);
+	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = BadFieldFormatException.class)
 	public JsonResponse badParameterFormatExceptionHandler(BadFieldFormatException e, Locale locale) {
 		logger.error("BadFieldFormatException:", e);
 		return new JsonResponse(e.getError(), locale, messageSource);
-    }
+	}
 
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(value = IllegalArgumentException.class)
+	@ExceptionHandler(value = IllegalArgumentException.class)
 	public JsonResponse illegalArgumentExceptionHandler(IllegalArgumentException e, Locale locale) {
 		logger.error("IllegalArgumentException:", e);
 		return new JsonResponse(new JsonError("Internal error").translateErrmsg(locale, messageSource));
-    }
+	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = MissingServletRequestParameterException.class)
@@ -112,19 +112,19 @@ public class ExceptionHandlerControllerAdvice {
 			MissingServletRequestParameterException e, Locale locale) {
 		logger.error("MissingServletRequestParameterException:", e);
 		return new JsonResponse(JsonError.Error.MISSING_FIELD.forField(e.getParameterName()), locale, messageSource);
-    }
-
-    @ResponseStatus(value = HttpStatus.FORBIDDEN)
-	@ExceptionHandler(value = AccessDeniedException.class)
-	public JsonResponse accessDeniedExceptionHandler(AccessDeniedException e, Locale locale) {
-	    logger.error("AccessDeniedException:", e);
-	    return new JsonResponse(JsonError.Error.ACCESS_DENIED, locale, messageSource);
 	}
 
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(value = Exception.class)
-    public JsonResponse generalExceptionHandler(Exception e, Locale locale) {
-	    logger.error("{}: {}", e.getClass(), e);
-	    return new JsonResponse(JsonError.Error.INTERNAL_ERROR, locale, messageSource);
-    }
+	@ResponseStatus(value = HttpStatus.FORBIDDEN)
+	@ExceptionHandler(value = AccessDeniedException.class)
+	public JsonResponse accessDeniedExceptionHandler(AccessDeniedException e, Locale locale) {
+		logger.error("AccessDeniedException:", e);
+		return new JsonResponse(JsonError.Error.ACCESS_DENIED, locale, messageSource);
+	}
+
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(value = Exception.class)
+	public JsonResponse generalExceptionHandler(Exception e, Locale locale) {
+		logger.error("{}: {}", e.getClass(), e);
+		return new JsonResponse(JsonError.Error.INTERNAL_ERROR, locale, messageSource);
+	}
 }

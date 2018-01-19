@@ -35,28 +35,28 @@ public class MapRestController {
 	private final IMapMarkersService markerService;
 	private final IIssueService issueService;
 
-    @Autowired
+	@Autowired
 	public MapRestController(IMapMarkersService markerService, IIssueService issueService) {
-    	this.markerService = markerService;
-    	this.issueService = issueService;
+		this.markerService = markerService;
+		this.issueService = issueService;
 	}
 
-    @GetMapping
-    public JsonResponse loadAllMarkers() {
-        return new JsonResponse(markerService.loadAllMarkers());
-    }
+	@GetMapping
+	public JsonResponse loadAllMarkers() {
+		return new JsonResponse(markerService.loadAllMarkers());
+	}
 
 	@GetMapping("/marker/{lat}/{lng}/")
 	public JsonResponse getMarkerByCoords(@PathVariable("lat") double lat,
-	                                      @PathVariable("lng") double lng) {
+										  @PathVariable("lng") double lng) {
 		return new JsonResponse(markerService.getMarker(lat, lng));
 	}
 
 	@Secured({ROLE_USER, ROLE_ADMIN})
-    @PostMapping("/marker")
-    public JsonResponse saveMarker(@RequestBody final MapMarker marker) {
-        return new JsonResponse(markerService.saveMarker(marker));
-    }
+	@PostMapping("/marker")
+	public JsonResponse saveMarker(@RequestBody final MapMarker marker) {
+		return new JsonResponse(markerService.saveMarker(marker));
+	}
 
 	@Secured({ROLE_USER, ROLE_ADMIN})
 	@PostMapping("/issue")

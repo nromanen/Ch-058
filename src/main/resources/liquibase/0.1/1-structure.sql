@@ -8,7 +8,7 @@ CREATE TYPE USER_TYPE AS ENUM ('BANNED', 'USER', 'ADMIN', 'MASTER');
 
 --changeset shrralis:1513597385307-3
 CREATE TABLE images (
-  id   SERIAL       NOT NULL,
+  id   SERIAL	   NOT NULL,
   src  VARCHAR(128) NOT NULL,
   type IMAGE_TYPE   NOT NULL,
   hash VARCHAR(32)  NOT NULL,
@@ -17,11 +17,11 @@ CREATE TABLE images (
 
 --changeset shrralis:1513597385307-4
 CREATE TABLE users (
-  id       SERIAL                   NOT NULL,
-  login    VARCHAR(16)              NOT NULL,
-  type     USER_TYPE DEFAULT 'USER' NOT NULL,
-  email    VARCHAR(256)             NOT NULL,
-  password VARCHAR(32)              NOT NULL,
+  id	   SERIAL				   NOT NULL,
+  login	VARCHAR(16)			  NOT NULL,
+  type	 USER_TYPE DEFAULT 'USER' NOT NULL,
+  email	VARCHAR(256)			 NOT NULL,
+  password VARCHAR(32)			  NOT NULL,
   image_id INT,
   CONSTRAINT users_pkey PRIMARY KEY (id)
 );

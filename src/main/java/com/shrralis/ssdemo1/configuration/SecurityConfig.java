@@ -38,7 +38,7 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthenticationProvider authProvider(ICitizenUserDetailsService userDetailsService,
-	                                           PasswordEncoder passwordEncoder) {
+											   PasswordEncoder passwordEncoder) {
 		AuthProvider authenticationProvider = new AuthProvider();
 
 		authenticationProvider.setUserDetailsService(userDetailsService);

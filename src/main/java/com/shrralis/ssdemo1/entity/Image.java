@@ -30,22 +30,22 @@ import static com.shrralis.ssdemo1.entity.Image.TABLE_NAME;
 	typeClass = PsqlEnum.class
 )
 public class Image implements Identifiable<Integer> {
-    public static final String TABLE_NAME = "images";
-    public static final String TYPE_COLUMN_NAME = "type";
-    public static final String ID_COLUMN_NAME = "id";
-    public static final String SRC_COLUMN_NAME = "src";
-    public static final String HASH_COLUMN_NAME = "hash";
-    public static final int MAX_SRC_LENGTH = 128;
-    public static final int MIN_SRC_LENGTH = 4;
-    public static final int MAX_HASH_LENGTH = 32;
-    public static final int MIN_HASH_LENGTH = MAX_HASH_LENGTH;
+	public static final String TABLE_NAME = "images";
+	public static final String TYPE_COLUMN_NAME = "type";
+	public static final String ID_COLUMN_NAME = "id";
+	public static final String SRC_COLUMN_NAME = "src";
+	public static final String HASH_COLUMN_NAME = "hash";
+	public static final int MAX_SRC_LENGTH = 128;
+	public static final int MIN_SRC_LENGTH = 4;
+	public static final int MAX_HASH_LENGTH = 32;
+	public static final int MIN_HASH_LENGTH = MAX_HASH_LENGTH;
 
-    @Id
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "images_seq_gen")
-    @SequenceGenerator(name = "images_seq_gen", sequenceName = "images_id_seq", allocationSize = 1)
-    @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
-    private Integer id;
+	@Id
+	@NotNull
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "images_seq_gen")
+	@SequenceGenerator(name = "images_seq_gen", sequenceName = "images_id_seq", allocationSize = 1)
+	@Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
+	private Integer id;
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
@@ -68,36 +68,36 @@ public class Image implements Identifiable<Integer> {
 		return id;
 	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public Image.Type getType() {
-        return type;
-    }
+	public Image.Type getType() {
+		return type;
+	}
 
-    public void setType(Type type) {
-        this.type = type;
-    }
+	public void setType(Type type) {
+		this.type = type;
+	}
 
-    public String getSrc() {
-        return src;
-    }
+	public String getSrc() {
+		return src;
+	}
 
-    public void setSrc(String src) {
-        this.src = src;
-    }
+	public void setSrc(String src) {
+		this.src = src;
+	}
 
-    public String getHash() {
-        return hash;
-    }
+	public String getHash() {
+		return hash;
+	}
 
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
 
-    public enum Type {
-        USER,
-        ISSUE
-    }
+	public enum Type {
+		USER,
+		ISSUE
+	}
 }

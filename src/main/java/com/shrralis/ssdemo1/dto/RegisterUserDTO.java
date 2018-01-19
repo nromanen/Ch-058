@@ -67,43 +67,43 @@ public class RegisterUserDTO implements Serializable {
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String surname;
 
-    public String getLogin() {
-	    return StringUtils.trim(login);
-    }
+	public String getLogin() {
+		return StringUtils.trim(login);
+	}
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+	public void setLogin(String login) {
+		this.login = login;
+	}
 
-    public String getEmail() {
-	    return StringUtils.trim(email);
-    }
+	public String getEmail() {
+		return StringUtils.trim(email);
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getPassword() {
-	    return StringUtils.trim(password);
-    }
+	public String getPassword() {
+		return StringUtils.trim(password);
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public String getName() {
-	    return StringUtils.trim(name);
-    }
+	public String getName() {
+		return StringUtils.trim(name);
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getSurname() {
-	    return StringUtils.trim(surname);
-    }
+	public String getSurname() {
+		return StringUtils.trim(surname);
+	}
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
 }

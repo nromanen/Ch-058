@@ -2,45 +2,45 @@ package com.shrralis.ssdemo1.entity;
 
 public class Message {
 
-    private String text;
-    private Long issueId;
-    private Long userId;
-    private Long authorId;
+	private String text;
+	private Long issueId;
+	private Long userId;
+	private Long authorId;
 
 
-    public Message(){
-        this.text = "default";
-    }
+	public Message(){
+		this.text = "default";
+	}
 
-    public String getText() {
-        return text;
-    }
+	public String getText() {
+		return text;
+	}
 
-    public void setText(String text) {
-        this.text = text;
-    }
+	public void setText(String text) {
+		this.text = text;
+	}
 
-    public Long getIssueId() {
-        return issueId;
-    }
+	public Long getIssueId() {
+		return issueId;
+	}
 
-    public void setIssueId(Long issueId) {
-        this.issueId = issueId;
-    }
+	public void setIssueId(Long issueId) {
+		this.issueId = issueId;
+	}
 
-    public Long getUserId() {
-        return userId;
-    }
+	public Long getUserId() {
+		return userId;
+	}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
-    public Long getAuthorId() {
-        return authorId;
-    }
+	public Long getAuthorId() {
+		return authorId;
+	}
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
+	public void setAuthorId(Long authorId) {
+		this.authorId = authorId;
+	}
 }

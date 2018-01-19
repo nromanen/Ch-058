@@ -40,20 +40,20 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 	private ICitizenUserDetailsService userDetailsService;
 
 	@Override
-    public void afterPropertiesSet() {
-        if (userDetailsService == null) {
-            throw new IllegalArgumentException("A UserDetailsService must be set");
-        }
-    }
+	public void afterPropertiesSet() {
+		if (userDetailsService == null) {
+			throw new IllegalArgumentException("A UserDetailsService must be set");
+		}
+	}
 
-    @Override
-    public Authentication authenticate(Authentication authentication) {
-	    String loginOrEmail = (authentication.getPrincipal() == null) ? null : authentication.getName();
-	    UserDetails userDetails = retrieveUserDetails(loginOrEmail);
+	@Override
+	public Authentication authenticate(Authentication authentication) {
+		String loginOrEmail = (authentication.getPrincipal() == null) ? null : authentication.getName();
+		UserDetails userDetails = retrieveUserDetails(loginOrEmail);
 
-	    additionalAuthenticationChecks((AuthorizedUser) userDetails, (UsernamePasswordAuthenticationToken) authentication);
-        return createSuccessAuthentication(authentication, userDetails);
-    }
+		additionalAuthenticationChecks((AuthorizedUser) userDetails, (UsernamePasswordAuthenticationToken) authentication);
+		return createSuccessAuthentication(authentication, userDetails);
+	}
 
 	private UserDetails retrieveUserDetails(String loginOrEmail) {
 		UserDetails userDetails;
@@ -71,33 +71,33 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 				&& ((AuthorizedUser) userDetails).getFailedAuthCount() == User.MAX_FAILED_AUTH_VALUE) {
 			throw new TooManyNonExpiredRecoveryTokensException(loginOrEmail);
 		}
-        return userDetails;
-    }
+		return userDetails;
+	}
 
-    /**
-     * Main method that respond login page password validation
-     *
-     * @param userDetails
-     * @param authentication
-     * @throws BadCredentialsException if invalid password was entered
-     */
-    private void additionalAuthenticationChecks(
-		    AuthorizedUser userDetails,
-		    UsernamePasswordAuthenticationToken authentication) {
-	    if (authentication.getCredentials() == null) {
-		    throw new CitizenBadCredentialsException(userDetails.getUsername());
-	    }
+	/**
+	 * Main method that respond login page password validation
+	 *
+	 * @param userDetails
+	 * @param authentication
+	 * @throws BadCredentialsException if invalid password was entered
+	 */
+	private void additionalAuthenticationChecks(
+			AuthorizedUser userDetails,
+			UsernamePasswordAuthenticationToken authentication) {
+		if (authentication.getCredentials() == null) {
+			throw new CitizenBadCredentialsException(userDetails.getUsername());
+		}
 
-	    String password = authentication.getCredentials().toString();
+		String password = authentication.getCredentials().toString();
 
-	    if (password.length() < User.MIN_PASSWORD_LENGTH
-			    || !passwordEncoder.matches(password, userDetails.getPassword())) {
-		    userDetailsService.increaseUserFailedAttempts(userDetails);
-		    throw new CitizenBadCredentialsException(
-				    userDetails.getUsername(), userDetails.getFailedAuthCount() + 1);
-	    }
-	    userDetailsService.resetUserFailedAttempts(userDetails);
-    }
+		if (password.length() < User.MIN_PASSWORD_LENGTH
+				|| !passwordEncoder.matches(password, userDetails.getPassword())) {
+			userDetailsService.increaseUserFailedAttempts(userDetails);
+			throw new CitizenBadCredentialsException(
+					userDetails.getUsername(), userDetails.getFailedAuthCount() + 1);
+		}
+		userDetailsService.resetUserFailedAttempts(userDetails);
+	}
 
 	@Override
 	public boolean supports(Class<?> authentication) {

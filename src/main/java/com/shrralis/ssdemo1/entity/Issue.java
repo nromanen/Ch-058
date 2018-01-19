@@ -25,21 +25,21 @@ import static com.shrralis.ssdemo1.entity.Issue.TABLE_NAME;
 @Table(name = TABLE_NAME)
 public class Issue implements Identifiable<Integer> {
 
-    public static final String TABLE_NAME = "issues";
-    public static final String ID_COLUMN_NAME = "id";
-    public static final String MAP_MARKER_COLUMN_NAME = "map_marker_id";
-    public static final String AUTHOR_COLUMN_NAME = "author_id";
-    public static final String IMG_COLUMN_NAME = "image_id";
-    public static final String TITLE_COLUMN_NAME = "title";
-    public static final String TEXT_COLUMN_NAME = "text";
-    public static final String TYPE_COLUMN_NAME = "type_id";
-    public static final String CLOSED_COLUMN_NAME = "closed";
-    public static final String CREATED_AT_COLUMN_NAME = "created_at";
-    public static final String UPDATED_AT_COLUMN_NAME = "updated_at";
-    public static final int MAX_TITLE_LENGTH = 32;
-    public static final int MIN_TITLE_LENGTH = 4;
-    public static final int MAX_TEXT_LENGTH = 2048;
-    public static final int MIN_TEXT_LENGTH = 8;
+	public static final String TABLE_NAME = "issues";
+	public static final String ID_COLUMN_NAME = "id";
+	public static final String MAP_MARKER_COLUMN_NAME = "map_marker_id";
+	public static final String AUTHOR_COLUMN_NAME = "author_id";
+	public static final String IMG_COLUMN_NAME = "image_id";
+	public static final String TITLE_COLUMN_NAME = "title";
+	public static final String TEXT_COLUMN_NAME = "text";
+	public static final String TYPE_COLUMN_NAME = "type_id";
+	public static final String CLOSED_COLUMN_NAME = "closed";
+	public static final String CREATED_AT_COLUMN_NAME = "created_at";
+	public static final String UPDATED_AT_COLUMN_NAME = "updated_at";
+	public static final int MAX_TITLE_LENGTH = 32;
+	public static final int MIN_TITLE_LENGTH = 4;
+	public static final int MAX_TEXT_LENGTH = 2048;
+	public static final int MIN_TEXT_LENGTH = 8;
 
 	@Id
 	@NotNull
@@ -93,53 +93,53 @@ public class Issue implements Identifiable<Integer> {
 	private Issue() {}
 
 	@Override
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public MapMarker getMapMarker() {
-        return mapMarker;
-    }
+	public MapMarker getMapMarker() {
+		return mapMarker;
+	}
 
-    public void setMapMarker(MapMarker mapMarker) {
-        this.mapMarker = mapMarker;
-    }
+	public void setMapMarker(MapMarker mapMarker) {
+		this.mapMarker = mapMarker;
+	}
 
-    public User getAuthor() {
-        return author;
-    }
+	public User getAuthor() {
+		return author;
+	}
 
-    public void setAuthor(User author) {
-        this.author = author;
-    }
+	public void setAuthor(User author) {
+		this.author = author;
+	}
 
-    public Image getImage() {
-        return image;
-    }
+	public Image getImage() {
+		return image;
+	}
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
+	public void setImage(Image image) {
+		this.image = image;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getText() {
-        return text;
-    }
+	public String getText() {
+		return text;
+	}
 
-    public void setText(String text) {
-        this.text = text;
-    }
+	public void setText(String text) {
+		this.text = text;
+	}
 
 	public Type getType() {
 		return type;
@@ -148,131 +148,131 @@ public class Issue implements Identifiable<Integer> {
 		this.type = type;
 	}
 
-    public boolean isClosed() {
-        return closed;
-    }
+	public boolean isClosed() {
+		return closed;
+	}
 
 	public void setClosed(boolean closed) {
-        this.closed = closed;
-    }
+		this.closed = closed;
+	}
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
 
 	public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+		this.createdAt = createdAt;
+	}
 
-    LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+	LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+		this.updatedAt = updatedAt;
+	}
 
-    @Entity
-    @Table(name = Type.TABLE_NAME)
-    public static class Type implements Identifiable<Integer> {
-        public static final String TABLE_NAME = "issue_types";
-        public static final String ID_COLUMN_NAME = "id";
-        public static final String NAME_COLUMN_NAME = "name";
-        public static final int MIN_NAME_LENGTH = 4;
-        public static final int MAX_NAME_LENGTH = 16;
+	@Entity
+	@Table(name = Type.TABLE_NAME)
+	public static class Type implements Identifiable<Integer> {
+		public static final String TABLE_NAME = "issue_types";
+		public static final String ID_COLUMN_NAME = "id";
+		public static final String NAME_COLUMN_NAME = "name";
+		public static final int MIN_NAME_LENGTH = 4;
+		public static final int MAX_NAME_LENGTH = 16;
 
-        @Id
-        @NotNull
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issue_types_seq_gen")
-        @SequenceGenerator(name = "issue_types_seq_gen", sequenceName = "issue_types_id_seq", allocationSize = 1)
-        @Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
-        private Integer id;
+		@Id
+		@NotNull
+		@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issue_types_seq_gen")
+		@SequenceGenerator(name = "issue_types_seq_gen", sequenceName = "issue_types_id_seq", allocationSize = 1)
+		@Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
+		private Integer id;
 
-	    @NotNull
-	    @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
-	    @Column(name = NAME_COLUMN_NAME, nullable = false, unique = true, length = MAX_NAME_LENGTH)
-	    private String name;
+		@NotNull
+		@Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
+		@Column(name = NAME_COLUMN_NAME, nullable = false, unique = true, length = MAX_NAME_LENGTH)
+		private String name;
 
-        public Integer getId() {
-            return id;
-        }
+		public Integer getId() {
+			return id;
+		}
 
-        public void setId(Integer id) {
-            this.id = id;
-        }
+		public void setId(Integer id) {
+			this.id = id;
+		}
 
-        public String getName() {
-            return name;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
 
-    public static final class Builder {
-    	private Issue issue;
+	public static final class Builder {
+		private Issue issue;
 
-    	private Builder() {
-    		issue = new Issue();
-	    }
+		private Builder() {
+			issue = new Issue();
+		}
 
-	    public static Builder anIssue() {
-    		return new Builder();
-	    }
+		public static Builder anIssue() {
+			return new Builder();
+		}
 
-	    public Builder setId(Integer id) {
-		    issue.setId(id);
-		    return this;
-	    }
+		public Builder setId(Integer id) {
+			issue.setId(id);
+			return this;
+		}
 
-	    public Builder setMapMarker(MapMarker marker) {
-    		issue.setMapMarker(marker);
-    		return this;
-	    }
+		public Builder setMapMarker(MapMarker marker) {
+			issue.setMapMarker(marker);
+			return this;
+		}
 
-	    public Builder setAuthor(User author) {
-    		issue.setAuthor(author);
-    		return this;
-	    }
+		public Builder setAuthor(User author) {
+			issue.setAuthor(author);
+			return this;
+		}
 
-	    public Builder setTitle(String title) {
-    		issue.setTitle(title);
-    		return this;
-	    }
+		public Builder setTitle(String title) {
+			issue.setTitle(title);
+			return this;
+		}
 
-	    public Builder setText(String text) {
-    		issue.setText(text);
-    		return this;
-	    }
+		public Builder setText(String text) {
+			issue.setText(text);
+			return this;
+		}
 
-	    public Builder setImage(Image image) {
-    		issue.setImage(image);
-    		return this;
-	    }
+		public Builder setImage(Image image) {
+			issue.setImage(image);
+			return this;
+		}
 
-	    public Builder setType(Type type) {
-		    issue.setTypeId(type);
-		    return this;
-	    }
+		public Builder setType(Type type) {
+			issue.setTypeId(type);
+			return this;
+		}
 
-	    public Builder setClosed(boolean closed) {
-    		issue.setClosed(closed);
-    		return this;
-	    }
+		public Builder setClosed(boolean closed) {
+			issue.setClosed(closed);
+			return this;
+		}
 
-	    public Builder setCreatedAt(LocalDateTime createdAt) {
-    		issue.setCreatedAt(createdAt);
-    		return this;
-	    }
+		public Builder setCreatedAt(LocalDateTime createdAt) {
+			issue.setCreatedAt(createdAt);
+			return this;
+		}
 
-	    public Builder setUpdatedAt(LocalDateTime updatedAt) {
-		    issue.setUpdatedAt(updatedAt);
-		    return this;
-	    }
+		public Builder setUpdatedAt(LocalDateTime updatedAt) {
+			issue.setUpdatedAt(updatedAt);
+			return this;
+		}
 
-	    public Issue build() {
-    		return issue;
-	    }
-    }
+		public Issue build() {
+			return issue;
+		}
+	}
 }

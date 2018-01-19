@@ -172,7 +172,7 @@ public class AuthServiceImpl implements IAuthService {
 	}
 
 	private boolean isCurrentAuthenticationAnonymous(final Authentication auth,
-	                                                 final AuthenticationTrustResolver authTrustResolver) {
+													 final AuthenticationTrustResolver authTrustResolver) {
 		return authTrustResolver.isAnonymous(auth);
 	}
 

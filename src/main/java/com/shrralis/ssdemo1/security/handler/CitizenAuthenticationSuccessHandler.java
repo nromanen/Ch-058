@@ -45,31 +45,31 @@ public class CitizenAuthenticationSuccessHandler implements AuthenticationSucces
 	}
 
 	@Override
-    public void onAuthenticationSuccess(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication
-    ) throws IOException {
-        handle(request, response, authentication);
-        clearAuthenticationAttributes(request);
-    }
+	public void onAuthenticationSuccess(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Authentication authentication
+	) throws IOException {
+		handle(request, response, authentication);
+		clearAuthenticationAttributes(request);
+	}
 
-    protected void handle(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication
-    ) throws IOException {
-	    response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-	    response.setStatus(HttpServletResponse.SC_OK);
-	    MAPPER.writeValue(response.getWriter(), new JsonResponse(authService.getCurrentSession()));
-    }
+	protected void handle(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Authentication authentication
+	) throws IOException {
+		response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+		response.setStatus(HttpServletResponse.SC_OK);
+		MAPPER.writeValue(response.getWriter(), new JsonResponse(authService.getCurrentSession()));
+	}
 
 	private void clearAuthenticationAttributes(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession(false);
 
-        if (session == null) {
-            return;
-        }
-        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-    }
+		if (session == null) {
+			return;
+		}
+		session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+	}
 }

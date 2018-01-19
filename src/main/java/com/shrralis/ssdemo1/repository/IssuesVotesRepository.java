@@ -22,13 +22,13 @@ import java.util.Optional;
 
 @Repository
 public interface IssuesVotesRepository extends JpaRepository<IssueVote, IssueVote.Id> {
-    Optional<IssueVote> findByVoter_IdAndIssue_Id(int voterId, int issueId);
+	Optional<IssueVote> findByVoter_IdAndIssue_Id(int voterId, int issueId);
 
-    void deleteAllByVoter_IdAndIssue_Id(int voterId, int issueId);
+	void deleteAllByVoter_IdAndIssue_Id(int voterId, int issueId);
 
-    long countByVoteAndIssue_Id(Boolean vote, int issueId);
+	long countByVoteAndIssue_Id(Boolean vote, int issueId);
 
-    @Modifying
-    @Query(value = "INSERT INTO issues_votes(issue_id, voter_id, vote) VALUES(?1, ?2, ?3)", nativeQuery = true)
-    void insertLikeOrDislike(Integer issueId, Integer voterId, Boolean vote);
+	@Modifying
+	@Query(value = "INSERT INTO issues_votes(issue_id, voter_id, vote) VALUES(?1, ?2, ?3)", nativeQuery = true)
+	void insertLikeOrDislike(Integer issueId, Integer voterId, Boolean vote);
 }

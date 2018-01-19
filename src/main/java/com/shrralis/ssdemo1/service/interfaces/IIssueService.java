@@ -11,29 +11,29 @@ import java.util.List;
 
 public interface IIssueService {
 
-    Issue saveIssue(MapDataDTO dto, MultipartFile image) throws BadFieldFormatException;
+	Issue saveIssue(MapDataDTO dto, MultipartFile image) throws BadFieldFormatException;
 
-    Issue getById(Integer id);
+	Issue getById(Integer id);
 
-    List<Issue> getAllIssueByMapMarker(int mapMarkerId);
+	List<Issue> getAllIssueByMapMarker(int mapMarkerId);
 
-    Issue findById(Integer id) throws AbstractCitizenException;
+	Issue findById(Integer id) throws AbstractCitizenException;
 
-    List<Issue> findTitleOrTextContaining(String title, String text);
+	List<Issue> findTitleOrTextContaining(String title, String text);
 
-    List<Issue> findAuthorId(Integer id);
+	List<Issue> findAuthorId(Integer id);
 
-    List<Issue> findAll();
+	List<Issue> findAll();
 
-    void deleteById(Integer id);
+	void deleteById(Integer id);
 
-    void setStatus(Boolean flag, Integer id);
+	void setStatus(Boolean flag, Integer id);
 
-    List<Issue> findClosedTrue();
+	List<Issue> findClosedTrue();
 
-    List<Issue> findClosedFalse();
+	List<Issue> findClosedFalse();
 
-    byte[] getImageInByte(Integer issueId) throws IOException;
+	byte[] getImageInByte(Integer issueId) throws IOException;
 
-    byte[] getImageInByte(String src) throws BadFieldFormatException;
+	byte[] getImageInByte(String src) throws BadFieldFormatException;
 }
