@@ -12,12 +12,11 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
+import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
-import com.shrralis.ssdemo1.exception.EntityNotExistException;
 import com.shrralis.ssdemo1.exception.IllegalParameterException;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.ssdemo1.service.interfaces.IMapMarkersService;
-import com.shrralis.tools.model.JsonError;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -25,14 +24,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
+
+import static com.shrralis.ssdemo1.configuration.SecurityConfig.ROLE_ADMIN;
+import static com.shrralis.ssdemo1.configuration.SecurityConfig.ROLE_USER;
 
 
 @RestController
 @RequestMapping("/map")
 public class MapRestController {
-	private static final String USER = "ROLE_USER";
-	private static final String ADMIN = "ROLE_ADMIN";
 	private final IMapMarkersService markerService;
 	private final IIssueService issueService;
 
@@ -53,16 +52,16 @@ public class MapRestController {
 		return new JsonResponse(markerService.getMarker(lat, lng));
 	}
 
-	@Secured({USER, ADMIN})
+	@Secured({ROLE_USER, ROLE_ADMIN})
     @PostMapping("/marker")
     public JsonResponse saveMarker(@RequestBody final MapMarker marker) {
         return new JsonResponse(markerService.saveMarker(marker));
     }
 
-	@Secured({USER, ADMIN})
+	@Secured({ROLE_USER, ROLE_ADMIN})
 	@PostMapping("/issue")
 	public JsonResponse saveIssue(@RequestParam("file") MultipartFile image, @Valid @ModelAttribute MapDataDTO dto)
-			throws AbstractCitizenException, IOException {
+			throws AbstractCitizenException {
 
 		if (image == null) {
 			throw new IllegalParameterException("file");

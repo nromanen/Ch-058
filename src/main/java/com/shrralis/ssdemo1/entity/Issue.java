@@ -191,7 +191,7 @@ public class Issue implements Identifiable<Integer> {
 	    @NotNull
 	    @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
 	    @Column(name = NAME_COLUMN_NAME, nullable = false, unique = true, length = MAX_NAME_LENGTH)
-	    private IssueType name;
+	    private String name;
 
         public Integer getId() {
             return id;
@@ -201,20 +201,14 @@ public class Issue implements Identifiable<Integer> {
             this.id = id;
         }
 
-        public IssueType getName() {
+        public String getName() {
             return name;
         }
 
-        public void setName(IssueType name) {
+        public void setName(String name) {
             this.name = name;
         }
     }
-
-	public enum IssueType {
-		PROBLEM,
-		INFO,
-		FEEDBACK
-	}
 
     public static final class Builder {
     	private Issue issue;
