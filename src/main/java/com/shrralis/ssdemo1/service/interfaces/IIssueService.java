@@ -1,17 +1,15 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
-import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 public interface IIssueService {
 
-    Issue saveIssue(MapDataDTO dto, MultipartFile image);
+    Issue saveIssue(MapDataDTO dto, MultipartFile image) throws IOException;
 
     Issue getById(Integer id);
 

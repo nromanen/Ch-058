@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 
 @RestController
 @RequestMapping("/map")
 public class MapRestController {
-
+	private static final String USER = "ROLE_USER";
+	private static final String ADMIN = "ROLE_ADMIN";
 	private final IMapMarkersService markerService;
 	private final IIssueService issueService;
 
@@ -51,16 +53,17 @@ public class MapRestController {
 		return new JsonResponse(markerService.getMarker(lat, lng));
 	}
 
-	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@Secured({USER, ADMIN})
     @PostMapping("/marker")
     public JsonResponse saveMarker(@RequestBody final MapMarker marker) {
         return new JsonResponse(markerService.saveMarker(marker));
     }
 
-	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@Secured({USER, ADMIN})
 	@PostMapping("/issue")
-	public JsonResponse saveIssue(@RequestParam("file") MultipartFile image,
-	                              @Valid @ModelAttribute MapDataDTO dto) throws AbstractCitizenException {
+	public JsonResponse saveIssue(@RequestParam("file") MultipartFile image, @Valid @ModelAttribute MapDataDTO dto)
+			throws AbstractCitizenException, IOException {
+
 		if (image == null) {
 			throw new IllegalParameterException("file");
 		}

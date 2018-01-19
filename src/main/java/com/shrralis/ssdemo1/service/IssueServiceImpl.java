@@ -11,11 +11,9 @@ import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,8 +32,6 @@ import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 public class IssueServiceImpl implements IIssueService {
 	private static final int OPENED_TYPE = 1;
 	private static final String CATALINA_HOME_NAME = "catalina.home";
-
-	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
 
     private final IssuesRepository issuesRepository;
     private final MapMarkersRepository mapMarkersRepository;
@@ -58,7 +54,7 @@ public class IssueServiceImpl implements IIssueService {
 	    return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
     }
 
-    public Issue saveIssue(MapDataDTO dto, MultipartFile file) {
+    public Issue saveIssue(MapDataDTO dto, MultipartFile file) throws IOException{
 
 		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
 
@@ -81,37 +77,26 @@ public class IssueServiceImpl implements IIssueService {
 		        .build());
     }
 
-    private Image parseImage(MultipartFile file) {
-	    byte[] blob = {};
+    private Image parseImage(MultipartFile file) throws IOException {
 
-	    try {
-		    blob = file.getBytes();
-	    } catch (IOException e) {
-		    logger.info("Error while file encoding", e);
-	    }
-
+	    byte[] blob = file.getBytes();
 	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(blob));
 
 	    if(duplicateImage == null) {
-		    Image image = new Image();
-
 		    String uniqueFileName = UUID.randomUUID().toString().replace("-", "");
 		    String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 		    String uniqueFile = uniqueFileName + "." + extension;
 
+		    Image image = new Image();
 		    image.setSrc(uniqueFile);
 		    image.setHash(DigestUtils.md5Hex(blob));
 
 		    File newFile = new File(System.getProperty(CATALINA_HOME_NAME) + File.separator + uniqueFile);
-		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
-			    stream.write(blob);
-		    } catch (IOException e) {
-			    logger.info("Error while file saving", e);
-		    }
+		    FileUtils.writeByteArrayToFile(newFile, blob);
+
 		    return image;
 	    }
-	        return duplicateImage;
-
+	    return duplicateImage;
     }
 
 	@Override
