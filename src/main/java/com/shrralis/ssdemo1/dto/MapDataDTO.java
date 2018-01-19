@@ -35,7 +35,7 @@ public class MapDataDTO {
 	private String desc;
 
 	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)
-	private Integer typeId;
+	private String typeName;
 
 	public Integer getMarkerId() {
 		return markerId;
@@ -61,11 +61,11 @@ public class MapDataDTO {
 		this.desc = desc;
 	}
 
-	public Integer getTypeId() {
-		return typeId;
+	public String getTypeName() {
+		return typeName;
 	}
 
-	public void setTypeId(Integer typeId) {
-		this.typeId = typeId;
+	public void setTypeName(String type) {
+		this.typeName = type;
 	}
 }

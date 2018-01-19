@@ -2,7 +2,7 @@
 
 --changeset shrralis:1513609008270-1
 CREATE TABLE issue_types (
-  id   SERIAL      NOT NULL,
+  id   SERIAL	  NOT NULL,
   name VARCHAR(16) NOT NULL,
   CONSTRAINT issue_types_pkey PRIMARY KEY (id)
 );

@@ -38,8 +38,8 @@ public class CitizenAuthenticationFailureHandler extends SimpleUrlAuthentication
 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request,
-	                                    HttpServletResponse response,
-	                                    AuthenticationException e
+										HttpServletResponse response,
+										AuthenticationException e
 	) throws IOException, ServletException {
 		response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 

@@ -23,10 +23,10 @@ import static com.shrralis.ssdemo1.entity.MapMarker.TABLE_NAME;
 @Table(name = TABLE_NAME)
 public class MapMarker implements Identifiable<Integer> {
 
-    public static final String TABLE_NAME = "map_markers";
-    public static final String ID_COLUMN_NAME = "id";
-    public static final String LAT_COLUMN_NAME = "lat";
-    public static final String LNG_COLUMN_NAME = "lng";
+	public static final String TABLE_NAME = "map_markers";
+	public static final String ID_COLUMN_NAME = "id";
+	public static final String LAT_COLUMN_NAME = "lat";
+	public static final String LNG_COLUMN_NAME = "lng";
 
 	@Id
 	@NotNull
@@ -43,27 +43,27 @@ public class MapMarker implements Identifiable<Integer> {
 	@Column(name = LNG_COLUMN_NAME, nullable = false)
 	private Double lng;
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public Double getLat() {
-        return lat;
-    }
+	public Double getLat() {
+		return lat;
+	}
 
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
 
-    public Double getLng() {
-        return lng;
-    }
+	public Double getLng() {
+		return lng;
+	}
 
-    public void setLng(Double lng) {
-        this.lng = lng;
-    }
+	public void setLng(Double lng) {
+		this.lng = lng;
+	}
 }

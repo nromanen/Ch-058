@@ -22,23 +22,23 @@ import java.util.UUID;
 @Transactional
 public class UserConnectionServiceImpl implements ConnectionSignUp{
 
-    private final UsersRepository usersRepository;
-    private final SocialService service;
+	private final UsersRepository usersRepository;
+	private final SocialService service;
 
-    @Autowired
-    public UserConnectionServiceImpl(UsersRepository usersRepository, SocialService service) {
-        this.usersRepository = usersRepository;
-        this.service = service;
-    }
+	@Autowired
+	public UserConnectionServiceImpl(UsersRepository usersRepository, SocialService service) {
+		this.usersRepository = usersRepository;
+		this.service = service;
+	}
 
-    @Override
-    public String execute(Connection<?> connection) {
+	@Override
+	public String execute(Connection<?> connection) {
 
 
-        if(StringUtils.contains(connection.getProfileUrl(), "facebook")){
-            return String.valueOf(usersRepository.save(service.facebookProfileExtract((Connection<Facebook>)connection)).getId());
-        }
+		if(StringUtils.contains(connection.getProfileUrl(), "facebook")){
+			return String.valueOf(usersRepository.save(service.facebookProfileExtract((Connection<Facebook>)connection)).getId());
+		}
 
-        return String.valueOf(usersRepository.save(service.googleProfileExtract((Connection<Google>)connection)).getId());
-    }
+		return String.valueOf(usersRepository.save(service.googleProfileExtract((Connection<Google>)connection)).getId());
+	}
 }

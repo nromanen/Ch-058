@@ -2,19 +2,19 @@
 
 --changeset shrralis:1513600434496-1
 CREATE TABLE issues (
-  id            SERIAL        NOT NULL,
-  map_marker_id INT           NOT NULL,
-  author_id     INT           NOT NULL,
-  title         VARCHAR(32)   NOT NULL,
-  text          VARCHAR(2048) NOT NULL,
+  id			SERIAL		NOT NULL,
+  map_marker_id INT		   NOT NULL,
+  author_id	 INT		   NOT NULL,
+  title		 VARCHAR(32)   NOT NULL,
+  text		  VARCHAR(2048) NOT NULL,
   CONSTRAINT issues_pkey PRIMARY KEY (id)
 );
 
 --changeset shrralis:1513600434496-2
 CREATE TABLE issues_votes (
-  issue_id INT                  NOT NULL,
-  voter_id INT                  NOT NULL,
-  vote     BOOLEAN DEFAULT TRUE NOT NULL
+  issue_id INT				  NOT NULL,
+  voter_id INT				  NOT NULL,
+  vote	 BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 --changeset shrralis:1513600434496-3
