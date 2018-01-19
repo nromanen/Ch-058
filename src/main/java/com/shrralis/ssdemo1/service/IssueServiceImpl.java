@@ -62,6 +62,8 @@ public class IssueServiceImpl implements IIssueService {
 
 	    boolean closed = dto.getTypeId() != OPENED_TYPE;
 
+	    Issue.Type type = dto.getType();
+
 	    Image image = parseImage(file);
 
 	    return issuesRepository.save(Issue.Builder.anIssue()
@@ -70,7 +72,7 @@ public class IssueServiceImpl implements IIssueService {
 		        .setText(dto.getDesc())
 		        .setAuthor(user)
 		        .setImage(image)
-		        .setTypeId(dto.getTypeId())
+		        .setType()
 		        .setClosed(closed)
 		        .setCreatedAt(LocalDateTime.now())
 		        .setUpdatedAt(LocalDateTime.now())

@@ -15,7 +15,6 @@ package com.shrralis.ssdemo1.entity;
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -75,8 +74,9 @@ public class Issue implements Identifiable<Integer> {
 	private Image image;
 
 	@NotNull
-	@Column(name = TYPE_COLUMN_NAME)
-	private Integer typeId;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@JoinColumn(name = TYPE_COLUMN_NAME, nullable = false)
+	private Type type;
 
 	@NotNull
 	@Column(name = CLOSED_COLUMN_NAME, nullable = false)
@@ -141,11 +141,11 @@ public class Issue implements Identifiable<Integer> {
         this.text = text;
     }
 
-	public Integer getTypeId() {
-		return typeId;
+	public Type getType() {
+		return type;
 	}
-	public void setTypeId(Integer typeId) {
-		this.typeId = typeId;
+	public void setTypeId(Type type) {
+		this.type = type;
 	}
 
     public boolean isClosed() {
@@ -191,7 +191,7 @@ public class Issue implements Identifiable<Integer> {
 	    @NotNull
 	    @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
 	    @Column(name = NAME_COLUMN_NAME, nullable = false, unique = true, length = MAX_NAME_LENGTH)
-	    private String name;
+	    private IssueType name;
 
         public Integer getId() {
             return id;
@@ -201,14 +201,20 @@ public class Issue implements Identifiable<Integer> {
             this.id = id;
         }
 
-        public String getName() {
+        public IssueType getName() {
             return name;
         }
 
-        public void setName(String name) {
+        public void setName(IssueType name) {
             this.name = name;
         }
     }
+
+	public enum IssueType {
+		PROBLEM,
+		INFO,
+		FEEDBACK
+	}
 
     public static final class Builder {
     	private Issue issue;
@@ -251,8 +257,8 @@ public class Issue implements Identifiable<Integer> {
     		return this;
 	    }
 
-	    public Builder setTypeId(Integer id) {
-		    issue.setTypeId(id);
+	    public Builder setType(Type type) {
+		    issue.setTypeId(type);
 		    return this;
 	    }
 
