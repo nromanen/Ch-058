@@ -163,13 +163,10 @@ public class IssueServiceImpl implements IIssueService {
 
 			Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(blob));
 
-			if (duplicateImage != null) {
-				byte[] duplicateImageFile = getImageInByte(duplicateImage.getSrc());
-
-				if(Arrays.equals(blob, duplicateImageFile)) {
-					return duplicateImage;
-				}
+			if (duplicateImage != null && Arrays.equals(blob, getImageInByte(duplicateImage.getSrc()))) {
+				return duplicateImage;
 			}
+
 			String uniqueFileName = UUID.randomUUID().toString().replace("-", "");
 			String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 			String uniqueFile = uniqueFileName + "." + extension;
