@@ -2,13 +2,17 @@ package com.shrralis.ssdemo1.mail;
 
 import com.shrralis.ssdemo1.mail.interfaces.ICitizenEmailMessage;
 import com.shrralis.ssdemo1.mail.interfaces.IMailCitizenService;
+import com.sun.mail.smtp.SMTPTransport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Date;
+import java.util.Properties;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
@@ -18,24 +22,30 @@ import javax.mail.internet.MimeMessage;
 @Service
 public class MailCitizenService implements IMailCitizenService {
 
-	private final JavaMailSender mailSender;
+	private final Properties emailProperties;
 
 	@Autowired
-	public MailCitizenService(JavaMailSender mailSender) {
-		this.mailSender = mailSender;
+	public MailCitizenService(Properties emailProperties) {
+		this.emailProperties = emailProperties;
 	}
 
 	@Override
 	public void send(final ICitizenEmailMessage message) throws MessagingException {
-		MimeMessage mimeMessage = mailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, message.getEncoding());
+		final Session session = Session.getInstance(emailProperties, null);
+		final MimeMessage msg = new MimeMessage(session);
 
-		helper.setTo(message.getDestEmail());
-		helper.setSubject(message.getSubject());
-		mimeMessage.setContent(message.getPreparedEmailContent(),
-				message.getContentType() +
-						"; charset=" +
-						message.getEncoding());
-		mailSender.send(mimeMessage);
+		msg.setFrom(emailProperties.getProperty("senderEmail"));
+		msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(message.getDestEmail(), false));
+		msg.setSubject(message.getSubject());
+		msg.setContent(message.getPreparedEmailContent(),
+				message.getContentType() + "; charset=" + message.getEncoding());
+		msg.setSentDate(new Date());
+
+		SMTPTransport transport = (SMTPTransport) session.getTransport("smtps");
+
+		transport.connect(emailProperties.getProperty("mail.smtps.host"),
+				emailProperties.getProperty("senderEmail"), emailProperties.getProperty("emailPassword"));
+		transport.sendMessage(msg, msg.getAllRecipients());
+		transport.close();
 	}
 }
