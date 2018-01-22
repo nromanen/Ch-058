@@ -59,7 +59,7 @@ public class AuthRestController {
 	@PostMapping("/signUp")
 	public JsonResponse signUp(@RequestBody @Valid RegisterUserDTO user) throws AbstractCitizenException {
 		return new JsonResponse(service.signUp(user));
-    }
+	}
 
     @PostMapping("/update")
     public JsonResponse updateUser(@RequestBody @Valid RegisterUserDTO user) throws AbstractCitizenException {

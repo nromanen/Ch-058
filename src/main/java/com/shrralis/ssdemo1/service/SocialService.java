@@ -20,69 +20,69 @@ public class SocialService {
 	public static final int MAX_SURNAME_LENGTH = 32;
 	public static final int MIN_SURNAME_LENGTH = 1;
 
-    private final UsersRepository repository;
+	private final UsersRepository repository;
 
-    @Autowired
-    public SocialService(UsersRepository repository) {
-        this.repository = repository;
-    }
+	@Autowired
+	public SocialService(UsersRepository repository) {
+		this.repository = repository;
+	}
 
-    public static final String NAME_PATTERN = "^[A-ZА-ЯІЇЄ]['a-zа-яіїє]+$";
+	public static final String NAME_PATTERN = "^[A-ZА-ЯІЇЄ]['a-zа-яіїє]+$";
 
-    public User facebookProfileExtract(Connection<Facebook> connection){
-        UserProfile userProfile = connection.fetchUserProfile();
-        User user = repository.getByEmail(userProfile.getEmail());
-        if (user == null) {
-            user = new User();
-            user.setEmail(userProfile.getEmail());
-            user.setLogin("facebook" + RandomStringUtils.randomAlphabetic(8));
-            user.setPassword(UUID.randomUUID().toString());
-            String name  = userProfile.getFirstName();
-            String surname = userProfile.getLastName();
-            SocialService.validateName(user, name);
-            SocialService.validateSurname(user, surname);
-        } else{
-            if(user.getName().contains("Social")){
-                user.setName(userProfile.getFirstName());
-            }
-            if (user.getSurname().contains("Social")){
-                user.setSurname(userProfile.getLastName());
-            }
-        }
-        return user;
-    }
+	public User facebookProfileExtract(Connection<Facebook> connection){
+		UserProfile userProfile = connection.fetchUserProfile();
+		User user = repository.getByEmail(userProfile.getEmail());
+		if (user == null) {
+			user = new User();
+			user.setEmail(userProfile.getEmail());
+			user.setLogin("facebook" + RandomStringUtils.randomAlphabetic(8));
+			user.setPassword(UUID.randomUUID().toString());
+			String name  = userProfile.getFirstName();
+			String surname = userProfile.getLastName();
+			SocialService.validateName(user, name);
+			SocialService.validateSurname(user, surname);
+		} else{
+			if(user.getName().contains("Social")){
+				user.setName(userProfile.getFirstName());
+			}
+			if (user.getSurname().contains("Social")){
+				user.setSurname(userProfile.getLastName());
+			}
+		}
+		return user;
+	}
 
-    public User googleProfileExtract(Connection<Google> connection){
-        Person person = connection.getApi().plusOperations().getGoogleProfile();
-        User user = repository.getByEmail(person.getAccountEmail());
-        if(user == null){
-            user = new User();
-            user.setEmail(person.getAccountEmail());
-            user.setLogin("google" + RandomStringUtils.randomAlphabetic(8));
-            user.setPassword(UUID.randomUUID().toString());
-            String name = person.getGivenName();
-            String surname = person.getFamilyName();
-            SocialService.validateName(user, name);
-            SocialService.validateSurname(user, surname);
-        }
-        return user;
-    }
+	public User googleProfileExtract(Connection<Google> connection){
+		Person person = connection.getApi().plusOperations().getGoogleProfile();
+		User user = repository.getByEmail(person.getAccountEmail());
+		if(user == null){
+			user = new User();
+			user.setEmail(person.getAccountEmail());
+			user.setLogin("google" + RandomStringUtils.randomAlphabetic(8));
+			user.setPassword(UUID.randomUUID().toString());
+			String name = person.getGivenName();
+			String surname = person.getFamilyName();
+			SocialService.validateName(user, name);
+			SocialService.validateSurname(user, surname);
+		}
+		return user;
+	}
 
-    private static void validateName(User user, String name){
-        if((name.length() > MIN_NAME_LENGTH && name.length() < MAX_NAME_LENGTH) && name.matches(NAME_PATTERN)){
-            user.setName(name);
-        } else{
-            user.setName("Name");
-        }
-    }
+	private static void validateName(User user, String name){
+		if((name.length() > MIN_NAME_LENGTH && name.length() < MAX_NAME_LENGTH) && name.matches(NAME_PATTERN)){
+			user.setName(name);
+		} else{
+			user.setName("Name");
+		}
+	}
 
-    private static void validateSurname(User user, String surname){
-        if((surname.length() > MIN_SURNAME_LENGTH && surname.length() < MAX_SURNAME_LENGTH) && surname.matches(NAME_PATTERN)){
-            user.setSurname(surname);
-        } else{
-            user.setSurname("Surname");
-        }
-    }
+	private static void validateSurname(User user, String surname){
+		if((surname.length() > MIN_SURNAME_LENGTH && surname.length() < MAX_SURNAME_LENGTH) && surname.matches(NAME_PATTERN)){
+			user.setSurname(surname);
+		} else{
+			user.setSurname("Surname");
+		}
+	}
 
 
 }

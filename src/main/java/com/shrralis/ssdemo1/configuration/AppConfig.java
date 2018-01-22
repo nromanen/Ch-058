@@ -20,8 +20,6 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -47,16 +45,31 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 @Import(value = {
 		DatabaseConfig.class,
 		SecurityConfig.class,
-        WebSocketConfig.class,
+		WebSocketConfig.class,
 		SocialConfig.class
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
 
-	@Value("${email.host}")
+	@Value("${mail.smtps.host}")
 	private String emailHost;
 
-	@Value("${email.port}")
-	private int emailPort;
+	@Value("${mail.smtp.socketFactory.class}")
+	private String emailSocketClass;
+
+	@Value("${mail.smtp.socketFactory.fallback}")
+	private String emailSocketFallback;
+
+	@Value("${mail.smtp.port}")
+	private String emailPort;
+
+	@Value("${mail.smtp.socketFactory.port}")
+	private String emailSocketPort;
+
+	@Value("${mail.smtps.auth}")
+	private String emailAuth;
+
+	@Value("${mail.smtps.quitwait}")
+	private String emailQuitWait;
 
 	@Value("${email.username}")
 	private String emailUsername;
@@ -87,21 +100,19 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public JavaMailSender javaMailSender() {
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+	public Properties emailProperties() {
+		Properties props = System.getProperties();
 
-		mailSender.setHost(emailHost);
-		mailSender.setPort(emailPort);
-		mailSender.setUsername(emailUsername);
-		mailSender.setPassword(emailPass);
-
-		Properties props = mailSender.getJavaMailProperties();
-
-		props.put("mail.transport.protocol", "smtp");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.debug", "true");
-		return mailSender;
+		props.setProperty("mail.smtps.host", emailHost);
+		props.setProperty("mail.smtp.socketFactory.class", emailSocketClass);
+		props.setProperty("mail.smtp.socketFactory.fallback", emailSocketFallback);
+		props.setProperty("mail.smtp.port", emailPort);
+		props.setProperty("mail.smtp.socketFactory.port", emailSocketPort);
+		props.setProperty("mail.smtps.auth", emailAuth);
+		props.setProperty("senderEmail", emailUsername);
+		props.setProperty("emailPassword", emailPass);
+		props.put("mail.smtps.quitwait", emailQuitWait);
+		return props;
 	}
 
 	@Bean
@@ -154,5 +165,4 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		messageSource.setUseCodeAsDefaultMessage(true);
 		return messageSource;
 	}
-
 }

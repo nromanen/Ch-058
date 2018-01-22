@@ -58,7 +58,7 @@
           </div>
         </div>
 
-        <md-chip class="md-accent" v-for="err in errors" :key="err">{{ err }}</md-chip>
+        <md-chip class="md-accent error" v-for="err in errors" :key="err">{{ err }}</md-chip>
       </md-card-content>
 
       <md-progress-bar md-mode="indeterminate" v-if="sending"/>

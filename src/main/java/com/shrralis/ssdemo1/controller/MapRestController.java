@@ -12,6 +12,7 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
+import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.exception.IllegalParameterException;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
@@ -23,6 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
+import static com.shrralis.ssdemo1.configuration.SecurityConfig.ROLE_ADMIN;
+import static com.shrralis.ssdemo1.configuration.SecurityConfig.ROLE_USER;
+
 
 @RestController
 @RequestMapping("/map")
@@ -31,10 +35,10 @@ public class MapRestController {
 	private final IMapMarkersService markerService;
 	private final IIssueService issueService;
 
-    @Autowired
+	@Autowired
 	public MapRestController(IMapMarkersService markerService, IIssueService issueService) {
-    	this.markerService = markerService;
-    	this.issueService = issueService;
+		this.markerService = markerService;
+		this.issueService = issueService;
 	}
 
     @GetMapping

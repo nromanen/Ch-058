@@ -2,47 +2,47 @@ package com.shrralis.ssdemo1.dto;
 
 public class ChatRoom {
 
-    private String login;
-    private String issueTitle;
-    private int userId;
-    private int issueId;
+	private String login;
+	private String issueTitle;
+	private int userId;
+	private int issueId;
 
-    public ChatRoom(String login, String issueTitle, int userId, int issueId) {
-        this.login = login;
-        this.issueTitle = issueTitle;
-        this.userId = userId;
-        this.issueId = issueId;
-    }
+	public ChatRoom(String login, String issueTitle, int userId, int issueId) {
+		this.login = login;
+		this.issueTitle = issueTitle;
+		this.userId = userId;
+		this.issueId = issueId;
+	}
 
-    public String getLogin() {
-        return login;
-    }
+	public String getLogin() {
+		return login;
+	}
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+	public void setLogin(String login) {
+		this.login = login;
+	}
 
-    public String getIssueTitle() {
-        return issueTitle;
-    }
+	public String getIssueTitle() {
+		return issueTitle;
+	}
 
-    public void setIssueTitle(String issueTitle) {
-        this.issueTitle = issueTitle;
-    }
+	public void setIssueTitle(String issueTitle) {
+		this.issueTitle = issueTitle;
+	}
 
-    public int getUserId() {
-        return userId;
-    }
+	public int getUserId() {
+		return userId;
+	}
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 
-    public int getIssueId() {
-        return issueId;
-    }
+	public int getIssueId() {
+		return issueId;
+	}
 
-    public void setIssueId(int issueId) {
-        this.issueId = issueId;
-    }
+	public void setIssueId(int issueId) {
+		this.issueId = issueId;
+	}
 }

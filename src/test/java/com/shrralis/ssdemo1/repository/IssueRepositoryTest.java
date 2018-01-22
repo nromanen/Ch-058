@@ -31,6 +31,7 @@ public class IssueRepositoryTest extends TestCase {
 	private Issue testIssue;
 	private MapMarker testMarker;
 	private Image testImage;
+	private Issue.Type testType;
 
 	@Before
 	public void setUp() throws Exception {
@@ -56,13 +57,16 @@ public class IssueRepositoryTest extends TestCase {
 		testImage.setHash("testHash");
 		testImage.setType(Image.Type.ISSUE);
 
+		testType = new Issue.Type();
+		testType.setName("PROBLEM");
+
 		testIssue = Issue.Builder.anIssue()
 				.setMapMarker(testMarker)
 				.setTitle("title")
 				.setText("description")
 				.setAuthor(testUser)
 				.setImage(testImage)
-				.setTypeId(1)
+				.setType(testType)
 				.setClosed(false)
 				.setCreatedAt(LocalDateTime.now())
 				.setUpdatedAt(LocalDateTime.now())
@@ -82,6 +86,5 @@ public class IssueRepositoryTest extends TestCase {
 
 		int[] result = repository.getIssueTypeById(testMarker.getId());
 		assertEquals(result.length, 1);
-		assertTrue(result[0] == testIssue.getTypeId());
 	}
 }

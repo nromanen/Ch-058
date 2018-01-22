@@ -21,17 +21,17 @@ import java.io.File;
 
 public class WebSpringInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    protected Class<?>[] getRootConfigClasses() {
-	    return new Class[] { AppConfig.class };
-    }
+	protected Class<?>[] getRootConfigClasses() {
+		return new Class[] { AppConfig.class };
+	}
 
-    protected Class<?>[] getServletConfigClasses() {
-        return null;
-    }
+	protected Class<?>[] getServletConfigClasses() {
+		return null;
+	}
 
-    protected String[] getServletMappings() {
-	    return new String[] { "/" };
-    }
+	protected String[] getServletMappings() {
+		return new String[] { "/" };
+	}
 
 	@Override
 	protected void customizeRegistration(ServletRegistration.Dynamic registration) {

@@ -20,8 +20,8 @@ public class UserManagementController {
 
 	@GetMapping("/{id}")
 	public JsonResponse getById(@PathVariable Integer id) throws AbstractCitizenException {
-        return new JsonResponse(userService.findById(id));
-    }
+		return new JsonResponse(userService.findById(id));
+	}
 
 	@GetMapping("/login/{login}")
 	public JsonResponse getByLogin(@PathVariable String login) throws AbstractCitizenException {

@@ -31,9 +31,9 @@ public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public SecurityConfigAdapter(AuthenticationSuccessHandler authSuccessHandler,
-	                             CitizenAuthenticationFailureHandler authFailureHandler,
-	                             CitizenAccessDeniedHandler accessDeniedHandler,
-	                             LogoutSuccessHandler logoutSuccessHandler) {
+								 CitizenAuthenticationFailureHandler authFailureHandler,
+								 CitizenAccessDeniedHandler accessDeniedHandler,
+								 LogoutSuccessHandler logoutSuccessHandler) {
 		this.authSuccessHandler = authSuccessHandler;
 		this.authFailureHandler = authFailureHandler;
 		this.accessDeniedHandler = accessDeniedHandler;

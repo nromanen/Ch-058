@@ -23,16 +23,16 @@ import java.util.Collections;
 @Service
 public class SpringSecuritySignInAdapter implements SignInAdapter {
 
-    @Autowired
-    private IUserService userDetailsService;
+	@Autowired
+	private IUserService userDetailsService;
 
-    @Override
-    public String signIn(String localUserId, Connection<?> connection, NativeWebRequest request) {
-        User user = this.userDetailsService.getUser(Integer.parseInt(localUserId));
-        AuthorizedUser authorizedUser = new AuthorizedUser(user, UserDetailsServiceImpl.getAuthorities(user));
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(
-                        authorizedUser, null, Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getType().toString()))));
-        return null;
-    }
+	@Override
+	public String signIn(String localUserId, Connection<?> connection, NativeWebRequest request) {
+		User user = this.userDetailsService.getUser(Integer.parseInt(localUserId));
+		AuthorizedUser authorizedUser = new AuthorizedUser(user, UserDetailsServiceImpl.getAuthorities(user));
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(
+						authorizedUser, null, Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getType().toString()))));
+		return null;
+	}
 }

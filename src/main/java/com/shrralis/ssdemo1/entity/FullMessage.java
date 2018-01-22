@@ -7,80 +7,80 @@ import java.time.LocalDateTime;
 @Table(name = "message")
 public class FullMessage {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-    private String text;
-    private Long userId;
-    private Long issueId;
-    private Long authorId;
-    private LocalDateTime date;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
+	private String text;
+	private Long userId;
+	private Long issueId;
+	private Long authorId;
+	private LocalDateTime date;
 
-    public FullMessage(Long id, String text) {
-        this.id = id;
-        this.text = text;
-    }
+	public FullMessage(Long id, String text) {
+		this.id = id;
+		this.text = text;
+	}
 
-    public FullMessage(){
-        this.text = "default";
-    }
+	public FullMessage(){
+		this.text = "default";
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getText() {
-        return text;
-    }
+	public String getText() {
+		return text;
+	}
 
-    public void setText(String text) {
-        this.text = text;
-    }
+	public void setText(String text) {
+		this.text = text;
+	}
 
-    public Long getUserId() {
-        return userId;
-    }
+	public Long getUserId() {
+		return userId;
+	}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
-    public Long getIssueId() {
-        return issueId;
-    }
+	public Long getIssueId() {
+		return issueId;
+	}
 
-    public void setIssueId(Long issueId) {
-        this.issueId = issueId;
-    }
+	public void setIssueId(Long issueId) {
+		this.issueId = issueId;
+	}
 
-    public LocalDateTime getDate() {
-        return date;
-    }
+	public LocalDateTime getDate() {
+		return date;
+	}
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
+	public void setDate(LocalDateTime date) {
+		this.date = date;
+	}
 
-    public Long getAuthorId() {
-        return authorId;
-    }
+	public Long getAuthorId() {
+		return authorId;
+	}
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
+	public void setAuthorId(Long authorId) {
+		this.authorId = authorId;
+	}
 
-    public static FullMessage messageBuilder(Message input, Long userId, Long issueId){
-        FullMessage message = new FullMessage();
-        message.setText(input.getText());
-        message.setIssueId(issueId);
-        message.setUserId(userId);
-        message.setAuthorId(input.getAuthorId());
-        message.setDate(LocalDateTime.now());
-        return message;
-    }
+	public static FullMessage messageBuilder(Message input, Long userId, Long issueId){
+		FullMessage message = new FullMessage();
+		message.setText(input.getText());
+		message.setIssueId(issueId);
+		message.setUserId(userId);
+		message.setAuthorId(input.getAuthorId());
+		message.setDate(LocalDateTime.now());
+		return message;
+	}
 }

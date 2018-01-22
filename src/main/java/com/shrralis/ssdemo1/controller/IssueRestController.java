@@ -16,17 +16,17 @@ import java.util.Map;
 @RequestMapping("/issues")
 public class IssueRestController {
 
-    private final IIssueService issueService;
-    private final IIssueVotesService issueVotesService;
-    private static final String LIKE = "likeVote";
-    private static final String DISLIKE = "dislikeVote";
+	private final IIssueService issueService;
+	private final IIssueVotesService issueVotesService;
+	private static final String LIKE = "likeVote";
+	private static final String DISLIKE = "dislikeVote";
 
 	@Autowired
-    public IssueRestController(IIssueService issueService,
-	                           IIssueVotesService issueVotesService) {
-        this.issueService = issueService;
-        this.issueVotesService = issueVotesService;
-    }
+	public IssueRestController(IIssueService issueService,
+							   IIssueVotesService issueVotesService) {
+		this.issueService = issueService;
+		this.issueVotesService = issueVotesService;
+	}
 
 	@GetMapping
 	public JsonResponse allIssues() {

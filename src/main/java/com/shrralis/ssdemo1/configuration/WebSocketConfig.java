@@ -14,17 +14,17 @@ import java.util.List;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
-        stompEndpointRegistry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
-    }
-    @Override
-    public boolean configureMessageConverters(List<MessageConverter> list) {
-        return true;
-    }
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry messageBrokerRegistry) {
-        messageBrokerRegistry.setApplicationDestinationPrefixes("/app");
-        messageBrokerRegistry.enableSimpleBroker("/topic", "/checkTopic");
-    }
+	@Override
+	public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
+		stompEndpointRegistry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
+	}
+	@Override
+	public boolean configureMessageConverters(List<MessageConverter> list) {
+		return true;
+	}
+	@Override
+	public void configureMessageBroker(MessageBrokerRegistry messageBrokerRegistry) {
+		messageBrokerRegistry.setApplicationDestinationPrefixes("/app");
+		messageBrokerRegistry.enableSimpleBroker("/topic", "/checkTopic");
+	}
 }
