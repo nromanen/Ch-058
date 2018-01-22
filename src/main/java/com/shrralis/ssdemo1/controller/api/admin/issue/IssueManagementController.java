@@ -10,7 +10,7 @@ import com.shrralis.tools.model.JsonResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Secured("ROLE_ADMIN")
+//@Secured("ROLE_ADMIN")
 @RequestMapping("/admin/issues")
 public class IssueManagementController {
 
@@ -18,7 +18,7 @@ public class IssueManagementController {
     IIssueService issueService;
 
     @GetMapping("/{id}")
-    public JsonResponse getById(@PathVariable Integer id) throws AbstractCitizenException {
+    public JsonResponse getById(@PathVariable int id) throws AbstractCitizenException {
         return new JsonResponse(issueService.findById(id));
     }
 
@@ -33,17 +33,17 @@ public class IssueManagementController {
     }
 
     @GetMapping("/author/{id}")
-    public JsonResponse getByAuthor(@PathVariable Integer id) {
+    public JsonResponse getByAuthor(@PathVariable int id) {
         return new JsonResponse(issueService.findAuthorId(id));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable int id) {
         issueService.deleteById(id);
     }
 
     @PutMapping("/{id}/{flag}")
-    public void close(@PathVariable Integer id, @PathVariable Boolean flag) {
+    public void close(@PathVariable int id, @PathVariable boolean flag) {
         issueService.setStatus(flag, id);
     }
 

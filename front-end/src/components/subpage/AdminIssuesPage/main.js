@@ -10,7 +10,7 @@ const search = (issues, str) => {
     return issues.filter(issue => toLower(
       issue.title
       + issue.text
-      + issue.author
+      + issue.author.login
       + issue.createdAt
       + issue.type
     ).includes(toLower(str)))

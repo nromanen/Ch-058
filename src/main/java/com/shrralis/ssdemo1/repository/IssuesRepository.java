@@ -14,6 +14,8 @@ package com.shrralis.ssdemo1.repository;
 
 import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -47,4 +49,6 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
     List<Issue> findByClosedTrue();
 
     List<Issue> findByClosedFalse();
+
+    Page<Issue> findAll(Pageable pageable);
 }

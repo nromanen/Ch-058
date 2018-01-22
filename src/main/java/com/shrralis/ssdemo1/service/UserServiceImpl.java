@@ -18,6 +18,8 @@ import com.shrralis.ssdemo1.exception.EntityNotExistException;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +59,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public List<User> findByLoginOrEmailContaining(String login, String email) {
-		return repository.findByLoginOrEmailContainingAllIgnoreCase(login, email);
+		return repository.findByLoginOrEmailContainingAllIgnoreCase(login, email).getContent();
 	}
 
 	@Override
@@ -76,4 +78,10 @@ public class UserServiceImpl implements IUserService {
 	public List<User> findByType(User.Type type) {
 		return repository.findByType(type);
 	}
+
+	@Override
+	public Page findaAll(Pageable pageable) {
+		return repository.findAll(pageable);
+	}
+
 }

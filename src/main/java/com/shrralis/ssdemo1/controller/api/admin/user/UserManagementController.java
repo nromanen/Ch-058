@@ -5,19 +5,25 @@ import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Secured("ROLE_ADMIN")
+//@Secured("ROLE_ADMIN")
 @RequestMapping("/admin/users")
 public class UserManagementController {
 
 	@Autowired
     private IUserService userService;
 
+	@GetMapping("/all")
+	public JsonResponse getAll(@RequestParam int page, @RequestParam int size) {
+		return new JsonResponse(userService.findaAll(new PageRequest(page, size)));
+	}
+
 	@GetMapping("/{id}")
-	public JsonResponse getById(@PathVariable Integer id) throws AbstractCitizenException {
+	public JsonResponse getById(@PathVariable int id) throws AbstractCitizenException {
         return new JsonResponse(userService.findById(id));
     }
 
@@ -27,12 +33,12 @@ public class UserManagementController {
 	}
 
 	@GetMapping("/search/{query}")
-	public JsonResponse getByLoginOrEmail(@PathVariable String q) {
-		return new JsonResponse(userService.findByLoginOrEmailContaining(q, q));
+	public JsonResponse getByLoginOrEmail(@PathVariable String query) {
+		return new JsonResponse(userService.findByLoginOrEmailContaining(query, query));
 	}
 
 	@PutMapping("/{id}/{type}")
-	public JsonResponse setStatus(@PathVariable Integer id, @PathVariable String type) throws AbstractCitizenException {
+	public JsonResponse setStatus(@PathVariable int id, @PathVariable String type) throws AbstractCitizenException {
 		return new JsonResponse(userService.setStatus(User.Type.valueOf(type.toUpperCase()), id));
 	}
 
