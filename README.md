@@ -1,4 +1,4 @@
-# Ch-958, Geo Citizen
+# Ch-058, Geo Citizen
 ### Getting started
 1) First of all, clone the repository with `git clone`.
 1) Go to the directory with cloned repository (`cd` or something).

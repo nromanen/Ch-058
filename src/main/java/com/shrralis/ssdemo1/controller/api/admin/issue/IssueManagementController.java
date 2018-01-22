@@ -24,8 +24,8 @@ public class IssueManagementController {
 
 	@GetMapping("/{id}")
 	public JsonResponse issueById(@PathVariable Integer id) throws AbstractCitizenException {
-        return new JsonResponse(issueService.findById(id));
-    }
+		return new JsonResponse(issueService.findById(id));
+	}
 
 	@DeleteMapping("/{id}")
 	public void issue(@PathVariable Integer id) {
@@ -55,6 +55,6 @@ public class IssueManagementController {
 	@GetMapping("/search/{query}")
 	public JsonResponse issueByTitleOrText(@PathVariable String query) {
 		return new JsonResponse(issueService.findTitleOrTextContaining(query, query));
-    }
+	}
 }
 

@@ -9,8 +9,14 @@ import java.time.LocalDateTime;
  */
 public class PasswordRecoveryEmailMessage extends AbstractCitizenEmailMessage {
 
+	private static String frontUrl;
+
 	{
 		setSubject("Password recovery");
+	}
+
+	public static void setFrontUrl(String frontUrl) {
+		PasswordRecoveryEmailMessage.frontUrl = frontUrl;
 	}
 
 	@Override
@@ -28,6 +34,8 @@ public class PasswordRecoveryEmailMessage extends AbstractCitizenEmailMessage {
 				"<h4>We've received a password recovering request today at " + LocalDateTime.now() +
 				" from the  IP-address " + clientIpAddress + ".</h4>" +
 				"<p>Use the following token to continue: <b style=\"color: #9636ff\">" + token + "</b>.</p>" +
+				"<p>Or just follow next link: <b><a style=\"color: #9636ff\" href=\"" + frontUrl +
+				"/auth/passwordRecovery/" + login + "/" + token + "\">CLICK ME</a></b>.</p>" +
 				"<p>If you haven't sent the request then just ignore this message.</p>");
 	}
 

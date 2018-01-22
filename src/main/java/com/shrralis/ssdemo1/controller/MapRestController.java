@@ -12,7 +12,6 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
-import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.exception.IllegalParameterException;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
@@ -23,9 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-
-import static com.shrralis.ssdemo1.configuration.SecurityConfig.ROLE_ADMIN;
-import static com.shrralis.ssdemo1.configuration.SecurityConfig.ROLE_USER;
 
 
 @RestController
@@ -41,10 +37,10 @@ public class MapRestController {
 		this.issueService = issueService;
 	}
 
-    @GetMapping
-    public JsonResponse allMarkers() {
-        return new JsonResponse(markerService.loadAllMarkers());
-    }
+	@GetMapping
+	public JsonResponse allMarkers() {
+		return new JsonResponse(markerService.loadAllMarkers());
+	}
 
 	@GetMapping("/marker/{lat}/{lng}/")
 	public JsonResponse markerByCoords(@PathVariable("lat") double lat,
@@ -54,8 +50,8 @@ public class MapRestController {
 
 	@PostMapping("/marker")
 	public JsonResponse marker(@RequestBody final MapMarker marker) {
-        return new JsonResponse(markerService.saveMarker(marker));
-    }
+		return new JsonResponse(markerService.saveMarker(marker));
+	}
 
 	@PostMapping("/issue")
 	public JsonResponse issue(@RequestParam("file") MultipartFile image,

@@ -30,41 +30,41 @@ public class IssueRestController {
 
 	@GetMapping
 	public JsonResponse allIssues() {
-        return new JsonResponse(issueService.findAll());
-    }
+		return new JsonResponse(issueService.findAll());
+	}
 
 	@GetMapping("/{issueId}")
 	public JsonResponse issue(@PathVariable("issueId") Integer issueId) {
-        return new JsonResponse(issueService.getById(issueId));
-    }
+		return new JsonResponse(issueService.getById(issueId));
+	}
 
 	@GetMapping("/{issueId}/is-vote-exist")
 	public JsonResponse voteExists(@PathVariable("issueId") Integer issueId) {
-        Boolean vote = issueVotesService.getByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId).getVote();
-        return new JsonResponse(vote);
-    }
+		Boolean vote = issueVotesService.getByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId).getVote();
+		return new JsonResponse(vote);
+	}
 
 	@DeleteMapping("/{issueId}/vote")
 	public void vote(@PathVariable("issueId") Integer issueId) {
-        issueVotesService.deleteByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId);
-    }
+		issueVotesService.deleteByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId);
+	}
 
 	@PostMapping("/{issueId}/{vote}")
 	public void vote(@PathVariable("issueId") Integer issueId,
 	                 @PathVariable("vote") Boolean vote) {
-        issueVotesService.insertIssueVote(issueId, AuthorizedUser.getCurrent().getId(), vote);
-    }
+		issueVotesService.insertIssueVote(issueId, AuthorizedUser.getCurrent().getId(), vote);
+	}
 
 	@GetMapping("/{issueId}/votes")
 	public JsonResponse calculateVotes(@PathVariable("issueId") Integer issueId) {
-        Map<String, Long> map = new HashMap<>();
-        map.put(LIKE, issueVotesService.countByVoteAndIssue(true, issueId));
-        map.put(DISLIKE, issueVotesService.countByVoteAndIssue(false, issueId));
-        return new JsonResponse(map);
-    }
+		Map<String, Long> map = new HashMap<>();
+		map.put(LIKE, issueVotesService.countByVoteAndIssue(true, issueId));
+		map.put(DISLIKE, issueVotesService.countByVoteAndIssue(false, issueId));
+		return new JsonResponse(map);
+	}
 
-    @GetMapping(value = "/images/{issueId}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] issueImage(@PathVariable("issueId") Integer issueId) throws IOException {
+	@GetMapping(value = "/images/{issueId}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public byte[] issueImage(@PathVariable("issueId") Integer issueId) throws IOException {
 		return issueService.getImageInByte(issueId);
 	}
 }

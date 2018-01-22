@@ -124,7 +124,7 @@ public class ExceptionHandlerControllerAdvice {
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value = Exception.class)
 	public JsonResponse generalExceptionHandler(Exception e, Locale locale) {
-		logger.error("{}: {}", e.getClass(), e);
+		logger.error(e.getClass() + ":", e);
 		return new JsonResponse(JsonError.Error.INTERNAL_ERROR, locale, messageSource);
 	}
 }

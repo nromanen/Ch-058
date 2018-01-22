@@ -16,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
 import com.shrralis.ssdemo1.util.PsqlEnum;
-import com.shrralis.tools.model.JsonError;
 import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.TypeDef;
 
@@ -48,6 +47,7 @@ public class User implements Identifiable<Integer> {
 	public static final String NAME_COLUMN_NAME = "name";
 	public static final String SURNAME_COLUMN_NAME = "surname";
 	public static final String FAILED_AUTH_COUNT_COLUMN_NAME = "failed_auth_count";
+	public static final String REGISTRATION_TOKEN_COLUMN_NAME = "registration_token";
 	public static final int MAX_LOGIN_LENGTH = 16;
 	public static final int MIN_LOGIN_LENGTH = 4;
 	public static final int MAX_EMAIL_LENGTH = 256;
@@ -59,6 +59,7 @@ public class User implements Identifiable<Integer> {
 	public static final int MAX_SURNAME_LENGTH = 32;
 	public static final int MIN_SURNAME_LENGTH = 1;
 	public static final int MAX_FAILED_AUTH_VALUE = 5;
+	public static final int MAX_REGISTRATION_TOKEN_LENGTH = 32;
 
 	@Id
 	@NotNull
@@ -117,6 +118,12 @@ public class User implements Identifiable<Integer> {
 	@Max(MAX_FAILED_AUTH_VALUE)
 	@Column(name = FAILED_AUTH_COUNT_COLUMN_NAME, nullable = false)
 	private Integer failedAuthCount = 0;
+
+	@JsonIgnore
+	@NotNull
+	@Size(max = MAX_REGISTRATION_TOKEN_LENGTH)
+	@Column(name = REGISTRATION_TOKEN_COLUMN_NAME, nullable = false, length = MAX_REGISTRATION_TOKEN_LENGTH)
+	private String registrationToken = "";
 
 	public Integer getId() {
 		return id;
@@ -190,6 +197,14 @@ public class User implements Identifiable<Integer> {
 		this.failedAuthCount = failedAuthCount;
 	}
 
+	public String getRegistrationToken() {
+		return registrationToken;
+	}
+
+	public void setRegistrationToken(String registrationToken) {
+		this.registrationToken = registrationToken;
+	}
+
 	@Override
 	public String toString() {
 		return "User{" +
@@ -197,11 +212,11 @@ public class User implements Identifiable<Integer> {
 				", login='" + login + '\'' +
 				", type=" + type +
 				", email='" + email + '\'' +
-				", password='" + password + '\'' +
 				", image=" + image +
 				", name='" + name + '\'' +
 				", surname='" + surname + '\'' +
 				", failedAuthCount=" + failedAuthCount +
+				", registrationToken='" + registrationToken + '\'' +
 				'}';
 	}
 
@@ -265,6 +280,11 @@ public class User implements Identifiable<Integer> {
 
 		public Builder setFailedAuthCount(Integer failedAuthCount) {
 			user.setFailedAuthCount(failedAuthCount);
+			return this;
+		}
+
+		public Builder setRegistrationToken(String registrationToken) {
+			user.setRegistrationToken(registrationToken);
 			return this;
 		}
 

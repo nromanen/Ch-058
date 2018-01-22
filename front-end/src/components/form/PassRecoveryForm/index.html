@@ -7,7 +7,7 @@
             <md-field :class="getValidationClass('login')">
               <label for="pr-login">{{ $t('label.login') }}</label>
 
-              <md-input name="login" id="pr-login" v-model.trim="form.login" :disabled="sending"/>
+              <md-input name="login" id="pr-login" v-model.trim="form.login" :disabled="sending || fromEmailLink"/>
 
               <span class="md-error" v-if="!$v.form.login.required">{{ $t('error.required') }}</span>
 
@@ -23,7 +23,8 @@
             <md-field :class="getValidationClass('token')">
               <label for="pr-recovery-token">{{ $t('label.recovery_token') }}</label>
 
-              <md-input name="recovery_token" id="pr-recovery-token" v-model.trim="form.token" :disabled="sending"/>
+              <md-input name="recovery_token" id="pr-recovery-token" v-model.trim="form.token"
+                        :disabled="sending || fromEmailLink"/>
 
               <span class="md-error" v-if="!$v.form.token.required">{{ $t('error.required') }}</span>
             </md-field>
@@ -66,11 +67,12 @@
       <md-card-actions>
         <md-button type="button" class="md-primary" to="/">{{ $t('button.cancel') }}</md-button>
 
-        <md-button type="submit" class="md-primary" :disabled="sending" v-if="!haveToken">
+        <md-button type="submit" class="md-raised md-primary" :disabled="sending" v-if="!haveToken">
           {{ $t('button.request_recovery_token') }}
         </md-button>
 
-        <md-button type="submit" class="md-primary" :disabled="sending" v-else>{{ $t('button.recover') }}</md-button>
+        <md-button type="submit" class="md-raised md-primary" :disabled="sending" v-else>{{ $t('button.recover') }}
+        </md-button>
       </md-card-actions>
     </md-card>
   </form>

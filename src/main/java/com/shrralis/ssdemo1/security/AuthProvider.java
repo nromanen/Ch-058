@@ -12,11 +12,12 @@
 
 package com.shrralis.ssdemo1.security;
 
-import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.security.exception.CitizenBadCredentialsException;
+import com.shrralis.ssdemo1.security.exception.NotSubmittedUserRegistrationException;
 import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensException;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.security.service.interfaces.ICitizenUserDetailsService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,6 +28,9 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static com.shrralis.ssdemo1.entity.User.MAX_FAILED_AUTH_VALUE;
+import static com.shrralis.ssdemo1.entity.User.MIN_PASSWORD_LENGTH;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
@@ -51,7 +55,8 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 		String loginOrEmail = (authentication.getPrincipal() == null) ? null : authentication.getName();
 		UserDetails userDetails = retrieveUserDetails(loginOrEmail);
 
-		additionalAuthenticationChecks((AuthorizedUser) userDetails, (UsernamePasswordAuthenticationToken) authentication);
+		additionalAuthenticationChecks((AuthorizedUser) userDetails,
+				(UsernamePasswordAuthenticationToken) authentication);
 		return createSuccessAuthentication(authentication, userDetails);
 	}
 
@@ -68,7 +73,7 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 			throw new InternalAuthenticationServiceException(
 					"UserDetailsService returned null, which is an interface contract violation");
 		} else if (userDetails instanceof AuthorizedUser
-				&& ((AuthorizedUser) userDetails).getFailedAuthCount() == User.MAX_FAILED_AUTH_VALUE) {
+				&& ((AuthorizedUser) userDetails).getFailedAuthCount() == MAX_FAILED_AUTH_VALUE) {
 			throw new TooManyNonExpiredRecoveryTokensException(loginOrEmail);
 		}
 		return userDetails;
@@ -88,9 +93,13 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 			throw new CitizenBadCredentialsException(userDetails.getUsername());
 		}
 
+		if (!StringUtils.isEmpty(userDetails.getRegistrationToken())) {
+			throw new NotSubmittedUserRegistrationException(userDetails.getUsername());
+		}
+
 		String password = authentication.getCredentials().toString();
 
-		if (password.length() < User.MIN_PASSWORD_LENGTH
+		if (password.length() < MIN_PASSWORD_LENGTH
 				|| !passwordEncoder.matches(password, userDetails.getPassword())) {
 			userDetailsService.increaseUserFailedAttempts(userDetails);
 			throw new CitizenBadCredentialsException(

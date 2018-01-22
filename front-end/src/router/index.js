@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import IndexPage from '@/components/page/IndexPage/IndexPage'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
+import RegistrationSubmitPage from '@/components/page/RegistrationSubmitPage/RegistrationSubmitPage'
 import Chat from '@/components/page/ChatPage/ChatPage'
 import AdminChatNotification from '@/components/AdminChatNotification/AdminChatNotification'
 import OpenChat from '@/components/OpenChat/OpenChat'
@@ -31,7 +32,23 @@ const router = new Router({
       component: AuthPage,
       meta: {
         requiresAnonymous: true
-      }
+      },
+      children: [
+        {
+          path: 'signIn/:login',
+          props: true
+        },
+        {
+          path: 'passwordRecovery/:login/:recoveryToken',
+          props: true
+        }
+      ]
+    },
+    {
+      path: '/submitSignUp/:login/:submitToken',
+      name: 'RegistrationSubmitPage',
+      component: RegistrationSubmitPage,
+      props: true
     },
     {
       path: '/socialSuccess**',
@@ -62,7 +79,6 @@ const router = new Router({
     },
     {
       path: '/admin',
-      name: 'AdminPage',
       component: AdminPage,
       meta: {
         requiresAdmin: true

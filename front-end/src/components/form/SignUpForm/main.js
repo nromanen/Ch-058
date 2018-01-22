@@ -114,7 +114,7 @@ export default {
       )
     },
     snackBarAction() {
-      this.$router.push('login');
+      this.$router.push('/auth/signIn');
 
       this.showSnackBar = false;
     },

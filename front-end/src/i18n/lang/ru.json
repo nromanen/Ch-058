@@ -86,7 +86,8 @@
     "admin_restriction": "Права администратора",
     "finish_registration": "Завершите регистрацию",
     "other": "Другое",
-    "messages": "Сообщения"
+    "messages": "Сообщения",
+    "submit_token": "Токен подтверждения"
   },
   "error": {
     "required": "Обязательно",

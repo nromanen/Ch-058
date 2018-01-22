@@ -1,9 +1,11 @@
 package com.shrralis.ssdemo1.security.exception;
 
-import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.security.exception.interfaces.ICitizenAuthenticationException;
 import com.shrralis.tools.model.JsonError;
 import org.springframework.security.authentication.BadCredentialsException;
+
+import static com.shrralis.ssdemo1.entity.User.MAX_FAILED_AUTH_VALUE;
+import static com.shrralis.tools.model.JsonError.Error.BAD_CREDENTIALS;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
@@ -60,7 +62,7 @@ public class CitizenBadCredentialsException extends BadCredentialsException impl
 	@Override
 	public JsonError.Error getError() {
 		return failedAttempts == 0 ?
-				JsonError.Error.BAD_CREDENTIALS :
-				JsonError.Error.BAD_CREDENTIALS.forField(getFailedAttempts() + "/" + User.MAX_FAILED_AUTH_VALUE);
+				BAD_CREDENTIALS :
+				BAD_CREDENTIALS.forField(getFailedAttempts() + "/" + MAX_FAILED_AUTH_VALUE);
 	}
 }

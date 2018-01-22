@@ -5,6 +5,18 @@ import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: "password-recovery-form",
+  props: {
+    recoveryToken: String,
+    login: String
+  },
+  created: function () {
+    if (this.$route.params.login && this.$route.params.recoveryToken) {
+      this.form.login = this.$route.params.login;
+      this.form.token = this.$route.params.recoveryToken;
+      this.haveToken = true;
+      this.fromEmailLink = true;
+    }
+  },
   mixins: [validationMixin],
   data: () => ({
     form: {
@@ -16,7 +28,8 @@ export default {
     sending: false,
     errors: null,
     haveToken: false,
-    showSnackBar: false
+    showSnackBar: false,
+    fromEmailLink: false
   }),
   validations: {
     form: {
@@ -63,13 +76,14 @@ export default {
           let json = response.body;
 
           if (!json.errors) {
-            this.sending = false;
             this.haveToken = true;
           } else if (json.errors.length) {
             this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
           } else {
             this.errors.push(getErrorMessage(UNEXPECTED));
           }
+
+          this.sending = false;
         }, error => {
           switch (error.status) {
             case 400:

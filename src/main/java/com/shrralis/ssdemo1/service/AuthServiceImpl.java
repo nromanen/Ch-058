@@ -12,15 +12,13 @@
 
 package com.shrralis.ssdemo1.service;
 
-import com.shrralis.ssdemo1.dto.PasswordRecoveryDTO;
-import com.shrralis.ssdemo1.dto.RegisterUserDTO;
-import com.shrralis.ssdemo1.dto.RegisteredUserDTO;
-import com.shrralis.ssdemo1.dto.UserSessionDTO;
+import com.shrralis.ssdemo1.dto.*;
 import com.shrralis.ssdemo1.dto.mapper.RegisteredUserMapper;
 import com.shrralis.ssdemo1.entity.RecoveryToken;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.*;
 import com.shrralis.ssdemo1.mail.PasswordRecoveryEmailMessage;
+import com.shrralis.ssdemo1.mail.SignUpEmailMessage;
 import com.shrralis.ssdemo1.mail.interfaces.IMailCitizenService;
 import com.shrralis.ssdemo1.repository.RecoveryTokensRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
@@ -28,6 +26,7 @@ import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensEx
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.security.service.UserDetailsServiceImpl;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -130,25 +129,46 @@ public class AuthServiceImpl implements IAuthService {
 	}
 
 	@Override
-	public RegisteredUserDTO signUp(final RegisterUserDTO user) throws AbstractCitizenException {
-		if (repository.getByLogin(user.getLogin()) != null) {
+	public RegisteredUserDTO signUp(final RegisterUserDTO dto) throws AbstractCitizenException, MessagingException {
+		if (repository.getByLogin(dto.getLogin()) != null) {
 			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "login");
 		}
 
-		if (repository.getByEmail(user.getEmail()) != null) {
+		if (repository.getByEmail(dto.getEmail()) != null) {
 			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "email");
 		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-		final User savedUser = repository.save(User.Builder.anUser()
-				.setLogin(user.getLogin())
-				.setEmail(user.getEmail())
-				.setPassword(user.getPassword())
-				.setName(user.getName())
-				.setSurname(user.getSurname())
+		final User user = User.Builder.anUser()
+				.setLogin(dto.getLogin())
+				.setEmail(dto.getEmail())
+				.setPassword(dto.getPassword())
+				.setName(dto.getName())
+				.setSurname(dto.getSurname())
+				.setRegistrationToken(DigestUtils.md5DigestAsHex((dto.getLogin() + dto.getPassword()).getBytes()))
+				.build();
+
+		repository.save(user);
+		mailService.send(SignUpEmailMessage.Builder.aSignUpEmailMessage()
+				.setDestEmail(user.getEmail())
+				.setMessage(user.getRegistrationToken(), user.getLogin())
 				.build());
+		return userToRegisteredUserDto.userToRegisteredUserDto(user);
+	}
 
-		return userToRegisteredUserDto.userToRegisteredUserDto(savedUser);
+	@Override
+	public void submitSignUp(SubmitRegistrationDTO dto) throws AbstractCitizenException {
+		final User user = repository.getByLogin(dto.getLogin());
+
+		if (user == null) {
+			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "login");
+		}
+
+		if (!StringUtils.equals(user.getRegistrationToken(), dto.getRegistrationToken())) {
+			throw new IllegalArgumentException(SubmitRegistrationDTO.REGISTRATION_TOKEN_FIELD);
+		}
+		user.setRegistrationToken("");
+		repository.save(user);
 	}
 
 	@Override
