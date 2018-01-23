@@ -45,8 +45,9 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 @Import(value = {
 		DatabaseConfig.class,
 		SecurityConfig.class,
-		WebSocketConfig.class,
-		SocialConfig.class
+        WebSocketConfig.class,
+		SocialConfig.class,
+		SwaggerConfig.class
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
 
@@ -164,5 +165,14 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		messageSource.setDefaultEncoding("UTF-8");
 		messageSource.setUseCodeAsDefaultMessage(true);
 		return messageSource;
+	}
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("swagger-ui.html")
+				.addResourceLocations("classpath:/META-INF/resources/");
+
+		registry.addResourceHandler("/webjars/**")
+				.addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}
 }

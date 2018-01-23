@@ -15,7 +15,9 @@
 
               <span class="md-error" v-else-if="!$v.form.login.maxLength">{{ $t('error.max_16_char') }}</span>
 
-              <span class="md-error" v-else-if="!$v.form.login.LoginValidator">{{ $t('error.not_login') }}</span>
+              <span class="md-error" v-else-if="!$v.form.login.LoginOrEmailValidator">
+                {{ $t('error.not_login_or_email') }}
+              </span>
             </md-field>
           </div>
 
