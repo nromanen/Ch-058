@@ -12,11 +12,7 @@
 
 package com.shrralis.ssdemo1.service.interfaces;
 
-import com.shrralis.ssdemo1.dto.PasswordRecoveryDTO;
-import com.shrralis.ssdemo1.dto.RegisterUserDTO;
-import com.shrralis.ssdemo1.dto.RegisteredUserDTO;
-import com.shrralis.ssdemo1.dto.UserSessionDTO;
-import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.dto.*;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 
 import javax.mail.MessagingException;
@@ -69,7 +65,9 @@ public interface IAuthService {
 	 *
 	 * @throws AbstractCitizenException
 	 */
-	RegisteredUserDTO signUp(final RegisterUserDTO user) throws AbstractCitizenException;
+	RegisteredUserDTO signUp(final RegisterUserDTO dto) throws AbstractCitizenException, MessagingException;
+
+	void submitSignUp(final SubmitRegistrationDTO dto) throws AbstractCitizenException;
 
 	RegisteredUserDTO update(RegisterUserDTO user) throws AbstractCitizenException;
 

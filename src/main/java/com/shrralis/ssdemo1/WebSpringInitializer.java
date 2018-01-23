@@ -21,6 +21,11 @@ import java.io.File;
 
 public class WebSpringInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
+	private static final String LOCATION = new File(System.getProperty("java.io.tmpdir")).getAbsolutePath();
+	private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
+	private static final long MAX_REQUEST_SIZE = MAX_FILE_SIZE * 2;
+	private static final int FILE_SIZE_THRESHOLD = 0;
+
 	protected Class<?>[] getRootConfigClasses() {
 		return new Class[] { AppConfig.class };
 	}
@@ -41,9 +46,4 @@ public class WebSpringInitializer extends AbstractAnnotationConfigDispatcherServ
 	private MultipartConfigElement getMultipartConfigElement() {
 		return new MultipartConfigElement(LOCATION, MAX_FILE_SIZE, MAX_REQUEST_SIZE, FILE_SIZE_THRESHOLD);
 	}
-
-	private static final String LOCATION = new File(System.getProperty("java.io.tmpdir")).getAbsolutePath();
-	private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
-	private static final long MAX_REQUEST_SIZE = MAX_FILE_SIZE * 2;
-	private static final int FILE_SIZE_THRESHOLD = 0;
 }

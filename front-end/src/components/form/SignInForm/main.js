@@ -5,7 +5,15 @@ import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: 'SignInPage',
+  props: {
+    login: String
+  },
   mixins: [validationMixin],
+  created: function () {
+    if (this.$route.params.login) {
+      this.form.login = this.$route.params.login;
+    }
+  },
   data: () => ({
     form: {
       login: null,

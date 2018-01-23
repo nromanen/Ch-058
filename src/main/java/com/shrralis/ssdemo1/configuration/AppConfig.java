@@ -165,5 +165,4 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		messageSource.setUseCodeAsDefaultMessage(true);
 		return messageSource;
 	}
-
 }

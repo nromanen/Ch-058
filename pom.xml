@@ -15,13 +15,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.shrralis</groupId>
-    <artifactId>ss-demo1</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+	<groupId>com.softserveinc</groupId>
+	<artifactId>geo-citizen</artifactId>
+	<version>1.0.5-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>ss-demo1</name>
-    <description>Demo 1 project for Soft Serve</description>
+	<name>Geo Citizen</name>
+	<description>Demo project named as "Geo Citizen" for Soft Serve by Ch-58 group.</description>
 
     <properties>
         <project.fileName>citizen</project.fileName>

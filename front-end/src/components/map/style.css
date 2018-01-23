@@ -93,6 +93,6 @@ a {
   cursor: pointer;
 }
 
-.md-primary {
+.md-snackbar .md-primary {
   background-color: #ffffff;
 }

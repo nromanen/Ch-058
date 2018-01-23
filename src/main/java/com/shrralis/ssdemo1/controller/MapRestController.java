@@ -12,26 +12,22 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
-import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.exception.IllegalParameterException;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.ssdemo1.service.interfaces.IMapMarkersService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
-import static com.shrralis.ssdemo1.configuration.SecurityConfig.ROLE_ADMIN;
-import static com.shrralis.ssdemo1.configuration.SecurityConfig.ROLE_USER;
-
 
 @RestController
 @RequestMapping("/map")
 public class MapRestController {
+
 	private final IMapMarkersService markerService;
 	private final IIssueService issueService;
 
@@ -42,35 +38,32 @@ public class MapRestController {
 	}
 
 	@GetMapping
-	public JsonResponse loadAllMarkers() {
+	public JsonResponse allMarkers() {
 		return new JsonResponse(markerService.loadAllMarkers());
 	}
 
 	@GetMapping("/marker/{lat}/{lng}/")
-	public JsonResponse getMarkerByCoords(@PathVariable("lat") double lat,
-										  @PathVariable("lng") double lng) {
+	public JsonResponse markerByCoords(@PathVariable("lat") double lat,
+	                                   @PathVariable("lng") double lng) {
 		return new JsonResponse(markerService.getMarker(lat, lng));
 	}
 
-	@Secured({ROLE_USER, ROLE_ADMIN})
 	@PostMapping("/marker")
-	public JsonResponse saveMarker(@RequestBody final MapMarker marker) {
+	public JsonResponse marker(@RequestBody final MapMarker marker) {
 		return new JsonResponse(markerService.saveMarker(marker));
 	}
 
-	@Secured({ROLE_USER, ROLE_ADMIN})
 	@PostMapping("/issue")
-	public JsonResponse saveIssue(@RequestParam("file") MultipartFile image, @Valid @ModelAttribute MapDataDTO dto)
-			throws AbstractCitizenException {
-
+	public JsonResponse issue(@RequestParam("file") MultipartFile image,
+	                          @Valid @ModelAttribute MapDataDTO dto) throws AbstractCitizenException {
 		if (image == null) {
 			throw new IllegalParameterException("file");
 		}
 		return new JsonResponse(issueService.saveIssue(dto, image));
 	}
 
-	@GetMapping(value = "/issues/mapMarker/{mapMarkerId}")
-	public JsonResponse getIssueByMapMarker(@PathVariable("mapMarkerId") int mapMarkerId) {
+	@GetMapping("/issues/mapMarker/{mapMarkerId}")
+	public JsonResponse issueByMapMarker(@PathVariable("mapMarkerId") int mapMarkerId) {
 		return new JsonResponse(issueService.getAllIssueByMapMarker(mapMarkerId));
 	}
 }

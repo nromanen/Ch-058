@@ -23,7 +23,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -57,7 +57,7 @@ public class AuthRestControllerTest {
 		UserSessionDTO dto = new UserSessionDTO(1, "testLogin", User.Type.USER);
 
 		when(service.getCurrentSession()).thenReturn(dto);
-		mockMvc.perform(get("/auth/getCurrentSession").accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(get("/auth/currentSession").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.data[0].type", is(dto.getType().toString())));
 
