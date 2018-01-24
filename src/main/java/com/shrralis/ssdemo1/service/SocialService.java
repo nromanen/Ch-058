@@ -3,6 +3,7 @@ package com.shrralis.ssdemo1.service;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
@@ -33,7 +34,7 @@ public class SocialService {
 		if (user == null) {
 			user = new User();
 			user.setEmail(userProfile.getEmail());
-			SocialService.findLogin(user);
+			SocialService.createLoginFromEmail(user);
 			user.setPassword(UUID.randomUUID().toString());
 			String name  = userProfile.getFirstName();
 			SocialService.validateAndSetName(user, name);
@@ -49,7 +50,7 @@ public class SocialService {
 		if(user == null){
 			user = new User();
 			user.setEmail(person.getAccountEmail());
-			SocialService.findLogin(user);
+			SocialService.createLoginFromEmail(user);
 			user.setPassword(UUID.randomUUID().toString());
 			String name = person.getGivenName();
 			SocialService.validateAndSetName(user, name);
@@ -75,12 +76,8 @@ public class SocialService {
 		}
 	}
 
-	private static void findLogin(User user){
-		user.setLogin(user.getEmail().replace("@", ""));
-		String login = user.getLogin();
-		if (login.length() > 16){
-			user.setLogin(login.substring(0, 16));
-		}
+	private static void createLoginFromEmail(User user){
+		user.setLogin(StringUtils.substring(user.getLogin().replace("@", ""), 0, 16));
 	}
 
 
