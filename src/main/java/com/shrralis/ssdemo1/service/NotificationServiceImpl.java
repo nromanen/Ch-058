@@ -16,32 +16,32 @@ import java.util.List;
 @Transactional
 public class NotificationServiceImpl implements INotificationService{
 
-    @Resource
-    NotificationRepository notificationRepository;
+	@Resource
+	NotificationRepository notificationRepository;
 
-    @Override
-    public Notification addNotification(Notification notification) {
-        return notificationRepository.save(notification);
-    }
+	@Override
+	public Notification addNotification(Notification notification) {
+		return notificationRepository.save(notification);
+	}
 
-    @Override
-    public Long removeNotification(Notification notification){
-        return notificationRepository.deleteByIssueIdAndUserId(notification.getIssueId(), notification.getUserId());
-    }
+	@Override
+	public Long removeNotification(Notification notification){
+		return notificationRepository.deleteByIssueIdAndUserId(notification.getIssueId(), notification.getUserId());
+	}
 
-    @Override
-    public List<Notification> getAllNotifications() {
-        return notificationRepository.findAll();
-    }
+	@Override
+	public List<Notification> getAllNotifications() {
+		return notificationRepository.findAll();
+	}
 
-    @Override
-    public Notification setWaiting(Notification notification) {
+	@Override
+	public Notification setWaiting(Notification notification) {
 
-        Notification getedNot = notificationRepository.findByIssueIdAndUserId(notification.getIssueId(),
-                notification.getUserId());
+		Notification getedNot = notificationRepository.findByIssueIdAndUserId(notification.getIssueId(),
+				notification.getUserId());
 
-        getedNot.setWaiting(notification.getWaiting());
+		getedNot.setWaiting(notification.getWaiting());
 
-        return notificationRepository.save(getedNot);
-    }
+		return notificationRepository.save(getedNot);
+	}
 }

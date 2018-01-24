@@ -31,6 +31,7 @@ public class AuthorizedUser extends User {
 	private String email;
 	private com.shrralis.ssdemo1.entity.User.Type type;
 	private transient int failedAuthCount;
+	private transient String registrationToken;
 
 	public AuthorizedUser(
 			com.shrralis.ssdemo1.entity.User user,
@@ -41,6 +42,7 @@ public class AuthorizedUser extends User {
 		email = user.getEmail();
 		type = user.getType();
 		failedAuthCount = user.getFailedAuthCount();
+		registrationToken = user.getRegistrationToken();
 	}
 
 	public static AuthorizedUser getCurrent() {
@@ -79,6 +81,10 @@ public class AuthorizedUser extends User {
 
 	public int getFailedAuthCount() {
 		return failedAuthCount;
+	}
+
+	public String getRegistrationToken() {
+		return registrationToken;
 	}
 
 	public void setFailedAuthCount(int failedAuthCount) {

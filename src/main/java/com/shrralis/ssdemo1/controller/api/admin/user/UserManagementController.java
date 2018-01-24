@@ -5,21 +5,23 @@ import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Secured("ROLE_ADMIN")
 @RequestMapping("/admin/users")
 public class UserManagementController {
 
+	private final IUserService userService;
+
 	@Autowired
-    private IUserService userService;
+	public UserManagementController(IUserService userService) {
+		this.userService = userService;
+	}
 
 	@GetMapping("/{id}")
 	public JsonResponse getById(@PathVariable Integer id) throws AbstractCitizenException {
-        return new JsonResponse(userService.findById(id));
-    }
+		return new JsonResponse(userService.findById(id));
+	}
 
 	@GetMapping("/login/{login}")
 	public JsonResponse getByLogin(@PathVariable String login) throws AbstractCitizenException {

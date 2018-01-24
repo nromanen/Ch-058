@@ -16,6 +16,7 @@ import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,15 +38,13 @@ public class UsersRestController {
 		this.localeResolver = localeResolver;
 	}
 
-	@Secured("ROLE_ADMIN")
-	@RequestMapping("/getAll")
-	public JsonResponse getAllUsers() {
+	@GetMapping("/")
+	public JsonResponse allUsers() {
 		return new JsonResponse(service.getAllUsers());
 	}
 
-	@Secured({ "ROLE_USER", "ROLE_ADMIN" })
-	@RequestMapping("/get/{id}")
-	public JsonResponse getUserInfo(@PathVariable int id) {
+	@GetMapping("/{id}")
+	public JsonResponse user(@PathVariable int id) {
 		return new JsonResponse(service.getUser(id));
 	}
 

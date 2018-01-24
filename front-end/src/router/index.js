@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import IndexPage from '@/components/page/IndexPage/IndexPage'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
+import RegistrationSubmitPage from '@/components/page/RegistrationSubmitPage/RegistrationSubmitPage'
 import Chat from '@/components/page/ChatPage/ChatPage'
 import AdminChatNotification from '@/components/AdminChatNotification/AdminChatNotification'
 import OpenChat from '@/components/OpenChat/OpenChat'
@@ -23,7 +24,7 @@ const router = new Router({
       name: 'IndexPage',
       component: IndexPage,
       meta: {
-        checkSuccessRegistration: true
+        requiresSuccessRegistration: true
       }
     },
     {
@@ -32,7 +33,23 @@ const router = new Router({
       component: AuthPage,
       meta: {
         requiresAnonymous: true
-      }
+      },
+      children: [
+        {
+          path: 'signIn/:login',
+          props: true
+        },
+        {
+          path: 'passwordRecovery/:login/:recoveryToken',
+          props: true
+        }
+      ]
+    },
+    {
+      path: '/submitSignUp/:login/:submitToken',
+      name: 'RegistrationSubmitPage',
+      component: RegistrationSubmitPage,
+      props: true
     },
     {
       path: '/socialSuccess**',
@@ -67,8 +84,10 @@ const router = new Router({
     },
     {
       path: '/admin',
-      name: 'AdminPage',
       component: AdminPage,
+      meta: {
+        requiresAdmin: true
+      },
       children: [
         {
           path: '/',
@@ -123,7 +142,7 @@ router.beforeEach((to, from, next) => {
     Vue.http.get('auth/getCurrentSession').then(response => {
       let json = response.body
 
-      if (!json.errors && json.data[0].login) {
+      if (!json.errors && json.data[0].logged_in) {
         localStorage.setItem('user', JSON.stringify(json.data[0]))
         next()
       } else {
@@ -135,7 +154,7 @@ router.beforeEach((to, from, next) => {
         })
       }
     })
-  } else if (to.matched.some(record => record.meta.checkSuccessRegistration)) {
+  } else if (to.matched.some(record => record.meta.requiresSuccessRegistration)) {
     Vue.http.get('auth/getCurrentSession').then(response => {
       let json = response.body
 
@@ -150,6 +169,24 @@ router.beforeEach((to, from, next) => {
         }
       }
       next()
+    }, error => {
+      console.log(error)
+      next()
+    })
+  } else if (to.matched.some(record => record.meta.requiresAdmin)) {
+    Vue.http.get('auth/getCurrentSession').then(response => {
+      let json = response.body
+
+      if (!json.errors && json.data[0].type === 'ADMIN') {
+        next()
+      } else {
+        next({
+          path: '/',
+          query: {
+            redirect: to.fullPath
+          }
+        })
+      }
     }, error => {
       console.log(error)
       next()

@@ -16,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
 import com.shrralis.ssdemo1.util.PsqlEnum;
-import com.shrralis.tools.model.JsonError;
 import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.TypeDef;
 
@@ -38,27 +37,29 @@ public class User implements Identifiable<Integer> {
 	public static final String PASS_PATTERN = "^(?=.*\\d)(?=.*[a-zа-яіїє])(?=.*[A-ZА-ЯІЇЄ])" +
 			"(?=.*[-`!@#$%^&*()_+=\"'<>,./|\\\\?]).*$";
 	public static final String NAME_PATTERN = "^[A-ZА-ЯІЇЄ]('?[a-zа-яіїє])+?(-[A-ZА-ЯІЇЄ]('?[a-zа-яіїє])+)?$";
-    public static final String TABLE_NAME = "users";
-    public static final String ID_COLUMN_NAME = "id";
-    public static final String LOGIN_COLUMN_NAME = "login";
-    public static final String TYPE_COLUMN_NAME = "type";
-    public static final String EMAIL_COLUMN_NAME = "email";
-    public static final String PASS_COLUMN_NAME = "password";
-    public static final String IMAGE_COLUMN_NAME = "image_id";
-    public static final String NAME_COLUMN_NAME = "name";
-    public static final String SURNAME_COLUMN_NAME = "surname";
+	public static final String TABLE_NAME = "users";
+	public static final String ID_COLUMN_NAME = "id";
+	public static final String LOGIN_COLUMN_NAME = "login";
+	public static final String TYPE_COLUMN_NAME = "type";
+	public static final String EMAIL_COLUMN_NAME = "email";
+	public static final String PASS_COLUMN_NAME = "password";
+	public static final String IMAGE_COLUMN_NAME = "image_id";
+	public static final String NAME_COLUMN_NAME = "name";
+	public static final String SURNAME_COLUMN_NAME = "surname";
 	public static final String FAILED_AUTH_COUNT_COLUMN_NAME = "failed_auth_count";
-    public static final int MAX_LOGIN_LENGTH = 16;
-    public static final int MIN_LOGIN_LENGTH = 4;
-    public static final int MAX_EMAIL_LENGTH = 256;
-    public static final int MIN_EMAIL_LENGTH = 6;
-    public static final int MAX_PASSWORD_LENGTH = 64;
-    public static final int MIN_PASSWORD_LENGTH = 8;
-    public static final int MAX_NAME_LENGTH = 16;
-    public static final int MIN_NAME_LENGTH = 1;
-    public static final int MAX_SURNAME_LENGTH = 32;
-    public static final int MIN_SURNAME_LENGTH = 1;
+	public static final String REGISTRATION_TOKEN_COLUMN_NAME = "registration_token";
+	public static final int MAX_LOGIN_LENGTH = 16;
+	public static final int MIN_LOGIN_LENGTH = 4;
+	public static final int MAX_EMAIL_LENGTH = 256;
+	public static final int MIN_EMAIL_LENGTH = 6;
+	public static final int MAX_PASSWORD_LENGTH = 64;
+	public static final int MIN_PASSWORD_LENGTH = 8;
+	public static final int MAX_NAME_LENGTH = 16;
+	public static final int MIN_NAME_LENGTH = 1;
+	public static final int MAX_SURNAME_LENGTH = 32;
+	public static final int MIN_SURNAME_LENGTH = 1;
 	public static final int MAX_FAILED_AUTH_VALUE = 5;
+	public static final int MAX_REGISTRATION_TOKEN_LENGTH = 32;
 
 	@Id
 	@NotNull
@@ -98,18 +99,14 @@ public class User implements Identifiable<Integer> {
 	@JoinColumn(name = IMAGE_COLUMN_NAME)
 	private Image image;
 
-	@NotNull
-	@NotBlank
 	@Pattern(regexp = NAME_PATTERN)
 	@Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
-	@Column(name = NAME_COLUMN_NAME, nullable = false, length = MAX_NAME_LENGTH)
+	@Column(name = NAME_COLUMN_NAME, length = MAX_NAME_LENGTH)
 	private String name;
 
-	@NotNull
-	@NotBlank
 	@Pattern(regexp = NAME_PATTERN)
 	@Size(min = MIN_SURNAME_LENGTH, max = MAX_SURNAME_LENGTH)
-	@Column(name = SURNAME_COLUMN_NAME, nullable = false, length = MAX_SURNAME_LENGTH)
+	@Column(name = SURNAME_COLUMN_NAME, length = MAX_SURNAME_LENGTH)
 	private String surname;
 
 	@JsonProperty("failed_auth_count")
@@ -118,69 +115,75 @@ public class User implements Identifiable<Integer> {
 	@Column(name = FAILED_AUTH_COUNT_COLUMN_NAME, nullable = false)
 	private Integer failedAuthCount = 0;
 
-    public Integer getId() {
-        return id;
-    }
+	@JsonIgnore
+	@NotNull
+	@Size(max = MAX_REGISTRATION_TOKEN_LENGTH)
+	@Column(name = REGISTRATION_TOKEN_COLUMN_NAME, nullable = false, length = MAX_REGISTRATION_TOKEN_LENGTH)
+	private String registrationToken = "";
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getLogin() {
-        return login;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+	public String getLogin() {
+		return login;
+	}
 
-    public Type getType() {
-        return type;
-    }
+	public void setLogin(String login) {
+		this.login = login;
+	}
 
-    public void setType(Type type) {
-        this.type = type;
-    }
+	public Type getType() {
+		return type;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setType(Type type) {
+		this.type = type;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public Image getImage() {
-        return image;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
+	public Image getImage() {
+		return image;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setImage(Image image) {
+		this.image = image;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getSurname() {
-        return surname;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
 
 	public Integer getFailedAuthCount() {
 		return failedAuthCount;
@@ -190,6 +193,14 @@ public class User implements Identifiable<Integer> {
 		this.failedAuthCount = failedAuthCount;
 	}
 
+	public String getRegistrationToken() {
+		return registrationToken;
+	}
+
+	public void setRegistrationToken(String registrationToken) {
+		this.registrationToken = registrationToken;
+	}
+
 	@Override
 	public String toString() {
 		return "User{" +
@@ -197,79 +208,84 @@ public class User implements Identifiable<Integer> {
 				", login='" + login + '\'' +
 				", type=" + type +
 				", email='" + email + '\'' +
-				", password='" + password + '\'' +
 				", image=" + image +
 				", name='" + name + '\'' +
 				", surname='" + surname + '\'' +
 				", failedAuthCount=" + failedAuthCount +
+				", registrationToken='" + registrationToken + '\'' +
 				'}';
 	}
 
 	public enum Type {
-        BANNED,
-        USER,
-        ADMIN,
-        MASTER
-    }
+		BANNED,
+		USER,
+		ADMIN,
+		MASTER
+	}
 
-    public static final class Builder {
-        private User user;
+	public static final class Builder {
+		private User user;
 
-        private Builder() {
-            user = new User();
-        }
+		private Builder() {
+			user = new User();
+		}
 
-        public static Builder anUser() {
-            return new Builder();
-        }
+		public static Builder anUser() {
+			return new Builder();
+		}
 
-        public Builder setId(Integer id) {
-            user.setId(id);
-            return this;
-        }
+		public Builder setId(Integer id) {
+			user.setId(id);
+			return this;
+		}
 
-        public Builder setLogin(String login) {
-            user.setLogin(login);
-            return this;
-        }
+		public Builder setLogin(String login) {
+			user.setLogin(login);
+			return this;
+		}
 
-        public Builder setType(Type type) {
-            user.setType(type);
-            return this;
-        }
+		public Builder setType(Type type) {
+			user.setType(type);
+			return this;
+		}
 
-        public Builder setEmail(String email) {
-            user.setEmail(email);
-            return this;
-        }
+		public Builder setEmail(String email) {
+			user.setEmail(email);
+			return this;
+		}
 
-        public Builder setPassword(String password) {
-            user.setPassword(password);
-            return this;
-        }
+		public Builder setPassword(String password) {
+			user.setPassword(password);
+			return this;
+		}
 
-        public Builder setImage(Image image) {
-            user.setImage(image);
-            return this;
-        }
+		public Builder setImage(Image image) {
+			user.setImage(image);
+			return this;
+		}
 
-        public Builder setName(String name) {
-            user.setName(name);
-            return this;
-        }
+		public Builder setName(String name) {
+			user.setName(name);
+			return this;
+		}
 
-        public Builder setSurname(String surname) {
-            user.setSurname(surname);
-            return this;
-        }
+		public Builder setSurname(String surname) {
+			user.setSurname(surname);
+			return this;
+		}
 
-	    public Builder setFailedAuthCount(Integer failedAuthCount) {
-		    user.setFailedAuthCount(failedAuthCount);
-		    return this;
-	    }
+		public Builder setFailedAuthCount(Integer failedAuthCount) {
+			user.setFailedAuthCount(failedAuthCount);
+			return this;
+		}
 
-        public User build() {
-            return user;
-        }
-    }
+		public Builder setRegistrationToken(String registrationToken) {
+			user.setRegistrationToken(registrationToken);
+			return this;
+		}
+
+		public User build() {
+			return user;
+		}
+	}
 }

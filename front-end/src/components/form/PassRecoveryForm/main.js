@@ -1,10 +1,22 @@
 import {validationMixin} from "vuelidate";
-import {maxLength, minLength, required, sameAs} from "vuelidate/lib/validators/index";
-import {LoginValidator, MAX_LOGIN_LENGTH, MIN_LOGIN_LENGTH} from "../../../_validator/LoginValidator";
+import {minLength, required, sameAs} from "vuelidate/lib/validators/index";
+import {LoginOrEmailValidator, MIN_LOGIN_LENGTH} from "../../../_validator";
 import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: "password-recovery-form",
+  props: {
+    recoveryToken: String,
+    login: String
+  },
+  created: function () {
+    if (this.$route.params.login && this.$route.params.recoveryToken) {
+      this.form.login = this.$route.params.login;
+      this.form.token = this.$route.params.recoveryToken;
+      this.haveToken = true;
+      this.fromEmailLink = true;
+    }
+  },
   mixins: [validationMixin],
   data: () => ({
     form: {
@@ -16,15 +28,15 @@ export default {
     sending: false,
     errors: null,
     haveToken: false,
-    showSnackBar: false
+    showSnackBar: false,
+    fromEmailLink: false
   }),
   validations: {
     form: {
       login: {
         required,
         minLength: minLength(MIN_LOGIN_LENGTH),
-        maxLength: maxLength(MAX_LOGIN_LENGTH),
-        LoginValidator
+        LoginOrEmailValidator
       },
       token: {
         required
@@ -63,13 +75,14 @@ export default {
           let json = response.body;
 
           if (!json.errors) {
-            this.sending = false;
             this.haveToken = true;
           } else if (json.errors.length) {
             this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
           } else {
             this.errors.push(getErrorMessage(UNEXPECTED));
           }
+
+          this.sending = false;
         }, error => {
           switch (error.status) {
             case 400:

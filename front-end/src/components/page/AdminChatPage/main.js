@@ -105,7 +105,6 @@ export default {
 
     _this.getAllMessages();
 
-    var socket = new SockJS("http://localhost:8080/chat");
     var socket = new SockJS(getServerAddress() + "/chat");
     var stompClient = Stomp.over(socket);
     this.stompClient = stompClient;

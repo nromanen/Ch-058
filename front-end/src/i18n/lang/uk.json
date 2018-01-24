@@ -25,6 +25,8 @@
     "view_user_issues": "Подивитися проблеми користувача",
     "ban": "Забанити",
     "unban": "Розбанити",
+    "sign_in_fb": "Увійти за допомогою Facebook",
+    "sign_in_gp": "Увійти за допомогою Google+",
     "home": "Головна"
   },
   "label": {
@@ -61,9 +63,9 @@
     "chatRoom": "Чат кімната",
     "messageHint": "Напишіть повідомлення",
     "issues_modal_title": "Всі питання",
-    "admin_page": "Сторінка адміністрації",
+    "admin_page": "Адміністрування",
     "navigation": "Навігація",
-    "users_management": "Керуання користувачами",
+    "users_management": "Керування користувачами",
     "issues_management": "Керування питаннями",
     "notifications": "Сповіщення",
     "issues": "Проблеми",
@@ -81,7 +83,11 @@
     "type": "Тип",
     "auth_block": "Блок авторизації",
     "management": "Керування",
-    "admin_restriction": "Права адміністратора"
+    "admin_restriction": "Права адміністратора",
+    "finish_registration": "Завершіть реєстрацію",
+    "other": "Інше",
+    "messages": "Повідомлення",
+    "submit_token": "Токен підтвердження"
   },
   "error": {
     "required": "Обов'язково",

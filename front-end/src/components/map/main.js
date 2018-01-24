@@ -407,7 +407,7 @@ export default {
       var formData = new FormData();
       formData.append('title', title);
       formData.append('desc', desc);
-      formData.append('typeId', type);
+      formData.append('typeName', type);
       formData.append('file', document.getElementById("uploadImage").files[0]);
 
       if(window.isPlaced) {
@@ -463,11 +463,11 @@ export default {
     setMarkerType(marker, type) {
       var url;
       switch(type) {
-        case '1': url = '/src/assets/caution.png';
+        case 'PROBLEM': url = '/src/assets/caution.png';
           break;
-        case '2': url = '/src/assets/info.png';
+        case 'INFO': url = '/src/assets/info.png';
           break;
-        case '3': url ='/src/assets/feedback.png';
+        case 'FEEDBACK': url ='/src/assets/feedback.png';
           break;
         case '4': url ='/src/assets/multiple.png';
           break;
@@ -550,7 +550,7 @@ export default {
             id: response.body.data[i].id,
             title: response.body.data[i].title,
             description: response.body.data[i].text,
-            typeId: response.body.data[i].typeId
+            typeId: response.body.data[i].type
           });
         }
         self.showDialog = true;
@@ -599,7 +599,19 @@ export default {
                 }
               });
               this.setListeners(marker);
-              this.setMarkerType(marker, type);
+              if(type === '1') {
+                self.setMarkerType(marker, 'PROBLEM');
+              }
+              else if(type === '2') {
+                self.setMarkerType(marker, 'INFO');
+              }
+              else if(type === '3') {
+                self.setMarkerType(marker, 'FEEDBACK');
+              }
+              else {
+                self.setMarkerType(marker, '4');
+              }
+
               this.lats.push(marker.getPosition().lat());
               this.lngs.push(marker.getPosition().lng());
               this.markers.push(marker);

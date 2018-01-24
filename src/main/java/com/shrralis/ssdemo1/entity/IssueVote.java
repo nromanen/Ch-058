@@ -24,10 +24,10 @@ import static com.shrralis.ssdemo1.entity.IssueVote.TABLE_NAME;
 @Entity
 @Table(name = TABLE_NAME)
 public class IssueVote implements Identifiable<IssueVote.Id> {
-    public static final String TABLE_NAME = "issues_votes";
-    public static final String ISSUE_COLUMN_NAME = "issue_id";
-    public static final String VOTER_COLUMN_NAME = "voter_id";
-    public static final String VOTE_COLUMN_NAME = "vote";
+	public static final String TABLE_NAME = "issues_votes";
+	public static final String ISSUE_COLUMN_NAME = "issue_id";
+	public static final String VOTER_COLUMN_NAME = "voter_id";
+	public static final String VOTE_COLUMN_NAME = "vote";
 
 	@EmbeddedId
 	private Id id;
@@ -46,95 +46,95 @@ public class IssueVote implements Identifiable<IssueVote.Id> {
 
 	@NotNull
 	@Column(name = VOTE_COLUMN_NAME, nullable = false)
-    private Boolean vote = true;
+	private Boolean vote = true;
 
 	@Override
-    public Id getId() {
-        return id;
-    }
+	public Id getId() {
+		return id;
+	}
 
-    public void setId(Id id) {
-        this.id = id;
-    }
+	public void setId(Id id) {
+		this.id = id;
+	}
 
-    public Issue getIssue() {
-        return issue;
-    }
+	public Issue getIssue() {
+		return issue;
+	}
 
-    public void setIssue(Issue issue) {
-        this.issue = issue;
-    }
+	public void setIssue(Issue issue) {
+		this.issue = issue;
+	}
 
-    public User getVoter() {
-        return voter;
-    }
+	public User getVoter() {
+		return voter;
+	}
 
-    public void setVoter(User voter) {
-        this.voter = voter;
-    }
+	public void setVoter(User voter) {
+		this.voter = voter;
+	}
 
 	public boolean getVote() {
-        return vote;
-    }
+		return vote;
+	}
 
 	public void setVote(boolean vote) {
-        this.vote = vote;
-    }
+		this.vote = vote;
+	}
 
-    @Embeddable
-    public static class Id implements Serializable {
+	@Embeddable
+	public static class Id implements Serializable {
 
-	    @NotNull
-	    @Column(name = ISSUE_COLUMN_NAME, nullable = false)
-	    private Integer issueId;
+		@NotNull
+		@Column(name = ISSUE_COLUMN_NAME, nullable = false)
+		private Integer issueId;
 
-	    @NotNull
-	    @Column(name = VOTER_COLUMN_NAME, nullable = false)
-        private Integer voterId;
+		@NotNull
+		@Column(name = VOTER_COLUMN_NAME, nullable = false)
+		private Integer voterId;
 
-        private Id() {
-        }
+		private Id() {
+		}
 
-        public Id(Integer issueId, Integer voterId) {
-            this.issueId = issueId;
-            this.voterId = voterId;
-        }
+		public Id(Integer issueId, Integer voterId) {
+			this.issueId = issueId;
+			this.voterId = voterId;
+		}
 
-        public Integer getIssueId() {
-            return issueId;
-        }
+		public Integer getIssueId() {
+			return issueId;
+		}
 
-        public void setIssueId(Integer issueId) {
-            this.issueId = issueId;
-        }
+		public void setIssueId(Integer issueId) {
+			this.issueId = issueId;
+		}
 
-        public Integer getVoterId() {
-            return voterId;
-        }
+		public Integer getVoterId() {
+			return voterId;
+		}
 
-        public void setVoterId(Integer voterId) {
-            this.voterId = voterId;
-        }
+		public void setVoterId(Integer voterId) {
+			this.voterId = voterId;
+		}
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) {
+				return true;
+			}
 
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
+			if (o == null || getClass() != o.getClass()) {
+				return false;
+			}
 
-            Id id = (Id) o;
+			Id id = (Id) o;
 
-            return Objects.equals(issueId, id.issueId) &&
-                    Objects.equals(voterId, id.voterId);
-        }
+			return Objects.equals(issueId, id.issueId) &&
+					Objects.equals(voterId, id.voterId);
+		}
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(issueId, voterId);
-        }
-    }
+		@Override
+		public int hashCode() {
+			return Objects.hash(issueId, voterId);
+		}
+	}
 }

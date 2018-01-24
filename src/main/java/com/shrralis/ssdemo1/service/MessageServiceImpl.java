@@ -20,57 +20,57 @@ import java.util.List;
 @Transactional
 public class MessageServiceImpl implements IMessageService {
 
-    private final MessageRepository messageRepository;
-    private final IssuesRepository issuesRepository;
-    private final UsersRepository usersRepository;
+	private final MessageRepository messageRepository;
+	private final IssuesRepository issuesRepository;
+	private final UsersRepository usersRepository;
 
-    @Autowired
-    public MessageServiceImpl(MessageRepository messageRepository,
-                              IssuesRepository issuesRepository,
-                              UsersRepository usersRepository) {
-        this.messageRepository = messageRepository;
-        this.issuesRepository = issuesRepository;
-        this.usersRepository = usersRepository;
-    }
+	@Autowired
+	public MessageServiceImpl(MessageRepository messageRepository,
+							  IssuesRepository issuesRepository,
+							  UsersRepository usersRepository) {
+		this.messageRepository = messageRepository;
+		this.issuesRepository = issuesRepository;
+		this.usersRepository = usersRepository;
+	}
 
-    @Override
-    public FullMessage saveMessage(FullMessage message) {
-        return messageRepository.save(message);
-    }
+	@Override
+	public FullMessage saveMessage(FullMessage message) {
+		return messageRepository.save(message);
+	}
 
-    @Override
-    public List<FullMessage> getAllMessages() throws AccessDeniedException {
-        if(AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN)) {
-            return messageRepository.findAll();
-        }
-        throw new AccessDeniedException();
-    }
+	@Override
+	public List<FullMessage> getAllMessages() throws AccessDeniedException {
+		if(AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN)) {
+			return messageRepository.findAll();
+		}
+		throw new AccessDeniedException();
+	}
 
-    @Override
-    public FullMessage getMessage(Long id) throws AccessDeniedException {
-        if(AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN)) {
-            return messageRepository.findOne(id);
-        }
-        throw new AccessDeniedException();
-    }
+	@Override
+	public FullMessage getMessage(Long id) throws AccessDeniedException {
+		if(AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN)) {
+			return messageRepository.findOne(id);
+		}
+		throw new AccessDeniedException();
+	}
 
-    @Override
-    public boolean checkChat(Long issueId, Long userId) throws AccessDeniedException {
-        if( new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
-                AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN) ) {
-            return messageRepository.existsByIssueIdAndUserId(issueId, userId);
-        }
-        throw new AccessDeniedException();
-    }
+	@Override
+	public boolean checkChat(Long issueId, Long userId) throws AccessDeniedException {
+		if( new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
+				AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN) ) {
+			return messageRepository.existsByIssueIdAndUserId(issueId, userId);
+		}
+		throw new AccessDeniedException();
+	}
 
-    @Override
-    public List<FullMessage> getAllMessagesForChat(Long issueId, Long userId) throws AccessDeniedException {
-        if( new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
-                AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN) ) {
-            return messageRepository.findAllByIssueIdAndUserId(issueId, userId);
-        }
-        throw new AccessDeniedException();
-    }
+	@Override
+	public List<FullMessage> getAllMessagesForChat(Long issueId, Long userId) throws AccessDeniedException {
+		if( new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
+				AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN) ) {
+			return messageRepository.findAllByIssueIdAndUserId(issueId, userId);
+		}
+		throw new AccessDeniedException();
+	}
 
     @Override
     public List<ChatRoom> getAllChatRooms(Long adminId){

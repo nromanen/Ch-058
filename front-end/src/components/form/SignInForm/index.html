@@ -32,7 +32,7 @@
             </md-field>
           </div>
 
-          <md-chip class="md-accent" v-for="err in errors" :key="err">{{ err }}</md-chip>
+          <md-chip class="md-accent error" v-for="err in errors" :key="err">{{ err }}</md-chip>
         </div>
       </md-card-content>
 
@@ -41,7 +41,7 @@
       <md-card-actions>
         <md-button type="button" class="md-primary" to="/">{{ $t('button.cancel') }}</md-button>
 
-        <md-button type="submit" class="md-primary" :disabled="sending">{{ $t('button.log_in') }}</md-button>
+        <md-button type="submit" class="md-raised md-primary" :disabled="sending">{{ $t('button.log_in') }}</md-button>
       </md-card-actions>
     </md-card>
   </form>

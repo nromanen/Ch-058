@@ -41,71 +41,71 @@ public class SocialConfig implements SocialConfigurer {
 	@Value("${front.url}")
 	private String frontUrl;
 
-    private final DataSource dataSource;
-    private final ConnectionSignUp connectionSignUp;
+	private final DataSource dataSource;
+	private final ConnectionSignUp connectionSignUp;
 
-    @Autowired
-    public SocialConfig(ConnectionSignUp connectionSignUp, DataSource dataSource) {
-        this.connectionSignUp = connectionSignUp;
-        this.dataSource = dataSource;
-    }
+	@Autowired
+	public SocialConfig(ConnectionSignUp connectionSignUp, DataSource dataSource) {
+		this.connectionSignUp = connectionSignUp;
+		this.dataSource = dataSource;
+	}
 
-    @Override
-    public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
-        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory(fbAppkey, fbSecret);
-        facebookConnectionFactory.setScope("public_profile,email");
-        GoogleConnectionFactory googleConnectionFactory = new GoogleConnectionFactory(googleAppkey, googleSecret);
-        googleConnectionFactory.setScope("profile email");
-        connectionFactoryConfigurer.addConnectionFactory(facebookConnectionFactory);
-        connectionFactoryConfigurer.addConnectionFactory(googleConnectionFactory);
-    }
+	@Override
+	public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
+		FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory(fbAppkey, fbSecret);
+		facebookConnectionFactory.setScope("public_profile,email");
+		GoogleConnectionFactory googleConnectionFactory = new GoogleConnectionFactory(googleAppkey, googleSecret);
+		googleConnectionFactory.setScope("profile email");
+		connectionFactoryConfigurer.addConnectionFactory(facebookConnectionFactory);
+		connectionFactoryConfigurer.addConnectionFactory(googleConnectionFactory);
+	}
 
-    @Override
-    public UserIdSource getUserIdSource() {
-        return new SessionIdUserIdSource();
-    }
+	@Override
+	public UserIdSource getUserIdSource() {
+		return new SessionIdUserIdSource();
+	}
 
-    @Override
-    public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
-        JdbcUsersConnectionRepository usersConnectionRepository =
-                new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
-        usersConnectionRepository.setConnectionSignUp(connectionSignUp);
-        return usersConnectionRepository;
-    }
+	@Override
+	public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
+		JdbcUsersConnectionRepository usersConnectionRepository =
+				new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
+		usersConnectionRepository.setConnectionSignUp(connectionSignUp);
+		return usersConnectionRepository;
+	}
 
-    @Bean
-    public ProviderSignInController providerSignInController(
-            ConnectionFactoryLocator connectionFactoryLocator,
-            UsersConnectionRepository usersConnectionRepository,
-            SpringSecuritySignInAdapter adapter) {
-        ProviderSignInController psic =  new ProviderSignInController(
-                connectionFactoryLocator,
-                usersConnectionRepository,
-                adapter);
-        psic.setPostSignInUrl(frontUrl + "/socialSuccess");
-        return psic;
-    }
-
-
-    @Bean
-    public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator,
-                                                   UsersConnectionRepository connectionRepository) {
-        return new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
-    }
+	@Bean
+	public ProviderSignInController providerSignInController(
+			ConnectionFactoryLocator connectionFactoryLocator,
+			UsersConnectionRepository usersConnectionRepository,
+			SpringSecuritySignInAdapter adapter) {
+		ProviderSignInController psic =  new ProviderSignInController(
+				connectionFactoryLocator,
+				usersConnectionRepository,
+				adapter);
+		psic.setPostSignInUrl(frontUrl + "/socialSuccess");
+		return psic;
+	}
 
 
+	@Bean
+	public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator,
+												   UsersConnectionRepository connectionRepository) {
+		return new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
+	}
 
-    private static final class SessionIdUserIdSource implements UserIdSource {
-        @Override
-        public String getUserId() {
-            RequestAttributes request = RequestContextHolder.currentRequestAttributes();
-            String uuid = (String) request.getAttribute("_socialUserUUID", RequestAttributes.SCOPE_SESSION);
-            if (uuid == null) {
-                uuid = UUID.randomUUID().toString();
-                request.setAttribute("_socialUserUUID", uuid, RequestAttributes.SCOPE_SESSION);
-            }
-            return uuid;
-        }
-    }
+
+
+	private static final class SessionIdUserIdSource implements UserIdSource {
+		@Override
+		public String getUserId() {
+			RequestAttributes request = RequestContextHolder.currentRequestAttributes();
+			String uuid = (String) request.getAttribute("_socialUserUUID", RequestAttributes.SCOPE_SESSION);
+			if (uuid == null) {
+				uuid = UUID.randomUUID().toString();
+				request.setAttribute("_socialUserUUID", uuid, RequestAttributes.SCOPE_SESSION);
+			}
+			return uuid;
+		}
+	}
 
 }

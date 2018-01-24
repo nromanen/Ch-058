@@ -12,22 +12,23 @@
 
 package com.shrralis.ssdemo1.service;
 
-import com.shrralis.ssdemo1.dto.PasswordRecoveryDTO;
-import com.shrralis.ssdemo1.dto.RegisterUserDTO;
-import com.shrralis.ssdemo1.dto.RegisteredUserDTO;
-import com.shrralis.ssdemo1.dto.UserSessionDTO;
+import com.shrralis.ssdemo1.dto.*;
 import com.shrralis.ssdemo1.dto.mapper.RegisteredUserMapper;
 import com.shrralis.ssdemo1.entity.RecoveryToken;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.*;
 import com.shrralis.ssdemo1.mail.PasswordRecoveryEmailMessage;
+import com.shrralis.ssdemo1.mail.SignUpEmailMessage;
 import com.shrralis.ssdemo1.mail.interfaces.IMailCitizenService;
 import com.shrralis.ssdemo1.repository.RecoveryTokensRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
+import com.shrralis.ssdemo1.security.exception.EmailNotFoundException;
+import com.shrralis.ssdemo1.security.exception.LoginNotFoundException;
 import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensException;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.security.service.UserDetailsServiceImpl;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -76,13 +77,21 @@ public class AuthServiceImpl implements IAuthService {
 	}
 
 	@Override
-	public String generateRecoveryToken(final String login, final String ip)
+	public String generateRecoveryToken(final String loginOrEmail, final String ip)
 			throws AbstractCitizenException, MessagingException {
-		final User user = repository.getByLogin(login);
-
-		if (user == null) {
-			throw new EntityNotExistException(EntityNotExistException.Entity.USER, "login");
+		final User user;
+		if (!loginOrEmail.contains("@")) {
+			user = repository.getByLogin(loginOrEmail);
+			if(user == null){
+				throw new LoginNotFoundException(loginOrEmail);
+			}
+		} else {
+			user = repository.getByEmail(loginOrEmail);
+			if(user == null){
+				throw new EmailNotFoundException(loginOrEmail);
+			}
 		}
+
 
 		if (tokensRepository.countNonExpiredByUser(user.getId()) > 2) {
 			throw new TooManyNonExpiredRecoveryTokensException(user.getLogin());
@@ -90,7 +99,7 @@ public class AuthServiceImpl implements IAuthService {
 
 		final RecoveryToken token = RecoveryToken.Builder.aRecoveryToken()
 				.setUser(user)
-				.setToken(DigestUtils.md5DigestAsHex((login + ip + LocalDateTime.now().toString()).getBytes()))
+				.setToken(DigestUtils.md5DigestAsHex((loginOrEmail + ip + LocalDateTime.now().toString()).getBytes()))
 				.build();
 
 		tokensRepository.save(token);
@@ -98,7 +107,7 @@ public class AuthServiceImpl implements IAuthService {
 				.setDestEmail(user.getEmail())
 				.setMessage(token.getToken(), user.getLogin(), ip)
 				.build());
-		return login;
+		return loginOrEmail;
 	}
 
 	@Override
@@ -130,29 +139,53 @@ public class AuthServiceImpl implements IAuthService {
 	}
 
 	@Override
-	public RegisteredUserDTO signUp(final RegisterUserDTO user) throws AbstractCitizenException {
-		if (repository.getByLogin(user.getLogin()) != null) {
+	public RegisteredUserDTO signUp(final RegisterUserDTO dto) throws AbstractCitizenException, MessagingException {
+		if (repository.getByLogin(dto.getLogin()) != null) {
 			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "login");
 		}
 
-		if (repository.getByEmail(user.getEmail()) != null) {
+		if (repository.getByEmail(dto.getEmail()) != null) {
 			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "email");
 		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-		final User savedUser = repository.save(User.Builder.anUser()
-				.setLogin(user.getLogin())
-				.setEmail(user.getEmail())
-				.setPassword(user.getPassword())
-				.setName(user.getName())
-				.setSurname(user.getSurname())
+		final User user = User.Builder.anUser()
+				.setLogin(dto.getLogin())
+				.setEmail(dto.getEmail())
+				.setPassword(dto.getPassword())
+				.setName(dto.getName())
+				.setSurname(dto.getSurname())
+				.setRegistrationToken(DigestUtils.md5DigestAsHex((dto.getLogin() + dto.getPassword()).getBytes()))
+				.build();
+
+		repository.save(user);
+		mailService.send(SignUpEmailMessage.Builder.aSignUpEmailMessage()
+				.setDestEmail(user.getEmail())
+				.setMessage(user.getRegistrationToken(), user.getLogin())
 				.build());
-
-		return userToRegisteredUserDto.userToRegisteredUserDto(savedUser);
+		return userToRegisteredUserDto.userToRegisteredUserDto(user);
 	}
 
 	@Override
-	public RegisteredUserDTO update(final RegisterUserDTO user) {
+	public void submitSignUp(SubmitRegistrationDTO dto) throws AbstractCitizenException {
+		final User user = repository.getByLogin(dto.getLogin());
+
+		if (user == null) {
+			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "login");
+		}
+
+		if (!StringUtils.equals(user.getRegistrationToken(), dto.getRegistrationToken())) {
+			throw new IllegalArgumentException(SubmitRegistrationDTO.REGISTRATION_TOKEN_FIELD);
+		}
+		user.setRegistrationToken("");
+		repository.save(user);
+	}
+
+	@Override
+	public RegisteredUserDTO update(final RegisterUserDTO user) throws AbstractCitizenException {
+		if (repository.getByLogin(user.getLogin()) != null) {
+			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "login");
+		}
 		final User savedUser = repository.getByEmail(user.getEmail());
 		savedUser.setName(user.getName());
 		savedUser.setSurname(user.getSurname());
@@ -169,7 +202,7 @@ public class AuthServiceImpl implements IAuthService {
 	}
 
 	private boolean isCurrentAuthenticationAnonymous(final Authentication auth,
-	                                                 final AuthenticationTrustResolver authTrustResolver) {
+													 final AuthenticationTrustResolver authTrustResolver) {
 		return authTrustResolver.isAnonymous(auth);
 	}
 

@@ -20,10 +20,9 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
@@ -52,17 +51,33 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 @Import(value = {
 		DatabaseConfig.class,
 		SecurityConfig.class,
-        WebSocketConfig.class,
+		WebSocketConfig.class,
 		SocketSecurityConfig.class,
-		SocialConfig.class
+		SocialConfig.class,
+		SwaggerConfig.class
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
 
-	@Value("${email.host}")
+	@Value("${mail.smtps.host}")
 	private String emailHost;
 
-	@Value("${email.port}")
-	private int emailPort;
+	@Value("${mail.smtp.socketFactory.class}")
+	private String emailSocketClass;
+
+	@Value("${mail.smtp.socketFactory.fallback}")
+	private String emailSocketFallback;
+
+	@Value("${mail.smtp.port}")
+	private String emailPort;
+
+	@Value("${mail.smtp.socketFactory.port}")
+	private String emailSocketPort;
+
+	@Value("${mail.smtps.auth}")
+	private String emailAuth;
+
+	@Value("${mail.smtps.quitwait}")
+	private String emailQuitWait;
 
 	@Value("${email.username}")
 	private String emailUsername;
@@ -70,10 +85,13 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	@Value("${email.password}")
 	private String emailPass;
 
+	@Value("${front-end.url}")
+	private String frontEndUrl;
+
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-				.allowedOrigins("http://localhost:8081")
+				.allowedOrigins(frontEndUrl)
 				.allowedMethods("*")
 				.allowCredentials(true);
 	}
@@ -89,31 +107,20 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		configurer.defaultContentType(MediaType.APPLICATION_JSON_UTF8);
 	}
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**")
-				.addResourceLocations("/", "/resources/")
-				.setCachePeriod(3600)
-				.resourceChain(true)
-				.addResolver(new PathResourceResolver());
-	}
-
 	@Bean
-	public JavaMailSender getJavaMailSender() {
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+	public Properties emailProperties() {
+		Properties props = System.getProperties();
 
-		mailSender.setHost(emailHost);
-		mailSender.setPort(emailPort);
-		mailSender.setUsername(emailUsername);
-		mailSender.setPassword(emailPass);
-
-		Properties props = mailSender.getJavaMailProperties();
-
-		props.put("mail.transport.protocol", "smtp");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.debug", "true");
-		return mailSender;
+		props.setProperty("mail.smtps.host", emailHost);
+		props.setProperty("mail.smtp.socketFactory.class", emailSocketClass);
+		props.setProperty("mail.smtp.socketFactory.fallback", emailSocketFallback);
+		props.setProperty("mail.smtp.port", emailPort);
+		props.setProperty("mail.smtp.socketFactory.port", emailSocketPort);
+		props.setProperty("mail.smtps.auth", emailAuth);
+		props.setProperty("senderEmail", emailUsername);
+		props.setProperty("emailPassword", emailPass);
+		props.put("mail.smtps.quitwait", emailQuitWait);
+		return props;
 	}
 
 	@Bean
@@ -167,4 +174,12 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		return messageSource;
 	}
 
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("swagger-ui.html")
+				.addResourceLocations("classpath:/META-INF/resources/");
+
+		registry.addResourceHandler("/webjars/**")
+				.addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}
 }
