@@ -27,7 +27,7 @@ export default {
     users: []
   }),
   created: function() {
-    Vue.http.get('users/getAll')
+    Vue.http.get('users/')
       .then(response => {
         let json = response.body;
 
