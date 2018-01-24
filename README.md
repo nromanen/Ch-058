@@ -71,7 +71,7 @@
 	```
 	After successful starting you will see the URL-address of your __front-end__.
 	
-1) If you'd like to check documentation, follow this link:
+1) If you'd like to check REST API documentation, follow this link:
  
     `http://localhost:8080/citizen/swagger-ui.html`
 
