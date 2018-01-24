@@ -1,5 +1,6 @@
 package com.shrralis.ssdemo1.configuration;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
@@ -24,7 +25,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     }
     @Override
     public void configureMessageBroker(MessageBrokerRegistry messageBrokerRegistry) {
-        messageBrokerRegistry.setApplicationDestinationPrefixes("/app");
         messageBrokerRegistry.enableSimpleBroker("/topic", "/checkTopic");
+        messageBrokerRegistry.setApplicationDestinationPrefixes("/app");
     }
 }

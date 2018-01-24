@@ -33,6 +33,7 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 
 import java.util.Locale;
 import java.util.Properties;
@@ -52,6 +53,7 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 		DatabaseConfig.class,
 		SecurityConfig.class,
         WebSocketConfig.class,
+		SocketSecurityConfig.class,
 		SocialConfig.class
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
@@ -85,6 +87,15 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 		configurer.defaultContentType(MediaType.APPLICATION_JSON_UTF8);
+	}
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/resources/**")
+				.addResourceLocations("/", "/resources/")
+				.setCachePeriod(3600)
+				.resourceChain(true)
+				.addResolver(new PathResourceResolver());
 	}
 
 	@Bean

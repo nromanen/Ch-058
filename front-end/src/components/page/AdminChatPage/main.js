@@ -4,6 +4,7 @@ import 'stompjs/lib/stomp.js';
 import * as SockJS from 'sockjs-client/dist/sockjs.min.js'
 import {getCurrentLang, switchLang} from "../../../i18n";
 import {getServerAddress} from "../../../main";
+import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: 'AdminChatPage',
@@ -80,19 +81,31 @@ export default {
     }
   },
   created: function () {
+    let _this = this;
+
+    if(getLocalUser() == null){
+      this.$router.push('../../../error403');
+      return;
+    }
     var issueId = this.$route.params.issueId;
     var userId = this.$route.params.userId;
     this.issueId = issueId;
     this.userId = userId;
-
     this.adminId = getLocalUser().id;
-
-    let _this = this;
+    this.$http.get(this.issueId + '/' + this.userId + '/' + this.adminId + '/chat').then( data => {
+      var checkAccess = data.body.data[0];
+      if ((getLocalUser().type != "ADMIN") || (!checkAccess)) {
+        _this.$router.push('../../../error403');
+        return;
+      }
+    }, error => {
+      _this.$router.push('../../../error403');
+      return;
+    });
 
     _this.getAllMessages();
 
     var socket = new SockJS("http://localhost:8080/chat");
-    console.log('prrrrr');
     var socket = new SockJS(getServerAddress() + "/chat");
     var stompClient = Stomp.over(socket);
     this.stompClient = stompClient;
@@ -103,6 +116,8 @@ export default {
         console.log(greeting);
         _this.showMessage(JSON.parse(greeting.body).data[0]);
       });
+    }, function () {
+      _this.$router.push('../../../error403');
     })
   }
 }

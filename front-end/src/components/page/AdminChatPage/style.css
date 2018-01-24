@@ -1,18 +1,33 @@
+html { height: 100%; }
+body {
+  height:100%;
+  min-height: 100%;
+  background: #000000;
+  color: #FFFFFF;
+  position:relative;
+}
+
 h1{
   margin: 0px;
   padding: 20px;
   text-align: center;
 }
 
+.heighWrapper{
+  position: fixed;
+  width: 100%;
+  height: calc(100vh - 250px);
+}
+
 .buttonBack{
   position: fixed;
-  top: 30px;
-  left: 30px;
+  top: 50px;
+  left: 13px;
 }
 
 .messageBl{
   width: 60%;
-  height: 30em;
+  height: 100%;
   margin: auto;
   overflow-y: scroll;
   padding: 10px 20px;
@@ -37,6 +52,12 @@ h1{
   float: right;
   background: #292322;
   color: white;
+}
+
+.footerBl{
+  width: 100%;
+  position: fixed;
+  bottom: 0px;
 }
 
 .messageManagment{
@@ -85,7 +106,7 @@ h1{
 @media screen and (max-width: 950px) {
 
   .messageBl{
-    height: 26em;
+    height: calc(100% - 50px);
   }
 
   .messageText{
