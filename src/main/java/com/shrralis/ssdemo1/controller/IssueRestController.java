@@ -51,7 +51,7 @@ public class IssueRestController {
 
 	@PostMapping("/{issueId}/{vote}")
 	public void vote(@PathVariable("issueId") Integer issueId,
-	                 @PathVariable("vote") Boolean vote) {
+					 @PathVariable("vote") Boolean vote) {
 		issueVotesService.insertIssueVote(issueId, AuthorizedUser.getCurrent().getId(), vote);
 	}
 
