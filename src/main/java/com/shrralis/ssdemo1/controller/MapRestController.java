@@ -44,7 +44,7 @@ public class MapRestController {
 
 	@GetMapping("/marker/{lat}/{lng}/")
 	public JsonResponse markerByCoords(@PathVariable("lat") double lat,
-	                                   @PathVariable("lng") double lng) {
+									   @PathVariable("lng") double lng) {
 		return new JsonResponse(markerService.getMarker(lat, lng));
 	}
 
@@ -55,7 +55,7 @@ public class MapRestController {
 
 	@PostMapping("/issue")
 	public JsonResponse issue(@RequestParam("file") MultipartFile image,
-	                          @Valid @ModelAttribute MapDataDTO dto) throws AbstractCitizenException {
+							  @Valid @ModelAttribute MapDataDTO dto) throws AbstractCitizenException {
 		if (image == null) {
 			throw new IllegalParameterException("file");
 		}

@@ -45,7 +45,7 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 @Import(value = {
 		DatabaseConfig.class,
 		SecurityConfig.class,
-        WebSocketConfig.class,
+		WebSocketConfig.class,
 		SocialConfig.class,
 		SwaggerConfig.class
 })
