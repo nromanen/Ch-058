@@ -93,8 +93,8 @@ export default {
     this.userId = userId;
     this.adminId = getLocalUser().id;
     this.$http.get(this.issueId + '/' + this.userId + '/' + this.adminId + '/chat').then( data => {
-      var checkAccess = data.body.data[0];
-      if ((getLocalUser().type != "ADMIN") || (!checkAccess)) {
+      // var checkAccess = data.body.data[0];
+      if ((getLocalUser().type != "ADMIN")){// || (!checkAccess)) {
         _this.$router.push('../../../error403');
         return;
       }
