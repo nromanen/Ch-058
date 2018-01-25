@@ -106,42 +106,42 @@ h1{
 @media screen and (max-width: 950px) {
 
   .messageBl{
-    height: calc(100% - 50px);
+	height: calc(100% - 50px);
   }
 
   .messageText{
-    display: block;
-    margin-top: 10px;
-    margin-bottom: 0px;
-    width: 100%;
-    float: none;
+	display: block;
+	margin-top: 10px;
+	margin-bottom: 0px;
+	width: 100%;
+	float: none;
   }
 
   .messageSend{
-    float: right;
-    width: fit-content;
-    margin: 10px 0px;
+	float: right;
+	width: fit-content;
+	margin: 10px 0px;
   }
 
   .messageSend::after{
-    clear: both;
+	clear: both;
   }
 
   .md-raised{
-    float: none;
+	float: none;
   }
 
   .messageManagment {
-    display: block;
+	display: block;
   }
   .messageManagment::after {
-    content: "";
-    display: block;
-    clear: both;
-    visibility: hidden;
-    line-height: 0;
-    height: 0;
-    margin: 0;
-    padding: 0;
+	content: "";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
   }
 }

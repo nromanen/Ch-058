@@ -19,43 +19,43 @@ export const USER_BLOCKED_BY_MAX_FAILED_AUTH = 16
 // eslint-disable-next-line
 export function getErrorMessage(error) {
   switch (error.errno) {
-    case NO_ERROR:
-      return 'Everything fine'
-    case UNEXPECTED:
-      return 'Unexpected error'
-    case ACCESS_DENIED:
-      return 'Access denied'
-    case IMAGE_ALREADY_EXISTS:
-      return 'Image already exists'
-    case MAP_MARKER_ALREADY_EXISTS:
-      return 'Map marker already exists'
-    case USER_ALREADY_EXISTS:
-      return 'User with the same ' + error.field + ' already exists'
-    case MISSING_FIELD:
-      return 'The field ' + error.field + ' is required'
-    case BAD_FIELD_FORMAT:
-      return 'The field ' + error.field + ' has bad format'
-    case USER_NOT_EXIST:
-      return 'User with current ' + error.field + ' doesn\'t exist'
-    case BAD_CREDENTIALS:
-      return 'Password is wrong, it\'s your ' +
-        error.field.substr(0, error.field.indexOf('/')) +
-        ' failed attempt of ' + error.field.substr(error.field.indexOf('/') + 1, error.field.length)
-    case RECOVERY_TOKEN_EXPIRED:
-      return 'The recovery token is expired'
-    case IMAGE_NOT_EXIST:
-      return 'Image doesn\'t exist'
-    case MAP_MARKER_NOT_EXIST:
-      return 'Map marker doesn\'t exist'
-    case RECOVERY_TOKEN_NOT_EXIST:
-      return 'Recovery token doesn\'t exist'
-    case ILLEGAL_PARAMETER:
-      return 'The retrieved parameter is illegal'
-    case TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS:
-      return 'There are too many non expired recovery tokens for the user'
-    case USER_BLOCKED_BY_MAX_FAILED_AUTH:
-      return 'The user has been blocked because of failed authentication attempts. Please, recover your password'
-    default:
-      return error.errmsg
+	case NO_ERROR:
+	  return 'Everything fine'
+	case UNEXPECTED:
+	  return 'Unexpected error'
+	case ACCESS_DENIED:
+	  return 'Access denied'
+	case IMAGE_ALREADY_EXISTS:
+	  return 'Image already exists'
+	case MAP_MARKER_ALREADY_EXISTS:
+	  return 'Map marker already exists'
+	case USER_ALREADY_EXISTS:
+	  return 'User with the same ' + error.field + ' already exists'
+	case MISSING_FIELD:
+	  return 'The field ' + error.field + ' is required'
+	case BAD_FIELD_FORMAT:
+	  return 'The field ' + error.field + ' has bad format'
+	case USER_NOT_EXIST:
+	  return 'User with current ' + error.field + ' doesn\'t exist'
+	case BAD_CREDENTIALS:
+	  return 'Password is wrong, it\'s your ' +
+		error.field.substr(0, error.field.indexOf('/')) +
+		' failed attempt of ' + error.field.substr(error.field.indexOf('/') + 1, error.field.length)
+	case RECOVERY_TOKEN_EXPIRED:
+	  return 'The recovery token is expired'
+	case IMAGE_NOT_EXIST:
+	  return 'Image doesn\'t exist'
+	case MAP_MARKER_NOT_EXIST:
+	  return 'Map marker doesn\'t exist'
+	case RECOVERY_TOKEN_NOT_EXIST:
+	  return 'Recovery token doesn\'t exist'
+	case ILLEGAL_PARAMETER:
+	  return 'The retrieved parameter is illegal'
+	case TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS:
+	  return 'There are too many non expired recovery tokens for the user'
+	case USER_BLOCKED_BY_MAX_FAILED_AUTH:
+	  return 'The user has been blocked because of failed authentication attempts. Please, recover your password'
+	default:
+	  return error.errmsg
   }
 }

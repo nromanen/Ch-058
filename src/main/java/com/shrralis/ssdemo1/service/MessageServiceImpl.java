@@ -72,26 +72,26 @@ public class MessageServiceImpl implements IMessageService {
 		throw new AccessDeniedException();
 	}
 
-    @Override
-    public List<ChatRoom> getAllChatRooms(Long adminId){
-        List<FullMessage> chatRoomMessages = messageRepository.findAllChatRooms(adminId);
-        List<ChatRoom> chatRooms = new ArrayList<>();
-        for(FullMessage chatRoom : chatRoomMessages){
-            int userId = Integer.valueOf(chatRoom.getUserId().toString());
-            int issueId = Integer.valueOf(chatRoom.getIssueId().toString());
-            String login = usersRepository.findById(userId).get().getLogin();
-            String issueTitle = issuesRepository.findById(issueId).get().getTitle();
-            chatRooms.add(new ChatRoom(login, issueTitle, userId, issueId));
-        }
-        return chatRooms;
-    }
+	@Override
+	public List<ChatRoom> getAllChatRooms(Long adminId){
+		List<FullMessage> chatRoomMessages = messageRepository.findAllChatRooms(adminId);
+		List<ChatRoom> chatRooms = new ArrayList<>();
+		for(FullMessage chatRoom : chatRoomMessages){
+			int userId = Integer.valueOf(chatRoom.getUserId().toString());
+			int issueId = Integer.valueOf(chatRoom.getIssueId().toString());
+			String login = usersRepository.findById(userId).get().getLogin();
+			String issueTitle = issuesRepository.findById(issueId).get().getTitle();
+			chatRooms.add(new ChatRoom(login, issueTitle, userId, issueId));
+		}
+		return chatRooms;
+	}
 
-    @Override
-    public boolean checkAccessForAdmin(Long issueId, Long userId, Long adminId) throws AccessDeniedException {
-        if( new Long(AuthorizedUser.getCurrent().getId()).equals(adminId) ||
-                AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN) ) {
-            return messageRepository.existsByIssueIdAndUserIdAndAuthorId(issueId, userId, adminId);
-        }
-        throw new AccessDeniedException();
-    }
+	@Override
+	public boolean checkAccessForAdmin(Long issueId, Long userId, Long adminId) throws AccessDeniedException {
+		if( new Long(AuthorizedUser.getCurrent().getId()).equals(adminId) ||
+				AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN) ) {
+			return messageRepository.existsByIssueIdAndUserIdAndAuthorId(issueId, userId, adminId);
+		}
+		throw new AccessDeniedException();
+	}
 }

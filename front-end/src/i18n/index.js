@@ -26,44 +26,44 @@ const i18n = new VueI18n({
 // eslint-disable-next-line
 function loadLocaleMessage(locale, cb) {
   return fetch(`./lang/${locale}.json`, {
-    method: 'get',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+	method: 'get',
+	headers: {
+	  'Accept': 'application/json',
+	  'Content-Type': 'application/json'
+	}
   }).then((res) => {
-    return res.json()
+	return res.json()
   }).then((json) => {
-    if (Object.keys(json).length === 0) {
-      return Promise.reject(new Error('locale empty !!'))
-    } else {
-      return Promise.resolve(json)
-    }
+	if (Object.keys(json).length === 0) {
+	  return Promise.reject(new Error('locale empty !!'))
+	} else {
+	  return Promise.resolve(json)
+	}
   }).then((message) => {
-    cb(null, message)
+	cb(null, message)
   }).catch((error) => {
-    cb(error)
+	cb(error)
   })
 }
 
 // eslint-disable-next-line
 export function switchLang(lang) {
   Vue.http.get('users/currentLang?lang=' + lang)
-    .then(() => {
-      if (lang in i18n.messages) {
-        i18n.locale = lang
-      } else {
-        loadLocaleMessage(lang, (err, message) => {
-          if (err) {
-            console.error(err)
-            return
-          }
-          i18n.setLocaleMessage(lang, message)
+	.then(() => {
+	  if (lang in i18n.messages) {
+		i18n.locale = lang
+	  } else {
+		loadLocaleMessage(lang, (err, message) => {
+		  if (err) {
+			console.error(err)
+			return
+		  }
+		  i18n.setLocaleMessage(lang, message)
 
-          i18n.locale = lang
-        })
-      }
-    })
+		  i18n.locale = lang
+		})
+	  }
+	})
 }
 
 export default i18n

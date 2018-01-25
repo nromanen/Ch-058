@@ -31,15 +31,15 @@
 
 @media (min-width: 40em) {
   .modal-content {
-    margin: 0 auto;
-    width: 50%;
+	margin: 0 auto;
+	width: 50%;
   }
 }
 
 @media (min-width: 75em) {
   .modal-content {
-    margin: 0 auto;
-    width: 25%;
+	margin: 0 auto;
+	width: 25%;
   }
 }
 
