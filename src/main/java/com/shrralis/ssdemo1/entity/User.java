@@ -79,7 +79,7 @@ public class User implements Identifiable<Integer> {
 	@Enumerated(EnumType.STRING)
 	@org.hibernate.annotations.Type(type = "user_type")
 	@Column(name = TYPE_COLUMN_NAME, nullable = false)
-	private Type type = Type.USER;
+	private Type type = Type.ROLE_USER;
 
 	@NotNull
 	@NotBlank
@@ -221,10 +221,14 @@ public class User implements Identifiable<Integer> {
 	}
 
 	public enum Type {
-		BANNED,
-		USER,
-		ADMIN,
-		MASTER
+		ROLE_BANNED,
+		ROLE_USER,
+		ROLE_ADMIN,
+		ROLE_MASTER;
+
+		public String getRole() {
+			return this.name().substring(this.name().indexOf('_') + 1);
+		}
 	}
 
 	public static final class Builder {

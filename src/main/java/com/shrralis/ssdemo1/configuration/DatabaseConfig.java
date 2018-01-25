@@ -101,7 +101,7 @@ public class DatabaseConfig {
 	public SpringLiquibase liquibase() {
 		SpringLiquibase liquibase = new SpringLiquibase();
 
-		liquibase.setChangeLog("classpath:mainChangeLog.xml");
+		liquibase.setChangeLog("classpath:liquibase/mainChangeLog.xml");
 		liquibase.setDataSource(getDataSource());
 		return liquibase;
 	}

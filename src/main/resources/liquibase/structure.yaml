@@ -348,7 +348,7 @@ databaseChangeLog:
         - column:
             constraints:
               nullable: false
-            defaultValue: USER
+            defaultValue: ROLE_USER
             name: type
             type: USER_TYPE
         - column:

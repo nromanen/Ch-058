@@ -182,11 +182,10 @@ public class AuthServiceImpl implements IAuthService {
 		savedUser.setPassword(passwordEncoder.encode(user.getPassword()));
 		savedUser.setLogin(user.getLogin());
 		repository.save(savedUser);
-		AuthorizedUser authorizedUser = new AuthorizedUser(savedUser, UserDetailsServiceImpl.getAuthorities(savedUser));;
+		AuthorizedUser authorizedUser = new AuthorizedUser(savedUser, UserDetailsServiceImpl.getAuthorities(savedUser));
 		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(
-						authorizedUser, null, Collections.singleton(
-								new SimpleGrantedAuthority("ROLE_" + savedUser.getType().toString()))));
+				new UsernamePasswordAuthenticationToken(authorizedUser, null,
+						Collections.singleton(new SimpleGrantedAuthority(savedUser.getType().name()))));
 
 		return userToRegisteredUserDto.userToRegisteredUserDto(savedUser);
 	}
