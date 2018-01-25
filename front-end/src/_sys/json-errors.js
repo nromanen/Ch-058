@@ -38,9 +38,7 @@ export function getErrorMessage(error) {
     case USER_NOT_EXIST:
       return 'User with current ' + error.field + ' doesn\'t exist'
     case BAD_CREDENTIALS:
-      return 'Password is wrong, it\'s your ' +
-        error.field.substr(0, error.field.indexOf('/')) +
-        ' failed attempt of ' + error.field.substr(error.field.indexOf('/') + 1, error.field.length)
+      return 'Password is wrong, it\'s your ' + error.field.substr(0, error.field.indexOf('/')) + ' failed attempt of ' + error.field.substr(error.field.indexOf('/') + 1, error.field.length)
     case RECOVERY_TOKEN_EXPIRED:
       return 'The recovery token is expired'
     case IMAGE_NOT_EXIST:

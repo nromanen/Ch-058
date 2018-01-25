@@ -110,7 +110,8 @@
     "desc_short": "Description must be at least 8 characters length",
     "desc_long": "Description cannot be longer than 2048 characters",
     "req_type": "Please, choose the type",
-    "req_image": "Please, attach an image"
+    "req_image": "Please, attach an image",
+    "forbidden": "Forbidden. Access denied to this resource"
   },
   "message": {
     "successful_register": "You have been successfully registered!",

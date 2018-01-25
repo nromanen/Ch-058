@@ -153,6 +153,12 @@
             <artifactId>spring-security-oauth2</artifactId>
             <version>${springframework.security.oauth2.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-messaging</artifactId>
+            <version>${springframework.security.version}</version>
+        </dependency>
         <!--JWT Tokens-->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
