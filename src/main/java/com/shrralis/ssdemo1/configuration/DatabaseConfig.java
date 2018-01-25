@@ -12,6 +12,7 @@
 
 package com.shrralis.ssdemo1.configuration;
 
+import liquibase.integration.spring.SpringLiquibase;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -94,5 +95,14 @@ public class DatabaseConfig {
 
 		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 		return transactionManager;
+	}
+
+	@Bean
+	public SpringLiquibase liquibase() {
+		SpringLiquibase liquibase = new SpringLiquibase();
+
+		liquibase.setChangeLog("classpath:mainChangeLog.xml");
+		liquibase.setDataSource(getDataSource());
+		return liquibase;
 	}
 }

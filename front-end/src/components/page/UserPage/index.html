@@ -1,0 +1,87 @@
+<div id="user-page">
+  <md-app md-mode="reveal">
+    <md-app-toolbar class="md-primary">
+      <header-page></header-page>
+    </md-app-toolbar>
+
+    <md-app-content>
+      <div id="content">
+        <div class="md-headline">
+          <md-avatar class="md-avatar-icon md-large md-accent">
+            <img src="https://vuematerial.io/assets/examples/avatar.png" alt="Avatar" v-if="user && user.image">
+
+            <md-ripple v-else>{{ user && user.initials }}</md-ripple>
+          </md-avatar>
+
+          <div id="display-name" v-if="!editMode">{{ user && (user.name + ' ' + user.surname) }}</div>
+
+          <div id="edit" v-else>
+            <div class="flex md-flex-small-100">
+              <md-field :class="getValidationClass('name')">
+                <label for="name">{{ $t('label.first_name') }}</label>
+
+                <md-input name="name" id="name" autocomplete="name" type="name" v-model.trim="user.name"
+                          :disabled="sending"/>
+
+                <span class="md-error" v-if="!$v.user.name.required">{{ $t('error.required') }}</span>
+
+                <span class="md-error" v-else-if="!$v.user.name.minLength">{{ $t('error.min_1_char') }}</span>
+
+                <span class="md-error" v-else-if="!$v.user.name.maxLength">{{ $t('error.max_16_char') }}</span>
+
+                <span class="md-error" v-else-if="!$v.user.name.NameValidator">{{ $t('error.not_first_name') }}</span>
+              </md-field>
+            </div>
+
+            <div class="flex md-flex-small-100">
+              <md-progress-bar md-mode="indeterminate" v-if="sending"/>
+
+              <md-field :class="getValidationClass('surname')">
+                <label for="surname">{{ $t('label.last_name') }}</label>
+
+                <md-input name="surname" id="surname" autocomplete="surname" type="surname" v-model.trim="user.surname"
+                          :disabled="sending"/>
+
+                <span class="md-error" v-if="!$v.user.surname.required">{{ $t('error.required') }}</span>
+
+                <span class="md-error" v-else-if="!$v.user.surname.minLength">{{ $t('error.min_1_char') }}</span>
+
+                <span class="md-error" v-else-if="!$v.user.surname.maxLength">{{ $t('error.max_32_char') }}</span>
+
+                <span class="md-error" v-else-if="!$v.user.surname.NameValidator">{{ $t('error.not_last_name') }}</span>
+              </md-field>
+            </div>
+          </div>
+
+          <div class="pull-right" v-if="user && getLocalUser().id === user.id">
+            <md-button @click="edit()">{{ $t('button.edit_user_info') }}</md-button>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <span class="md-caption">{{ $t('label.login') }}</span>
+
+          <span class="md-body-2">{{ user && user.login }}</span>
+
+          <md-divider></md-divider>
+        </div>
+
+        <div class="info-block" v-if="user && getLocalUser().id === user.id">
+          <md-subheader>{{ $t('label.contact_info') }}</md-subheader>
+
+          <span class="md-caption">{{ $t('label.email') }}</span>
+
+          <span class="md-body-2">{{ user && user.email }}</span>
+
+          <md-divider></md-divider>
+
+          <span class="md-caption">{{ $t('label.social_accounts') }}</span>
+
+          <md-button disabled>Facebook {{ $t('label.linked-lowercase') }}</md-button>
+
+          <md-button disabled>Google {{ $t('label.linked-lowercase') }}</md-button>
+        </div>
+      </div>
+    </md-app-content>
+  </md-app>
+</div>

@@ -1,5 +1,6 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
+import com.shrralis.ssdemo1.dto.EditUserDTO;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 
@@ -28,4 +29,6 @@ public interface IUserService {
 	User setStatus(User.Type userType, Integer id) throws AbstractCitizenException;
 
 	List<User> findByType(User.Type type);
+
+	void edit(EditUserDTO dto);
 }

@@ -19,4 +19,6 @@
 	<include file="./enum-types.sql" relativeToChangelogFile="true"/>
 
 	<include file="./structure.yaml" relativeToChangelogFile="true"/>
+
+	<include file="./data.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

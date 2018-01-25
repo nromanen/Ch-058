@@ -52,9 +52,11 @@ public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 				.cors()
 				.and()
 				.authorizeRequests()
-				.antMatchers("/auth/getCurrentSession", "/issues**", "/issues/*/votes", "/images/*", "/map**").permitAll()
+				.antMatchers("/auth/getCurrentSession", "/users/currentLang", "/issues**",
+						"/issues/*/votes", "/images/*", "/map**").permitAll()
 				.antMatchers("/auth/logout", "/auth/update").authenticated()
-				.antMatchers("/issues/*/*", "/map/marker", "/map/issue", "/users/*").hasAnyRole(User.Type.USER.name(), User.Type.ADMIN.name())
+				.antMatchers("/issues/*/*", "/map/marker", "/map/issue", "/users/*")
+				.hasAnyRole(User.Type.USER.name(), User.Type.ADMIN.name())
 				.antMatchers("/users", "/admin/**").hasRole(User.Type.ADMIN.name())
 				.antMatchers("/auth/*", "/signin").anonymous()
 				.and()

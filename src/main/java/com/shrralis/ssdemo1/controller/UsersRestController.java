@@ -12,16 +12,16 @@
 
 package com.shrralis.ssdemo1.controller;
 
+import com.shrralis.ssdemo1.dto.EditUserDTO;
+import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -36,7 +36,7 @@ public class UsersRestController {
 		this.localeResolver = localeResolver;
 	}
 
-	@GetMapping("/")
+	@GetMapping
 	public JsonResponse allUsers() {
 		return new JsonResponse(service.getAllUsers());
 	}
@@ -44,6 +44,12 @@ public class UsersRestController {
 	@GetMapping("/{id}")
 	public JsonResponse user(@PathVariable int id) {
 		return new JsonResponse(service.getUser(id));
+	}
+
+	@PutMapping("/edit")
+	public JsonResponse edit(@RequestBody @Valid EditUserDTO dto) {
+		service.edit(dto);
+		return new JsonResponse(service.getUser(AuthorizedUser.getCurrent().getId()));
 	}
 
 	@GetMapping("/currentLang")

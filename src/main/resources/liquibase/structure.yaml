@@ -1,316 +1,316 @@
 databaseChangeLog:
 - changeSet:
-	id: 1516657572581-1
-	author: shrralis (generated)
-	changes:
-	- createTable:
-		columns:
-		- column:
-			autoIncrement: true
-			constraints:
-			  primaryKey: true
-			  primaryKeyName: images_pkey
-			name: id
-			type: SERIAL
-		- column:
-			constraints:
-			  nullable: false
-			name: src
-			type: VARCHAR(128)
-		- column:
-			constraints:
-			  nullable: false
-			name: type
-			type: IMAGE_TYPE
-		- column:
-			constraints:
-			  nullable: false
-			name: hash
-			type: VARCHAR(32)
-		tableName: images
+    id: 1516657572581-1
+    author: shrralis (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: images_pkey
+            name: id
+            type: SERIAL
+        - column:
+            constraints:
+              nullable: false
+            name: src
+            type: VARCHAR(128)
+        - column:
+            constraints:
+              nullable: false
+            name: type
+            type: IMAGE_TYPE
+        - column:
+            constraints:
+              nullable: false
+            name: hash
+            type: VARCHAR(32)
+        tableName: images
 - changeSet:
-	id: 1516657572581-1
-	author: shrralis (generated)
-	changes:
-	- createTable:
-		columns:
-		- column:
-			autoIncrement: true
-			constraints:
-			  primaryKey: true
-			  primaryKeyName: images_pkey
-			name: id
-			type: SERIAL
-		- column:
-			constraints:
-			  nullable: false
-			name: src
-			type: VARCHAR(128)
-		- column:
-			constraints:
-			  nullable: false
-			name: type
-			type: IMAGE_TYPE
-		- column:
-			constraints:
-			  nullable: false
-			name: hash
-			type: VARCHAR(32)
-		tableName: images
+    id: 1516657572581-1
+    author: shrralis (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: images_pkey
+            name: id
+            type: SERIAL
+        - column:
+            constraints:
+              nullable: false
+            name: src
+            type: VARCHAR(128)
+        - column:
+            constraints:
+              nullable: false
+            name: type
+            type: IMAGE_TYPE
+        - column:
+            constraints:
+              nullable: false
+            name: hash
+            type: VARCHAR(32)
+        tableName: images
 - changeSet:
-	id: 1516657572581-2
-	author: shrralis (generated)
-	changes:
-	- createTable:
-		columns:
-		- column:
-			autoIncrement: true
-			constraints:
-			  primaryKey: true
-			  primaryKeyName: issue_types_pkey
-			name: id
-			type: SERIAL
-		- column:
-			constraints:
-			  nullable: false
-			name: name
-			type: VARCHAR(16)
-		tableName: issue_types
+    id: 1516657572581-2
+    author: shrralis (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: issue_types_pkey
+            name: id
+            type: SERIAL
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(16)
+        tableName: issue_types
 - changeSet:
-	id: 1516657572581-3
-	author: shrralis (generated)
-	changes:
-	- createTable:
-		columns:
-		- column:
-			autoIncrement: true
-			constraints:
-			  primaryKey: true
-			  primaryKeyName: issues_pkey
-			name: id
-			type: SERIAL
-		- column:
-			constraints:
-			  nullable: false
-			name: map_marker_id
-			type: INT
-		- column:
-			constraints:
-			  nullable: false
-			name: author_id
-			type: INT
-		- column:
-			constraints:
-			  nullable: false
-			name: title
-			type: VARCHAR(32)
-		- column:
-			constraints:
-			  nullable: false
-			name: text
-			type: VARCHAR(2048)
-		- column:
-			name: image_id
-			type: INT
-		- column:
-			constraints:
-			  nullable: false
-			name: type_id
-			type: INT
-		- column:
-			constraints:
-			  nullable: false
-			defaultValueBoolean: false
-			name: closed
-			type: BOOLEAN
-		- column:
-			constraints:
-			  nullable: false
-			defaultValueComputed: now()
-			name: created_at
-			type: TIMESTAMP(6) WITHOUT TIME ZONE
-		- column:
-			name: updated_at
-			type: TIMESTAMP(6) WITHOUT TIME ZONE
-		tableName: issues
+    id: 1516657572581-3
+    author: shrralis (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: issues_pkey
+            name: id
+            type: SERIAL
+        - column:
+            constraints:
+              nullable: false
+            name: map_marker_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: author_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: title
+            type: VARCHAR(32)
+        - column:
+            constraints:
+              nullable: false
+            name: text
+            type: VARCHAR(2048)
+        - column:
+            name: image_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: type_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            defaultValueBoolean: false
+            name: closed
+            type: BOOLEAN
+        - column:
+            constraints:
+              nullable: false
+            defaultValueComputed: now()
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        tableName: issues
 - changeSet:
-	id: 1516657572581-4
-	author: shrralis (generated)
-	changes:
-	- createTable:
-		columns:
-		- column:
-			constraints:
-			  nullable: false
-			name: issue_id
-			type: INT
-		- column:
-			constraints:
-			  nullable: false
-			name: voter_id
-			type: INT
-		- column:
-			constraints:
-			  nullable: false
-			defaultValueBoolean: true
-			name: vote
-			type: BOOLEAN
-		tableName: issues_votes
+    id: 1516657572581-4
+    author: shrralis (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: issue_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: voter_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            defaultValueBoolean: true
+            name: vote
+            type: BOOLEAN
+        tableName: issues_votes
 - changeSet:
-	id: 1516657572581-5
-	author: shrralis (generated)
-	changes:
-	- createTable:
-		columns:
-		- column:
-			autoIncrement: true
-			constraints:
-			  primaryKey: true
-			  primaryKeyName: map_markers_pkey
-			name: id
-			type: SERIAL
-		- column:
-			constraints:
-			  nullable: false
-			name: lat
-			type: FLOAT8
-		- column:
-			constraints:
-			  nullable: false
-			name: lng
-			type: FLOAT8
-		tableName: map_markers
+    id: 1516657572581-5
+    author: shrralis (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: map_markers_pkey
+            name: id
+            type: SERIAL
+        - column:
+            constraints:
+              nullable: false
+            name: lat
+            type: FLOAT8
+        - column:
+            constraints:
+              nullable: false
+            name: lng
+            type: FLOAT8
+        tableName: map_markers
 - changeSet:
-	id: 1516657572581-6
-	author: shrralis (generated)
-	changes:
-	- createTable:
-		columns:
-		- column:
-			autoIncrement: true
-			constraints:
-			  primaryKey: true
-			  primaryKeyName: message_pkey
-			name: id
-			type: SERIAL
-		- column:
-			name: text
-			type: VARCHAR
-		- column:
-			constraints:
-			  nullable: false
-			name: userid
-			type: INT
-		- column:
-			constraints:
-			  nullable: false
-			name: issueid
-			type: INT
-		- column:
-			name: date
-			type: TIMESTAMP(6) WITHOUT TIME ZONE
-		- column:
-			constraints:
-			  nullable: false
-			name: authorid
-			type: INT
-		tableName: message
+    id: 1516657572581-6
+    author: shrralis (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: message_pkey
+            name: id
+            type: SERIAL
+        - column:
+            name: text
+            type: VARCHAR
+        - column:
+            constraints:
+              nullable: false
+            name: userid
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: issueid
+            type: INT
+        - column:
+            name: date
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: authorid
+            type: INT
+        tableName: message
 - changeSet:
-	id: 1516657572581-7
-	author: shrralis (generated)
-	changes:
-	- createTable:
-		columns:
-		- column:
-			constraints:
-			  nullable: false
-			name: login
-			type: VARCHAR
-		- column:
-			constraints:
-			  nullable: false
-			name: userid
-			type: INT
-		- column:
-			constraints:
-			  nullable: false
-			name: issueid
-			type: INT
-		- column:
-			name: text
-			type: VARCHAR
-		- column:
-			autoIncrement: true
-			constraints:
-			  primaryKey: true
-			  primaryKeyName: notification_id_pk
-			name: id
-			type: SERIAL
-		- column:
-			name: waiting
-			type: BOOLEAN
-		tableName: notification
+    id: 1516657572581-7
+    author: shrralis (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: login
+            type: VARCHAR
+        - column:
+            constraints:
+              nullable: false
+            name: userid
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: issueid
+            type: INT
+        - column:
+            name: text
+            type: VARCHAR
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: notification_id_pk
+            name: id
+            type: SERIAL
+        - column:
+            name: waiting
+            type: BOOLEAN
+        tableName: notification
 - changeSet:
-	id: 1516657572581-8
-	author: shrralis (generated)
-	changes:
-	- createTable:
-		columns:
-		- column:
-			autoIncrement: true
-			constraints:
-			  primaryKey: true
-			  primaryKeyName: recovery_tokens_pkey
-			name: id
-			type: SERIAL
-		- column:
-			constraints:
-			  nullable: false
-			name: token
-			type: VARCHAR(32)
-		- column:
-			constraints:
-			  nullable: false
-			name: user_id
-			type: INT
-		- column:
-			name: expires_at
-			type: TIMESTAMP(6) WITHOUT TIME ZONE
-		tableName: recovery_tokens
+    id: 1516657572581-8
+    author: shrralis (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: recovery_tokens_pkey
+            name: id
+            type: SERIAL
+        - column:
+            constraints:
+              nullable: false
+            name: token
+            type: VARCHAR(32)
+        - column:
+            constraints:
+              nullable: false
+            name: user_id
+            type: INT
+        - column:
+            name: expires_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        tableName: recovery_tokens
 - changeSet:
-	id: 1516657572581-9
-	author: shrralis (generated)
-	changes:
-	- createTable:
-		columns:
-		- column:
-			constraints:
-			  nullable: false
-			name: userid
-			type: VARCHAR(255)
-		- column:
-			constraints:
-			  nullable: false
-			name: providerid
-			type: VARCHAR(255)
-		- column:
-			constraints:
-			  nullable: false
-			name: provideruserid
-			type: VARCHAR(255)
-		- column:
-			constraints:
-			  nullable: false
-			name: rank
-			type: INT
-		- column:
-			name: displayname
-			type: VARCHAR(255)
-		- column:
-			name: profileurl
-			type: VARCHAR(512)
-		- column:
-			name: imageurl
+    id: 1516657572581-9
+    author: shrralis (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: userid
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: providerid
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: provideruserid
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: rank
+            type: INT
+        - column:
+            name: displayname
+            type: VARCHAR(255)
+        - column:
+            name: profileurl
+            type: VARCHAR(512)
+        - column:
+            name: imageurl
             type: VARCHAR(512)
         - column:
             constraints:
@@ -654,9 +654,8 @@ databaseChangeLog:
         onUpdate: CASCADE
         referencedColumnNames: id
         referencedTableName: images
-databaseChangeLog:
 - changeSet:
-    id: 1516658170136-1
+    id: 1516657572581-38
     author: shrralis (generated)
     changes:
     - addColumn:

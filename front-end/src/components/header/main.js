@@ -93,6 +93,9 @@ export default {
     backToMap() {
       localStorage.setItem('redirectFromIssue', true);
       this.$router.push('/');
+    },
+    getLocalUser() {
+      return getLocalUser();
     }
   }
 }
