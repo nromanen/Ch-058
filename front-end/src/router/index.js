@@ -19,103 +19,103 @@ Vue.use(Router)
 
 const router = new Router({
   routes: [
-	{
-	  path: '/',
-	  name: 'IndexPage',
-	  component: IndexPage,
-	  meta: {
-		requiresSuccessRegistration: true
-	  }
-	},
-	{
-	  path: '/auth**',
-	  name: 'AuthPage',
-	  component: AuthPage,
-	  meta: {
-		requiresAnonymous: true
-	  },
-	  children: [
-		{
-		  path: 'signIn/:login',
-		  props: true
-		},
-		{
-		  path: 'passwordRecovery/:login/:recoveryToken',
-		  props: true
-		}
-	  ]
-	},
-	{
-	  path: '/submitSignUp/:login/:submitToken',
-	  name: 'RegistrationSubmitPage',
-	  component: RegistrationSubmitPage,
-	  props: true
-	},
-	{
-	  path: '/socialSuccess**',
-	  name: 'SocialSuccessPage',
-	  component: SocialSuccessPage,
-	  meta: {
-		requiresAnonymous: true
-	  }
-	},
-	{
-	  path: '/chat/:issueId/:userId',
-	  name: 'ChatPage',
-	  component: Chat
-	},
-	{
-	  path: '/openChat',
-	  name: 'OpenChat',
-	  component: OpenChat
-	},
-	{
-	  path: '/adminChatPage/:issueId/:userId',
-	  name: 'AdminChatPage',
-	  component: AdminChatPage
-	},
-	{
-	  path: '/issue/:id',
-	  component: Issue
-	},
-	{
-	  path: '/error403',
-	  component: Error403
-	},
-	{
-	  path: '/admin',
-	  component: AdminPage,
-	  meta: {
-		requiresAdmin: true
-	  },
-	  children: [
-		{
-		  path: '/',
-		  component: AdminUsersPage
-		},
-		{
-		  path: 'users',
-		  component: AdminUsersPage
-		},
-		{
-		  path: 'issues',
-		  component: AdminIssuesPage
-		},
-		{
-		  path: 'issues/:user',
-		  component: AdminIssuesPage,
-		  props: true
-		},
-		{
-		  path: 'notification',
-		  component: AdminChatNotification
-		},
-		{
-		  path: 'messages',
-		  component: AdminMessagesPage
-		}
-	  ]
-	}
+    {
+      path: '/',
+      name: 'IndexPage',
+      component: IndexPage,
+      meta: {
+        requiresSuccessRegistration: true
+      }
+    },
+    {
+      path: '/auth**',
+      name: 'AuthPage',
+      component: AuthPage,
+      meta: {
+        requiresAnonymous: true
+      },
+      children: [
+        {
+          path: 'signIn/:login',
+          props: true
+        },
+        {
+          path: 'passwordRecovery/:login/:recoveryToken',
+          props: true
+        }
+      ]
+    },
+    {
+      path: '/submitSignUp/:login/:submitToken',
+      name: 'RegistrationSubmitPage',
+      component: RegistrationSubmitPage,
+      props: true
+    },
+    {
+      path: '/socialSuccess**',
+      name: 'SocialSuccessPage',
+      component: SocialSuccessPage,
+      meta: {
+        requiresAnonymous: true
+      }
+    },
+    {
+      path: '/chat/:issueId/:userId',
+      name: 'ChatPage',
+      component: Chat
+    },
+    {
+      path: '/openChat',
+      name: 'OpenChat',
+      component: OpenChat
+    },
+    {
+      path: '/adminChatPage/:issueId/:userId',
+      name: 'AdminChatPage',
+      component: AdminChatPage
+    },
+    {
+      path: '/issue/:id',
+      component: Issue
+    },
+    {
+      path: '/error403',
+      component: Error403
+    },
+    {
+      path: '/admin',
+      component: AdminPage,
+      meta: {
+        requiresAdmin: true
+      },
+      children: [
+        {
+          path: '/',
+          component: AdminUsersPage
+        },
+        {
+          path: 'users',
+          component: AdminUsersPage
+        },
+        {
+          path: 'issues',
+          component: AdminIssuesPage
+        },
+        {
+          path: 'issues/:user',
+          component: AdminIssuesPage,
+          props: true
+        },
+        {
+          path: 'notification',
+          component: AdminChatNotification
+        },
+        {
+          path: 'messages',
+          component: AdminMessagesPage
+        }
+      ]
+    }
   ]
 })
 
@@ -123,76 +123,76 @@ export default router
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAnonymous)) {
-	Vue.http.get('auth/getCurrentSession').then(response => {
-	  let json = response.body
+    Vue.http.get('auth/getCurrentSession').then(response => {
+      let json = response.body
 
-	  if (!json.errors && json.data[0].logged_in && !json.data[0].login.match(/.*(google)|(facebook).*/)) {
-		localStorage.setItem('user', JSON.stringify(json.data[0]))
-		next({
-		  path: '/',
-		  query: {
-			redirect: to.fullPath
-		  }
-		})
-	  } else {
-		next()
-	  }
-	})
+      if (!json.errors && json.data[0].logged_in && !json.data[0].login.match(/.*(google)|(facebook).*/)) {
+        localStorage.setItem('user', JSON.stringify(json.data[0]))
+        next({
+          path: '/',
+          query: {
+            redirect: to.fullPath
+          }
+        })
+      } else {
+        next()
+      }
+    })
   } else if (to.matched.some(record => record.meta.requiresAuth)) {
-	Vue.http.get('auth/getCurrentSession').then(response => {
-	  let json = response.body
+    Vue.http.get('auth/getCurrentSession').then(response => {
+      let json = response.body
 
-	  if (!json.errors && json.data[0].logged_in) {
-		localStorage.setItem('user', JSON.stringify(json.data[0]))
-		next()
-	  } else {
-		next({
-		  path: '/auth/login',
-		  query: {
-			redirect: to.fullPath
-		  }
-		})
-	  }
-	})
+      if (!json.errors && json.data[0].logged_in) {
+        localStorage.setItem('user', JSON.stringify(json.data[0]))
+        next()
+      } else {
+        next({
+          path: '/auth/login',
+          query: {
+            redirect: to.fullPath
+          }
+        })
+      }
+    })
   } else if (to.matched.some(record => record.meta.requiresSuccessRegistration)) {
-	Vue.http.get('auth/getCurrentSession').then(response => {
-	  let json = response.body
+    Vue.http.get('auth/getCurrentSession').then(response => {
+      let json = response.body
 
-	  if (!json.errors && json.data[0].login) {
-		if (json.data[0].login.match(/.*(google)|(facebook).*/)) {
-		  next({
-			path: '/socialSuccess',
-			query: {
-			  redirect: to.fullPath
-			}
-		  })
-		}
-	  }
-	  next()
-	}, error => {
-	  console.log(error)
-	  next()
-	})
+      if (!json.errors && json.data[0].login) {
+        if (json.data[0].login.match(/.*(google)|(facebook).*/)) {
+          next({
+            path: '/socialSuccess',
+            query: {
+              redirect: to.fullPath
+            }
+          })
+        }
+      }
+      next()
+    }, error => {
+      console.log(error)
+      next()
+    })
   } else if (to.matched.some(record => record.meta.requiresAdmin)) {
-	Vue.http.get('auth/getCurrentSession').then(response => {
-	  let json = response.body
+    Vue.http.get('auth/getCurrentSession').then(response => {
+      let json = response.body
 
-	  if (!json.errors && json.data[0].type === 'ADMIN') {
-		next()
-	  } else {
-		next({
-		  path: '/',
-		  query: {
-			redirect: to.fullPath
-		  }
-		})
-	  }
-	}, error => {
-	  console.log(error)
-	  next()
-	})
+      if (!json.errors && json.data[0].type === 'ADMIN') {
+        next()
+      } else {
+        next({
+          path: '/',
+          query: {
+            redirect: to.fullPath
+          }
+        })
+      }
+    }, error => {
+      console.log(error)
+      next()
+    })
   } else {
-	next()
+    next()
   }
 })
 // eslint-disable-next-line
