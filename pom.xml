@@ -15,13 +15,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.shrralis</groupId>
-    <artifactId>ss-demo1</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+	<groupId>com.softserveinc</groupId>
+	<artifactId>geo-citizen</artifactId>
+	<version>1.0.5-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>ss-demo1</name>
-    <description>Demo 1 project for Soft Serve</description>
+	<name>Geo Citizen</name>
+	<description>Demo project named as "Geo Citizen" for Soft Serve by Ch-58 group.</description>
 
     <properties>
         <project.fileName>citizen</project.fileName>
@@ -54,11 +54,11 @@
         <dbunit.version>2.5.4</dbunit.version>
         <springtestdbunit.veriosn>1.3.0</springtestdbunit.veriosn>
         <assertj.version>3.8.0</assertj.version>
-	    <javax.mail-api.version>1.6.0</javax.mail-api.version>
-	    <javax.mail.version>1.4.7</javax.mail.version>
+	    <javax.mail.version>1.6.0</javax.mail.version>
 	    <apache.commons.lang>3.7</apache.commons.lang>
 	    <apache.commons.collections>4.1</apache.commons.collections>
         <apache.commons.io>2.6</apache.commons.io>
+        <swagger.version>2.7.0</swagger.version>
     </properties>
 
     <dependencies>
@@ -354,14 +354,20 @@
 	    <dependency>
 		    <groupId>javax.mail</groupId>
 		    <artifactId>javax.mail-api</artifactId>
-		    <version>${javax.mail-api.version}</version>
+		    <version>${javax.mail.version}</version>
 	    </dependency>
 
 	    <dependency>
-		    <groupId>javax.mail</groupId>
-		    <artifactId>mail</artifactId>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>javax.mail</artifactId>
             <version>${javax.mail.version}</version>
-        </dependency>
+	    </dependency>
+
+	    <dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>smtp</artifactId>
+		    <version>${javax.mail.version}</version>
+	    </dependency>
 
 	    <dependency>
 		    <groupId>org.apache.commons</groupId>
@@ -439,6 +445,17 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.196</version>
+        </dependency>
+        <!-- Swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
     </dependencies>
 

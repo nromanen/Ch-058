@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<FullMessage, Long> {
 
-    boolean existsByIssueIdAndUserId(Long issueId, Long userId);
-    List<FullMessage> findAllByIssueIdAndUserId(Long issueId, Long userId);
-    @Query(value = "SELECT * FROM message WHERE authorid = ?1 GROUP BY id, userid, issueid ORDER BY date", nativeQuery = true)
-    List<FullMessage> findAllChatRooms(Long adminId);
+	boolean existsByIssueIdAndUserId(Long issueId, Long userId);
+	List<FullMessage> findAllByIssueIdAndUserId(Long issueId, Long userId);
+	@Query(value = "SELECT * FROM message WHERE authorid = ?1 GROUP BY id, userid, issueid ORDER BY date", nativeQuery = true)
+	List<FullMessage> findAllChatRooms(Long adminId);
 }

@@ -8,7 +8,7 @@ export default {
   data: () => ({
     menuVisible: false,
     authDialog: false,
-    userEmail: null,
+    login: null,
     snackBarText: null,
     showBack: false,
     user: null
@@ -24,23 +24,7 @@ export default {
             if (!json.errors) {
               if (json.data[0].logged_in) {
                 this.user = json.data[0];
-
-                Vue.http.get('users/get/' + getLocalUser().id)
-                  .then(
-                    response => {
-                      let json = response.body;
-
-                      if (!json.errors) {
-                        if (json.data[0]) {
-                          this.userEmail = json.data[0].email;
-                        }
-                      } else if (json.errors.length) {
-                        this.snackBarText = getErrorMessage(json.errors[0]);
-                      } else {
-                        this.snackBarText = getErrorMessage(UNEXPECTED);
-                      }
-                    }
-                  )
+                this.login = json.data[0].login;
               }
             } else if (json.errors.length) {
               this.snackBarText = getErrorMessage(json.errors[0]);
@@ -75,7 +59,7 @@ export default {
           let json = response.body;
 
           if (!json.errors && json.data[0].logged_in === false) {
-            this.userEmail = null;
+            this.login = null;
 
             resetLocalUser();
           } else if (json.errors.length) {

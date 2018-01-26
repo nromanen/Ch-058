@@ -19,17 +19,17 @@ public interface IUserService {
 
 	User getUser(int id);
 
-    User findById(Integer id) throws AbstractCitizenException;
+	User findById(Integer id) throws AbstractCitizenException;
 
-    User findByLogin(String login) throws AbstractCitizenException;
+	User findByLogin(String login) throws AbstractCitizenException;
 
-    List<User> findByLoginOrEmailContaining(String login, String email);
+	List<User> findByLoginOrEmailContaining(String login, String email);
 
-    List<User> findAll();
+	List<User> findAll();
 
 	User setStatus(User.Type userType, Integer id) throws AbstractCitizenException;
 
-    List<User> findByType(User.Type type);
+	List<User> findByType(User.Type type);
 
-    Page findaAll(Pageable pageable);
+	Page findaAll(Pageable pageable);
 }

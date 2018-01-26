@@ -38,9 +38,9 @@
               <md-field :class="getValidationClass('type')">
                 <label for="type">{{ $t('label.issue_type') }}</label>
                 <md-select id="type" name="type" v-model="form.type">
-                  <md-option value="1">{{ $t('label.issue_type_problem') }}</md-option>
-                  <md-option value="2">{{ $t('label.issue_type_info') }}</md-option>
-                  <md-option value="3">{{ $t('label.issue_type_feedback') }}</md-option>
+                  <md-option value="PROBLEM">{{ $t('label.issue_type_problem') }}</md-option>
+                  <md-option value="INFO">{{ $t('label.issue_type_info') }}</md-option>
+                  <md-option value="FEEDBACK">{{ $t('label.issue_type_feedback') }}</md-option>
                 </md-select>
                 <span class="md-error" v-if="!$v.form.type.required">{{ $t('error.req_type') }}</span>
               </md-field>

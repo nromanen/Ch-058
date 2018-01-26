@@ -85,9 +85,9 @@ public class UserDetailsServiceImpl implements ICitizenUserDetailsService {
 	}
 
 	public static Set<GrantedAuthority> getAuthorities(User user) {
-        Set<GrantedAuthority> authorities = new HashSet<>();
+		Set<GrantedAuthority> authorities = new HashSet<>();
 
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getType().toString()));
-        return authorities;
-    }
+		authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getType().toString()));
+		return authorities;
+	}
 }

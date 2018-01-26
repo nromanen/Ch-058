@@ -10,12 +10,15 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@Secured("ROLE_ADMIN")
 @RequestMapping("/admin/users")
 public class UserManagementController {
 
+	private final IUserService userService;
+
 	@Autowired
-    private IUserService userService;
+	public UserManagementController(IUserService userService) {
+		this.userService = userService;
+	}
 
 	@GetMapping("/all")
 	public JsonResponse getAll(@RequestParam int page, @RequestParam int size) {
@@ -23,9 +26,9 @@ public class UserManagementController {
 	}
 
 	@GetMapping("/{id}")
-	public JsonResponse getById(@PathVariable int id) throws AbstractCitizenException {
-        return new JsonResponse(userService.findById(id));
-    }
+	public JsonResponse getById(@PathVariable Integer id) throws AbstractCitizenException {
+		return new JsonResponse(userService.findById(id));
+	}
 
 	@GetMapping("/login/{login}")
 	public JsonResponse getByLogin(@PathVariable String login) throws AbstractCitizenException {

@@ -7,12 +7,12 @@
   </div>
 
   <div class="md-toolbar-section-end">
-    <md-button to="/auth" v-if="!userEmail">
+    <md-button to="/auth" v-if="!login">
       {{ $t('button.login') }}
     </md-button>
 
     <md-menu md-size="auto" md-align-trigger v-else>
-      <md-button md-menu-trigger>{{ userEmail }}</md-button>
+      <md-button md-menu-trigger>{{ login }}</md-button>
 
       <md-menu-content>
         <md-menu-item to="/admin" v-if="user.type === 'ADMIN'">{{ $t('label.admin_page') }}</md-menu-item>

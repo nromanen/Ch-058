@@ -40,13 +40,16 @@ public class IssueServiceTest {
 
 		MockitoAnnotations.initMocks(this);
 
+		Issue.Type type = new Issue.Type();
+		type.setName("PROBLEM");
+
 		Issue testIssue = Issue.Builder.anIssue()
 				.setMapMarker(null)
 				.setTitle("title")
 				.setText("description")
 				.setAuthor(null)
 				.setImage(null)
-				.setTypeId(1)
+				.setType(type)
 				.setClosed(false)
 				.setCreatedAt(LocalDateTime.now())
 				.setUpdatedAt(LocalDateTime.now())

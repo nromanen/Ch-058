@@ -27,8 +27,8 @@ import java.util.List;
 public class MapMarkersServiceImpl implements IMapMarkersService {
 	public static final int MULTIPLE = 4;
 
-    private final MapMarkersRepository markerRepository;
-    private final IssuesRepository issuesRepository;
+	private final MapMarkersRepository markerRepository;
+	private final IssuesRepository issuesRepository;
 
 	@Autowired
 	public MapMarkersServiceImpl(MapMarkersRepository markerRepository, IssuesRepository issuesRepository) {
@@ -36,23 +36,23 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 		this.issuesRepository = issuesRepository;
 	}
 
-    @Override
-    public List<MarkerDTO> loadAllMarkers() {
+	@Override
+	public List<MarkerDTO> loadAllMarkers() {
 
 		List<MarkerDTO> list = new ArrayList<>();
-        List<MapMarker> markers = markerRepository.findAll();
+		List<MapMarker> markers = markerRepository.findAll();
 
-        for(MapMarker m : markers) {
-        	MarkerDTO dto = new MarkerDTO(m.getLat(), m.getLng());
-        	int[] types = issuesRepository.getIssueTypeById(m.getId());
+		for(MapMarker m : markers) {
+			MarkerDTO dto = new MarkerDTO(m.getLat(), m.getLng());
+			int[] types = issuesRepository.getIssueTypeById(m.getId());
 
-        	if(types.length == 1) {
-		        dto.setType(types[0]);
-	        } else dto.setType(MULTIPLE);
-	        list.add(dto);
-        }
-        return list;
-    }
+			if(types.length == 1) {
+				dto.setType(types[0]);
+			} else dto.setType(MULTIPLE);
+			list.add(dto);
+		}
+		return list;
+	}
 
 	@Override
 	public MapMarker getMarker(double lat, double lng) {
@@ -60,7 +60,7 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 	}
 
 	@Override
-    public MapMarker saveMarker(MapMarker marker) {
-        return markerRepository.save(marker);
-    }
+	public MapMarker saveMarker(MapMarker marker) {
+		return markerRepository.save(marker);
+	}
 }

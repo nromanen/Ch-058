@@ -86,7 +86,8 @@
     "messageHint": "Write a message",
     "finish_registration": "Finish registration",
     "other": "Other",
-    "messages": "Messages"
+    "messages": "Messages",
+    "submit_token": "Submit token"
   },
   "error": {
     "required": "Required",

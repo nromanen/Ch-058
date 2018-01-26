@@ -1,4 +1,4 @@
-# Ch-958, Geo Citizen
+# Ch-058, Geo Citizen
 ### Getting started
 1) First of all, clone the repository with `git clone`.
 1) Go to the directory with cloned repository (`cd` or something).
@@ -70,3 +70,8 @@
 	npm run dev
 	```
 	After successful starting you will see the URL-address of your __front-end__.
+	
+1) If you'd like to check REST API documentation, follow this link:
+ 
+    `http://localhost:8080/citizen/swagger-ui.html`
+

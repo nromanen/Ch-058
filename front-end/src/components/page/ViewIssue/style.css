@@ -44,7 +44,7 @@ img {
   min-height: 80vh;
 }
 
-.md-primary {
+.md-snackbar .md-primary {
   background-color: #ffffff;
 }
 

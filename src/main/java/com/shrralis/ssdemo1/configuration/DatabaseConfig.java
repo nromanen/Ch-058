@@ -58,16 +58,16 @@ public class DatabaseConfig {
 	@Value("${entity_manager.packages.to.scan}")
 	private String entityManagerPackagesToScan;
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+	@Bean
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
-        entityManagerFactoryBean.setDataSource(getDataSource());
-        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-	    entityManagerFactoryBean.setPackagesToScan(entityManagerPackagesToScan);
-	    entityManagerFactoryBean.setJpaProperties(getHibProperties());
-        return entityManagerFactoryBean;
-    }
+		entityManagerFactoryBean.setDataSource(getDataSource());
+		entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+		entityManagerFactoryBean.setPackagesToScan(entityManagerPackagesToScan);
+		entityManagerFactoryBean.setJpaProperties(getHibProperties());
+		return entityManagerFactoryBean;
+	}
 
 	@Bean
 	public DataSource getDataSource() {
@@ -80,19 +80,19 @@ public class DatabaseConfig {
 		return dataSource;
 	}
 
-    private Properties getHibProperties() {
-        Properties properties = new Properties();
+	private Properties getHibProperties() {
+		Properties properties = new Properties();
 
-	    properties.put(HIBERNATE_DIALECT_PROP_NAME, hibernateDialect);
-	    properties.put(HIBERNATE_SHOW_SQL_PROP_NAME, hibernateShowSql);
-        return properties;
-    }
+		properties.put(HIBERNATE_DIALECT_PROP_NAME, hibernateDialect);
+		properties.put(HIBERNATE_SHOW_SQL_PROP_NAME, hibernateShowSql);
+		return properties;
+	}
 
-    @Bean
-    public JpaTransactionManager transactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
+	@Bean
+	public JpaTransactionManager transactionManager() {
+		JpaTransactionManager transactionManager = new JpaTransactionManager();
 
-        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-        return transactionManager;
-    }
+		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+		return transactionManager;
+	}
 }

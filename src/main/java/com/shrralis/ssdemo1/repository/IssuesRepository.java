@@ -26,29 +26,29 @@ import java.util.Optional;
 
 @Repository
 public interface IssuesRepository extends JpaRepository<Issue, Integer> {
-    Optional<Issue> findById(Integer id);
+	Optional<Issue> findById(Integer id);
 
-    List<Issue> findByMapMarker_Id(int mapMarkerId);
+	List<Issue> findByMapMarker_Id(int mapMarkerId);
 
-    @Query(value = "SELECT type_id FROM issues WHERE map_marker_id = ?1", nativeQuery = true)
+	@Query(value = "SELECT type_id FROM issues WHERE map_marker_id = ?1", nativeQuery = true)
 
-    int[] getIssueTypeById(int id);
+	int[] getIssueTypeById(int id);
 
-    List<Issue> findByTitleOrTextContainingAllIgnoreCase(String title, String text);
+	List<Issue> findByTitleOrTextContainingAllIgnoreCase(String title, String text);
 
-    List<Issue> findByAuthor_Id(Integer id);
+	List<Issue> findByAuthor_Id(Integer id);
 
-//    List<Issue> findAll();
+//	List<Issue> findAll();
 
-    void deleteById(Integer id);
+	void deleteById(Integer id);
 
-    @Modifying
-    @Query("UPDATE Issue i SET i.closed = ?1 WHERE i.id = ?2")
-    void setStatus(Boolean closed, Integer id);
+	@Modifying
+	@Query("UPDATE Issue i SET i.closed = ?1 WHERE i.id = ?2")
+	void setStatus(Boolean closed, Integer id);
 
-    List<Issue> findByClosedTrue();
+	List<Issue> findByClosedTrue();
 
-    List<Issue> findByClosedFalse();
+	List<Issue> findByClosedFalse();
 
-    Page<Issue> findAll(Pageable pageable);
+	Page<Issue> findAll(Pageable pageable);
 }

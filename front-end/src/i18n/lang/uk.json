@@ -86,7 +86,8 @@
     "admin_restriction": "Права адміністратора",
     "finish_registration": "Завершіть реєстрацію",
     "other": "Інше",
-    "messages": "Повідомлення"
+    "messages": "Повідомлення",
+    "submit_token": "Токен підтвердження"
   },
   "error": {
     "required": "Обов'язково",

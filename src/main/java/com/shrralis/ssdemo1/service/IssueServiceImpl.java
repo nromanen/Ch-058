@@ -6,18 +6,18 @@ import com.shrralis.ssdemo1.entity.Issue;
 import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
+import com.shrralis.ssdemo1.exception.BadFieldFormatException;
 import com.shrralis.ssdemo1.exception.EntityNotExistException;
+import com.shrralis.ssdemo1.repository.*;
 import com.shrralis.ssdemo1.repository.ImagesRepository;
 import com.shrralis.ssdemo1.repository.IssuesRepository;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +25,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,87 +38,57 @@ import static com.shrralis.ssdemo1.security.model.AuthorizedUser.getCurrent;
 @Service
 @Transactional
 public class IssueServiceImpl implements IIssueService {
-	private static final int OPENED_TYPE = 1;
+	private static final String OPENED_TYPE = "PROBLEM";
 	private static final String CATALINA_HOME_NAME = "catalina.home";
 
-	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
-
-    private final IssuesRepository issuesRepository;
-    private final MapMarkersRepository mapMarkersRepository;
-    private final UsersRepository usersRepository;
-    private final ImagesRepository imagesRepository;
+	private final IssuesRepository issuesRepository;
+	private final MapMarkersRepository mapMarkersRepository;
+	private final UsersRepository usersRepository;
+	private final ImagesRepository imagesRepository;
+	private final IssueTypesRepository issueTypesRepository;
 
 	@Autowired
 	public IssueServiceImpl(IssuesRepository issuesRepository,
-	                        MapMarkersRepository mapMarkersRepository,
-	                        UsersRepository usersRepository,
-	                        ImagesRepository imagesRepository) {
+							MapMarkersRepository mapMarkersRepository,
+							UsersRepository usersRepository,
+							ImagesRepository imagesRepository,
+							IssueTypesRepository issueTypesRepository) {
 		this.issuesRepository = issuesRepository;
 		this.mapMarkersRepository = mapMarkersRepository;
 		this.usersRepository = usersRepository;
 		this.imagesRepository = imagesRepository;
+		this.issueTypesRepository = issueTypesRepository;
 	}
 
-    @Override
-    public Issue getById(Integer id) {
-	    return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
-    }
+	@Override
+	public Issue getById(Integer id) {
+		return issuesRepository.findById(id).orElseThrow(NullPointerException::new);
+	}
 
-    public Issue saveIssue(MapDataDTO dto, MultipartFile file) {
+	public Issue saveIssue(MapDataDTO dto, MultipartFile file) throws BadFieldFormatException {
 
 		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
 
-	    User user = usersRepository.findOne(getCurrent().getId());
+		User user = usersRepository.findOne(getCurrent().getId());
 
-	    boolean closed = dto.getTypeId() != OPENED_TYPE;
+		boolean closed = !dto.getTypeName().equals(OPENED_TYPE);
 
-	    Image image = parseImage(file);
+		Image image = parseImage(file);
 
-	    return issuesRepository.save(Issue.Builder.anIssue()
-		        .setMapMarker(marker)
-		        .setTitle(dto.getTitle())
-		        .setText(dto.getDesc())
-		        .setAuthor(user)
-		        .setImage(image)
-		        .setTypeId(dto.getTypeId())
-		        .setClosed(closed)
-		        .setCreatedAt(LocalDateTime.now())
-		        .setUpdatedAt(LocalDateTime.now())
-		        .build());
-    }
+		Issue.Type type = getTypeByName(dto.getTypeName());
 
-    private Image parseImage(MultipartFile file) {
-	    byte[] blob = {};
-
-	    try {
-		    blob = file.getBytes();
-	    } catch (IOException e) {
-		    logger.info("Error while file encoding", e);
-	    }
-
-	    Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(blob));
-
-	    if(duplicateImage == null) {
-		    Image image = new Image();
-
-		    String uniqueFileName = UUID.randomUUID().toString().replace("-", "");
-		    String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-		    String uniqueFile = uniqueFileName + "." + extension;
-
-		    image.setSrc(uniqueFile);
-		    image.setHash(DigestUtils.md5Hex(blob));
-
-		    File newFile = new File(System.getProperty(CATALINA_HOME_NAME) + File.separator + uniqueFile);
-		    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
-			    stream.write(blob);
-		    } catch (IOException e) {
-			    logger.info("Error while file saving", e);
-		    }
-		    return image;
-	    }
-	        return duplicateImage;
-
-    }
+		return issuesRepository.save(Issue.Builder.anIssue()
+				.setMapMarker(marker)
+				.setTitle(dto.getTitle())
+				.setText(dto.getDesc())
+				.setAuthor(user)
+				.setImage(image)
+				.setType(type)
+				.setClosed(closed)
+				.setCreatedAt(LocalDateTime.now())
+				.setUpdatedAt(LocalDateTime.now())
+				.build());
+	}
 
 	@Override
 	public List<Issue> getAllIssueByMapMarker(int mapMarkerId) {
@@ -171,5 +145,55 @@ public class IssueServiceImpl implements IIssueService {
 		byte[] imageInByte = baos.toByteArray();
 		baos.close();
 		return imageInByte;
+	}
+
+	@Override
+	public byte[] getImageInByte(String src) throws BadFieldFormatException {
+		try {
+			Path path = Paths.get(System.getProperty(CATALINA_HOME_NAME) + File.separator + src);
+			return Files.readAllBytes(path);
+		} catch (IOException e) {
+			throw new BadFieldFormatException(e.getMessage());
+		}
+	}
+
+	private Image parseImage(MultipartFile file) throws BadFieldFormatException {
+		try {
+			byte[] blob = file.getBytes();
+
+			Image duplicateImage = imagesRepository.getByHash(DigestUtils.md5Hex(blob));
+
+			if (duplicateImage != null && Arrays.equals(blob, getImageInByte(duplicateImage.getSrc()))) {
+				return duplicateImage;
+			}
+
+			String uniqueFileName = UUID.randomUUID().toString().replace("-", "");
+			String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+			String uniqueFile = uniqueFileName + "." + extension;
+
+			Image image = new Image();
+			image.setSrc(uniqueFile);
+			image.setHash(DigestUtils.md5Hex(blob));
+
+			File newFile = new File(System.getProperty(CATALINA_HOME_NAME) + File.separator + uniqueFile);
+			FileUtils.writeByteArrayToFile(newFile, blob);
+
+			return image;
+
+		} catch(IOException e) {
+			throw new BadFieldFormatException(e.getMessage());
+		}
+	}
+
+	private Issue.Type getTypeByName(String type) {
+
+		Issue.Type issueType = issueTypesRepository.getByName(type);
+
+		if(issueType == null) {
+			issueType = new Issue.Type();
+			issueType.setName(type);
+		}
+		return issueType;
+
 	}
 }
