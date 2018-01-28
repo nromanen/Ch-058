@@ -102,18 +102,14 @@ public class User implements Identifiable<Integer> {
 	@JoinColumn(name = IMAGE_COLUMN_NAME)
 	private Image image;
 
-	@NotNull
-	@NotBlank
 	@Pattern(regexp = NAME_PATTERN)
 	@Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH)
-	@Column(name = NAME_COLUMN_NAME, nullable = false, length = MAX_NAME_LENGTH)
+	@Column(name = NAME_COLUMN_NAME, length = MAX_NAME_LENGTH)
 	private String name;
 
-	@NotNull
-	@NotBlank
 	@Pattern(regexp = NAME_PATTERN)
 	@Size(min = MIN_SURNAME_LENGTH, max = MAX_SURNAME_LENGTH)
-	@Column(name = SURNAME_COLUMN_NAME, nullable = false, length = MAX_SURNAME_LENGTH)
+	@Column(name = SURNAME_COLUMN_NAME, length = MAX_SURNAME_LENGTH)
 	private String surname;
 
 	@JsonProperty("failed_auth_count")

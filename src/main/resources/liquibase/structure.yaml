@@ -29,35 +29,6 @@ databaseChangeLog:
             type: VARCHAR(32)
         tableName: images
 - changeSet:
-    id: 1516657572581-1
-    author: shrralis (generated)
-    changes:
-    - createTable:
-        columns:
-        - column:
-            autoIncrement: true
-            constraints:
-              primaryKey: true
-              primaryKeyName: images_pkey
-            name: id
-            type: SERIAL
-        - column:
-            constraints:
-              nullable: false
-            name: src
-            type: VARCHAR(128)
-        - column:
-            constraints:
-              nullable: false
-            name: type
-            type: IMAGE_TYPE
-        - column:
-            constraints:
-              nullable: false
-            name: hash
-            type: VARCHAR(32)
-        tableName: images
-- changeSet:
     id: 1516657572581-2
     author: shrralis (generated)
     changes:

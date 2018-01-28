@@ -1,6 +1,6 @@
 import {validationMixin} from "vuelidate";
-import {maxLength, minLength, required, sameAs} from "vuelidate/lib/validators/index";
-import {LoginValidator, MAX_LOGIN_LENGTH, MIN_LOGIN_LENGTH} from "../../../_validator/LoginValidator";
+import {minLength, required, sameAs} from "vuelidate/lib/validators/index";
+import {LoginOrEmailValidator, MIN_LOGIN_LENGTH} from "../../../_validator";
 import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
@@ -36,8 +36,7 @@ export default {
       login: {
         required,
         minLength: minLength(MIN_LOGIN_LENGTH),
-        maxLength: maxLength(MAX_LOGIN_LENGTH),
-        LoginValidator
+        LoginOrEmailValidator
       },
       token: {
         required

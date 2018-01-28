@@ -22,6 +22,8 @@ import com.shrralis.ssdemo1.mail.SignUpEmailMessage;
 import com.shrralis.ssdemo1.mail.interfaces.IMailCitizenService;
 import com.shrralis.ssdemo1.repository.RecoveryTokensRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
+import com.shrralis.ssdemo1.security.exception.EmailNotFoundException;
+import com.shrralis.ssdemo1.security.exception.LoginNotFoundException;
 import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensException;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.security.service.UserDetailsServiceImpl;
@@ -75,13 +77,21 @@ public class AuthServiceImpl implements IAuthService {
 	}
 
 	@Override
-	public String generateRecoveryToken(final String login, final String ip)
+	public String generateRecoveryToken(final String loginOrEmail, final String ip)
 			throws AbstractCitizenException, MessagingException {
-		final User user = repository.getByLogin(login);
-
-		if (user == null) {
-			throw new EntityNotExistException(EntityNotExistException.Entity.USER, "login");
+		final User user;
+		if (!loginOrEmail.contains("@")) {
+			user = repository.getByLogin(loginOrEmail);
+			if(user == null){
+				throw new LoginNotFoundException(loginOrEmail);
+			}
+		} else {
+			user = repository.getByEmail(loginOrEmail);
+			if(user == null){
+				throw new EmailNotFoundException(loginOrEmail);
+			}
 		}
+
 
 		if (tokensRepository.countNonExpiredByUser(user.getId()) > 2) {
 			throw new TooManyNonExpiredRecoveryTokensException(user.getLogin());
@@ -89,7 +99,7 @@ public class AuthServiceImpl implements IAuthService {
 
 		final RecoveryToken token = RecoveryToken.Builder.aRecoveryToken()
 				.setUser(user)
-				.setToken(DigestUtils.md5DigestAsHex((login + ip + LocalDateTime.now().toString()).getBytes()))
+				.setToken(DigestUtils.md5DigestAsHex((loginOrEmail + ip + LocalDateTime.now().toString()).getBytes()))
 				.build();
 
 		tokensRepository.save(token);
@@ -97,7 +107,7 @@ public class AuthServiceImpl implements IAuthService {
 				.setDestEmail(user.getEmail())
 				.setMessage(token.getToken(), user.getLogin(), ip)
 				.build());
-		return login;
+		return loginOrEmail;
 	}
 
 	@Override
