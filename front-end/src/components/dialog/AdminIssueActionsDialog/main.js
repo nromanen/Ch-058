@@ -27,6 +27,27 @@ export default {
         }, error => {
           console.log(JSON.stringify(error.body));
         });
+    },
+    deleteIssue() {
+      this.$http.delete('admin/issues/' + this.issue.id + '/')
+        .then(response => {
+          let json = response.body;
+
+          if (!json.errors) {
+            this.$parent.issues.splice(this.$parent.issues.indexOf(this.issue), 1);
+
+            this.$parent.searched = this.$parent.issues;
+            this.showDialog = false;
+          } else if (json.errors.length) {
+            // TODO: show error in snackBar
+            console.log(JSON.stringify(json.errors));
+          } else {
+            // TODO: show Unexpected error in snackbar
+            console.log('UNEXPECTED');
+          }
+        }, error => {
+          console.log(JSON.stringify(error.body));
+        });
     }
   }
 }

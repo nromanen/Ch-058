@@ -5,6 +5,7 @@ import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.ssdemo1.service.interfaces.IIssueVotesService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +30,11 @@ public class IssueRestController {
 	}
 
 	@GetMapping
-	public JsonResponse allIssues() {
-		return new JsonResponse(issueService.findAll());
+	public JsonResponse all(/*@PageableDefault(page=0,size=10,sort="title")Pageable pageable*/
+			@RequestParam(required = false, defaultValue = "0") int page,
+			@RequestParam(required = false, defaultValue = "10") int size
+	) {
+		return new JsonResponse(issueService.findAll(new PageRequest(page, size)));
 	}
 
 	@GetMapping("/{issueId}")
@@ -40,7 +44,8 @@ public class IssueRestController {
 
 	@GetMapping("/{issueId}/is-vote-exist")
 	public JsonResponse voteExists(@PathVariable("issueId") Integer issueId) {
-		Boolean vote = issueVotesService.getByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId).getVote();
+		Boolean vote = issueVotesService
+				.getByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId).getVote();
 		return new JsonResponse(vote);
 	}
 

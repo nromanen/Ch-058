@@ -18,7 +18,7 @@ export default {
 
             if (!json.errors) {
               if (json.data[0].logged_in) {
-                Vue.http.get('users/get/' + getLocalUser().id)
+                Vue.http.get('users/' + getLocalUser().id)
                   .then(
                     response => {
                       let json = response.body;

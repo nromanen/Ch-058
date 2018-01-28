@@ -1,5 +1,5 @@
 <div id="admin-issues-page">
-  <md-table v-model="searched" md-sort="id" md-card>
+  <md-table v-model="searched" md-sort="id" md-card md-fixed-header>
     <md-table-toolbar>
       <h1 class="md-title">{{ $t('label.issues') }}</h1>
 
@@ -15,15 +15,20 @@
       <md-table-cell :md-label="$t('label.title')" md-sort-by="title">{{ item.title }}</md-table-cell>
       <md-table-cell :md-label="$t('label.text')" md-sort-by="text">{{ item.text }}</md-table-cell>
       <md-table-cell :md-label="$t('label.author')" md-sort-by="author">{{ item.author.login }}</md-table-cell>
-      <md-table-cell :md-label="$t('label.created')" md-numeric="created_at">
+      <md-table-cell :md-label="$t('label.created')">
         {{ item.createdAt.dayOfMonth }}/{{ item.createdAt.monthValue }}/{{ item.createdAt.year }}
-        {{ item.createdAt.hour }}:{{ item.createdAt.minute }}<!--:{{ item.createdAt.second }}-->
+        {{ item.createdAt.hour }}:{{ item.createdAt.minute }}
       </md-table-cell>
+      <md-table-cell :md-label="$t('label.type')" md-sort-by="type">{{ item.type.name }}</md-table-cell>
       <md-table-cell :md-label="$t('label.closed')" md-sort-by="type">
         {{ item.closed ? $t('label.yes') : $t('label.no') }}
       </md-table-cell>
     </md-table-row>
   </md-table>
+
+  <md-button class="md-dense md-raised md-primary" :disabled="page === 0" @click="load(--page)">prev</md-button>
+  <md-button class="md-dense md-raised md-primary" :disabled="page === totalPages - 1" @click="load(++page)">next
+  </md-button>
 
   <admin-issue-actions-dialog ref="aIssueActionsDialog"></admin-issue-actions-dialog>
 </div>

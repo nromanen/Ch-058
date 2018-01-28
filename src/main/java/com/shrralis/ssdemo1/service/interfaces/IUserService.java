@@ -23,13 +23,13 @@ public interface IUserService {
 
 	User findByLogin(String login) throws AbstractCitizenException;
 
-	List<User> findByLoginOrEmailContaining(String login, String email);
-
-	List<User> findAll();
+	Page<User> findByLoginOrEmail(String login, String email, Pageable pageable);
 
 	User setStatus(User.Type userType, Integer id) throws AbstractCitizenException;
 
-	List<User> findByType(User.Type type);
+	Page<User> findByType(User.Type type, Pageable pageable);
 
-	Page findaAll(Pageable pageable);
+	Page<User> findAll(Pageable pageable);
+
+//	Page<User> findAll(Predicate predicate, Pageable pageable);
 }

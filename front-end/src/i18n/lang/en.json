@@ -22,12 +22,13 @@
     "manage": "Manage",
     "grant": "Grant",
     "revoke": "Revoke",
-    "view_user_issues": "View user's issues",
+    "view_user_issues": "User's issues",
     "ban": "Ban",
     "unban": "Unban",
     "sign_in_fb": "Sign in with Facebook",
     "sign_in_gp": "Sign in with Google+",
-    "home": "Home"
+    "home": "Home",
+    "delete_issue": "Delete issue"
   },
   "label": {
     "sign_in": "Sign in",
@@ -77,7 +78,7 @@
     "type": "Type",
     "auth_block": "Auth block",
     "management": "Management",
-    "admin_restriction": "Admin restrictions",
+    "admin_restrictions": "Admin privileges",
     "issues_modal_title": "All issues",
     "projectTitle": "Geo citizen",
     "waitHint": "Please wait for a minute for an answer from admin",

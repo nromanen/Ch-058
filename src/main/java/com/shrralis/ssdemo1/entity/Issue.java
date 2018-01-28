@@ -13,6 +13,7 @@
 package com.shrralis.ssdemo1.entity;
 
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -54,7 +55,7 @@ public class Issue implements Identifiable<Integer> {
 	private MapMarker mapMarker;
 
 	@NotNull
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name = AUTHOR_COLUMN_NAME, nullable = false)
 	private User author;
 
@@ -83,14 +84,14 @@ public class Issue implements Identifiable<Integer> {
 	private Boolean closed;
 
 	@NotNull
+	@DateTimeFormat
 	@Column(name = CREATED_AT_COLUMN_NAME, nullable = false)
 	private LocalDateTime createdAt;
 
 	@NotNull
+	@DateTimeFormat
 	@Column(name = UPDATED_AT_COLUMN_NAME, nullable = false)
 	private LocalDateTime updatedAt;
-
-	private Issue() {}
 
 	@Override
 	public Integer getId() {
@@ -144,7 +145,8 @@ public class Issue implements Identifiable<Integer> {
 	public Type getType() {
 		return type;
 	}
-	public void setTypeId(Type type) {
+
+	public void setType(Type type) {
 		this.type = type;
 	}
 
@@ -175,6 +177,7 @@ public class Issue implements Identifiable<Integer> {
 	@Entity
 	@Table(name = Type.TABLE_NAME)
 	public static class Type implements Identifiable<Integer> {
+
 		public static final String TABLE_NAME = "issue_types";
 		public static final String ID_COLUMN_NAME = "id";
 		public static final String NAME_COLUMN_NAME = "name";
@@ -252,7 +255,7 @@ public class Issue implements Identifiable<Integer> {
 		}
 
 		public Builder setType(Type type) {
-			issue.setTypeId(type);
+			issue.setType(type);
 			return this;
 		}
 

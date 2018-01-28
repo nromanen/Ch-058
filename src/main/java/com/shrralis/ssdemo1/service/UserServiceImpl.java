@@ -58,30 +58,23 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public List<User> findByLoginOrEmailContaining(String login, String email) {
-		return repository.findByLoginOrEmailContainingAllIgnoreCase(login, email).getContent();
+	public Page<User> findByLoginOrEmail(String login, String email, Pageable pageable) {
+		return repository.findByLoginContainingOrEmailContainingAllIgnoreCase(login, email, pageable);
 	}
 
 	@Override
-	public List<User> findAll() {
-		return repository.findAll();
-	}
-
-	@Override
-	@Transactional
 	public User setStatus(User.Type type, Integer id) {
 		repository.setStatus(type, id);
 		return repository.getOne(id);
 	}
 
 	@Override
-	public List<User> findByType(User.Type type) {
-		return repository.findByType(type);
+	public Page<User> findByType(User.Type type, Pageable pageable) {
+		return repository.findByType(type, pageable);
 	}
 
 	@Override
-	public Page findaAll(Pageable pageable) {
+	public Page<User> findAll(Pageable pageable) {
 		return repository.findAll(pageable);
 	}
-
 }

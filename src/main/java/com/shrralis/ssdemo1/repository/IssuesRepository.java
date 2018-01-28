@@ -12,7 +12,6 @@
 
 package com.shrralis.ssdemo1.repository;
 
-import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,29 +25,27 @@ import java.util.Optional;
 
 @Repository
 public interface IssuesRepository extends JpaRepository<Issue, Integer> {
-	Optional<Issue> findById(Integer id);
+
+	Optional<Issue> findById(int id);
 
 	List<Issue> findByMapMarker_Id(int mapMarkerId);
 
 	@Query(value = "SELECT type_id FROM issues WHERE map_marker_id = ?1", nativeQuery = true)
-
 	int[] getIssueTypeById(int id);
 
-	List<Issue> findByTitleOrTextContainingAllIgnoreCase(String title, String text);
+	Page<Issue> findByTitleContainingOrTextContainingAllIgnoreCase(String title, String text, Pageable pageable);
 
-	List<Issue> findByAuthor_Id(Integer id);
+	Page<Issue> findByAuthor_Id(Integer id, Pageable pageable);
 
-//	List<Issue> findAll();
-
-	void deleteById(Integer id);
+	Integer deleteById(Integer id);
 
 	@Modifying
 	@Query("UPDATE Issue i SET i.closed = ?1 WHERE i.id = ?2")
-	void setStatus(Boolean closed, Integer id);
+	Integer setStatus(Boolean closed, Integer id);
 
-	List<Issue> findByClosedTrue();
+	Page<Issue> findByClosedTrue(Pageable pageable);
 
-	List<Issue> findByClosedFalse();
+	Page<Issue> findByClosedFalse(Pageable pageable);
 
 	Page<Issue> findAll(Pageable pageable);
 }

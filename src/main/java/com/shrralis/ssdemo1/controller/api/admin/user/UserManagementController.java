@@ -6,7 +6,8 @@ import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,10 +21,17 @@ public class UserManagementController {
 		this.userService = userService;
 	}
 
-	@GetMapping("/all")
-	public JsonResponse getAll(@RequestParam int page, @RequestParam int size) {
-		return new JsonResponse(userService.findaAll(new PageRequest(page, size)));
+	@GetMapping
+	public JsonResponse getAll(@PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable
+//			@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size
+	) {
+		return new JsonResponse(userService.findAll(pageable).getContent());
 	}
+
+//	@GetMapping
+//	public JsonResponse getAll(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+//		return new JsonResponse(userService.findAll(pageable));
+//	}
 
 	@GetMapping("/{id}")
 	public JsonResponse getById(@PathVariable Integer id) throws AbstractCitizenException {
@@ -36,8 +44,8 @@ public class UserManagementController {
 	}
 
 	@GetMapping("/search/{query}")
-	public JsonResponse getByLoginOrEmail(@PathVariable String query) {
-		return new JsonResponse(userService.findByLoginOrEmailContaining(query, query));
+	public JsonResponse getByLoginOrEmail(@PathVariable String query, @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
+		return new JsonResponse(userService.findByLoginOrEmail(query, query, pageable).getContent());
 	}
 
 	@PutMapping("/{id}/{type}")
@@ -46,7 +54,9 @@ public class UserManagementController {
 	}
 
 	@GetMapping("/type/{type}")
-	public JsonResponse getByStatus(@PathVariable String type) {
-		return new JsonResponse(userService.findByType(User.Type.valueOf(type.toUpperCase())));
+	public JsonResponse getByStatus(@PathVariable String type,
+	                                @RequestParam(required = false, defaultValue = "0") int page,
+	                                @RequestParam(required = false, defaultValue = "10") int size) {
+		return new JsonResponse(userService.findByType(User.Type.valueOf(type.toUpperCase()), new PageRequest(page, size)));
 	}
 }

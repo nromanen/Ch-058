@@ -13,21 +13,25 @@
 package com.shrralis.ssdemo1.repository;
 
 import com.shrralis.ssdemo1.entity.User;
-import com.shrralis.ssdemo1.exception.AbstractCitizenException;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UsersRepository extends JpaRepository<User, Integer> {
+public interface UsersRepository extends JpaRepository<User, Integer>/*, QueryDslPredicateExecutor<User>, QuerydslBinderCustomizer<QUser>*/ {
+
+//	@Override
+//	default public void customize(QuerydslBindings bindings, QUser root) {
+//
+//		bindings.bind(String.class).first((StringPath path, String value) -> path.containsIgnoreCase(value));
+//		bindings.excluding(root.password);
+//	}
+
 	Optional<User> findByEmail(String email);
 
 	Optional<User> findByLogin(String login);
@@ -38,13 +42,15 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
 
 	Optional<User> findById(int id);
 
-	Page<User> findByLoginOrEmailContainingAllIgnoreCase(String login, String email);
+	Page<User> findByLoginContainingOrEmailContainingAllIgnoreCase(String login, String email, Pageable pageable);
 
 	@Modifying
 	@Query("UPDATE User u SET u.type = ?1 WHERE u.id = ?2")
 	void setStatus(User.Type userType, Integer id);
 
-	List<User> findByType(User.Type type);
+	Page<User> findByType(User.Type type, Pageable pageable);
 
 	Page<User> findAll(Pageable pageable);
+
+//	Page<User> findAll(Predicate predicate, Pageable pageable);
 }
