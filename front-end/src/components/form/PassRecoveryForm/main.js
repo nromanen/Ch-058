@@ -1,7 +1,7 @@
 import {validationMixin} from "vuelidate";
 import {maxLength, minLength, required, sameAs} from "vuelidate/lib/validators/index";
 import {LoginValidator, MAX_LOGIN_LENGTH, MIN_LOGIN_LENGTH} from "../../../_validator/LoginValidator";
-import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
+import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: "password-recovery-form",
@@ -78,7 +78,15 @@ export default {
           if (!json.errors) {
             this.haveToken = true;
           } else if (json.errors.length) {
-            this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
+            switch (json.errors[0].errno) {
+              case ACCESS_DENIED:
+                this.$router.push('/403');
+                break;
+              default:
+                this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
+
+                break;
+            }
           } else {
             this.errors.push(getErrorMessage(UNEXPECTED));
           }
@@ -86,8 +94,11 @@ export default {
           this.sending = false;
         }, error => {
           switch (error.status) {
-            case 400:
-            case 500:
+            case 403:
+            case 404:
+              this.$router.push('/' + error.status);
+              break;
+            default:
               let json = error.body;
 
               if (json.errors) {
@@ -123,7 +134,15 @@ export default {
             this.$parent.$parent.$parent.$parent.setLogin(json.data[0].login);
             localStorage.setItem('user', JSON.stringify(json.data[0]));
           } else if (json.errors.length > 0) {
-            this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
+            switch (json.errors[0].errno) {
+              case ACCESS_DENIED:
+                this.$router.push('/403');
+                break;
+              default:
+                this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
+
+                break;
+            }
           } else {
             this.errors.push(getErrorMessage(UNEXPECTED));
           }
@@ -131,8 +150,11 @@ export default {
           this.sending = false;
         }, error => {
           switch (error.status) {
-            case 400:
-            case 500:
+            case 403:
+            case 404:
+              this.$router.push('/' + error.status);
+              break;
+            default:
               let json = error.body;
 
               if (json.errors) {

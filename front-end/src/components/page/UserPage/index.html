@@ -51,6 +51,12 @@
                 <span class="md-error" v-else-if="!$v.user.surname.NameValidator">{{ $t('error.not_last_name') }}</span>
               </md-field>
             </div>
+
+            <md-snackbar md-position="center" :md-duration="Infinity" :md-active.sync="error" md-persistent>
+              <span>error</span>
+
+              <md-button class="md-primary">OK</md-button>
+            </md-snackbar>
           </div>
 
           <div class="pull-right" v-if="user && getLocalUser().id === user.id">

@@ -8,6 +8,7 @@ import {
   MIN_SURNAME_LENGTH,
   NameValidator
 } from "../../../_validator";
+import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: "UserPage",
@@ -19,7 +20,8 @@ export default {
     user: null,
     showBack: true,
     editMode: false,
-    sending: false
+    sending: false,
+    error: null
   }),
   created: function () {
     this.$http.get('users/' + this.$route.params.id)
@@ -57,6 +59,9 @@ export default {
         return;
       }
 
+      this.error = null;
+      this.sending = true;
+
       if (this.validateCredentials()) {
         this.$http.put('users/edit', this.user).then(response => {
           let json = response.body;
@@ -67,13 +72,39 @@ export default {
             this.user.surname = json.data[0].surname;
             this.user.initials = this.user.name.charAt(0) + this.user.surname.charAt(0);
           } else if (json.errors.length) {
-            // TODO: show error
+            switch (json.errors[0].errno) {
+              case ACCESS_DENIED:
+                this.$router.push('/403');
+                break;
+              default:
+                this.error = getErrorMessage(json.errors[0]);
+
+                break;
+            }
           } else {
-            // TODO: show error
+            this.error = getErrorMessage(UNEXPECTED);
           }
+
+          this.sending = false;
         }, error => {
-          // TODO: manage this
-          // this.$router.push('/' + error.status);
+          let json = error.body;
+
+          switch (error.status) {
+            case 500:
+              this.error = getErrorMessage(json.errors[0]);
+
+              break;
+            case 403:
+            case 404:
+              this.$router.push('/' + error.status);
+              break;
+          }
+
+          if (!this.error) {
+            this.error = 'HTTP error (' + error.status + ': ' + error.statusText + ')';
+          }
+
+          this.sending = false;
         });
       }
     },

@@ -667,3 +667,13 @@ databaseChangeLog:
             name: registration_token
             type: varchar(32 BYTE)
         tableName: users
+- changeSet:
+    id: 1516972824887-1
+    author: shrralis (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: blocking_expires_at
+            type: timestamp(29, 6)
+        tableName: users

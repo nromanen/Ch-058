@@ -41,4 +41,10 @@
       </md-menu-content>
     </md-menu>
   </div>
+
+  <md-snackbar md-position="center" :md-duration="Infinity" :md-active.sync="error" md-persistent>
+    <span>{{ error }}</span>
+
+    <md-button class="md-primary" @click="hideSnackBar()">OK</md-button>
+  </md-snackbar>
 </div>
