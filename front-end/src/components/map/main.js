@@ -1,6 +1,5 @@
-import {minLength, maxLength, required} from 'vuelidate/lib/validators'
+import {maxLength, minLength, required} from 'vuelidate/lib/validators'
 import {getLocalUser} from "../../router/index"
-import {getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
 
 export default {
   name: 'Map',
@@ -32,7 +31,6 @@ export default {
         lng: 0
       }
   }),
-
   validations: {
     form: {
       title: {
@@ -54,7 +52,6 @@ export default {
       }
     }
   },
-
   methods: {
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
@@ -63,29 +60,28 @@ export default {
         return {'md-invalid': field.$invalid && field.$dirty}
       }
     },
-
     validateData() {
       this.$v.$touch();
+
       if (!this.$v.$invalid) {
         var fileSize = document.getElementById("uploadImage").files[0].size;
-        if(fileSize > 1024 * 1024 * 5)
-        {
+
+        if (fileSize > 1024 * 1024 * 5) {
           window.alert(this.$t('message.image_size'));
         } else {
           this.saveIssue();
         }
       }
     },
-
     clearForm() {
       this.$v.$reset();
+
       this.form.title = null;
       this.form.desc = null;
       this.form.type = null;
       this.form.image = null;
       document.getElementById("uploadImage").value = null
     },
-
     initMap() {
       var self = this;
       this.map = new google.maps.Map(document.getElementById('map'), {
@@ -98,17 +94,21 @@ export default {
         zoomControl: true,
         mapTypeControl: true,
       });
+
       this.addYourLocationButton();
       this.addSearchField();
       this.loadAllMarkers();
 
       if (localStorage.getItem('redirectFromIssue') && localStorage.getItem('activeMarker') !== null) {
         self.activeMarker = JSON.parse(localStorage.getItem('activeMarker'));
+
         self.showAllIssuesByMarker(self.activeMarker.id);
-        var pos = {
+
+        let pos = {
           lat: self.activeMarker.lat,
           lng: self.activeMarker.lng
         };
+
         self.map.setCenter(pos);
         self.map.setZoom(20);
       } else {
@@ -116,55 +116,56 @@ export default {
       }
 
       this.map.addListener('idle', function () {
-      for (var i = 0; i < self.markers.length; i++) {
-        var marker = self.markers[i];
-        if(self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
-          marker.setMap(self.map);
+        for (let i = 0; i < self.markers.length; i++) {
+          let marker = self.markers[i];
+
+          if (self.map.getBounds().contains(marker.getPosition()) && marker.getMap() !== self.map) {
+            marker.setMap(self.map);
+          }
+
+          if (!self.map.getBounds().contains(marker.getPosition())) {
+            marker.setMap(null);
+          }
         }
-        if(!self.map.getBounds().contains(marker.getPosition())) {
-          marker.setMap(null);
-        }
-      }
       });
 
-      this.map.addListener('click', function(e) {
-        if(getLocalUser()) {
+      this.map.addListener('click', function (e) {
+        if (getLocalUser()) {
           e.stop();
           self.$http.get('auth/getCurrentSession')
             .then(response => {
-                let json = response.body;
+              let json = response.body;
 
-                if (json.data[0].logged_in) {
-                  self.clickHandler(e, self.map);
-                }
-                else {
-                  e.stop();
-                  self.showSnackBar = true
-                }
-              });
+              if (json.data[0].logged_in) {
+                self.clickHandler(e, self.map);
+              } else {
+                e.stop();
+
+                self.showSnackBar = true
+              }
+            });
         } else {
           e.stop();
+
           self.showSnackBar = true
         }
       });
-  },
-
+    },
     clickHandler(e, map) {
       var self = this;
       var k = 0;
       var placesService = new google.maps.places.PlacesService(map);
 
       if (e.placeId) {
-        placesService.getDetails({
-            placeId: e.placeId
-        }, function(place) {
-          for (var i = 0; i < self.lats.length; i++) {
+        placesService.getDetails({placeId: e.placeId}, function (place) {
+          for (let i = 0; i < self.lats.length; i++) {
             if (self.lats[i] === place.geometry.location.lat()
               && self.lngs[i] === place.geometry.location.lng()) {
               k++;
             }
           }
-          if(k === 0) {
+
+          if (k === 0) {
             self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
           }
         });
@@ -173,19 +174,19 @@ export default {
         self.saveCoords(e.latLng.lat(), e.latLng.lng())
       }
     },
-
     searchHandler(lat, lng, s, place) {
-      var self = this;
-      var k = 0;
-      for (var i = 0; i < self.lats.length; i++) {
+      let self = this;
+      let k = 0;
+      for (let i = 0; i < self.lats.length; i++) {
         if (self.lats[i] === lat && self.lngs[i] === lng) {
           k++;
         }
       }
 
-      if(k === 0) {
+      if (k === 0) {
         self.map.setCenter(place.geometry.location);
         self.map.setZoom(20);
+
         s = new google.maps.Marker({
           map: self.map,
           position: {
@@ -194,24 +195,23 @@ export default {
           },
           animation: google.maps.Animation.DROP
         });
+
         self.setMarkerType(s, '5');
 
-        if(getLocalUser()) {
+        if (getLocalUser()) {
           self.$http.get('auth/getCurrentSession')
             .then(response => {
               let json = response.body;
 
               if (json.data[0].logged_in) {
-                setTimeout(function() {
+                setTimeout(function () {
                   self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
                   s.setMap(null);
                 }, 1200)
-              }
-              else {
+              } else {
                 self.showSnackBar = true
               }
             });
-
         } else {
           self.showSnackBar = true;
           document.getElementById('pac-input').value = '';
@@ -219,18 +219,18 @@ export default {
       } else {
         self.map.setCenter(place.geometry.location);
         self.map.setZoom(20);
+
         document.getElementById('pac-input').value = '';
 
-        if(!getLocalUser()) {
+        if (!getLocalUser()) {
           self.showSnackBar = true;
           document.getElementById('pac-input').value = '';
         }
       }
     },
-
     search() {
-      var self = this;
-      var pos;
+      let self = this;
+      let pos;
 
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -242,31 +242,35 @@ export default {
       } else {
         pos = new google.maps.LatLng(48.29149, 25.94034);
       }
-      var autocomplete = new google.maps.places.Autocomplete(
+
+      let autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('pac-input'), {
           location: pos,
           radius: 10000,
         });
+
         autocomplete.setTypes([self.searchParam]);
         autocomplete.bindTo('bounds', self.map);
-
         autocomplete.addListener('place_changed', function() {
-         var place = autocomplete.getPlace();
-         var s = window.select;
+          let place = autocomplete.getPlace();
+          let s = window.select;
+
          self.searchHandler(place.geometry.location.lat(), place.geometry.location.lng(), s, place);
       });
     },
-
     getUserLocation() {
-      var self = this;
+      let self = this;
       navigator.geolocation.getCurrentPosition(function (position) {
-        var pos = {
+        let pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
+
         self.map.setCenter(pos);
         self.map.setZoom(20);
-        var infoWindow = new google.maps.InfoWindow({map: self.map});
+
+        let infoWindow = new google.maps.InfoWindow({map: self.map});
+
         infoWindow.setPosition(pos);
         infoWindow.setContent('<b>' + self.$t('message.user_location') + '</b>');
         setTimeout(function () {
@@ -276,20 +280,18 @@ export default {
         self.handleLocationError()
       })
     },
-
     handleLocationError() {
       window.alert(this.$t('message.geolocation'));
     },
-
     addSearchField() {
-      var self = this;
+      let self = this;
+      let controlDiv = document.createElement('div');
+      let input = document.createElement('input');
 
-      var controlDiv = document.createElement('div');
-
-      var input = document.createElement('input');
       input.setAttribute('placeholder', this.$t('label.input_location'));
       input.setAttribute('id', 'pac-input');
       input.setAttribute('type', 'text');
+
       input.style.marginTop = '10px';
       input.style.border = '1px solid transparent';
       input.style.borderRadius = '2px 0 0 2px';
@@ -298,57 +300,58 @@ export default {
       input.style.padding = '0 11px 0 13px';
       input.style.fontSize = '15px';
       input.style.borderColor = '#323232';
-      input.addEventListener('click', function() {
+
+      input.addEventListener('click', function () {
         self.search()
       });
 
-      var selectDiv = document.createElement('div');
+      let selectDiv = document.createElement('div');
+
       selectDiv.setAttribute('id', 'type-selector');
+
       selectDiv.style.color = '#fff';
       selectDiv.style.backgroundColor = '#323232';
       selectDiv.style.padding = '5px 11px 5px 11px';
       selectDiv.style.fontSize = '13px';
 
-      var radio1 = document.createElement('input');
+      let radio1 = document.createElement('input');
+
       radio1.setAttribute('type', 'radio');
       radio1.setAttribute('name', 'type');
       radio1.setAttribute('checked', 'checked');
-      radio1.addEventListener('click', function() {
+      radio1.addEventListener('click', function () {
         self.searchParam = 'establishment';
       });
 
-      var radio2 = document.createElement('input');
+      let radio2 = document.createElement('input');
+
       radio2.setAttribute('type', 'radio');
       radio2.setAttribute('name', 'type');
-      radio2.addEventListener('click', function() {
+      radio2.addEventListener('click', function () {
         self.searchParam = 'address';
       });
 
-      var label1 = document.createElement('label');
+      let label1 = document.createElement('label');
+
       label1.setAttribute('for', 'radio1');
       label1.appendChild(document.createTextNode(this.$t('label.establishments')));
 
-      var label2 = document.createElement('label2');
+      let label2 = document.createElement('label2');
+
       label2.setAttribute('for', 'radio2');
       label2.appendChild(document.createTextNode(this.$t('label.addresses')));
-
       selectDiv.appendChild(radio1);
       selectDiv.appendChild(label1);
       selectDiv.appendChild(radio2);
       selectDiv.appendChild(label2);
-
       controlDiv.appendChild(input);
       controlDiv.appendChild(selectDiv);
-
       this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlDiv);
     },
-
     addYourLocationButton() {
-      var self = this;
-
-      var controlDiv = document.createElement('div');
-
-      var firstChild = document.createElement('button');
+      let self = this;
+      let controlDiv = document.createElement('div');
+      let firstChild = document.createElement('button');
       firstChild.style.backgroundColor = '#fff';
       firstChild.style.border = 'none';
       firstChild.style.outline = 'none';
@@ -360,9 +363,10 @@ export default {
       firstChild.style.marginRight = '10px';
       firstChild.style.padding = '0px';
       firstChild.title = 'Find your location';
+
       controlDiv.appendChild(firstChild);
 
-      var secondChild = document.createElement('div');
+      let secondChild = document.createElement('div');
       secondChild.style.margin = '5px';
       secondChild.style.width = '18px';
       secondChild.style.height = '18px';
@@ -371,23 +375,20 @@ export default {
       secondChild.style.backgroundPosition = '0px 0px';
 
       firstChild.appendChild(secondChild);
-
       firstChild.addEventListener('click', function () {
         self.getUserLocation()
       });
-
       this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv)
     },
-
     saveCoords(lat, lng) {
       window.lat = lat;
       window.lng = lng;
+
       this.openPopup()
     },
-
     openPopup() {
-      var modal = document.getElementById('myModal');
-      var span = document.getElementsByClassName("close")[0];
+      let modal = document.getElementById('myModal');
+      let span = document.getElementsByClassName("close")[0];
       modal.style.display = "table";
       span.onclick = function () {
         modal.style.display = "none";
@@ -397,24 +398,24 @@ export default {
         window.lng = 0;
       };
     },
-
     saveIssue() {
-      var self = this;
-      var title = this.form.title;
-      var desc = this.form.desc;
-      var type = this.form.type;
+      let self = this;
+      let title = this.form.title;
+      let desc = this.form.desc;
+      let type = this.form.type;
+      let formData = new FormData();
 
-      var formData = new FormData();
       formData.append('title', title);
       formData.append('desc', desc);
       formData.append('typeName', type);
       formData.append('file', document.getElementById("uploadImage").files[0]);
 
-      if(window.isPlaced) {
+      if (window.isPlaced) {
         formData.append('markerId', window.id);
         this.setMarkerType(window.marker, '4');
         this.map.setCenter(window.marker.getPosition());
-        var infoWindow = new google.maps.InfoWindow({
+
+        let infoWindow = new google.maps.InfoWindow({
           content: self.$t('message.new_issue')});
         infoWindow.open(self.map, window.marker);
         setTimeout(function () {
@@ -423,13 +424,14 @@ export default {
 
         this.$http.post('map/issue', formData).then((response) => {});
       } else {
-          var marker = new google.maps.Marker({
+        let marker = new google.maps.Marker({
             map: this.map,
             position: {
               lat: window.lat,
               lng: window.lng
             }
           });
+
           this.setMarkerType(marker, type);
           this.setListeners(marker);
           this.markers.push(marker);
@@ -437,9 +439,11 @@ export default {
           this.lngs.push(marker.getPosition().lng());
           this.map.setCenter(marker.getPosition());
           self.map.setZoom(20);
-          var infoWindow = new google.maps.InfoWindow({
+
+        let infoWindow = new google.maps.InfoWindow({
             content: self.$t('message.new_issue')});
-          infoWindow.open(self.map, marker);
+
+        infoWindow.open(self.map, marker);
           setTimeout(function () {
             infoWindow.close();
           }, 2000);
@@ -451,17 +455,17 @@ export default {
             this.$http.post('map/issue', formData).then((response) => {});
           });
       }
-
       this.clearForm();
+
       window.marker = null;
       window.isPlaced = false;
       document.getElementById('pac-input').value = '';
       document.getElementById("preview").hidden = true;
       document.getElementById('myModal').style.display = "none";
     },
-
     setMarkerType(marker, type) {
-      var url;
+      let url;
+
       switch(type) {
         case 'PROBLEM': url = '/src/assets/caution.png';
           break;
@@ -475,51 +479,55 @@ export default {
           break;
         default: url = ''
       }
-      var icon = {
+
+      let icon = {
         url: url,
         scaledSize: new google.maps.Size(50, 50),
       };
+
       marker.setIcon(icon);
     },
-
     onCancelIssuesDialog() {
       this.issues = [];
+
       localStorage.removeItem('redirectFromIssue');
-      localStorage.removeItem('activeMarker')
-      localStorage.removeItem('zoom')
+      localStorage.removeItem('activeMarker');
+      localStorage.removeItem('zoom');
     },
-
     setListeners(marker) {
-        var self = this;
-        var timer = 0;
-        var prevent = false;
+      let self = this;
+      let timer = 0;
+      let prevent = false;
 
-        marker.addListener('click', function() {
+      marker.addListener('click', function () {
           timer = setTimeout(function () {
-
             if (!prevent) {
               self.$http.get('map/marker/' + marker.getPosition().lat() + "/" + marker.getPosition().lng() + "/")
                 .then((response) => {
                   self.activeMarker.id = response.body.data[0].id;
                   self.activeMarker.lat = parseFloat(response.body.data[0].lat);
                   self.activeMarker.lng = parseFloat(response.body.data[0].lng);
+
                   self.showAllIssuesByMarker(self.activeMarker.id);
                 });
             }
+
             prevent = false;
           }, 300);
 
           marker.addListener('dblclick', function () {
             clearTimeout(timer);
+
             prevent = true;
 
-            if(getLocalUser()) {
+            if (getLocalUser()) {
               self.$http.get('auth/getCurrentSession')
                 .then(response => {
                   let json = response.body;
 
                   if (json.data[0].logged_in) {
                     self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
+
                     window.marker = marker;
                     var modal = document.getElementById('myModal');
                     var span = document.getElementsByClassName("close")[0];
@@ -527,12 +535,10 @@ export default {
                     span.onclick = function () {
                       modal.style.display = "none";
                     };
-                  }
-                  else {
+                  } else {
                     self.showSnackBar = true
                   }
                 });
-
             } else {
               self.showSnackBar = true;
               document.getElementById('pac-input').value = '';
@@ -540,12 +546,11 @@ export default {
           });
       })
     },
-
     showAllIssuesByMarker(markerId) {
-      var self = this;
+      let self = this;
+
       self.$http.get("map/issues/mapMarker/" + markerId).then(response => {
-        var i;
-        for (i = 0; i < response.body.data.length; i++) {
+        for (let i = 0; i < response.body.data.length; i++) {
           self.issues.push({
             id: response.body.data[i].id,
             title: response.body.data[i].title,
@@ -553,84 +558,79 @@ export default {
             typeId: response.body.data[i].type
           });
         }
+
         self.showDialog = true;
       })
     },
-
     getMarkerByCoords(lat, lng) {
       this.$http.get('map/marker/' + lat + "/" + lng + "/").then((response) => {
         window.id = response.body.data[0].id;
       });
+
       window.isPlaced = true;
     },
-
     previewImage() {
-      var reader = new FileReader();
+      let reader = new FileReader();
+
       reader.readAsDataURL(document.getElementById("uploadImage").files[0]);
+
       reader.onload = function (e) {
         document.getElementById("preview").src = e.target.result;
         document.getElementById("preview").hidden = false;
       };
     },
-
     snackBarAction() {
       this.$router.push('auth/login');
     },
-
     redirectToIssue(issueId, marker) {
       localStorage.setItem('activeMarker', JSON.stringify(marker));
       localStorage.setItem('zoom', this.map.getZoom());
       this.$router.push('issue/' + issueId);
     },
-
     loadAllMarkers() {
       let self = this;
+
       this.$http.get('map').then((response) => {
-        for (var i = 0; i < response.body.data.length; i++) {
-
-              var lat = parseFloat(response.body.data[i].lat);
-              var lng = parseFloat(response.body.data[i].lng);
-              var type = response.body.data[i].type.toString();
-
-              var marker = new google.maps.Marker({
+        for (let i = 0; i < response.body.data.length; i++) {
+          let lat = parseFloat(response.body.data[i].lat);
+          let lng = parseFloat(response.body.data[i].lng);
+          let type = response.body.data[i].type.toString();
+          let marker = new google.maps.Marker({
                 position: {
                   lat: lat,
                   lng: lng
                 }
               });
-              this.setListeners(marker);
-              if(type === '1') {
+
+          this.setListeners(marker);
+
+          if (type === '1') {
                 self.setMarkerType(marker, 'PROBLEM');
-              }
-              else if(type === '2') {
+          } else if (type === '2') {
                 self.setMarkerType(marker, 'INFO');
-              }
-              else if(type === '3') {
+          } else if (type === '3') {
                 self.setMarkerType(marker, 'FEEDBACK');
-              }
-              else {
+          } else {
                 self.setMarkerType(marker, '4');
               }
-
               this.lats.push(marker.getPosition().lat());
               this.lngs.push(marker.getPosition().lng());
               this.markers.push(marker);
           }
-          for (var i = 0; i < this.markers.length; i++) {
-            var marker = this.markers[i];
 
-            if(self.map.getBounds().contains(marker.getPosition())) {
+        for (let i = 0; i < this.markers.length; i++) {
+          let marker = this.markers[i];
+
+          if (self.map.getBounds().contains(marker.getPosition())) {
               marker.setMap(self.map);
             }
           }
         });
     },
   },
-
   mounted: function () {
       this.initMap();
   },
-
   destroyed: function () {
     localStorage.removeItem('redirectFromIssue');
   }

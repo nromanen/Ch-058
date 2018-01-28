@@ -27,7 +27,9 @@
     "unban": "Unban",
     "sign_in_fb": "Sign in with Facebook",
     "sign_in_gp": "Sign in with Google+",
-    "home": "Home"
+    "home": "Home",
+    "edit_user_info": "Edit user info",
+    "view_profile": "View profile"
   },
   "label": {
     "sign_in": "Sign in",
@@ -87,7 +89,10 @@
     "finish_registration": "Finish registration",
     "other": "Other",
     "messages": "Messages",
-    "submit_token": "Submit token"
+    "submit_token": "Submit token",
+    "contact_info": "Contact information",
+    "social_accounts": "Social accounts",
+    "linked-lowercase": "linked"
   },
   "error": {
     "required": "Required",
@@ -110,7 +115,8 @@
     "desc_short": "Description must be at least 8 characters length",
     "desc_long": "Description cannot be longer than 2048 characters",
     "req_type": "Please, choose the type",
-    "req_image": "Please, attach an image"
+    "req_image": "Please, attach an image",
+    "page_not_found": "Page you looked for is not found"
   },
   "message": {
     "successful_register": "You have been successfully registered!",

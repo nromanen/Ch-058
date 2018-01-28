@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import IndexPage from '@/components/page/IndexPage/IndexPage'
+import Page404 from '@/components/page/404Page/404Page'
 import AuthPage from '@/components/page/AuthPage/AuthPage'
 import RegistrationSubmitPage from '@/components/page/RegistrationSubmitPage/RegistrationSubmitPage'
 import Chat from '@/components/page/ChatPage/ChatPage'
@@ -9,6 +10,7 @@ import OpenChat from '@/components/OpenChat/OpenChat'
 import AdminChatPage from '@/components/page/AdminChatPage/AdminChatPage'
 import Issue from '@/components/page/ViewIssue/App'
 import SocialSuccessPage from '@/components/page/SocialSuccessPage/SocialSuccessPage'
+import UserPage from '@/components/page/UserPage/UserPage'
 import AdminPage from '@/components/page/AdminPage/AdminPage'
 import AdminUsersPage from '@/components/subpage/AdminUsersPage/AdminUsersPage'
 import AdminIssuesPage from '@/components/subpage/AdminIssuesPage/AdminIssuesPage'
@@ -25,6 +27,11 @@ const router = new Router({
       meta: {
         requiresSuccessRegistration: true
       }
+    },
+    {
+      path: '/404',
+      name: 'Page404',
+      component: Page404
     },
     {
       path: '/auth**',
@@ -78,6 +85,11 @@ const router = new Router({
       component: Issue
     },
     {
+      path: '/user/:id',
+      name: 'UserPage',
+      component: UserPage
+    },
+    {
       path: '/admin',
       component: AdminPage,
       meta: {
@@ -117,6 +129,11 @@ const router = new Router({
 export default router
 
 router.beforeEach((to, from, next) => {
+  if (!to.matched.length) {
+    next('/404')
+    return
+  }
+
   if (to.matched.some(record => record.meta.requiresAnonymous)) {
     Vue.http.get('auth/getCurrentSession').then(response => {
       let json = response.body

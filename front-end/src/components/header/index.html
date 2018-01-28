@@ -15,6 +15,10 @@
       <md-button md-menu-trigger>{{ login }}</md-button>
 
       <md-menu-content>
+        <md-menu-item :to="'/user/' + getLocalUser().id" v-if="getLocalUser()">
+          {{ $t('button.view_profile') }}
+        </md-menu-item>
+
         <md-menu-item to="/admin" v-if="user.type === 'ADMIN'">{{ $t('label.admin_page') }}</md-menu-item>
 
         <md-menu-item @click="logout()">{{ $t('button.logout') }}</md-menu-item>
@@ -23,24 +27,24 @@
 
     <md-menu md-size="auto" md-align-trigger>
       <md-button class="md-icon-button" md-menu-trigger>
-        <md-icon>more_vert</md-icon>
+        <md-icon>language</md-icon>
       </md-button>
 
+      <md-tooltip md-direction="bottom">{{ $t('button.choose_lang') }}</md-tooltip>
+
       <md-menu-content>
-        <md-menu-item>
-          <md-menu md-size="auto" md-align-trigger>
-            <md-button md-menu-trigger>{{ $t('button.choose_lang') }}</md-button>
+        <md-menu-item :class="getLangClass('en')" @click="switchLang('en')">EN</md-menu-item>
 
-            <md-menu-content>
-              <md-menu-item :class="getLangClass('en')" @click="switchLang('en')">EN</md-menu-item>
+        <md-menu-item :class="getLangClass('ru')" @click="switchLang('ru')">RU</md-menu-item>
 
-              <md-menu-item :class="getLangClass('ru')" @click="switchLang('ru')">RU</md-menu-item>
-
-              <md-menu-item :class="getLangClass('uk')" @click="switchLang('uk')">UA</md-menu-item>
-            </md-menu-content>
-          </md-menu>
-        </md-menu-item>
+        <md-menu-item :class="getLangClass('uk')" @click="switchLang('uk')">UA</md-menu-item>
       </md-menu-content>
     </md-menu>
   </div>
+
+  <md-snackbar md-position="center" :md-duration="Infinity" :md-active.sync="error" md-persistent>
+    <span>{{ error }}</span>
+
+    <md-button class="md-primary" @click="hideSnackBar()">OK</md-button>
+  </md-snackbar>
 </div>

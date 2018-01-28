@@ -55,28 +55,28 @@ public class ExceptionHandlerControllerAdvice {
 	@ExceptionHandler(value = TooManyNonExpiredRecoveryTokensException.class)
 	public JsonResponse tooManyNonExpiredRecoveryTokensException(
 			TooManyNonExpiredRecoveryTokensException e, Locale locale) {
-		logger.error("TooManyNonExpiredRecoveryTokensException:", e);
+		logger.error("TooManyNonExpiredRecoveryTokensException", e);
 		return new JsonResponse(JsonError.Error.TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS, locale, messageSource);
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = IllegalParameterException.class)
 	public JsonResponse illegalParameterException(IllegalParameterException e, Locale locale) {
-		logger.error("IllegalParameterException:", e);
+		logger.error("IllegalParameterException", e);
 		return new JsonResponse(e.getError(), locale, messageSource);
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = ExpiredRecoveryTokenException.class)
 	public JsonResponse expiredRecoveryTokenException(ExpiredRecoveryTokenException e, Locale locale) {
-		logger.error("ExpiredRecoveryTokenException:", e);
+		logger.error("ExpiredRecoveryTokenException", e);
 		return new JsonResponse(e.getError(), locale, messageSource);
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
 	public JsonResponse methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e, Locale locale) {
-		logger.error("MethodArgumentNotValidException:", e);
+		logger.error("MethodArgumentNotValidException", e);
 		return new JsonResponse(
 				e.getBindingResult().getFieldErrors().stream()
 						.map(mapFieldError)
@@ -88,21 +88,21 @@ public class ExceptionHandlerControllerAdvice {
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = EntityNotUniqueException.class)
 	public JsonResponse entityNotUniqueExceptionHandler(EntityNotUniqueException e, Locale locale) {
-		logger.error("EntityNotUniqueException:", e);
+		logger.error("EntityNotUniqueException", e);
 		return new JsonResponse(e.getError(), locale, messageSource);
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = BadFieldFormatException.class)
 	public JsonResponse badParameterFormatExceptionHandler(BadFieldFormatException e, Locale locale) {
-		logger.error("BadFieldFormatException:", e);
+		logger.error("BadFieldFormatException", e);
 		return new JsonResponse(e.getError(), locale, messageSource);
 	}
 
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value = IllegalArgumentException.class)
 	public JsonResponse illegalArgumentExceptionHandler(IllegalArgumentException e, Locale locale) {
-		logger.error("IllegalArgumentException:", e);
+		logger.error("IllegalArgumentException", e);
 		return new JsonResponse(new JsonError("Internal error").translateErrmsg(locale, messageSource));
 	}
 
@@ -110,21 +110,21 @@ public class ExceptionHandlerControllerAdvice {
 	@ExceptionHandler(value = MissingServletRequestParameterException.class)
 	public JsonResponse missingRequestParameterExceptionHandler(
 			MissingServletRequestParameterException e, Locale locale) {
-		logger.error("MissingServletRequestParameterException:", e);
+		logger.error("MissingServletRequestParameterException", e);
 		return new JsonResponse(JsonError.Error.MISSING_FIELD.forField(e.getParameterName()), locale, messageSource);
 	}
 
 	@ResponseStatus(value = HttpStatus.FORBIDDEN)
 	@ExceptionHandler(value = AccessDeniedException.class)
 	public JsonResponse accessDeniedExceptionHandler(AccessDeniedException e, Locale locale) {
-		logger.error("AccessDeniedException:", e);
+		logger.error("AccessDeniedException", e);
 		return new JsonResponse(JsonError.Error.ACCESS_DENIED, locale, messageSource);
 	}
 
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value = Exception.class)
 	public JsonResponse generalExceptionHandler(Exception e, Locale locale) {
-		logger.error(e.getClass() + ":", e);
+		logger.error(e.getClass().getName(), e);
 		return new JsonResponse(JsonError.Error.INTERNAL_ERROR, locale, messageSource);
 	}
 }
