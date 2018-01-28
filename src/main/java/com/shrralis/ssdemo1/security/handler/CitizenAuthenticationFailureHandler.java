@@ -44,11 +44,11 @@ public class CitizenAuthenticationFailureHandler extends SimpleUrlAuthentication
 		response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 
 		if (ICitizenAuthenticationException.class.isAssignableFrom(e.getClass())) {
-			logger.error(e.getClass().getName() + ":", e);
+			logger.error(e.getClass().getName(), e);
 			MAPPER.writeValue(response.getWriter(), new JsonResponse(((ICitizenAuthenticationException) e).getError(),
 					localeResolver.resolveLocale(request), messageSource));
 		} else {
-			logger.error("AuthenticationException:", e);
+			logger.error("AuthenticationException", e);
 			MAPPER.writeValue(response.getWriter(), new JsonResponse(new JsonError(
 					e.getMessage()).translateErrmsg(localeResolver.resolveLocale(request), messageSource)));
 		}

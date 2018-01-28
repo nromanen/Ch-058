@@ -14,7 +14,6 @@ package com.shrralis.ssdemo1.security;
 
 import com.shrralis.ssdemo1.security.exception.CitizenBadCredentialsException;
 import com.shrralis.ssdemo1.security.exception.NotSubmittedUserRegistrationException;
-import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensException;
 import com.shrralis.ssdemo1.security.exception.UserFailedAuthenticationCountOverflow;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.security.service.interfaces.ICitizenUserDetailsService;
@@ -76,7 +75,7 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 			throw new InternalAuthenticationServiceException(
 					"UserDetailsService returned null, which is an interface contract violation");
 		} else if (userDetails instanceof AuthorizedUser
-				&& ((AuthorizedUser) userDetails).getFailedAuthCount() == MAX_FAILED_AUTH_VALUE
+				&& ((AuthorizedUser) userDetails).getFailedAuthCount() >= MAX_FAILED_AUTH_VALUE
 				&& LocalDateTime.now().isBefore(((AuthorizedUser) userDetails).getBlockingExpiresAt())) {
 			throw new UserFailedAuthenticationCountOverflow(loginOrEmail);
 		}

@@ -77,7 +77,7 @@ public class UserDetailsServiceImpl implements ICitizenUserDetailsService {
 
 		user.setFailedAuthCount(user.getFailedAuthCount() + 1);
 
-		if (user.getFailedAuthCount() == MAX_FAILED_AUTH_VALUE) {
+		if (user.getFailedAuthCount() >= MAX_FAILED_AUTH_VALUE) {
 			user.setBlockingExpiresAt(LocalDateTime.now().plusMinutes(15));
 		}
 		usersRepository.save(user);
