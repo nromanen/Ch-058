@@ -27,7 +27,9 @@
   </md-table>
 
   <md-button class="md-dense md-raised md-primary" :disabled="page === 0" @click="load(--page)">prev</md-button>
-  <md-button class="md-dense md-raised md-primary" :disabled="page === totalPages - 1" @click="load(++page)">next
+
+  <md-button class="md-dense md-raised md-primary" :disabled="page === totalPages - 1" @click="load(++page)">
+    next
   </md-button>
 
   <admin-issue-actions-dialog ref="aIssueActionsDialog"></admin-issue-actions-dialog>

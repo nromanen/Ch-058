@@ -34,14 +34,15 @@ export default {
     this.load(this.page);
   },
   methods: {
-    load(page, size, sort) {
-      Vue.http.get('admin/issues/', {params: {page: page, size: size, sort: sort}}).then(response => {
+    load(page) {
+      Vue.http.get('admin/issues/', {params: {page: page, size: this.size, sort: this.sort}}).then(response => {
         let json = response.body;
 
         if (!json.errors) {
           this.issues = json.data;
           this.searched = this.issues;
-          this.totalPages = json.totalPages;
+          this.totalPages = json.count / this.size;
+          this.totalPages = (this.totalPages - Math.floor(this.totalPages) ? (this.totalPages | 0) + 1 : this.totalPages | 0);
           // } else if (json.errors.length) {
           //   TODO: show error in snackBar
           // console.log(JSON.stringify(json.errors));

@@ -4,6 +4,7 @@ import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,14 @@ public class IssueManagementController {
 
 	@GetMapping/*("/")*/
 	public JsonResponse getAll(@PageableDefault(page = 0, size = 10, sort = "title") Pageable pageable) {
-		return new JsonResponse(issueService.findAll(pageable).getContent());
+		Page issues = issueService.findAll(pageable);
+
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(issues.getContent())
+				.setCount(issues.getTotalElements())
+				.build();
 	}
+
 //	@GetMapping
 //	public Page<Issue> getAll(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size
 //			@PageableDefault(page = 0, size = 10) Pageable pageable

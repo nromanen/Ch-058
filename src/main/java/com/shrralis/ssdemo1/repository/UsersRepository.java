@@ -22,15 +22,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+//import com.shrralis.ssdemo1.entity.QUser;
+
 @Repository
 public interface UsersRepository extends JpaRepository<User, Integer>/*, QueryDslPredicateExecutor<User>, QuerydslBinderCustomizer<QUser>*/ {
 
-//	@Override
-//	default public void customize(QuerydslBindings bindings, QUser root) {
-//
-//		bindings.bind(String.class).first((StringPath path, String value) -> path.containsIgnoreCase(value));
-//		bindings.excluding(root.password);
-//	}
+/*	@Override
+	default void customize(QuerydslBindings bindings, QUser root) {
+		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+	}*/
 
 	Optional<User> findByEmail(String email);
 
@@ -52,5 +52,6 @@ public interface UsersRepository extends JpaRepository<User, Integer>/*, QueryDs
 
 	Page<User> findAll(Pageable pageable);
 
+//	@Override
 //	Page<User> findAll(Predicate predicate, Pageable pageable);
 }

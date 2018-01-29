@@ -42,7 +42,8 @@ export default {
         if (!json.errors) {
           this.users = json.data;
           this.searched = this.users;
-          this.totalPages = json.totalPages;
+          this.totalPages = json.count / this.size;
+          this.totalPages = (this.totalPages - Math.floor(this.totalPages) ? (this.totalPages | 0) + 1 : this.totalPages | 0);
           // } else if (json.errors.length) {
           //   TODO: show error in snackBar
           //   console.log(JSON.stringify(json.errors));
@@ -82,7 +83,8 @@ export default {
         if (!json.errors) {
           this.users = json.data;
           this.searched = this.users;
-          this.totalPages = json.totalPages;
+          this.totalPages = json.count / this.size;
+          this.totalPages = (this.totalPages - Math.floor(this.totalPages) ? (this.totalPages | 0) + 1 : this.totalPages | 0);
           // } else if (json.errors.length) {
           //   TODO: show error in snackBar
           // console.log(JSON.stringify(json.errors));

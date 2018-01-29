@@ -5,6 +5,7 @@ import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -25,7 +26,12 @@ public class UserManagementController {
 	public JsonResponse getAll(@PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable
 //			@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size
 	) {
-		return new JsonResponse(userService.findAll(pageable).getContent());
+		Page users = userService.findAll(pageable);
+
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(users.getContent())
+				.setCount(users.getTotalElements())
+				.build();
 	}
 
 //	@GetMapping
@@ -59,4 +65,9 @@ public class UserManagementController {
 	                                @RequestParam(required = false, defaultValue = "10") int size) {
 		return new JsonResponse(userService.findByType(User.Type.valueOf(type.toUpperCase()), new PageRequest(page, size)));
 	}
+
+//	@GetMapping("/test")
+//	public JsonResponse getByPredicate(@PageableDefault(page = 0, size = 10) Pageable pageable, Predicate predicate) {
+//		return new JsonResponse(userService.findAll(predicate, pageable));
+//	}
 }
