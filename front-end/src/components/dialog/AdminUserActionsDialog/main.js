@@ -10,12 +10,12 @@ export default {
       this.user = user;
     },
     banUser(ban) {
-      this.$http.put('admin/users/' + this.user.id + '/' + (ban ? 'BANNED' : 'USER'))
+      this.$http.put('admin/users/' + this.user.id + '/' + (ban ? 'ROLE_BANNED' : 'ROLE_USER'))
         .then(response => {
           let json = response.body;
 
           if (!json.errors) {
-            this.$parent.users[this.$parent.users.indexOf(this.user)].type = (ban ? 'BANNED' : 'USER');
+            this.$parent.users[this.$parent.users.indexOf(this.user)].type = (ban ? 'ROLE_BANNED' : 'ROLE_USER');
             this.$parent.searched = this.$parent.users;
           } else if (json.errors.length) {
             // TODO: show error in snackBar
@@ -29,12 +29,12 @@ export default {
         });
     },
     grantUser(grant) {
-      this.$http.put('admin/users/' + this.user.id + '/' + (grant ? 'ADMIN' : 'USER'))
+      this.$http.put('admin/users/' + this.user.id + '/' + (grant ? 'ROLE_ADMIN' : 'ROLE_USER'))
         .then(response => {
           let json = response.body;
 
           if (!json.errors) {
-            this.$parent.users[this.$parent.users.indexOf(this.user)].type = (grant ? 'ADMIN' : 'USER');
+            this.$parent.users[this.$parent.users.indexOf(this.user)].type = (grant ? 'ROLE_ADMIN' : 'ROLE_USER');
             this.$parent.searched = this.$parent.users;
           } else if (json.errors.length) {
             // TODO: show error in snackBar

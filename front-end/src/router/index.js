@@ -189,7 +189,7 @@ router.beforeEach((to, from, next) => {
     Vue.http.get('auth/getCurrentSession').then(response => {
       let json = response.body
 
-      if (!json.errors && json.data[0].type === 'ADMIN') {
+      if (!json.errors && json.data[0].type === 'ROLE_ADMIN') {
         next()
       } else {
         next({
