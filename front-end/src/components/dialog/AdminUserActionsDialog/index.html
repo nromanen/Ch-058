@@ -8,7 +8,7 @@
 
         <span class="md-list-item-text">{{ $t('button.manage') }}</span>
 
-        <md-card slot="md-expand" v-if="user && user.type !== 'BANNED'">
+        <md-card slot="md-expand" v-if="user && user.type !== 'ROLE_BANNED'">
           <md-card-header>{{ $t('label.admin_restrictions') }}</md-card-header>
 
           <md-card-content>
@@ -29,7 +29,7 @@
         <span class="md-list-item-text">{{ $t('button.view_user_issues') }}</span>
       </md-list-item>
 
-      <md-list-item id="ban" v-if="user && user.type !== 'BANNED'" @click="banUser(true)">
+      <md-list-item id="ban" v-if="user && user.type !== 'ROLE_BANNED'" @click="banUser(true)">
         <md-icon>gavel</md-icon>
 
         <span class="md-list-item-text">{{ $t('button.ban') }}</span>

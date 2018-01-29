@@ -54,12 +54,12 @@ public class AuthRestControllerTest {
 	@Test
 	public void testGetCurrentSession() throws Exception {
 
-		UserSessionDTO dto = new UserSessionDTO(1, "testLogin", User.Type.USER);
+		UserSessionDTO dto = new UserSessionDTO(1, "testLogin", User.Type.ROLE_USER);
 
 		when(service.getCurrentSession()).thenReturn(dto);
 		mockMvc.perform(get("/auth/currentSession").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.data[0].type", is(dto.getType().toString())));
+				.andExpect(jsonPath("$.data[0].type", is(dto.getType().name())));
 
 		verify(service, times(1)).getCurrentSession();
 		verifyNoMoreInteractions(service);

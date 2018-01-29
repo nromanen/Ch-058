@@ -38,7 +38,7 @@ public class RecoveryTokenRepositoryTest extends TestCase {
 				.setName("testName")
 				.setSurname("testSurname")
 				.setImage(null)
-				.setType(User.Type.USER)
+				.setType(User.Type.ROLE_USER)
 				.setFailedAuthCount(0)
 				.build();
 

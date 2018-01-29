@@ -4,6 +4,8 @@ import com.shrralis.ssdemo1.security.exception.interfaces.ICitizenAuthentication
 import com.shrralis.tools.model.JsonError;
 import org.springframework.security.core.AuthenticationException;
 
+import static com.shrralis.tools.model.JsonError.Error.TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS;
+
 /**
  * @author shrralis (https://t.me/Shrralis)
  * @version 1.0
@@ -37,6 +39,6 @@ public class TooManyNonExpiredRecoveryTokensException extends AuthenticationExce
 
 	@Override
 	public JsonError.Error getError() {
-		return JsonError.Error.USER_BLOCKED_BY_MAX_FAILED_AUTH;
+		return TOO_MANY_NON_EXPIRED_RECOVERY_TOKENS;
 	}
 }

@@ -1,5 +1,6 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
+import com.shrralis.ssdemo1.dto.EditUserDTO;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import org.springframework.data.domain.Page;
@@ -32,4 +33,7 @@ public interface IUserService {
 	Page<User> findAll(Pageable pageable);
 
 //	Page<User> findAll(Predicate predicate, Pageable pageable);
+	List<User> findByType(User.Type type);
+
+	void edit(EditUserDTO dto);
 }

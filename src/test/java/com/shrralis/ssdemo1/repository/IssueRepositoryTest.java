@@ -1,7 +1,10 @@
 package com.shrralis.ssdemo1.repository;
 
 import com.shrralis.ssdemo1.configuration.TestDatabaseConfig;
-import com.shrralis.ssdemo1.entity.*;
+import com.shrralis.ssdemo1.entity.Image;
+import com.shrralis.ssdemo1.entity.Issue;
+import com.shrralis.ssdemo1.entity.MapMarker;
+import com.shrralis.ssdemo1.entity.User;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +46,7 @@ public class IssueRepositoryTest extends TestCase {
 				.setName("testName")
 				.setSurname("testSurname")
 				.setImage(null)
-				.setType(User.Type.USER)
+				.setType(User.Type.ROLE_USER)
 				.setFailedAuthCount(0)
 				.build();
 

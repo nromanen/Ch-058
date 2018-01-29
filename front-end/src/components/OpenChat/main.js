@@ -97,7 +97,7 @@ export default {
     let _this = this;
     if(getLocalUser() != null) {
       console.log(getLocalUser().type);
-      if (getLocalUser().type == 'USER') {
+      if (getLocalUser().type == 'ROLE_USER') {
         _this.userType = true;
       }
     }

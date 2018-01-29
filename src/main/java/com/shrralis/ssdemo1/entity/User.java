@@ -22,6 +22,8 @@ import org.hibernate.annotations.TypeDef;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import java.time.LocalDateTime;
+
 import static com.shrralis.ssdemo1.entity.User.TABLE_NAME;
 
 @Entity
@@ -48,6 +50,7 @@ public class User implements Identifiable<Integer> {
 	public static final String SURNAME_COLUMN_NAME = "surname";
 	public static final String FAILED_AUTH_COUNT_COLUMN_NAME = "failed_auth_count";
 	public static final String REGISTRATION_TOKEN_COLUMN_NAME = "registration_token";
+	public static final String BLOCKING_EXPIRES_AT_COLUMN_NAME = "blocking_expires_at";
 	public static final int MAX_LOGIN_LENGTH = 16;
 	public static final int MIN_LOGIN_LENGTH = 4;
 	public static final int MAX_EMAIL_LENGTH = 256;
@@ -79,7 +82,7 @@ public class User implements Identifiable<Integer> {
 	@Enumerated(EnumType.STRING)
 	@org.hibernate.annotations.Type(type = "user_type")
 	@Column(name = TYPE_COLUMN_NAME, nullable = false)
-	private Type type = Type.USER;
+	private Type type = Type.ROLE_USER;
 
 	@NotNull
 	@NotBlank
@@ -120,6 +123,10 @@ public class User implements Identifiable<Integer> {
 	@Size(max = MAX_REGISTRATION_TOKEN_LENGTH)
 	@Column(name = REGISTRATION_TOKEN_COLUMN_NAME, nullable = false, length = MAX_REGISTRATION_TOKEN_LENGTH)
 	private String registrationToken = "";
+
+	@JsonIgnore
+	@Column(name = BLOCKING_EXPIRES_AT_COLUMN_NAME)
+	private LocalDateTime blockingExpiresAt;
 
 	public Integer getId() {
 		return id;
@@ -201,6 +208,14 @@ public class User implements Identifiable<Integer> {
 		this.registrationToken = registrationToken;
 	}
 
+	public LocalDateTime getBlockingExpiresAt() {
+		return blockingExpiresAt;
+	}
+
+	public void setBlockingExpiresAt(LocalDateTime blockingExpiresAt) {
+		this.blockingExpiresAt = blockingExpiresAt;
+	}
+
 	@Override
 	public String toString() {
 		return "User{" +
@@ -217,10 +232,14 @@ public class User implements Identifiable<Integer> {
 	}
 
 	public enum Type {
-		BANNED,
-		USER,
-		ADMIN,
-		MASTER
+		ROLE_BANNED,
+		ROLE_USER,
+		ROLE_ADMIN,
+		ROLE_MASTER;
+
+		public String getRole() {
+			return this.name().substring(this.name().indexOf('_') + 1);
+		}
 	}
 
 	public static final class Builder {
@@ -281,6 +300,10 @@ public class User implements Identifiable<Integer> {
 
 		public Builder setRegistrationToken(String registrationToken) {
 			user.setRegistrationToken(registrationToken);
+			return this;
+		}
+		public Builder setBlockingExpiresAt(LocalDateTime blockingExpiresAt) {
+			user.setBlockingExpiresAt(blockingExpiresAt);
 			return this;
 		}
 

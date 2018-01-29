@@ -14,7 +14,7 @@ package com.shrralis.ssdemo1.security;
 
 import com.shrralis.ssdemo1.security.exception.CitizenBadCredentialsException;
 import com.shrralis.ssdemo1.security.exception.NotSubmittedUserRegistrationException;
-import com.shrralis.ssdemo1.security.exception.TooManyNonExpiredRecoveryTokensException;
+import com.shrralis.ssdemo1.security.exception.UserFailedAuthenticationCountOverflow;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.security.service.interfaces.ICitizenUserDetailsService;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +28,8 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.LocalDateTime;
 
 import static com.shrralis.ssdemo1.entity.User.MAX_FAILED_AUTH_VALUE;
 import static com.shrralis.ssdemo1.entity.User.MIN_PASSWORD_LENGTH;
@@ -73,8 +75,9 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 			throw new InternalAuthenticationServiceException(
 					"UserDetailsService returned null, which is an interface contract violation");
 		} else if (userDetails instanceof AuthorizedUser
-				&& ((AuthorizedUser) userDetails).getFailedAuthCount() == MAX_FAILED_AUTH_VALUE) {
-			throw new TooManyNonExpiredRecoveryTokensException(loginOrEmail);
+				&& ((AuthorizedUser) userDetails).getFailedAuthCount() >= MAX_FAILED_AUTH_VALUE
+				&& LocalDateTime.now().isBefore(((AuthorizedUser) userDetails).getBlockingExpiresAt())) {
+			throw new UserFailedAuthenticationCountOverflow(loginOrEmail);
 		}
 		return userDetails;
 	}
@@ -101,7 +104,9 @@ public class AuthProvider implements AuthenticationProvider, InitializingBean {
 
 		if (password.length() < MIN_PASSWORD_LENGTH
 				|| !passwordEncoder.matches(password, userDetails.getPassword())) {
-			userDetailsService.increaseUserFailedAttempts(userDetails);
+			if (userDetails.getBlockingExpiresAt() == null) {
+				userDetailsService.increaseUserFailedAttempts(userDetails);
+			}
 			throw new CitizenBadCredentialsException(
 					userDetails.getUsername(), userDetails.getFailedAuthCount() + 1);
 		}

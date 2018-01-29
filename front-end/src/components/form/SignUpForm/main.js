@@ -1,10 +1,17 @@
 import {email, maxLength, minLength, required, sameAs} from "vuelidate/lib/validators/index";
 import {validationMixin} from "vuelidate";
 import {
-  LoginValidator, MAX_LOGIN_LENGTH, MAX_NAME_LENGTH, MAX_SURNAME_LENGTH, MIN_LOGIN_LENGTH, MIN_NAME_LENGTH,
-  MIN_SURNAME_LENGTH, NameValidator, PasswordValidator
+  LoginValidator,
+  MAX_LOGIN_LENGTH,
+  MAX_NAME_LENGTH,
+  MAX_SURNAME_LENGTH,
+  MIN_LOGIN_LENGTH,
+  MIN_NAME_LENGTH,
+  MIN_SURNAME_LENGTH,
+  NameValidator,
+  PasswordValidator
 } from "../../../_validator/index";
-import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
+import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 
 export default {
   name: "SignUpPage",
@@ -87,7 +94,15 @@ export default {
 
             this.$parent.$parent.$parent.$parent.setLogin(json.data[0].login);
           } else if (json.errors.length) {
-            this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
+            switch (json.errors[0].errno) {
+              case ACCESS_DENIED:
+                this.$router.push('/403');
+                break;
+              default:
+                this.errors = this.errors.concat(json.errors.map((error) => getErrorMessage(error)));
+
+                break;
+            }
           } else {
             this.errors.push(getErrorMessage(UNEXPECTED));
           }
@@ -95,8 +110,11 @@ export default {
           this.sending = false;
         }, error => {
           switch (error.status) {
-            case 400:
-            case 500:
+            case 403:
+            case 404:
+              this.$router.push('/' + error.status);
+              break;
+            default:
               let json = error.body;
 
               if (json.errors) {
