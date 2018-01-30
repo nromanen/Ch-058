@@ -103,7 +103,7 @@ const router = new Router({
       children: [
         {
           path: '/',
-          component: AdminUsersPage
+          component: AdminChatNotification
         },
         {
           path: 'users',

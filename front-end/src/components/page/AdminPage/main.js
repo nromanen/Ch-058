@@ -8,7 +8,7 @@ export default {
   data: () => ({
 	menuVisible: false,
 	userEmail: null,
-  amount: 5,
+  amount: null,
   }),
   created: function() {
 	if (getLocalUser()) {
@@ -57,6 +57,10 @@ export default {
 			}
 		  }
 		);
+
+    this.$http.get('notification/all').then(data => {
+      this.amount = data.body.data.length;
+    });
 	}
   },
   methods: {
@@ -97,8 +101,5 @@ export default {
 	getLangClass(lang) {
 	  return getCurrentLang() === lang ? 'md-primary' : '';
 	}
-  },
-  mounted: function () {
-    console.log('!!!!!!!!!!!!!!!!!!' + this.amount);
   }
 }
