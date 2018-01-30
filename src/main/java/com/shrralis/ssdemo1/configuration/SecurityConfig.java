@@ -12,7 +12,6 @@
 
 package com.shrralis.ssdemo1.configuration;
 
-import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.security.AuthProvider;
 import com.shrralis.ssdemo1.security.service.interfaces.ICitizenUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -33,8 +32,6 @@ import java.util.Arrays;
  */
 @Configuration
 public class SecurityConfig {
-	public static final String ROLE_USER = "ROLE_USER";
-	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
 	@Bean
 	public AuthenticationProvider authProvider(ICitizenUserDetailsService userDetailsService,

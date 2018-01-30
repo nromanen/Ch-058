@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +55,7 @@ public class UsersRestControllerTest {
 				.setName("testName")
 				.setSurname("testSurname")
 				.setImage(null)
-				.setType(User.Type.USER)
+				.setType(User.Type.ROLE_USER)
 				.setFailedAuthCount(0)
 				.build();
 	}

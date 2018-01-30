@@ -230,5 +230,6 @@ Temporary Items
 hs_err_pid*
 
 # Custom
+front-end/package-lock.json
 src/main/resources/liquibase/diffChangeLog.postgresql.sql
 src/main/resources/liquibase/diffChangeLog.yaml

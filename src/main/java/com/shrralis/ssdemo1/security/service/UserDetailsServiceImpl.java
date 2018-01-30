@@ -27,8 +27,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.shrralis.ssdemo1.entity.User.MAX_FAILED_AUTH_VALUE;
 
 /**
  * @author shrralis (https://t.me/Shrralis)
@@ -73,6 +76,10 @@ public class UserDetailsServiceImpl implements ICitizenUserDetailsService {
 		User user = usersRepository.getByLogin(userDetails.getUsername());
 
 		user.setFailedAuthCount(user.getFailedAuthCount() + 1);
+
+		if (user.getFailedAuthCount() >= MAX_FAILED_AUTH_VALUE) {
+			user.setBlockingExpiresAt(LocalDateTime.now().plusMinutes(15));
+		}
 		usersRepository.save(user);
 	}
 
@@ -81,13 +88,14 @@ public class UserDetailsServiceImpl implements ICitizenUserDetailsService {
 		User user = usersRepository.getByLogin(userDetails.getUsername());
 
 		user.setFailedAuthCount(0);
+		user.setBlockingExpiresAt(null);
 		usersRepository.save(user);
 	}
 
 	public static Set<GrantedAuthority> getAuthorities(User user) {
 		Set<GrantedAuthority> authorities = new HashSet<>();
 
-		authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getType().toString()));
+		authorities.add(new SimpleGrantedAuthority(user.getType().name()));
 		return authorities;
 	}
 }

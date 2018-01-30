@@ -17,6 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -32,6 +33,7 @@ public class AuthorizedUser extends User {
 	private com.shrralis.ssdemo1.entity.User.Type type;
 	private transient int failedAuthCount;
 	private transient String registrationToken;
+	private transient LocalDateTime blockingExpiresAt;
 
 	public AuthorizedUser(
 			com.shrralis.ssdemo1.entity.User user,
@@ -43,6 +45,7 @@ public class AuthorizedUser extends User {
 		type = user.getType();
 		failedAuthCount = user.getFailedAuthCount();
 		registrationToken = user.getRegistrationToken();
+		blockingExpiresAt = user.getBlockingExpiresAt();
 	}
 
 	public static AuthorizedUser getCurrent() {
@@ -87,8 +90,8 @@ public class AuthorizedUser extends User {
 		return registrationToken;
 	}
 
-	public void setFailedAuthCount(int failedAuthCount) {
-		this.failedAuthCount = failedAuthCount;
+	public LocalDateTime getBlockingExpiresAt() {
+		return blockingExpiresAt;
 	}
 
 	@Override

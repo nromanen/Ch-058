@@ -40,7 +40,7 @@ public class MessageServiceImpl implements IMessageService {
 
 	@Override
 	public List<FullMessage> getAllMessages() throws AccessDeniedException {
-		if(AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN)) {
+		if (AuthorizedUser.getCurrent().getType().equals(User.Type.ROLE_ADMIN)) {
 			return messageRepository.findAll();
 		}
 		throw new AccessDeniedException();
@@ -48,7 +48,7 @@ public class MessageServiceImpl implements IMessageService {
 
 	@Override
 	public FullMessage getMessage(Long id) throws AccessDeniedException {
-		if(AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN)) {
+		if (AuthorizedUser.getCurrent().getType().equals(User.Type.ROLE_ADMIN)) {
 			return messageRepository.findOne(id);
 		}
 		throw new AccessDeniedException();
@@ -57,7 +57,7 @@ public class MessageServiceImpl implements IMessageService {
 	@Override
 	public boolean checkChat(Long issueId, Long userId) throws AccessDeniedException {
 		if( new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
-				AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN) ) {
+				AuthorizedUser.getCurrent().getType().equals(User.Type.ROLE_ADMIN)) {
 			return messageRepository.existsByIssueIdAndUserId(issueId, userId);
 		}
 		throw new AccessDeniedException();
@@ -66,7 +66,7 @@ public class MessageServiceImpl implements IMessageService {
 	@Override
 	public List<FullMessage> getAllMessagesForChat(Long issueId, Long userId) throws AccessDeniedException {
 		if( new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
-				AuthorizedUser.getCurrent().getType().equals(User.Type.ADMIN) ) {
+				AuthorizedUser.getCurrent().getType().equals(User.Type.ROLE_ADMIN)) {
 			return messageRepository.findAllByIssueIdAndUserId(issueId, userId);
 		}
 		throw new AccessDeniedException();
