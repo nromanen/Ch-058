@@ -124,7 +124,7 @@ public class IssueServiceImpl implements IIssueService {
 		}
 		issuesRepository.delete(issue);
 
-		if (countAllByMapMarker(issue.getMapMarker()) < 1) {
+		if (countAllByMapMarker(issue.getMapMarker()) <= 1) {
 			mapMarkersRepository.delete(issue.getMapMarker());
 		}
 		return 0;
