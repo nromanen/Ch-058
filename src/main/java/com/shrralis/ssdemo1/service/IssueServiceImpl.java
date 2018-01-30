@@ -9,22 +9,22 @@ import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.exception.BadFieldFormatException;
 import com.shrralis.ssdemo1.exception.EntityNotExistException;
 import com.shrralis.ssdemo1.repository.*;
-import com.shrralis.ssdemo1.repository.ImagesRepository;
-import com.shrralis.ssdemo1.repository.IssuesRepository;
-import com.shrralis.ssdemo1.repository.MapMarkersRepository;
-import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -101,37 +101,49 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
 	@Override
-	public List<Issue> findTitleOrTextContaining(String title, String text) {
-		return issuesRepository.findByTitleOrTextContainingAllIgnoreCase(title, text);
+	public Page<Issue> findByTitleOrText(String title, String text, Pageable pageable) {
+		return issuesRepository.findByTitleContainingOrTextContainingAllIgnoreCase(title, text, pageable);
 	}
 
 	@Override
-	public List<Issue> findAuthorId(Integer id) {
-		return issuesRepository.findByAuthor_Id(id);
+	public Page<Issue> findAuthorId(Integer id, Pageable pageable) {
+		return issuesRepository.findByAuthor_Id(id, pageable);
 	}
 
 	@Override
-	public List<Issue> findAll() {
-		return issuesRepository.findAll();
+	public Page<Issue> findAll(Pageable pageable) {
+		return issuesRepository.findAll(pageable);
 	}
 
 	@Override
-	public void deleteById(Integer id) {
-		issuesRepository.deleteById(id);
+	public Integer deleteById(Integer id) throws AbstractCitizenException {
+		Issue issue = issuesRepository.getOne(id);
+
+		if (issue == null) {
+			throw new EntityNotExistException(EntityNotExistException.Entity.ISSUE);
+		}
+		issuesRepository.delete(issue);
+
+		if (countAllByMapMarker(issue.getMapMarker()) < 1) {
+			mapMarkersRepository.delete(issue.getMapMarker());
+		}
+		return 0;
 	}
 
 	@Override
-	@Transactional
-	public void setStatus(Boolean flag, Integer id) {
-		issuesRepository.setStatus(flag, id);
+	public Integer setStatus(Boolean flag, Integer id) throws AbstractCitizenException {
+		if (issuesRepository.getOne(id) == null) {
+			throw new EntityNotExistException(EntityNotExistException.Entity.ISSUE);
+		}
+		return issuesRepository.setStatus(flag, id);
 	}
 
-	public List<Issue> findClosedTrue() {
-		return issuesRepository.findByClosedTrue();
+	public Page<Issue> findClosedTrue(Pageable pageable) {
+		return issuesRepository.findByClosedTrue(pageable);
 	}
 
-	public List<Issue> findClosedFalse() {
-		return issuesRepository.findByClosedFalse();
+	public Page<Issue> findClosedFalse(Pageable pageable) {
+		return issuesRepository.findByClosedFalse(pageable);
 	}
 
 	@Override
@@ -156,6 +168,16 @@ public class IssueServiceImpl implements IIssueService {
 			throw new BadFieldFormatException(e.getMessage());
 		}
 	}
+
+	@Override
+	public Integer countAllByMapMarker(MapMarker mapMarker) {
+		return issuesRepository.findAllByMapMarker(mapMarker).size();
+	}
+
+//	@Override
+//	public Integer countAllByMapMarker(MapMarker mapMarker) {
+//		issuesRepository.countAllByMapMarker(mapMarker);
+//	}
 
 	private Image parseImage(MultipartFile file) throws BadFieldFormatException {
 		try {

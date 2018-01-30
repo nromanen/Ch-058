@@ -30,23 +30,17 @@
 
         <md-menu md-size="auto" md-align-trigger>
           <md-button class="md-icon-button" md-menu-trigger>
-            <md-icon>more_vert</md-icon>
+            <md-icon>language</md-icon>
           </md-button>
 
+          <md-tooltip md-direction="bottom">{{ $t('button.choose_lang') }}</md-tooltip>
+
           <md-menu-content>
-            <md-menu-item>
-              <md-menu md-size="auto" md-align-trigger>
-                <md-button md-menu-trigger>{{ $t('button.choose_lang') }}</md-button>
+            <md-menu-item :class="getLangClass('en')" @click="switchLang('en')">EN</md-menu-item>
 
-                <md-menu-content>
-                  <md-menu-item :class="getLangClass('en')" @click="switchLang('en')">EN</md-menu-item>
+            <md-menu-item :class="getLangClass('ru')" @click="switchLang('ru')">RU</md-menu-item>
 
-                  <md-menu-item :class="getLangClass('ru')" @click="switchLang('ru')">RU</md-menu-item>
-
-                  <md-menu-item :class="getLangClass('uk')" @click="switchLang('uk')">UA</md-menu-item>
-                </md-menu-content>
-              </md-menu>
-            </md-menu-item>
+            <md-menu-item :class="getLangClass('uk')" @click="switchLang('uk')">UA</md-menu-item>
           </md-menu-content>
         </md-menu>
       </div>

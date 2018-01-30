@@ -20,6 +20,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -29,6 +30,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+@EnableSpringDataWebSupport
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.shrralis.ssdemo1")
 @EnableJpaRepositories("com.shrralis.ssdemo1.repository")

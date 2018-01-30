@@ -10,6 +10,7 @@ export default {
       type: null,
       image: null
     },
+    types: [],
     id: 0,
     lat: 0,
     lng: 0,
@@ -630,6 +631,13 @@ export default {
   },
   mounted: function () {
       this.initMap();
+  },
+  created: function () {
+    this.$http.get('issues/types').then(response => {
+      let json = response.body;
+
+      this.types = json.data;
+    });
   },
   destroyed: function () {
     localStorage.removeItem('redirectFromIssue');
