@@ -2,6 +2,7 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
+import com.shrralis.ssdemo1.service.interfaces.IIssueTypesService;
 import com.shrralis.ssdemo1.service.interfaces.IIssueVotesService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,17 @@ import java.util.Map;
 public class IssueRestController {
 
 	private final IIssueService issueService;
+	private final IIssueTypesService issueTypesService;
 	private final IIssueVotesService issueVotesService;
 	private static final String LIKE = "likeVote";
 	private static final String DISLIKE = "dislikeVote";
 
 	@Autowired
 	public IssueRestController(IIssueService issueService,
-							   IIssueVotesService issueVotesService) {
+	                           IIssueTypesService issueTypesService,
+	                           IIssueVotesService issueVotesService) {
 		this.issueService = issueService;
+		this.issueTypesService = issueTypesService;
 		this.issueVotesService = issueVotesService;
 	}
 
@@ -71,5 +75,10 @@ public class IssueRestController {
 	@GetMapping(value = "/images/{issueId}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] issueImage(@PathVariable("issueId") Integer issueId) throws IOException {
 		return issueService.getImageInByte(issueId);
+	}
+
+	@GetMapping("/types")
+	public JsonResponse allTypes() {
+		return new JsonResponse(issueTypesService.getAll());
 	}
 }

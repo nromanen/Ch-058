@@ -1,5 +1,15 @@
 <div id="admin-issues-page">
-  <md-table v-model="searched" md-sort="id" md-card md-fixed-header>
+  <div id="buttons">
+    <md-button class="md-dense md-raised md-primary" :disabled="page === 0" @click="load(--page)">
+      {{ $t('button.prev') }}
+    </md-button>
+
+    <md-button class="md-dense md-raised md-primary" :disabled="page === totalPages - 1" @click="load(++page)">
+      {{ $t('button.next') }}
+    </md-button>
+  </div>
+
+  <md-table v-model="searched" md-sort="id" md-card>
     <md-table-toolbar>
       <h1 class="md-title">{{ $t('label.issues') }}</h1>
 
@@ -25,12 +35,6 @@
       </md-table-cell>
     </md-table-row>
   </md-table>
-
-  <md-button class="md-dense md-raised md-primary" :disabled="page === 0" @click="load(--page)">prev</md-button>
-
-  <md-button class="md-dense md-raised md-primary" :disabled="page === totalPages - 1" @click="load(++page)">
-    next
-  </md-button>
 
   <admin-issue-actions-dialog ref="aIssueActionsDialog"></admin-issue-actions-dialog>
 </div>

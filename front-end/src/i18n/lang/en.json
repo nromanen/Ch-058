@@ -31,7 +31,9 @@
     "delete_issue": "Delete issue",
     "home": "Home",
     "edit_user_info": "Edit user info",
-    "view_profile": "View profile"
+    "view_profile": "View profile",
+    "prev": "Prev",
+    "next": "Next"
   },
   "label": {
     "sign_in": "Sign in",
@@ -121,7 +123,7 @@
     "page_not_found": "Page you looked for is not found"
   },
   "message": {
-    "successful_register": "You have been successfully registered!",
+    "successful_register": "You have been successfully registered! Submit the E-Mail please.",
     "successful_recovering": "You have been successfully changed your password!",
     "snackbar": "Please, log in to create an issue",
     "user_location": "Your location",
@@ -130,9 +132,8 @@
     "new_issue": "You just created a new issue"
   },
   "type": {
-    "BANNED": "Banned",
-    "USER": "User",
-    "ADMIN": "Admin",
-    "successful_recovering": "You have been successfully changed your password!"
+    "ROLE_BANNED": "Banned",
+    "ROLE_USER": "User",
+    "ROLE_ADMIN": "Admin"
   }
 }

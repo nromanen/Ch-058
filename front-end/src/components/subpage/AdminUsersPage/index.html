@@ -1,6 +1,15 @@
 <div id="admin-users-page">
-  <md-table v-model="searched" md-sort="id" md-card md-fixed-header>
+  <div id="buttons">
+    <md-button class="md-dense md-raised md-primary" :disabled="page === 0" @click="load(--page)">
+      {{ $t('button.prev') }}
+    </md-button>
 
+    <md-button class="md-dense md-raised md-primary" :disabled="page === totalPages - 1" @click="load(++page)">
+      {{ $t('button.next') }}
+    </md-button>
+  </div>
+
+  <md-table v-model="searched" md-sort="id" md-card>
     <md-table-toolbar>
       <h1 class="md-title">{{ $t('label.users') }}</h1>
 
@@ -10,7 +19,6 @@
     </md-table-toolbar>
 
     <md-table-empty-state :md-label="$t('label.no_users_found')"></md-table-empty-state>
-
 
     <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single" @md-selected="onSelect">
       <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
@@ -24,11 +32,6 @@
       </md-table-cell>
     </md-table-row>
   </md-table>
-
-  <md-button class="md-dense md-raised md-primary" :disabled="page === 0" @click="load(--page)">prev</md-button>
-
-  <md-button class="md-dense md-raised md-primary" :disabled="page === totalPages - 1" @click="load(++page)">next
-  </md-button>
 
   <admin-user-actions-dialog ref="aUserActionsDialog"></admin-user-actions-dialog>
 </div>
