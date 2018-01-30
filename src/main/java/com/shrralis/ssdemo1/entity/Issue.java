@@ -54,7 +54,7 @@ public class Issue implements Identifiable<Integer> {
 	private MapMarker mapMarker;
 
 	@NotNull
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = AUTHOR_COLUMN_NAME, nullable = false)
 	private User author;
 

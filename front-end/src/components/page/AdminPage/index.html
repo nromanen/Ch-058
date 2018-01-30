@@ -11,11 +11,12 @@
 		<md-menu md-size="auto" md-align-trigger>
 		  <md-button class="md-icon-button" md-menu-trigger>
 			<md-icon>notifications</md-icon>
+        <span>{{amount}}</span>
 		  </md-button>
 
 		  <md-menu-content>
 			<md-menu-item>
-			  <admin-chat-notifications></admin-chat-notifications>
+          <admin-chat-notifications></admin-chat-notifications>
 			</md-menu-item>
 		  </md-menu-content>
 		</md-menu>
@@ -87,6 +88,7 @@
 		  <md-icon>notifications</md-icon>
 
 		  <span class="md-list-item-text">{{ $t('label.notifications') }}</span>
+      <span>{{amount}}</span>
 		</md-list-item>
 
 		<md-list-item @click="menuVisible = false" to="/admin/messages">

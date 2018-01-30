@@ -463,15 +463,15 @@ export default {
 	setMarkerType(marker, type) {
 	  var url;
 	  switch(type) {
-		case 'PROBLEM': url = '/src/assets/caution.png';
+		case 'PROBLEM': url = './src/assets/caution.png';
 		  break;
-		case 'INFO': url = '/src/assets/info.png';
+		case 'INFO': url = './src/assets/info.png';
 		  break;
-		case 'FEEDBACK': url ='/src/assets/feedback.png';
+		case 'FEEDBACK': url ='./src/assets/feedback.png';
 		  break;
-		case '4': url ='/src/assets/multiple.png';
+		case '4': url ='./src/assets/multiple.png';
 		  break;
-		case '5': url ='/src/assets/select.png';
+		case '5': url ='./src/assets/select.png';
 		  break;
 		default: url = ''
 	  }

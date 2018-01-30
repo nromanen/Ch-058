@@ -7,7 +7,8 @@ export default {
   name: 'AdminIndexPage',
   data: () => ({
 	menuVisible: false,
-	userEmail: null
+	userEmail: null,
+  amount: 5,
   }),
   created: function() {
 	if (getLocalUser()) {
@@ -95,6 +96,9 @@ export default {
 	},
 	getLangClass(lang) {
 	  return getCurrentLang() === lang ? 'md-primary' : '';
-	},
+	}
+  },
+  mounted: function () {
+    console.log('!!!!!!!!!!!!!!!!!!' + this.amount);
   }
 }
