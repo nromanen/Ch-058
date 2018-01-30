@@ -13,6 +13,7 @@
 package com.shrralis.ssdemo1.repository;
 
 import com.shrralis.ssdemo1.entity.Issue;
+import com.shrralis.ssdemo1.entity.MapMarker;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,4 +49,9 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 	Page<Issue> findByClosedFalse(Pageable pageable);
 
 	Page<Issue> findAll(Pageable pageable);
+
+	List<Issue> findAllByMapMarker(MapMarker mapMarker);
+
+//	@Query("SELECT COUNT Issue i WHERE i.mapMarker = ?")
+//	Integer countAllByMapMarker(MapMarker mapMarker);
 }

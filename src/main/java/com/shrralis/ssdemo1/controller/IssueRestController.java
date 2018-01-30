@@ -41,6 +41,11 @@ public class IssueRestController {
 		return new JsonResponse(issueService.findAll(new PageRequest(page, size)));
 	}
 
+	@GetMapping("/types")
+	public JsonResponse allTypes() {
+		return new JsonResponse(issueTypesService.getAll());
+	}
+
 	@GetMapping("/{issueId}")
 	public JsonResponse issue(@PathVariable("issueId") Integer issueId) {
 		return new JsonResponse(issueService.getById(issueId));
@@ -75,10 +80,5 @@ public class IssueRestController {
 	@GetMapping(value = "/images/{issueId}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] issueImage(@PathVariable("issueId") Integer issueId) throws IOException {
 		return issueService.getImageInByte(issueId);
-	}
-
-	@GetMapping("/types")
-	public JsonResponse allTypes() {
-		return new JsonResponse(issueTypesService.getAll());
 	}
 }

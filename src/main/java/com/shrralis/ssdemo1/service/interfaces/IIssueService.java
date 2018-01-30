@@ -2,6 +2,7 @@ package com.shrralis.ssdemo1.service.interfaces;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.Issue;
+import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.exception.BadFieldFormatException;
 import org.springframework.data.domain.Page;
@@ -38,4 +39,6 @@ public interface IIssueService {
 	byte[] getImageInByte(Integer issueId) throws IOException;
 
 	byte[] getImageInByte(String src) throws BadFieldFormatException;
+
+	Integer countAllByMapMarker(MapMarker mapMarker);
 }

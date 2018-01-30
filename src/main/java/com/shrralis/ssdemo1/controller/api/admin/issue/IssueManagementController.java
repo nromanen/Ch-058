@@ -20,7 +20,7 @@ public class IssueManagementController {
 		this.issueService = issueService;
 	}
 
-	@GetMapping/*("/")*/
+	@GetMapping
 	public JsonResponse getAll(@PageableDefault(page = 0, size = 10, sort = "title") Pageable pageable) {
 		Page issues = issueService.findAll(pageable);
 
@@ -29,13 +29,6 @@ public class IssueManagementController {
 				.setCount(issues.getTotalElements())
 				.build();
 	}
-
-//	@GetMapping
-//	public Page<Issue> getAll(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size
-//			@PageableDefault(page = 0, size = 10) Pageable pageable
-//	) {
-//		return issueService.findAll(/*pageable*/new PageRequest(page, size));
-//	}
 
 	@GetMapping("/{id}")
 	public JsonResponse getById(@PathVariable int id) throws AbstractCitizenException {
@@ -52,26 +45,26 @@ public class IssueManagementController {
 		return new JsonResponse(issueService.setStatus(flag, id));
 	}
 
-//	@GetMapping("/author/{id}")
-//	public JsonResponse getAllByAuthorId(@PathVariable Integer id,
-//	                                 @PageableDefault(page = 0, size = 10) Pageable pageable) {
-//		return new JsonResponse(issueService.findAuthorId(id, pageable));
-//	}
-//
-//	@GetMapping("/search/{query}")
-//	public JsonResponse getAllByTitleOrText(@PathVariable String query,
-//	                                       @PageableDefault(page = 0, size = 10) Pageable pageable) {
-//		return new JsonResponse(issueService.findByTitleOrText(query, query, pageable));
-//	}
-//
-//	@GetMapping("/opened")
-//	public JsonResponse getAllByTypeOpen(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-//		return new JsonResponse(issueService.findClosedFalse(pageable));
-//	}
-//
-//	@GetMapping("/closed")
-//	public JsonResponse getAllByTypeClose(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-//		return new JsonResponse(issueService.findClosedTrue(pageable));
-//	}
+	@GetMapping("/author/{id}")
+	public JsonResponse getAllByAuthorId(@PathVariable Integer id,
+	                                     @PageableDefault(page = 0, size = 10) Pageable pageable) {
+		return new JsonResponse(issueService.findAuthorId(id, pageable));
+	}
+
+	@GetMapping("/search/{query}")
+	public JsonResponse getAllByTitleOrText(@PathVariable String query,
+	                                        @PageableDefault(page = 0, size = 10) Pageable pageable) {
+		return new JsonResponse(issueService.findByTitleOrText(query, query, pageable));
+	}
+
+	@GetMapping("/opened")
+	public JsonResponse getAllByTypeOpen(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+		return new JsonResponse(issueService.findClosedFalse(pageable));
+	}
+
+	@GetMapping("/closed")
+	public JsonResponse getAllByTypeClose(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+		return new JsonResponse(issueService.findClosedTrue(pageable));
+	}
 }
 

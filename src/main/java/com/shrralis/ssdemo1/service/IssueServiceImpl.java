@@ -117,10 +117,17 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public Integer deleteById(Integer id) throws AbstractCitizenException {
-		if (issuesRepository.getOne(id) == null) {
+		Issue issue = issuesRepository.getOne(id);
+
+		if (issue == null) {
 			throw new EntityNotExistException(EntityNotExistException.Entity.ISSUE);
 		}
-		return issuesRepository.deleteById(id);
+		issuesRepository.delete(issue);
+
+		if (countAllByMapMarker(issue.getMapMarker()) < 1) {
+			mapMarkersRepository.delete(issue.getMapMarker());
+		}
+		return 0;
 	}
 
 	@Override
@@ -161,6 +168,16 @@ public class IssueServiceImpl implements IIssueService {
 			throw new BadFieldFormatException(e.getMessage());
 		}
 	}
+
+	@Override
+	public Integer countAllByMapMarker(MapMarker mapMarker) {
+		return issuesRepository.findAllByMapMarker(mapMarker).size();
+	}
+
+//	@Override
+//	public Integer countAllByMapMarker(MapMarker mapMarker) {
+//		issuesRepository.countAllByMapMarker(mapMarker);
+//	}
 
 	private Image parseImage(MultipartFile file) throws BadFieldFormatException {
 		try {
