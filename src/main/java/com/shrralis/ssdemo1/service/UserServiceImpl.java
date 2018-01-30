@@ -20,9 +20,9 @@ import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,17 +64,9 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
+	@ReadOnlyProperty
 	public Page<User> findByLoginOrEmail(String login, String email, Pageable pageable) {
 		return repository.findByLoginContainingOrEmailContainingAllIgnoreCase(login, email, pageable);
-	@ReadOnlyProperty
-	public List<User> findByLoginOrEmailContaining(String login, String email) {
-		return repository.findByLoginOrEmailContainingAllIgnoreCase(login, email);
-	}
-
-	@Override
-	@ReadOnlyProperty
-	public List<User> findAll() {
-		return repository.findAll();
 	}
 
 	@Override
@@ -84,15 +76,13 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
+	@ReadOnlyProperty
 	public Page<User> findByType(User.Type type, Pageable pageable) {
 		return repository.findByType(type, pageable);
-
-	@ReadOnlyProperty
-	public List<User> findByType(User.Type type) {
-		return repository.findByType(type);
 	}
 
 	@Override
+	@ReadOnlyProperty
 	public Page<User> findAll(Pageable pageable) {
 		return repository.findAll(pageable);
 	}

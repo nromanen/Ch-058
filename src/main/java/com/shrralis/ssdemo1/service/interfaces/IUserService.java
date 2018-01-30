@@ -33,7 +33,6 @@ public interface IUserService {
 	Page<User> findAll(Pageable pageable);
 
 //	Page<User> findAll(Predicate predicate, Pageable pageable);
-	List<User> findByType(User.Type type);
 
 	void edit(EditUserDTO dto);
 }
