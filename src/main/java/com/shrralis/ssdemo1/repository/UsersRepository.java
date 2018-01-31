@@ -25,12 +25,7 @@ import java.util.Optional;
 //import com.shrralis.ssdemo1.entity.QUser;
 
 @Repository
-public interface UsersRepository extends JpaRepository<User, Integer>/*, QueryDslPredicateExecutor<User>, QuerydslBinderCustomizer<QUser>*/ {
-
-/*	@Override
-	default void customize(QuerydslBindings bindings, QUser root) {
-		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
-	}*/
+public interface UsersRepository extends JpaRepository<User, Integer> {
 
 	Optional<User> findByEmail(String email);
 
@@ -51,7 +46,4 @@ public interface UsersRepository extends JpaRepository<User, Integer>/*, QueryDs
 	Page<User> findByType(User.Type type, Pageable pageable);
 
 	Page<User> findAll(Pageable pageable);
-
-//	@Override
-//	Page<User> findAll(Predicate predicate, Pageable pageable);
 }

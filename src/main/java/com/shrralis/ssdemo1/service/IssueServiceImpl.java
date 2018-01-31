@@ -13,6 +13,7 @@ import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -117,14 +118,10 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public Integer deleteById(Integer id) throws AbstractCitizenException {
-		Issue issue = issuesRepository.getOne(id);
-
-		if (issue == null) {
-			throw new EntityNotExistException(EntityNotExistException.Entity.ISSUE);
-		}
+		Issue issue = issuesRepository.findById(id)
+				.orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
 		issuesRepository.delete(issue);
-
-		if (countAllByMapMarker(issue.getMapMarker()) <= 1) {
+		if (issuesRepository.countAllByMapMarker(issue.getMapMarker()) <= 1) {
 			mapMarkersRepository.delete(issue.getMapMarker());
 		}
 		return 0;
@@ -132,10 +129,21 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public Integer setStatus(Boolean flag, Integer id) throws AbstractCitizenException {
-		if (issuesRepository.getOne(id) == null) {
-			throw new EntityNotExistException(EntityNotExistException.Entity.ISSUE);
+		Issue issue = issuesRepository.findById(id).
+				orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
+
+		System.out.println("ID: " + issue.getId());
+		System.out.println("TYPE: " + issue.getType().getName());
+
+		if (StringUtils.equalsIgnoreCase(issue.getType().getName(), "PROBLEM")) {
+			issuesRepository.setStatus(flag, id);
 		}
-		return issuesRepository.setStatus(flag, id);
+		return 0;
+//		if (issuesRepository.findOne(id) == null) {
+//			throw new EntityNotExistException(EntityNotExistException.Entity.ISSUE);
+//		} else if ()
+//
+//		return issuesRepository.setStatus(flag, id);
 	}
 
 	public Page<Issue> findClosedTrue(Pageable pageable) {
@@ -169,16 +177,6 @@ public class IssueServiceImpl implements IIssueService {
 		}
 	}
 
-	@Override
-	public Integer countAllByMapMarker(MapMarker mapMarker) {
-		return issuesRepository.findAllByMapMarker(mapMarker).size();
-	}
-
-//	@Override
-//	public Integer countAllByMapMarker(MapMarker mapMarker) {
-//		issuesRepository.countAllByMapMarker(mapMarker);
-//	}
-
 	private Image parseImage(MultipartFile file) throws BadFieldFormatException {
 		try {
 			byte[] blob = file.getBytes();
@@ -211,7 +209,7 @@ public class IssueServiceImpl implements IIssueService {
 
 		Issue.Type issueType = issueTypesRepository.getByName(type);
 
-		if(issueType == null) {
+		if (issueType == null) {
 			issueType = new Issue.Type();
 			issueType.setName(type);
 		}

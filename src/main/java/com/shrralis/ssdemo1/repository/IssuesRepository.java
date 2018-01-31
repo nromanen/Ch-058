@@ -50,7 +50,7 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 
 	Page<Issue> findAll(Pageable pageable);
 
-	List<Issue> findAllByMapMarker(MapMarker mapMarker);
+	Integer countAllByMapMarker(MapMarker mapMarker);
 
 //	@Query("SELECT COUNT Issue i WHERE i.mapMarker = ?")
 //	Integer countAllByMapMarker(MapMarker mapMarker);
