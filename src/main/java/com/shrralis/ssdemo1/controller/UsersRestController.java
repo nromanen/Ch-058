@@ -14,25 +14,32 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.EditUserDTO;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
+import com.shrralis.ssdemo1.service.interfaces.IImageService;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/users")
 public class UsersRestController {
 
 	private final IUserService service;
+	private final IImageService imageService;
 	private final LocaleResolver localeResolver;
 
 	@Autowired
-	public UsersRestController(IUserService service, LocaleResolver localeResolver) {
+	public UsersRestController(IUserService service,
+	                           IImageService imageService,
+	                           LocaleResolver localeResolver) {
 		this.service = service;
+		this.imageService = imageService;
 		this.localeResolver = localeResolver;
 	}
 
@@ -55,5 +62,10 @@ public class UsersRestController {
 	@GetMapping("/currentLang")
 	public JsonResponse currentLang(HttpServletRequest request) {
 		return new JsonResponse(localeResolver.resolveLocale(request));
+	}
+
+	@GetMapping(value = "/image/{userId}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public byte[] userImage(@PathVariable("userId") int userId) throws IOException {
+		return imageService.getUserImageInByte(userId);
 	}
 }

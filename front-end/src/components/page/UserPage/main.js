@@ -9,6 +9,7 @@ import {
   NameValidator
 } from "../../../_validator";
 import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
+import {getServerAddress} from "../../../main";
 
 export default {
   name: "UserPage",
@@ -21,7 +22,8 @@ export default {
     showBack: true,
     editMode: false,
     sending: false,
-    error: null
+    error: null,
+    avatarHovered: false
   }),
   created: function () {
     this.$http.get('users/' + this.$route.params.id)
@@ -123,6 +125,9 @@ export default {
     },
     getLocalUser() {
       return getLocalUser();
+    },
+    getServerAddress() {
+      return getServerAddress();
     }
   }
-}
+};

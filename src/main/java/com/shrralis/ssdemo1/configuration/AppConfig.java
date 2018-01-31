@@ -51,6 +51,8 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
 
+	public static final String CATALINA_HOME_NAME = "catalina.home";
+
 	@Value("${mail.smtps.host}")
 	private String emailHost;
 

@@ -7,11 +7,23 @@
     <md-app-content>
       <div id="content">
         <div class="md-headline">
-          <md-avatar class="md-avatar-icon md-large md-accent">
-            <img src="https://vuematerial.io/assets/examples/avatar.png" alt="Avatar" v-if="user && user.image">
+          <span @mouseover="avatarHovered = true" @mouseleave="avatarHovered = false">
+            <md-avatar class="md-avatar-icon md-large md-accent">
+              <transition-group name="fade" mode="out-in">
+                <img :src="getServerAddress() + '/users/image/' + (user && user.id)" alt="Avatar"
+                     v-show="!avatarHovered && user && user.image" key="img">
 
-            <md-ripple v-else>{{ user && user.initials }}</md-ripple>
-          </md-avatar>
+                <md-ripple v-show="!avatarHovered && (!user || !user.image)" key="initials">
+                  {{ user && user.initials }}
+                </md-ripple>
+
+                <md-ripple v-show="avatarHovered" key="upl"><md-icon>file_upload</md-icon></md-ripple>
+              </transition-group>
+              <!--<img :src="getServerAddress() + '/users/image/' + user.id" alt="Avatar" v-if="user && user.image">-->
+
+              <!--<md-ripple>{{ user && user.initials }}</md-ripple>-->
+            </md-avatar>
+          </span>
 
           <div id="display-name" v-if="!editMode">{{ user && (user.name + ' ' + user.surname) }}</div>
 

@@ -4,7 +4,7 @@ import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../_sys/json-errors
 import {getCurrentLang, switchLang} from "../../i18n";
 
 export default {
-  name: "header",
+  name: "Header",
   data: () => ({
     menuVisible: false,
     authDialog: false,

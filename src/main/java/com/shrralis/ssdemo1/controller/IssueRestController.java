@@ -1,6 +1,7 @@
 package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
+import com.shrralis.ssdemo1.service.interfaces.IImageService;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.ssdemo1.service.interfaces.IIssueVotesService;
 import com.shrralis.tools.model.JsonResponse;
@@ -16,16 +17,20 @@ import java.util.Map;
 @RequestMapping("/issues")
 public class IssueRestController {
 
-	private final IIssueService issueService;
-	private final IIssueVotesService issueVotesService;
 	private static final String LIKE = "likeVote";
 	private static final String DISLIKE = "dislikeVote";
 
+	private final IIssueService issueService;
+	private final IIssueVotesService issueVotesService;
+	private final IImageService imageService;
+
 	@Autowired
 	public IssueRestController(IIssueService issueService,
-							   IIssueVotesService issueVotesService) {
+	                           IIssueVotesService issueVotesService,
+	                           IImageService imageService) {
 		this.issueService = issueService;
 		this.issueVotesService = issueVotesService;
+		this.imageService = imageService;
 	}
 
 	@GetMapping
@@ -65,6 +70,6 @@ public class IssueRestController {
 
 	@GetMapping(value = "/images/{issueId}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] issueImage(@PathVariable("issueId") Integer issueId) throws IOException {
-		return issueService.getImageInByte(issueId);
+		return imageService.getIssueImageInByte(issueId);
 	}
 }

@@ -14,6 +14,7 @@ import com.shrralis.ssdemo1.dto.MapDataDTO;
 import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.exception.IllegalParameterException;
+import com.shrralis.ssdemo1.service.interfaces.IImageService;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.ssdemo1.service.interfaces.IMapMarkersService;
 import com.shrralis.tools.model.JsonResponse;
@@ -30,11 +31,15 @@ public class MapRestController {
 
 	private final IMapMarkersService markerService;
 	private final IIssueService issueService;
+	private final IImageService imageService;
 
 	@Autowired
-	public MapRestController(IMapMarkersService markerService, IIssueService issueService) {
+	public MapRestController(IMapMarkersService markerService,
+	                         IIssueService issueService,
+	                         IImageService imageService) {
 		this.markerService = markerService;
 		this.issueService = issueService;
+		this.imageService = imageService;
 	}
 
 	@GetMapping
@@ -59,7 +64,7 @@ public class MapRestController {
 		if (image == null) {
 			throw new IllegalParameterException("file");
 		}
-		return new JsonResponse(issueService.saveIssue(dto, image));
+		return new JsonResponse(issueService.saveIssue(dto, imageService.parseImage(image)));
 	}
 
 	@GetMapping("/issues/mapMarker/{mapMarkerId}")
