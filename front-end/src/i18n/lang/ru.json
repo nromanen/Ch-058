@@ -27,6 +27,8 @@
     "sendMessage": "Отправить",
     "sign_in_fb": "Войти с помощью Facebook",
     "sign_in_gp": "Войти с помощью Google+",
+    "connect_fb": "Присоединить Facebook",
+    "connect_gp": "Присоединить Google+",
     "home": "Главная",
     "delete_issue": "Удалить проблему",
     "edit_user_info": "Редактировать информацию",

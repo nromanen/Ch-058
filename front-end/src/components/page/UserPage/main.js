@@ -9,6 +9,7 @@ import {
   NameValidator
 } from "../../../_validator";
 import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
+import {getServerAddress} from "../../../main";
 
 export default {
   name: "UserPage",
@@ -24,7 +25,7 @@ export default {
     error: null
   }),
   created: function () {
-    this.$http.get('users/' + this.$route.params.id)
+    this.$http.get('users/profile/' + this.$route.params.id)
       .then(response => {
         let json = response.body;
 
@@ -107,6 +108,9 @@ export default {
           this.sending = false;
         });
       }
+    },
+    getServerAddress() {
+      return getServerAddress();
     },
     validateCredentials() {
       this.$v.$touch();
