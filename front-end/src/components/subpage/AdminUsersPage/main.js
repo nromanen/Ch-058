@@ -68,7 +68,7 @@ export default {
     },
     search: debounce(function () {
       if (!this.searchString) {
-        this.load(this.page, size, sort);
+        this.load(this.page, this.size, this.sort);
         return;
       }
       this.$http.get('admin/users/search/' + encodeURIComponent(this.searchString), {

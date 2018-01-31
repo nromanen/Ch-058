@@ -88,7 +88,7 @@
     "type": "Тип",
     "auth_block": "Блок авторизації",
     "management": "Керування",
-    "admin_restriction": "Права адміністратора",
+    "admin_restrictions": "Права адміністратора",
     "finish_registration": "Завершіть реєстрацію",
     "other": "Інше",
     "messages": "Повідомлення",

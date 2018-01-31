@@ -50,7 +50,8 @@ public class UserManagementController {
 	}
 
 	@GetMapping("/search/{query}")
-	public JsonResponse getByLoginOrEmail(@PathVariable String query, @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
+	public JsonResponse getByLoginOrEmail(@PathVariable String query,
+	                                      @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
 		return new JsonResponse(userService.findByLoginOrEmail(query, query, pageable).getContent());
 	}
 

@@ -88,7 +88,7 @@
     "type": "Тип",
     "auth_block": "Блок авторизации",
     "management": "Управление",
-    "admin_restriction": "Права администратора",
+    "admin_restrictions": "Права администратора",
     "finish_registration": "Завершите регистрацию",
     "other": "Другое",
     "messages": "Сообщения",
