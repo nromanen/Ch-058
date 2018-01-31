@@ -27,7 +27,7 @@ public class ConnectionRepositoryTest extends TestCase {
 	@Test
 	public void testGetByEmail() throws Exception{
 
-		UserConnection userProvider = repository.getByUserId("22");
+		UserConnection userProvider = repository.getByUserIdAndProvider("5", "facebook");
 		System.out.println(userProvider);
 	}
 }

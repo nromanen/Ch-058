@@ -2,7 +2,7 @@ package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
-import org.apache.commons.lang3.RandomStringUtils;
+import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
@@ -19,18 +19,23 @@ import static com.shrralis.ssdemo1.entity.User.*;
 @Service
 public class SocialService {
 
-	private final UsersRepository repository;
+	private final UsersRepository usersRepository;
 
 	@Autowired
-	public SocialService(UsersRepository repository) {
-		this.repository = repository;
+	public SocialService(UsersRepository usersRepository) {
+		this.usersRepository = usersRepository;
 	}
 
 	public static final String NAME_PATTERN = "^[A-ZА-ЯІЇЄ]['a-zа-яіїє]+$";
 
 	public User facebookProfileExtract(Connection<Facebook> connection){
+		User user;
 		UserProfile userProfile = connection.fetchUserProfile();
-		User user = repository.getByEmail(userProfile.getEmail());
+		if(userProfile.getEmail().equals(AuthorizedUser.getCurrent().getEmail())){
+			user = usersRepository.findById(AuthorizedUser.getCurrent().getId()).get();
+		} else{
+			user = usersRepository.getByEmail(userProfile.getEmail());
+		}
 		if (user == null) {
 			user = new User();
 			user.setEmail(userProfile.getEmail());
@@ -45,8 +50,13 @@ public class SocialService {
 	}
 
 	public User googleProfileExtract(Connection<Google> connection){
+		User user;
 		Person person = connection.getApi().plusOperations().getGoogleProfile();
-		User user = repository.getByEmail(person.getAccountEmail());
+		if(person.getAccountEmail().equals(AuthorizedUser.getCurrent().getEmail())){
+			user = usersRepository.findById(AuthorizedUser.getCurrent().getId()).get();
+		} else{
+			user = usersRepository.getByEmail(person.getAccountEmail());
+		}
 		if(user == null){
 			user = new User();
 			user.setEmail(person.getAccountEmail());
@@ -77,8 +87,7 @@ public class SocialService {
 	}
 
 	private static void createLoginFromEmail(User user){
-		user.setLogin(StringUtils.substring(user.getLogin().replace("@", ""), 0, 16));
+		user.setLogin(StringUtils.substring(user.getEmail().replace("@", ""), 0, 16));
 	}
-
 
 }
