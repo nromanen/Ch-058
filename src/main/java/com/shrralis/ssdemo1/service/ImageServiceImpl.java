@@ -77,7 +77,6 @@ public class ImageServiceImpl implements IImageService {
 	}
 
 	@Override
-	@ReadOnlyProperty
 	public Image parseImage(MultipartFile file) throws BadFieldFormatException {
 		try {
 			byte[] blob = file.getBytes();

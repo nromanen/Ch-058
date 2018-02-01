@@ -30,8 +30,8 @@
         {{ item.createdAt.dayOfMonth }}/{{ item.createdAt.monthValue }}/{{ item.createdAt.year }}
         {{ item.createdAt.hour }}:{{ item.createdAt.minute }}
       </md-table-cell>
-      <md-table-cell :md-label="$t('label.type')" md-sort-by="type">{{ item.type.name }}</md-table-cell>
-      <md-table-cell :md-label="$t('label.closed')" md-sort-by="type">
+      <md-table-cell :md-label="$t('label.type')">{{ item.type.name }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.closed')">
         {{ item.closed ? $t('label.yes') : $t('label.no') }}
       </md-table-cell>
     </md-table-row>
