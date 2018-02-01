@@ -1,7 +1,7 @@
 databaseChangeLog:
 - changeSet:
     id: 1516657572581-1
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createTable:
         columns:
@@ -30,7 +30,7 @@ databaseChangeLog:
         tableName: images
 - changeSet:
     id: 1516657572581-2
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createTable:
         columns:
@@ -49,7 +49,7 @@ databaseChangeLog:
         tableName: issue_types
 - changeSet:
     id: 1516657572581-3
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createTable:
         columns:
@@ -106,7 +106,7 @@ databaseChangeLog:
         tableName: issues
 - changeSet:
     id: 1516657572581-4
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createTable:
         columns:
@@ -129,7 +129,7 @@ databaseChangeLog:
         tableName: issues_votes
 - changeSet:
     id: 1516657572581-5
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createTable:
         columns:
@@ -153,7 +153,7 @@ databaseChangeLog:
         tableName: map_markers
 - changeSet:
     id: 1516657572581-6
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createTable:
         columns:
@@ -188,7 +188,7 @@ databaseChangeLog:
         tableName: message
 - changeSet:
     id: 1516657572581-7
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createTable:
         columns:
@@ -223,7 +223,7 @@ databaseChangeLog:
         tableName: notification
 - changeSet:
     id: 1516657572581-8
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createTable:
         columns:
@@ -250,7 +250,7 @@ databaseChangeLog:
         tableName: recovery_tokens
 - changeSet:
     id: 1516657572581-9
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createTable:
         columns:
@@ -300,7 +300,7 @@ databaseChangeLog:
         tableName: userconnection
 - changeSet:
     id: 1516657572581-10
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createTable:
         columns:
@@ -356,7 +356,7 @@ databaseChangeLog:
         tableName: users
 - changeSet:
     id: 1516657572581-11
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addPrimaryKey:
         columnNames: issue_id, voter_id
@@ -364,7 +364,7 @@ databaseChangeLog:
         tableName: issues_votes
 - changeSet:
     id: 1516657572581-12
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addPrimaryKey:
         columnNames: userid, providerid, provideruserid
@@ -372,7 +372,7 @@ databaseChangeLog:
         tableName: userconnection
 - changeSet:
     id: 1516657572581-13
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: hash
@@ -380,7 +380,7 @@ databaseChangeLog:
         tableName: images
 - changeSet:
     id: 1516657572581-14
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: src
@@ -388,7 +388,7 @@ databaseChangeLog:
         tableName: images
 - changeSet:
     id: 1516657572581-15
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: name
@@ -396,7 +396,7 @@ databaseChangeLog:
         tableName: issue_types
 - changeSet:
     id: 1516657572581-16
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: token
@@ -404,7 +404,7 @@ databaseChangeLog:
         tableName: recovery_tokens
 - changeSet:
     id: 1516657572581-17
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: hash
@@ -412,7 +412,7 @@ databaseChangeLog:
         tableName: images
 - changeSet:
     id: 1516657572581-18
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: id
@@ -420,7 +420,7 @@ databaseChangeLog:
         tableName: images
 - changeSet:
     id: 1516657572581-19
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: src
@@ -428,7 +428,7 @@ databaseChangeLog:
         tableName: images
 - changeSet:
     id: 1516657572581-20
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: id
@@ -436,7 +436,7 @@ databaseChangeLog:
         tableName: issues
 - changeSet:
     id: 1516657572581-21
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: issue_id, voter_id
@@ -444,7 +444,7 @@ databaseChangeLog:
         tableName: issues_votes
 - changeSet:
     id: 1516657572581-22
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: id
@@ -452,7 +452,7 @@ databaseChangeLog:
         tableName: map_markers
 - changeSet:
     id: 1516657572581-23
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: lat, lng
@@ -460,7 +460,7 @@ databaseChangeLog:
         tableName: map_markers
 - changeSet:
     id: 1516657572581-24
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: email
@@ -468,7 +468,7 @@ databaseChangeLog:
         tableName: users
 - changeSet:
     id: 1516657572581-25
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: id
@@ -476,7 +476,7 @@ databaseChangeLog:
         tableName: users
 - changeSet:
     id: 1516657572581-26
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: login
@@ -484,7 +484,7 @@ databaseChangeLog:
         tableName: users
 - changeSet:
     id: 1516657572581-27
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: email
@@ -492,7 +492,7 @@ databaseChangeLog:
         tableName: users
 - changeSet:
     id: 1516657572581-28
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addUniqueConstraint:
         columnNames: login
@@ -500,7 +500,7 @@ databaseChangeLog:
         tableName: users
 - changeSet:
     id: 1516657572581-29
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - createIndex:
         columns:
@@ -515,7 +515,7 @@ databaseChangeLog:
         unique: true
 - changeSet:
     id: 1516657572581-30
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addForeignKeyConstraint:
         baseColumnNames: author_id
@@ -529,7 +529,7 @@ databaseChangeLog:
         referencedTableName: users
 - changeSet:
     id: 1516657572581-31
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addForeignKeyConstraint:
         baseColumnNames: image_id
@@ -543,7 +543,7 @@ databaseChangeLog:
         referencedTableName: images
 - changeSet:
     id: 1516657572581-32
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addForeignKeyConstraint:
         baseColumnNames: map_marker_id
@@ -557,7 +557,7 @@ databaseChangeLog:
         referencedTableName: map_markers
 - changeSet:
     id: 1516657572581-33
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addForeignKeyConstraint:
         baseColumnNames: type_id
@@ -571,7 +571,7 @@ databaseChangeLog:
         referencedTableName: issue_types
 - changeSet:
     id: 1516657572581-34
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addForeignKeyConstraint:
         baseColumnNames: issue_id
@@ -585,7 +585,7 @@ databaseChangeLog:
         referencedTableName: issues
 - changeSet:
     id: 1516657572581-35
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addForeignKeyConstraint:
         baseColumnNames: voter_id
@@ -599,7 +599,7 @@ databaseChangeLog:
         referencedTableName: users
 - changeSet:
     id: 1516657572581-36
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addForeignKeyConstraint:
         baseColumnNames: user_id
@@ -613,7 +613,7 @@ databaseChangeLog:
         referencedTableName: users
 - changeSet:
     id: 1516657572581-37
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addForeignKeyConstraint:
         baseColumnNames: image_id
@@ -627,7 +627,7 @@ databaseChangeLog:
         referencedTableName: images
 - changeSet:
     id: 1516657572581-38
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addColumn:
         columns:
@@ -640,7 +640,7 @@ databaseChangeLog:
         tableName: users
 - changeSet:
     id: 1516972824887-1
-    author: shrralis (generated)
+    author: softserveinc (generated)
     changes:
     - addColumn:
         columns:
