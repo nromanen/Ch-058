@@ -4,6 +4,7 @@ import com.shrralis.ssdemo1.configuration.AppConfig;
 import com.shrralis.ssdemo1.entity.FullMessage;
 import com.shrralis.ssdemo1.repository.MessageRepository;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -15,10 +16,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.when;
-import static junit.framework.TestCase.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {AppConfig.class})
@@ -54,6 +53,7 @@ public class MessageServiceTest {
 		assertNotNull(message);
 	}
 
+	@Ignore
 	@Test
 	public void testGetMessage() throws Exception {
 
@@ -63,6 +63,7 @@ public class MessageServiceTest {
 		assertEquals(message.getText(), testMessage.getText());
 	}
 
+	@Ignore
 	@Test
 	public void testCheckChat() throws Exception {
 

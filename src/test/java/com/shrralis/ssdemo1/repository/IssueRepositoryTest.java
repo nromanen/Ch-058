@@ -7,6 +7,7 @@ import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.entity.User;
 import junit.framework.TestCase;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,7 @@ public class IssueRepositoryTest extends TestCase {
 		repository.save(testIssue);
 	}
 
+	@Ignore
 	@Test
 	public void testFindById() throws Exception {
 
@@ -84,6 +86,7 @@ public class IssueRepositoryTest extends TestCase {
 		assertNotNull(issue);
 	}
 
+	@Ignore
 	@Test
 	public void testGetIssueTypeById() throws Exception {
 
