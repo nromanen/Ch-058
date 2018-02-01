@@ -1,8 +1,6 @@
 package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.entity.User;
-import com.shrralis.ssdemo1.exception.AbstractCitizenException;
-import com.shrralis.ssdemo1.exception.AccessDeniedException;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.security.exception.CitizenBadCredentialsException;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
@@ -17,7 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-import static com.shrralis.ssdemo1.entity.User.*;
+import static com.shrralis.ssdemo1.entity.User.MAX_NAME_LENGTH;
+import static com.shrralis.ssdemo1.entity.User.MIN_NAME_LENGTH;
 
 @Service
 public class SocialService {
@@ -58,6 +57,22 @@ public class SocialService {
 		return user;
 	}
 
+	private static void validateAndSetSurname(User user, String surname) {
+		if ((surname.length() > MIN_NAME_LENGTH && surname.length() < MAX_NAME_LENGTH) && surname.matches(NAME_PATTERN)) {
+			user.setSurname(surname);
+		} else {
+			user.setSurname(null);
+		}
+	}
+
+	private static void validateAndSetName(User user, String name) {
+		if ((name.length() > MIN_NAME_LENGTH && name.length() < MAX_NAME_LENGTH) && name.matches(NAME_PATTERN)) {
+			user.setName(name);
+		} else {
+			user.setName(null);
+		}
+	}
+
 	public User googleProfileExtract(Connection<Google> connection) throws CitizenBadCredentialsException {
 		User user;
 		Person person = connection.getApi().plusOperations().getGoogleProfile();
@@ -71,7 +86,7 @@ public class SocialService {
 			user = usersRepository.getByEmail(person.getAccountEmail());
 		}
 
-		if(user == null){
+		if (user == null) {
 			user = new User();
 			user.setEmail(person.getAccountEmail());
 			SocialService.createLoginFromEmail(user);
@@ -82,22 +97,6 @@ public class SocialService {
 			SocialService.validateAndSetSurname(user, surname);
 		}
 		return user;
-	}
-
-	private static void validateAndSetName(User user, String name){
-		if((name.length() > MIN_NAME_LENGTH && name.length() < MAX_NAME_LENGTH) && name.matches(NAME_PATTERN)){
-			user.setName(name);
-		} else{
-			user.setName(null);
-		}
-	}
-
-	private static void validateAndSetSurname(User user, String surname){
-		if((surname.length() > MIN_NAME_LENGTH && surname.length() < MAX_NAME_LENGTH) && surname.matches(NAME_PATTERN)){
-			user.setSurname(surname);
-		} else{
-			user.setSurname(null);
-		}
 	}
 
 	private static void createLoginFromEmail(User user){

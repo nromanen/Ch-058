@@ -56,7 +56,7 @@ public class MessageServiceImpl implements IMessageService {
 
 	@Override
 	public boolean checkChat(Long issueId, Long userId) throws AccessDeniedException {
-		if( new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
+		if (new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
 				AuthorizedUser.getCurrent().getType().equals(User.Type.ROLE_ADMIN)) {
 			return messageRepository.existsByIssueIdAndUserId(issueId, userId);
 		}
@@ -65,7 +65,7 @@ public class MessageServiceImpl implements IMessageService {
 
 	@Override
 	public List<FullMessage> getAllMessagesForChat(Long issueId, Long userId) throws AccessDeniedException {
-		if( new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
+		if (new Long(AuthorizedUser.getCurrent().getId()).equals(userId) ||
 				AuthorizedUser.getCurrent().getType().equals(User.Type.ROLE_ADMIN)) {
 			return messageRepository.findAllByIssueIdAndUserId(issueId, userId);
 		}
@@ -76,7 +76,7 @@ public class MessageServiceImpl implements IMessageService {
 	public List<ChatRoom> getAllChatRooms(Long adminId){
 		List<FullMessage> chatRoomMessages = messageRepository.findAllChatRooms(adminId);
 		List<ChatRoom> chatRooms = new ArrayList<>();
-		for(FullMessage chatRoom : chatRoomMessages){
+		for (FullMessage chatRoom : chatRoomMessages) {
 			int userId = Integer.valueOf(chatRoom.getUserId().toString());
 			int issueId = Integer.valueOf(chatRoom.getIssueId().toString());
 			String login = usersRepository.findById(userId).get().getLogin();

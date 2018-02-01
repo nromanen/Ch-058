@@ -98,7 +98,8 @@
     "submit_token": "Submit token",
     "contact_info": "Contact information",
     "social_accounts": "Social accounts",
-    "linked-lowercase": "linked"
+    "linked-lowercase": "linked",
+    "filter_by_type": "by type"
   },
   "error": {
     "required": "Required",
@@ -137,6 +138,7 @@
   "type": {
     "ROLE_BANNED": "Banned",
     "ROLE_USER": "User",
-    "ROLE_ADMIN": "Admin"
+    "ROLE_ADMIN": "Admin",
+    "ROLE_MASTER": "Joda"
   }
 }

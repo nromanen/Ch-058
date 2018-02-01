@@ -25,6 +25,7 @@ import java.util.List;
 @Service
 @Transactional
 public class MapMarkersServiceImpl implements IMapMarkersService {
+
 	public static final int MULTIPLE = 4;
 
 	private final MapMarkersRepository markerRepository;
@@ -42,7 +43,7 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 		List<MarkerDTO> list = new ArrayList<>();
 		List<MapMarker> markers = markerRepository.findAll();
 
-		for(MapMarker m : markers) {
+		for (MapMarker m : markers) {
 			MarkerDTO dto = new MarkerDTO(m.getLat(), m.getLng());
 			int[] types = issuesRepository.getIssueTypeById(m.getId());
 

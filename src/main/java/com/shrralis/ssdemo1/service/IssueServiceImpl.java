@@ -86,8 +86,8 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
 	@Override
-	public Page<Issue> findByTitleOrText(String title, String text, Pageable pageable) {
-		return issuesRepository.findByTitleContainingOrTextContainingAllIgnoreCase(title, text, pageable);
+	public Page<Issue> findByTitleOrText(String title, String text, String author, Pageable pageable) {
+		return issuesRepository.findByTitleContainingOrTextContainingOrAuthor_loginContainingAllIgnoreCase(title, text, author, pageable);
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class IssueServiceImpl implements IIssueService {
 		Issue issue = issuesRepository.findById(id)
 				.orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
 		issuesRepository.delete(issue);
-		if (issuesRepository.countAllByMapMarker(issue.getMapMarker()) <= 1) {
+		if (issuesRepository.countAllByMapMarker(issue.getMapMarker()) < 1) {
 			mapMarkersRepository.delete(issue.getMapMarker());
 		}
 		return 0;
@@ -116,18 +116,10 @@ public class IssueServiceImpl implements IIssueService {
 		Issue issue = issuesRepository.findById(id).
 				orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
 
-		System.out.println("ID: " + issue.getId());
-		System.out.println("TYPE: " + issue.getType().getName());
-
 		if (StringUtils.equalsIgnoreCase(issue.getType().getName(), "PROBLEM")) {
 			issuesRepository.setStatus(flag, id);
 		}
 		return 0;
-//		if (issuesRepository.findOne(id) == null) {
-//			throw new EntityNotExistException(EntityNotExistException.Entity.ISSUE);
-//		} else if ()
-//
-//		return issuesRepository.setStatus(flag, id);
 	}
 
 	public Page<Issue> findClosedTrue(Pageable pageable) {
@@ -139,7 +131,6 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
 	private Issue.Type getTypeByName(String type) {
-
 		Issue.Type issueType = issueTypesRepository.getByName(type);
 
 		if (issueType == null) {
@@ -147,6 +138,5 @@ public class IssueServiceImpl implements IIssueService {
 			issueType.setName(type);
 		}
 		return issueType;
-
 	}
 }

@@ -4,19 +4,6 @@ const toLower = text => {
   return text.toString().toLowerCase()
 };
 
-const search = (users, str) => {
-  if (str) {
-    return users.filter(user => toLower(
-      user.login
-      + user.email
-      + user.name
-      + user.surname
-      + user.type
-    ).includes(toLower(str)))
-  }
-  return users
-};
-
 var debounce = require('debounce');
 
 export default {
@@ -29,7 +16,8 @@ export default {
     searchString: null,
     selected: null,
     searched: [],
-    users: []
+    users: [],
+    userType: null
   }),
   created: function() {
     this.load(this.page);
@@ -96,6 +84,37 @@ export default {
         // TODO: implement this shit, pls
         console.log(JSON.stringify(error.body));
       });
-    }, 500)
+    }, 500),
+    filterByType() {
+      let self = this;
+
+      setTimeout(function () {
+        self.$http.get('admin/users/type/' + encodeURIComponent(self.userType), {
+          params: {
+            page: self.page,
+            size: 10,
+            sort: null
+          }
+        }).then(response => {
+          let json = response.body;
+
+          if (!json.errors) {
+            self.users = json.data;
+            self.searched = self.users;
+            self.totalPages = json.count / self.size;
+            self.totalPages = (self.totalPages - Math.floor(self.totalPages) ? (self.totalPages | 0) + 1 : self.totalPages | 0);
+            // } else if (json.errors.length) {
+            //   TODO: show error in snackBar
+            // console.log(JSON.stringify(json.errors));
+          } else {
+            // TODO: show Unexpected error in snackbar
+            console.log('UNEXPECTED');
+          }
+        }, error => {
+          // TODO: implement this shit, pls
+          console.log(JSON.stringify(error.body));
+        });
+      }, 10);
+    }
   }
 }

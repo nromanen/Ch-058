@@ -1,5 +1,5 @@
 <div id="admin-users-page">
-  <div id="buttons">
+  <div id="buttons" v-if="totalPages > 1">
     <md-button class="md-dense md-raised md-primary" :disabled="page === 0" @click="load(--page)">
       {{ $t('button.prev') }}
     </md-button>
@@ -17,6 +17,18 @@
       <md-field md-clearable class="md-toolbar-section-end">
         <md-input :placeholder="$t('label.search')" v-model.trim="searchString" @input="search"/>
       </md-field>
+
+      <md-field id="type-filter" md-clearable>
+        <label for="type-filter-select">{{ $t('label.filter_by_type') }}</label>
+
+        <md-select id="type-filter-select" v-model="userType" :placeholder="$t('label.filter_by_type')"
+                   @md-selected="filterByType()">
+          <md-option value="ROLE_BANNED">{{ $t('type.ROLE_BANNED') }}</md-option>
+          <md-option value="ROLE_USER">{{ $t('type.ROLE_USER') }}</md-option>
+          <md-option value="ROLE_ADMIN">{{ $t('type.ROLE_ADMIN') }}</md-option>
+          <md-option value="ROLE_MASTER">{{ $t('type.ROLE_MASTER') }}</md-option>
+        </md-select>
+      </md-field>
     </md-table-toolbar>
 
     <md-table-empty-state :md-label="$t('label.no_users_found')"></md-table-empty-state>
@@ -28,9 +40,6 @@
       <md-table-cell :md-label="$t('label.first_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
       <md-table-cell :md-label="$t('label.last_name')" md-sort-by="surname">{{ item.surname }}</md-table-cell>
       <md-table-cell :md-label="$t('label.type')" md-sort-by="type">{{ $t('type.' + item.type) }}</md-table-cell>
-      <md-table-cell :md-label="$t('label.auth_block')">
-        {{ item.failed_auth_count >= 5 ? $t('label.yes') : $t('label.no') }}
-      </md-table-cell>
     </md-table-row>
   </md-table>
 

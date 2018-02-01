@@ -20,7 +20,7 @@ public interface IIssueService {
 
 	Issue findById(Integer id) throws AbstractCitizenException;
 
-	Page<Issue> findByTitleOrText(String title, String text, Pageable pageable);
+	Page<Issue> findByTitleOrText(String title, String text, String author, Pageable pageable);
 
 	Page<Issue> findAuthorId(Integer id, Pageable pageable);
 

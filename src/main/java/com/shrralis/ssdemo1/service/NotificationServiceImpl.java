@@ -1,10 +1,7 @@
 package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.entity.Notification;
-import com.shrralis.ssdemo1.entity.User;
-import com.shrralis.ssdemo1.exception.AccessDeniedException;
 import com.shrralis.ssdemo1.repository.NotificationRepository;
-import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.service.interfaces.INotificationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,12 +33,9 @@ public class NotificationServiceImpl implements INotificationService{
 
 	@Override
 	public Notification setWaiting(Notification notification) {
-
 		Notification getedNot = notificationRepository.findByIssueIdAndUserId(notification.getIssueId(),
 				notification.getUserId());
-
 		getedNot.setWaiting(notification.getWaiting());
-
 		return notificationRepository.save(getedNot);
 	}
 }

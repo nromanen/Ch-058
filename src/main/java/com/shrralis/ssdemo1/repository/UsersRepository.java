@@ -37,7 +37,7 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
 
 	Optional<User> findById(int id);
 
-	Page<User> findByLoginContainingOrEmailContainingAllIgnoreCase(String login, String email, Pageable pageable);
+	Page<User> findByLoginContainingOrEmailContainingOrNameContainingOrSurnameContainingAllIgnoreCase(String login, String email, String name, String surname, Pageable pageable);
 
 	@Modifying
 	@Query("UPDATE User u SET u.type = ?1 WHERE u.id = ?2")

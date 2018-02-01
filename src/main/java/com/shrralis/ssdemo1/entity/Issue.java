@@ -12,7 +12,6 @@
 
 package com.shrralis.ssdemo1.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.shrralis.ssdemo1.entity.interfaces.Identifiable;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -71,7 +70,7 @@ public class Issue implements Identifiable<Integer> {
 	private String text;
 
 	@NotNull
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, targetEntity = Image.class)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name = IMG_COLUMN_NAME)
 	private Image image;
 
@@ -85,8 +84,6 @@ public class Issue implements Identifiable<Integer> {
 	private Boolean closed;
 
 	@NotNull
-	@JsonFormat(pattern = "dd/MM/yyyy")
-//	@DateTimeFormat(pattern = "yy-MM-dd")
 	@Column(name = CREATED_AT_COLUMN_NAME, nullable = false)
 	private LocalDateTime createdAt;
 

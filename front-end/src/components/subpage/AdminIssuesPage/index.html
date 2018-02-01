@@ -1,5 +1,5 @@
 <div id="admin-issues-page">
-  <div id="buttons">
+  <div id="buttons" v-if="totalPages > 1">
     <md-button class="md-dense md-raised md-primary" :disabled="page === 0" @click="load(--page)">
       {{ $t('button.prev') }}
     </md-button>
@@ -15,8 +15,20 @@
       <h1 class="md-title">{{ $t('label.issues') }}</h1>
 
       <md-field md-clearable class="md-toolbar-section-end">
-        <md-input :placeholder="$t('label.search')" v-model="searchString" @input="searchOnTable" />
+        <md-input :placeholder="$t('label.search')" v-model.trim="searchString" @input="search"/>
       </md-field>
+
+      <!--TODO: maybe some time-->
+      <!--<md-field id="type-filter" md-clearable>
+        <label for="type-filter-select">{{ $t('label.filter_by_type') }}</label>
+
+        <md-select id="type-filter-select" v-model="issueType" :placeholder="$t('label.filter_by_type')"
+                   @md-selected="filterByType()">
+          <md-option v-for="type of types" :key="type.id" :value="type.name">
+            {{ $t('label.issue_type_' + type.name.toLowerCase()) }}
+          </md-option>
+        </md-select>
+      </md-field>-->
     </md-table-toolbar>
 
     <md-table-empty-state :md-label="$t('label.no_issues_found')"></md-table-empty-state>
@@ -25,7 +37,7 @@
       <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
       <md-table-cell :md-label="$t('label.title')" md-sort-by="title">{{ item.title }}</md-table-cell>
       <md-table-cell :md-label="$t('label.text')" md-sort-by="text">{{ item.text }}</md-table-cell>
-      <md-table-cell :md-label="$t('label.author')" md-sort-by="author">{{ item.author.login }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.author')">{{ item.author.login }}</md-table-cell>
       <md-table-cell :md-label="$t('label.created')">
         {{ item.createdAt.dayOfMonth }}/{{ item.createdAt.monthValue }}/{{ item.createdAt.year }}
         {{ item.createdAt.hour }}:{{ item.createdAt.minute }}

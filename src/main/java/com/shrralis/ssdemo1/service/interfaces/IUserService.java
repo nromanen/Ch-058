@@ -1,8 +1,8 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
 import com.shrralis.ssdemo1.dto.EditUserDTO;
-import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.dto.UserProfileDTO;
+import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import org.springframework.data.domain.Page;
@@ -26,15 +26,13 @@ public interface IUserService {
 
 	User findByLogin(String login) throws AbstractCitizenException;
 
-	Page<User> findByLoginOrEmail(String login, String email, Pageable pageable);
+	Page<User> findByLoginOrEmailOrNameOrSurname(String login, String email, String name, String surname, Pageable pageable);
 
 	User setStatus(User.Type userType, Integer id) throws AbstractCitizenException;
 
 	Page<User> findByType(User.Type type, Pageable pageable);
 
 	Page<User> findAll(Pageable pageable);
-
-//	Page<User> findAll(Predicate predicate, Pageable pageable);
 
 	void edit(EditUserDTO dto);
 

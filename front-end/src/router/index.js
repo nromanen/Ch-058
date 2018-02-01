@@ -91,7 +91,7 @@ const router = new Router({
       component: UserPage
     },
     {
-      path: '/error403',
+      path: '/403',
       component: Error403
     },
     {

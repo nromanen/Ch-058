@@ -3,17 +3,19 @@
     <md-dialog-title>{{ $t('label.management') }}</md-dialog-title>
 
     <md-list>
-      <md-list-item id="close" v-if="issue && !issue.closed" @click="closeIssue(true)">
-        <md-icon>gavel</md-icon>
+      <div v-if="issue && issue.type.name.toLowerCase() === 'PROBLEM'.toLowerCase()">
+        <md-list-item id="close" v-if="issue && !issue.closed" @click="closeIssue(true)">
+          <md-icon>gavel</md-icon>
 
-        <span class="md-list-item-text">{{ $t('button.close_issue') }}</span>
-      </md-list-item>
+          <span class="md-list-item-text">{{ $t('button.close_issue') }}</span>
+        </md-list-item>
 
-      <md-list-item id="open" v-else @click="closeIssue(false)">
-        <md-icon>gavel</md-icon>
+        <md-list-item id="open" v-else @click="closeIssue(false)">
+          <md-icon>gavel</md-icon>
 
-        <span class="md-list-item-text">{{ $t('button.open_issue') }}</span>
-      </md-list-item>
+          <span class="md-list-item-text">{{ $t('button.open_issue') }}</span>
+        </md-list-item>
+      </div>
 
       <md-list-item id="delete" @click="deleteIssue()">
         <md-icon>delete_forever</md-icon>

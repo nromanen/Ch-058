@@ -70,8 +70,8 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	@ReadOnlyProperty
-	public Page<User> findByLoginOrEmail(String login, String email, Pageable pageable) {
-		return repository.findByLoginContainingOrEmailContainingAllIgnoreCase(login, email, pageable);
+	public Page<User> findByLoginOrEmailOrNameOrSurname(String login, String email, String name, String surname, Pageable pageable) {
+		return repository.findByLoginContainingOrEmailContainingOrNameContainingOrSurnameContainingAllIgnoreCase(login, email, name, surname, pageable);
 	}
 
 	@Override
@@ -91,11 +91,6 @@ public class UserServiceImpl implements IUserService {
 	public Page<User> findAll(Pageable pageable) {
 		return repository.findAll(pageable);
 	}
-
-//	@Override
-//	public Page<User> findAll(Predicate predicate, Pageable pageable) {
-//		return repository.findAll(predicate, pageable);
-//	}
 
 	@Override
 	public void edit(final EditUserDTO dto) {
@@ -117,10 +112,10 @@ public class UserServiceImpl implements IUserService {
 		dto.setImage(user.getImage());
 		dto.setName(user.getName());
 		dto.setSurname(user.getSurname());
-		if(connectionRepository.getByUserIdAndProvider(String.valueOf(id), "facebook") != null){
+		if (connectionRepository.getByUserIdAndProvider(String.valueOf(id), "facebook") != null) {
 			dto.setFacebookConnected(true);
 		}
-		if(connectionRepository.getByUserIdAndProvider(String.valueOf(id), "google") != null){
+		if (connectionRepository.getByUserIdAndProvider(String.valueOf(id), "google") != null) {
 			dto.setGoogleConnected(true);
 		}
 		return dto;

@@ -1,5 +1,6 @@
 package com.shrralis.ssdemo1.controller.api.admin.issue;
 
+import com.shrralis.ssdemo1.entity.Issue;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import com.shrralis.tools.model.JsonResponse;
@@ -22,8 +23,7 @@ public class IssueManagementController {
 
 	@GetMapping
 	public JsonResponse getAll(@PageableDefault(page = 0, size = 10, sort = "title") Pageable pageable) {
-		Page issues = issueService.findAll(pageable);
-
+		Page<Issue> issues = issueService.findAll(pageable);
 		return JsonResponse.Builder.aJsonResponse()
 				.setData(issues.getContent())
 				.setCount(issues.getTotalElements())
@@ -54,7 +54,13 @@ public class IssueManagementController {
 	@GetMapping("/search/{query}")
 	public JsonResponse getAllByTitleOrText(@PathVariable String query,
 	                                        @PageableDefault(page = 0, size = 10) Pageable pageable) {
-		return new JsonResponse(issueService.findByTitleOrText(query, query, pageable));
+
+		Page<Issue> issues = issueService.findByTitleOrText(query, query, query, pageable);
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(issues.getContent())
+				.setCount(issues.getTotalElements())
+				.build();
+//		return new JsonResponse(issueService.findByTitleOrText(query, query, query, pageable));
 	}
 
 	@GetMapping("/opened")

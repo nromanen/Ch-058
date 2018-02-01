@@ -97,7 +97,8 @@
     "submit_token": "Токен підтвердження",
     "contact_info": "Контактна інформація",
     "social_accounts": "Соціальні мережі",
-    "linked-lowercase": "прив'язаний"
+    "linked-lowercase": "прив'язаний",
+    "filter_by_type": "по типу"
   },
   "error": {
     "required": "Обов'язково",
@@ -136,6 +137,7 @@
   "type": {
     "ROLE_BANNED": "Заблокований",
     "ROLE_USER": "Користувач",
-    "ROLE_ADMIN": "Адміністратор"
+    "ROLE_ADMIN": "Адміністратор",
+    "ROLE_MASTER": "Йода"
   }
 }

@@ -34,7 +34,7 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 	@Query(value = "SELECT type_id FROM issues WHERE map_marker_id = ?1", nativeQuery = true)
 	int[] getIssueTypeById(int id);
 
-	Page<Issue> findByTitleContainingOrTextContainingAllIgnoreCase(String title, String text, Pageable pageable);
+	Page<Issue> findByTitleContainingOrTextContainingOrAuthor_loginContainingAllIgnoreCase(String title, String text, String author, Pageable pageable);
 
 	Page<Issue> findByAuthor_Id(Integer id, Pageable pageable);
 
@@ -51,7 +51,4 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 	Page<Issue> findAll(Pageable pageable);
 
 	Integer countAllByMapMarker(MapMarker mapMarker);
-
-//	@Query("SELECT COUNT Issue i WHERE i.mapMarker = ?")
-//	Integer countAllByMapMarker(MapMarker mapMarker);
 }

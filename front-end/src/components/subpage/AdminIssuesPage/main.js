@@ -4,18 +4,7 @@ const toLower = text => {
   return text.toString().toLowerCase()
 };
 
-const search = (issues, str) => {
-  if (str) {
-    return issues.filter(issue => toLower(
-      issue.title
-      + issue.text
-      + issue.author.login
-      + issue.createdAt
-      + issue.type.name
-    ).includes(toLower(str)))
-  }
-  return issues
-};
+var debounce = require('debounce');
 
 export default {
   name: "AdminIssuesPage",
@@ -29,9 +18,15 @@ export default {
     searched: [],
     issues: []
   }),
-  props: ['issue'],
+  props: ['user'],
   created: function() {
-    this.load(this.page);
+    if (this.$route.params.user) {
+      this.searchString = this.$route.params.user;
+
+      this.search();
+    } else {
+      this.load(this.page);
+    }
   },
   methods: {
     load(page) {
@@ -62,8 +57,36 @@ export default {
         this.selected = issue;
       }
     },
-    searchOnTable() {
-      this.searched = search(this.issues, this.searchString);
-    }
+    search: debounce(function () {
+      if (!this.searchString) {
+        this.load(this.page, this.size, this.sort);
+        return;
+      }
+      this.$http.get('admin/issues/search/' + encodeURIComponent(this.searchString), {
+        params: {
+          page: this.page,
+          size: 10,
+          sort: null
+        }
+      }).then(response => {
+        let json = response.body;
+
+        if (!json.errors) {
+          this.issues = json.data;
+          this.searched = this.issues;
+          this.totalPages = json.count / this.size;
+          this.totalPages = (this.totalPages - Math.floor(this.totalPages) ? (this.totalPages | 0) + 1 : this.totalPages | 0);
+          // } else if (json.errors.length) {
+          //   TODO: show error in snackBar
+          // console.log(JSON.stringify(json.errors));
+        } else {
+          // TODO: show Unexpected error in snackbar
+          console.log('UNEXPECTED');
+        }
+      }, error => {
+        // TODO: implement this shit, pls
+        console.log(JSON.stringify(error.body));
+      });
+    }, 500)
   }
 }

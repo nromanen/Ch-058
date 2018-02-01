@@ -97,7 +97,8 @@
     "submit_token": "Токен подтверждения",
     "contact_info": "Контактная информация",
     "social_accounts": "Социальные сети",
-    "linked-lowercase": "привязан"
+    "linked-lowercase": "привязан",
+    "filter_by_type": "по типу"
   },
   "error": {
 	"required": "Обязательно",
@@ -136,6 +137,7 @@
   "type": {
     "ROLE_BANNED": "Заблокирован",
     "ROLE_USER": "Пользователь",
-    "ROLE_ADMIN": "Администратор"
+    "ROLE_ADMIN": "Администратор",
+    "ROLE_MASTER": "Йода"
   }
 }

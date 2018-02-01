@@ -36,10 +36,6 @@
 	# (/usr/share/tomcat9/webapps/ in my case)
 	mv ./target/citizen.war /usr/share/tomcat9/webapps/
 	```
-1) Restore necessary __database__ with _Liquibase_:
-	```bash
-	mvn liquibase:update
-	```
 1) Run your _Tomcat_ with the _.war_.
 	```bash
 	# The next is just my case
