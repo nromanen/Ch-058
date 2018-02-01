@@ -1,6 +1,7 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
 import com.shrralis.ssdemo1.dto.EditUserDTO;
+import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.dto.UserProfileDTO;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
@@ -36,6 +37,8 @@ public interface IUserService {
 //	Page<User> findAll(Predicate predicate, Pageable pageable);
 
 	void edit(EditUserDTO dto);
+
+	void updateImage(Image image);
 
 	UserProfileDTO getUserProfile(int id);
 }

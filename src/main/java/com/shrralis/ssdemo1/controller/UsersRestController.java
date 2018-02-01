@@ -1,7 +1,22 @@
+/*
+ * The following code have been created by Yaroslav Zhyravov (shrralis).
+ * The code can be used in non-commercial way for everyone.
+ * But for any commercial way it needs a author's agreement.
+ * Please contact the author for that:
+ *  - https://t.me/Shrralis
+ *  - https://twitter.com/Shrralis
+ *  - shrralis@gmail.com
+ *
+ * Copyright (c) 2017 by shrralis (Yaroslav Zhyravov).
+ */
+
 package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.EditUserDTO;
+import com.shrralis.ssdemo1.exception.BadFieldFormatException;
+import com.shrralis.ssdemo1.exception.IllegalParameterException;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
+import com.shrralis.ssdemo1.service.interfaces.IImageService;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import com.shrralis.tools.model.JsonResponse;
 import io.swagger.annotations.Api;
@@ -12,22 +27,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/users")
 public class UsersRestController {
 
 	private final IUserService service;
+	private final IImageService imageService;
 	private final LocaleResolver localeResolver;
 
 	@Autowired
-	public UsersRestController(IUserService service, LocaleResolver localeResolver) {
+	public UsersRestController(IUserService service,
+	                           IImageService imageService,
+	                           LocaleResolver localeResolver) {
 		this.service = service;
+		this.imageService = imageService;
 		this.localeResolver = localeResolver;
 	}
 
@@ -56,5 +78,20 @@ public class UsersRestController {
 	@GetMapping("/currentLang")
 	public JsonResponse currentLang(HttpServletRequest request) {
 		return new JsonResponse(localeResolver.resolveLocale(request));
+	}
+
+	@GetMapping(value = "/image/{userId}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public byte[] userImage(@PathVariable("userId") int userId) throws IOException {
+		return imageService.getUserImageInByte(userId);
+	}
+
+	@PutMapping("/image")
+	public JsonResponse issue(@RequestParam("image") MultipartFile image)
+			throws IllegalParameterException, BadFieldFormatException {
+		if (image == null) {
+			throw new IllegalParameterException("image");
+		}
+		service.updateImage(imageService.parseImage(image));
+		return new JsonResponse(service.getUser(AuthorizedUser.getCurrent().getId()));
 	}
 }

@@ -65,7 +65,7 @@ export default {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        var fileSize = document.getElementById("uploadImage").files[0].size;
+        let fileSize = document.getElementById("uploadImage").files[0].size;
 
         if (fileSize > 1024 * 1024 * 5) {
           window.alert(this.$t('message.image_size'));
@@ -84,7 +84,8 @@ export default {
       document.getElementById("uploadImage").value = null
     },
     initMap() {
-      var self = this;
+      let self = this;
+
       this.map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 48.29149, lng: 25.94034},
         zoom: 16,
@@ -153,9 +154,9 @@ export default {
       });
     },
     clickHandler(e, map) {
-      var self = this;
-      var k = 0;
-      var placesService = new google.maps.places.PlacesService(map);
+      let self = this;
+      let k = 0;
+      let placesService = new google.maps.places.PlacesService(map);
 
       if (e.placeId) {
         placesService.getDetails({placeId: e.placeId}, function (place) {
@@ -208,9 +209,9 @@ export default {
                 setTimeout(function () {
                   self.saveCoords(place.geometry.location.lat(), place.geometry.location.lng());
                   s.setMap(null);
-                }, 1200)
+                }, 1200);
               } else {
-                self.showSnackBar = true
+                self.showSnackBar = true;
               }
             });
         } else {
@@ -530,8 +531,8 @@ export default {
                     self.getMarkerByCoords(marker.getPosition().lat(), marker.getPosition().lng());
 
                     window.marker = marker;
-                    var modal = document.getElementById('myModal');
-                    var span = document.getElementsByClassName("close")[0];
+                    let modal = document.getElementById('myModal');
+                    let span = document.getElementsByClassName("close")[0];
                     modal.style.display = "table";
                     span.onclick = function () {
                       modal.style.display = "none";

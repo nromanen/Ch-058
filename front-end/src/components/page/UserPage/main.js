@@ -22,7 +22,8 @@ export default {
     showBack: true,
     editMode: false,
     sending: false,
-    error: null
+    error: null,
+    avatarHovered: false
   }),
   created: function () {
     this.$http.get('users/profile/' + this.$route.params.id)
@@ -61,9 +62,10 @@ export default {
       }
 
       this.error = null;
-      this.sending = true;
 
       if (this.validateCredentials()) {
+        this.sending = true;
+
         this.$http.put('users/edit', this.user).then(response => {
           let json = response.body;
 
@@ -109,8 +111,49 @@ export default {
         });
       }
     },
-    getServerAddress() {
-      return getServerAddress();
+    updateImage(event) {
+      this.sending = true;
+      let formData = new FormData();
+
+      formData.append('image', event.target.files[0]);
+      this.$http.put('users/image', formData).then(response => {
+        let json = response.body;
+
+        if (!json.errors) {
+          location.reload();
+        } else if (json.errors.length) {
+          switch (json.errors[0].errno) {
+            case ACCESS_DENIED:
+              this.$router.push('/403');
+              break;
+            default:
+              this.error = getErrorMessage(json.errors[0]);
+
+              break;
+          }
+        }
+
+        this.sending = false;
+      }, error => {
+        let json = error.body;
+
+        switch (error.status) {
+          case 500:
+            this.error = getErrorMessage(json.errors[0]);
+
+            break;
+          case 403:
+          case 404:
+            this.$router.push('/' + error.status);
+            break;
+        }
+
+        if (!this.error) {
+          this.error = 'HTTP error (' + error.status + ': ' + error.statusText + ')';
+        }
+
+        this.sending = false;
+      });
     },
     validateCredentials() {
       this.$v.$touch();
@@ -127,6 +170,12 @@ export default {
     },
     getLocalUser() {
       return getLocalUser();
+    },
+    getServerAddress() {
+      return getServerAddress();
+    },
+    fileInputClick() {
+      document.getElementById('fileInput').click();
     }
   }
 }

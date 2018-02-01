@@ -20,10 +20,23 @@
           </md-menu-content>
         </md-menu>
 
-        <md-menu md-size="auto" md-align-trigger v-if="userEmail">
-          <md-button md-menu-trigger>{{ userEmail }}</md-button>
+        <md-menu md-size="auto" md-align-trigger v-if="user && user.login">
+          <md-button md-menu-trigger>
+            <md-avatar class="md-small">
+              <img :src="getServerAddress() + '/users/image/' + (user && user.id)" v-if="user && user.image"
+                   id="avatar">
+
+              <md-ripple v-else>{{ user && user.initials }}</md-ripple>
+            </md-avatar>
+
+            {{ user.login }}
+          </md-button>
 
           <md-menu-content>
+            <md-menu-item :to="'/user/' + user.id" v-if="user">
+              {{ $t('button.view_profile') }}
+            </md-menu-item>
+
             <md-menu-item @click="logout()">{{ $t('button.logout') }}</md-menu-item>
           </md-menu-content>
         </md-menu>

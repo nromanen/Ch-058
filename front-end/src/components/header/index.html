@@ -7,12 +7,20 @@
   </div>
 
   <div class="md-toolbar-section-end">
-    <md-button to="/auth" v-if="!login">
+    <md-button to="/auth" v-if="!user">
       {{ $t('button.login') }}
     </md-button>
 
     <md-menu md-size="auto" md-align-trigger v-else>
-      <md-button md-menu-trigger>{{ login }}</md-button>
+      <md-button md-menu-trigger v-if="user">
+        <md-avatar class="md-small">
+          <img :src="getServerAddress() + '/users/image/' + (user && user.id)" v-if="user && user.image" id="avatar">
+
+          <md-ripple v-else>{{ user && user.initials }}</md-ripple>
+        </md-avatar>
+
+        {{ user.login }}
+      </md-button>
 
       <md-menu-content>
         <md-menu-item :to="'/user/' + getLocalUser().id" v-if="getLocalUser()">
