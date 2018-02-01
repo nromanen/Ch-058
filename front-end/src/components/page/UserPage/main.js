@@ -26,7 +26,7 @@ export default {
     avatarHovered: false
   }),
   created: function () {
-    this.$http.get('users/' + this.$route.params.id)
+    this.$http.get('users/profile/' + this.$route.params.id)
       .then(response => {
         let json = response.body;
 
@@ -177,4 +177,4 @@ export default {
       document.getElementById('fileInput').click();
     }
   }
-};
+}

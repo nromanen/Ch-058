@@ -22,14 +22,20 @@
     "manage": "Manage",
     "grant": "Grant",
     "revoke": "Revoke",
-    "view_user_issues": "View user's issues",
+    "view_user_issues": "User's issues",
     "ban": "Ban",
     "unban": "Unban",
     "sign_in_fb": "Sign in with Facebook",
     "sign_in_gp": "Sign in with Google+",
+    "connect_fb": "Connect Facebook",
+    "connect_gp": "Connect Google+",
+    "home": "Home",
+    "delete_issue": "Delete issue",
     "home": "Home",
     "edit_user_info": "Edit user info",
-    "view_profile": "View profile"
+    "view_profile": "View profile",
+    "prev": "Prev",
+    "next": "Next"
   },
   "label": {
     "sign_in": "Sign in",
@@ -79,7 +85,7 @@
     "type": "Type",
     "auth_block": "Auth block",
     "management": "Management",
-    "admin_restriction": "Admin restrictions",
+    "admin_restrictions": "Admin privileges",
     "issues_modal_title": "All issues",
     "projectTitle": "Geo citizen",
     "waitHint": "Please wait for a minute for an answer from admin",
@@ -119,7 +125,7 @@
     "page_not_found": "Page you looked for is not found"
   },
   "message": {
-    "successful_register": "You have been successfully registered!",
+    "successful_register": "You have been successfully registered! Submit the E-Mail please.",
     "successful_recovering": "You have been successfully changed your password!",
     "snackbar": "Please, log in to create an issue",
     "user_location": "Your location",
@@ -128,9 +134,8 @@
     "new_issue": "You just created a new issue"
   },
   "type": {
-    "BANNED": "Banned",
-    "USER": "User",
-    "ADMIN": "Admin",
-    "successful_recovering": "You have been successfully changed your password!"
+    "ROLE_BANNED": "Banned",
+    "ROLE_USER": "User",
+    "ROLE_ADMIN": "Admin"
   }
 }

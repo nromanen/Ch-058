@@ -18,7 +18,7 @@
     "manage": "Управлять",
     "grant": "Предоставить",
     "revoke": "Отозвать",
-    "view_user_issues": "Просмотреть проблемы пользователя",
+    "view_user_issues": "Проблемы автора",
     "ban": "Забанить",
     "unban": "Разбанить",
     "openChat": "Открыть чат",
@@ -27,9 +27,14 @@
     "sendMessage": "Отправить",
     "sign_in_fb": "Войти с помощью Facebook",
     "sign_in_gp": "Войти с помощью Google+",
+    "connect_fb": "Присоединить Facebook",
+    "connect_gp": "Присоединить Google+",
     "home": "Главная",
+    "delete_issue": "Удалить проблему",
     "edit_user_info": "Редактировать информацию",
-    "view_profile": "Посмотреть профиль"
+    "view_profile": "Посмотреть профиль",
+    "prev": "Пред",
+    "next": "След"
   },
   "label": {
     "sign_in": "Войти",
@@ -85,7 +90,7 @@
     "type": "Тип",
     "auth_block": "Блок авторизации",
     "management": "Управление",
-    "admin_restriction": "Права администратора",
+    "admin_restrictions": "Права администратора",
     "finish_registration": "Завершите регистрацию",
     "other": "Другое",
     "messages": "Сообщения",
@@ -119,7 +124,7 @@
     "page_not_found": "Запрошенная Вами страница не найдена"
   },
   "message": {
-    "successful_register": "Вы успешно зарегистрировались!",
+    "successful_register": "Вы успешно зарегистрировались! Пожалуйста подтвердите Ваш E-Mail.",
     "successful_recovering": "Вы успешно изменили Ваш пароль!",
     "snackbar": "Авторизируйтесь, что бы создать вопрос",
     "user_location": "Ваше местоположение",
@@ -128,8 +133,8 @@
     "new_issue": "Вы создали новый вопрос"
   },
   "type": {
-    "BANNED": "Заблокирован",
-    "USER": "Пользователь",
-    "ADMIN": "Администратор"
+    "ROLE_BANNED": "Заблокирован",
+    "ROLE_USER": "Пользователь",
+    "ROLE_ADMIN": "Администратор"
   }
 }

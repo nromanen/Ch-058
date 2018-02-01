@@ -12,7 +12,10 @@ import com.shrralis.ssdemo1.repository.IssuesRepository;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,44 +81,63 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
 	@Override
-	public List<Issue> findTitleOrTextContaining(String title, String text) {
-		return issuesRepository.findByTitleOrTextContainingAllIgnoreCase(title, text);
+	public Page<Issue> findByTitleOrText(String title, String text, Pageable pageable) {
+		return issuesRepository.findByTitleContainingOrTextContainingAllIgnoreCase(title, text, pageable);
 	}
 
 	@Override
-	public List<Issue> findAuthorId(Integer id) {
-		return issuesRepository.findByAuthor_Id(id);
+	public Page<Issue> findAuthorId(Integer id, Pageable pageable) {
+		return issuesRepository.findByAuthor_Id(id, pageable);
 	}
 
 	@Override
-	public List<Issue> findAll() {
-		return issuesRepository.findAll();
+	public Page<Issue> findAll(Pageable pageable) {
+		return issuesRepository.findAll(pageable);
 	}
 
 	@Override
-	public void deleteById(Integer id) {
-		issuesRepository.deleteById(id);
+	public Integer deleteById(Integer id) throws AbstractCitizenException {
+		Issue issue = issuesRepository.findById(id)
+				.orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
+		issuesRepository.delete(issue);
+		if (issuesRepository.countAllByMapMarker(issue.getMapMarker()) <= 1) {
+			mapMarkersRepository.delete(issue.getMapMarker());
+		}
+		return 0;
 	}
 
 	@Override
-	@Transactional
-	public void setStatus(Boolean flag, Integer id) {
-		issuesRepository.setStatus(flag, id);
+	public Integer setStatus(Boolean flag, Integer id) throws AbstractCitizenException {
+		Issue issue = issuesRepository.findById(id).
+				orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
+
+		System.out.println("ID: " + issue.getId());
+		System.out.println("TYPE: " + issue.getType().getName());
+
+		if (StringUtils.equalsIgnoreCase(issue.getType().getName(), "PROBLEM")) {
+			issuesRepository.setStatus(flag, id);
+		}
+		return 0;
+//		if (issuesRepository.findOne(id) == null) {
+//			throw new EntityNotExistException(EntityNotExistException.Entity.ISSUE);
+//		} else if ()
+//
+//		return issuesRepository.setStatus(flag, id);
 	}
 
-	public List<Issue> findClosedTrue() {
-		return issuesRepository.findByClosedTrue();
+	public Page<Issue> findClosedTrue(Pageable pageable) {
+		return issuesRepository.findByClosedTrue(pageable);
 	}
 
-	public List<Issue> findClosedFalse() {
-		return issuesRepository.findByClosedFalse();
+	public Page<Issue> findClosedFalse(Pageable pageable) {
+		return issuesRepository.findByClosedFalse(pageable);
 	}
 
 	private Issue.Type getTypeByName(String type) {
 
 		Issue.Type issueType = issueTypesRepository.getByName(type);
 
-		if(issueType == null) {
+		if (issueType == null) {
 			issueType = new Issue.Type();
 			issueType.setName(type);
 		}

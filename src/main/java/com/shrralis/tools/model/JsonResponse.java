@@ -28,7 +28,7 @@ public class JsonResponse {
 
 	private List<JsonError> errors;
 	private List<Object> data;
-	private Integer count = 0;
+	private Long count = 0l;
 
 	private JsonResponse() {
 	}
@@ -54,7 +54,7 @@ public class JsonResponse {
 			this.data.add(data);
 		}
 
-		count = this.data.size();
+		count = Long.valueOf(this.data.size());
 	}
 
 	private void addError(JsonError.Error error, Locale locale, MessageSource messageSource) {
@@ -114,11 +114,11 @@ public class JsonResponse {
 		return data;
 	}
 
-	public Integer getCount() {
+	public Long getCount() {
 		return count;
 	}
 
-	public void setCount(Integer count) {
+	public void setCount(Long count) {
 		this.count = count;
 	}
 
@@ -157,7 +157,7 @@ public class JsonResponse {
 			return this;
 		}
 
-		public Builder setCount(Integer count) {
+		public Builder setCount(Long count) {
 			jsonResponse.setCount(count);
 			return this;
 		}

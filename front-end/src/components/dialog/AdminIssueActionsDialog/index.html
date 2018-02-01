@@ -14,6 +14,12 @@
 
         <span class="md-list-item-text">{{ $t('button.open_issue') }}</span>
       </md-list-item>
+
+      <md-list-item id="delete" @click="deleteIssue()">
+        <md-icon>delete_forever</md-icon>
+
+        <span class="md-list-item-text">{{ $t('button.delete_issue') }}</span>
+      </md-list-item>
     </md-list>
 
     <md-dialog-actions>
