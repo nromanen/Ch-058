@@ -1,9 +1,12 @@
 package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
+import com.shrralis.ssdemo1.security.exception.CitizenBadCredentialsException;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.security.service.UserDetailsServiceImpl;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,7 +25,11 @@ public class SpringSecuritySignInAdapter implements SignInAdapter {
 	private IUserService userDetailsService;
 
 	@Override
-	public String signIn(String localUserId, Connection<?> connection, NativeWebRequest request) {
+	public String signIn(String localUserId, Connection<?> connection, NativeWebRequest request) throws CitizenBadCredentialsException {
+		if(AuthorizedUser.getCurrent()!=null && !StringUtils.contains(connection.fetchUserProfile().getEmail(), AuthorizedUser.getCurrent().getEmail())){
+			throw new CitizenBadCredentialsException("Email doesn't match with yours");
+		}
+
 		User user = this.userDetailsService.getUser(Integer.parseInt(localUserId));
 		AuthorizedUser authorizedUser = new AuthorizedUser(user, UserDetailsServiceImpl.getAuthorities(user));
 

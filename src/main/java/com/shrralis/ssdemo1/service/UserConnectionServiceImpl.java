@@ -2,6 +2,7 @@ package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.repository.UsersRepository;
+import com.shrralis.ssdemo1.security.exception.CitizenBadCredentialsException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
@@ -32,7 +33,7 @@ public class UserConnectionServiceImpl implements ConnectionSignUp{
 	}
 
 	@Override
-	public String execute(Connection<?> connection) {
+	public String execute(Connection<?> connection) throws CitizenBadCredentialsException {
 
 
 		if(StringUtils.contains(connection.getProfileUrl(), "facebook")){

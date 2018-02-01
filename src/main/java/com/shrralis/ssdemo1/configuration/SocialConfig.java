@@ -1,6 +1,8 @@
 package com.shrralis.ssdemo1.configuration;
 
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.repository.UsersRepository;
+import com.shrralis.ssdemo1.security.exception.CitizenBadCredentialsException;
 import com.shrralis.ssdemo1.service.SocialService;
 import com.shrralis.ssdemo1.service.SpringSecuritySignInAdapter;
 import com.shrralis.ssdemo1.service.UserConnectionServiceImpl;
@@ -14,6 +16,7 @@ import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurer;
 import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
@@ -77,13 +80,14 @@ public class SocialConfig implements SocialConfigurer {
 	public ProviderSignInController providerSignInController(
 			ConnectionFactoryLocator connectionFactoryLocator,
 			UsersConnectionRepository usersConnectionRepository,
-			SpringSecuritySignInAdapter adapter) {
+			SpringSecuritySignInAdapter adapter) throws CitizenBadCredentialsException {
 		ProviderSignInController psic =  new ProviderSignInController(
 				connectionFactoryLocator,
 				usersConnectionRepository,
 				adapter);
 		psic.setPostSignInUrl(frontUrl + "/socialSuccess");
-		return psic;
+		psic.canceledAuthorizationCallback();
+ 		return psic;
 	}
 
 
