@@ -15,6 +15,7 @@ import AdminPage from '@/components/page/AdminPage/AdminPage'
 import AdminUsersPage from '@/components/subpage/AdminUsersPage/AdminUsersPage'
 import AdminIssuesPage from '@/components/subpage/AdminIssuesPage/AdminIssuesPage'
 import AdminMessagesPage from '@/components/subpage/AdminMessagesPage/AdminMessagesPage'
+import Error403 from '@/components/page/403Page/403Page'
 
 Vue.use(Router)
 
@@ -90,6 +91,10 @@ const router = new Router({
       component: UserPage
     },
     {
+      path: '/error403',
+      component: Error403
+    },
+    {
       path: '/admin',
       component: AdminPage,
       meta: {
@@ -98,7 +103,7 @@ const router = new Router({
       children: [
         {
           path: '/',
-          component: AdminUsersPage
+          component: AdminChatNotification
         },
         {
           path: 'users',

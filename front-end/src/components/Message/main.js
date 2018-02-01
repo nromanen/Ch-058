@@ -1,10 +1,10 @@
 export default {
   name: 'message',
   data: function(){
-    return {
-    }
+	return {
+	}
   },
   props: [
-    'text', 'author'
+	'text', 'author'
   ]
 }

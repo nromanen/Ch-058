@@ -7,8 +7,9 @@ import {getServerAddress} from "../../../main";
 export default {
   name: 'AdminIndexPage',
   data: () => ({
-    menuVisible: false,
-    user: null
+	menuVisible: false,
+	user: null,
+    amount: null,
   }),
   created: function() {
     if (getLocalUser()) {
@@ -72,7 +73,7 @@ export default {
           let json = response.body;
 
           if (!json.errors && json.data[0].logged_in === false) {
-            this.user = null;
+            this.userEmail = null;
 
             resetLocalUser();
           } else if (json.errors.length) {
