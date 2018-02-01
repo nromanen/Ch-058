@@ -1,7 +1,10 @@
 package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.entity.User;
+import com.shrralis.ssdemo1.exception.AbstractCitizenException;
+import com.shrralis.ssdemo1.exception.AccessDeniedException;
 import com.shrralis.ssdemo1.repository.UsersRepository;
+import com.shrralis.ssdemo1.security.exception.CitizenBadCredentialsException;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +31,20 @@ public class SocialService {
 
 	public static final String NAME_PATTERN = "^[A-ZА-ЯІЇЄ]['a-zа-яіїє]+$";
 
-	public User facebookProfileExtract(Connection<Facebook> connection){
+	public User facebookProfileExtract(Connection<Facebook> connection) throws CitizenBadCredentialsException{
 		User user;
 		UserProfile userProfile = connection.fetchUserProfile();
-		if(userProfile.getEmail().equals(AuthorizedUser.getCurrent().getEmail())){
+
+		if (AuthorizedUser.getCurrent() != null) {
+			if (!StringUtils.contains(AuthorizedUser.getCurrent().getEmail(), userProfile.getEmail())) {
+				throw new CitizenBadCredentialsException(userProfile.getEmail());
+			}
+
 			user = usersRepository.findById(AuthorizedUser.getCurrent().getId()).get();
-		} else{
+		} else {
 			user = usersRepository.getByEmail(userProfile.getEmail());
 		}
+
 		if (user == null) {
 			user = new User();
 			user.setEmail(userProfile.getEmail());
@@ -49,14 +58,19 @@ public class SocialService {
 		return user;
 	}
 
-	public User googleProfileExtract(Connection<Google> connection){
+	public User googleProfileExtract(Connection<Google> connection) throws CitizenBadCredentialsException {
 		User user;
 		Person person = connection.getApi().plusOperations().getGoogleProfile();
-		if(person.getAccountEmail().equals(AuthorizedUser.getCurrent().getEmail())){
+		if (AuthorizedUser.getCurrent() != null) {
+			if (!StringUtils.contains(AuthorizedUser.getCurrent().getEmail(), person.getAccountEmail())) {
+				throw new CitizenBadCredentialsException(person.getAccountEmail());
+			}
+
 			user = usersRepository.findById(AuthorizedUser.getCurrent().getId()).get();
-		} else{
+		} else {
 			user = usersRepository.getByEmail(person.getAccountEmail());
 		}
+
 		if(user == null){
 			user = new User();
 			user.setEmail(person.getAccountEmail());

@@ -58,7 +58,7 @@ public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 				.antMatchers("/issues/*/*", "/map/marker", "/map/issue", "/users/*")
 				.hasAnyRole(User.Type.ROLE_USER.getRole(), User.Type.ROLE_ADMIN.getRole())
 				.antMatchers("/users", "/admin/**").hasRole(User.Type.ROLE_ADMIN.getRole())
-				.antMatchers("/auth/*", "/signin").anonymous()
+				.antMatchers("/auth/*").anonymous()
 				.and()
 				.formLogin()
 				.loginPage("/auth/login")
