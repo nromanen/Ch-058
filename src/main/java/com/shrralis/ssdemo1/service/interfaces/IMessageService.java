@@ -12,4 +12,5 @@ public interface IMessageService {
 	boolean checkChat(Long issueId, Long userId) throws AccessDeniedException;
 	List<FullMessage> getAllMessagesForChat(Long issueId, Long userId) throws AccessDeniedException;
 	List<ChatRoom> getAllChatRooms(Long adminId);
+	boolean checkAccessForAdmin(Long issueId, Long userId, Long adminId) throws AccessDeniedException;
 }

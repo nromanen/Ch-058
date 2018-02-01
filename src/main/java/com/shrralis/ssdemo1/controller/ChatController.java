@@ -33,11 +33,21 @@ public class ChatController {
 	private final INotificationService notificationService;
 	private final IMessageService messageService;
 
+	private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
+
 	@Autowired
 	public ChatController(INotificationService notificationService,
 						  IMessageService messageService){
 		this.notificationService = notificationService;
 		this.messageService = messageService;
+	}
+
+	@Secured(ADMIN_ROLE)
+	@RequestMapping("/{issueId}/{userId}/{adminId}/chat")
+	public  JsonResponse checkAccess(@PathVariable("issueId") Long issueId,
+									 @PathVariable("userId") Long userId,
+									 @PathVariable("adminId") Long adminId) throws AccessDeniedException {
+		return new JsonResponse(messageService.checkAccessForAdmin(issueId, userId, adminId));
 	}
 
 	@Secured({USER_ROLE, ADMIN_ROLE})

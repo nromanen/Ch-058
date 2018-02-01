@@ -85,4 +85,13 @@ public class MessageServiceImpl implements IMessageService {
 		}
 		return chatRooms;
 	}
+
+	@Override
+	public boolean checkAccessForAdmin(Long issueId, Long userId, Long adminId) throws AccessDeniedException {
+		if( new Long(AuthorizedUser.getCurrent().getId()).equals(adminId) ||
+				AuthorizedUser.getCurrent().getType().equals(User.Type.ROLE_ADMIN) ) {
+			return messageRepository.existsByIssueIdAndUserIdAndAuthorId(issueId, userId, adminId);
+		}
+		throw new AccessDeniedException();
+	}
 }

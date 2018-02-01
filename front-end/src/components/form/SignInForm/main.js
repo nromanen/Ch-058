@@ -6,7 +6,7 @@ import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../../_sys/json-err
 export default {
   name: 'SignInPage',
   props: {
-    login: String
+	login: String
   },
   mixins: [validationMixin],
   created: function () {
