@@ -2,4 +2,4 @@
 
 <script src="./main.js"></script>
 
-<style scoped src="./style.scss"></style>
+<style scoped lang="scss" src="./style.scss"></style>

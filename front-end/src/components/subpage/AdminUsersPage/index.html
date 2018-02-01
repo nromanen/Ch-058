@@ -1,26 +1,37 @@
 <div id="admin-users-page">
+  <div id="buttons">
+    <md-button class="md-dense md-raised md-primary" :disabled="page === 0" @click="load(--page)">
+      {{ $t('button.prev') }}
+    </md-button>
+
+    <md-button class="md-dense md-raised md-primary" :disabled="page === totalPages - 1 || totalPages === 0"
+               @click="load(++page)">
+      {{ $t('button.next') }}
+    </md-button>
+  </div>
+
   <md-table v-model="searched" md-sort="id" md-card>
-	<md-table-toolbar>
-	  <h1 class="md-title">{{ $t('label.users') }}</h1>
+    <md-table-toolbar>
+      <h1 class="md-title">{{ $t('label.users') }}</h1>
 
-	  <md-field md-clearable class="md-toolbar-section-end">
-		<md-input :placeholder="$t('label.search')" v-model="searchString" @input="searchOnTable" />
-	  </md-field>
-	</md-table-toolbar>
+      <md-field md-clearable class="md-toolbar-section-end">
+        <md-input :placeholder="$t('label.search')" v-model.trim="searchString" @input="search"/>
+      </md-field>
+    </md-table-toolbar>
 
-	<md-table-empty-state :md-label="$t('label.no_users_found')"></md-table-empty-state>
+    <md-table-empty-state :md-label="$t('label.no_users_found')"></md-table-empty-state>
 
-	<md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single" @md-selected="onSelect">
-	  <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
-	  <md-table-cell :md-label="$t('label.login')" md-sort-by="login">{{ item.login }}</md-table-cell>
-	  <md-table-cell :md-label="$t('label.email')" md-sort-by="email">{{ item.email }}</md-table-cell>
-	  <md-table-cell :md-label="$t('label.first_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
-	  <md-table-cell :md-label="$t('label.last_name')" md-sort-by="surname">{{ item.surname }}</md-table-cell>
-	  <md-table-cell :md-label="$t('label.type')" md-sort-by="type">{{ $t('type.' + item.type) }}</md-table-cell>
-	  <md-table-cell :md-label="$t('label.auth_block')" md-sort-by="title">
-		{{ item.failed_auth_count >= 5 ? $t('label.yes') : $t('label.no') }}
-	  </md-table-cell>
-	</md-table-row>
+    <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single" @md-selected="onSelect">
+      <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.login')" md-sort-by="login">{{ item.login }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.email')" md-sort-by="email">{{ item.email }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.first_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.last_name')" md-sort-by="surname">{{ item.surname }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.type')" md-sort-by="type">{{ $t('type.' + item.type) }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.auth_block')" md-sort-by="title">
+        {{ item.failed_auth_count >= 5 ? $t('label.yes') : $t('label.no') }}
+      </md-table-cell>
+    </md-table-row>
   </md-table>
 
   <admin-user-actions-dialog ref="aUserActionsDialog"></admin-user-actions-dialog>

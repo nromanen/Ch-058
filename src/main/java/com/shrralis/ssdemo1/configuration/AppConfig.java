@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,6 +42,7 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 @Configuration
 @EnableWebMvc
+@EnableSpringDataWebSupport
 @ComponentScan(basePackages = "com.shrralis.ssdemo1",  excludeFilters = {
 		@ComponentScan.Filter(type = ASSIGNABLE_TYPE,
 				value = {
@@ -57,6 +59,8 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 		SwaggerConfig.class
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
+
+	public static final String CATALINA_HOME_NAME = "catalina.home";
 
 	@Value("${mail.smtps.host}")
 	private String emailHost;

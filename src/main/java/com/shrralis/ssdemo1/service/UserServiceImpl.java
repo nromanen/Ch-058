@@ -13,14 +13,19 @@
 package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.dto.EditUserDTO;
+import com.shrralis.ssdemo1.dto.UserProfileDTO;
+import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.exception.EntityNotExistException;
+import com.shrralis.ssdemo1.repository.ConnectionRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.ReadOnlyProperty;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +36,12 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
 
 	private final UsersRepository repository;
+	private final ConnectionRepository connectionRepository;
 
 	@Autowired
-	public UserServiceImpl(UsersRepository repository) {
+	public UserServiceImpl(UsersRepository repository, ConnectionRepository connectionRepository) {
 		this.repository = repository;
+		this.connectionRepository = connectionRepository;
 	}
 
 	@Override
@@ -63,14 +70,8 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	@ReadOnlyProperty
-	public List<User> findByLoginOrEmailContaining(String login, String email) {
-		return repository.findByLoginOrEmailContainingAllIgnoreCase(login, email);
-	}
-
-	@Override
-	@ReadOnlyProperty
-	public List<User> findAll() {
-		return repository.findAll();
+	public Page<User> findByLoginOrEmail(String login, String email, Pageable pageable) {
+		return repository.findByLoginContainingOrEmailContainingAllIgnoreCase(login, email, pageable);
 	}
 
 	@Override
@@ -81,16 +82,55 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	@ReadOnlyProperty
-	public List<User> findByType(User.Type type) {
-		return repository.findByType(type);
+	public Page<User> findByType(User.Type type, Pageable pageable) {
+		return repository.findByType(type, pageable);
 	}
 
 	@Override
-	public void edit(EditUserDTO dto) {
+	@ReadOnlyProperty
+	public Page<User> findAll(Pageable pageable) {
+		return repository.findAll(pageable);
+	}
+
+//	@Override
+//	public Page<User> findAll(Predicate predicate, Pageable pageable) {
+//		return repository.findAll(predicate, pageable);
+//	}
+
+	@Override
+	public void edit(final EditUserDTO dto) {
 		final User user = repository.findOne(AuthorizedUser.getCurrent().getId());
 
 		user.setName(dto.getName());
 		user.setSurname(dto.getSurname());
+		repository.save(user);
+	}
+
+	@Override
+	public UserProfileDTO getUserProfile(int id) {
+		UserProfileDTO dto = new UserProfileDTO();
+		User user = repository.findById(id).get();
+		dto.setId(id);
+		dto.setLogin(user.getLogin());
+		dto.setEmail(user.getEmail());
+		dto.setType(user.getType());
+		dto.setImage(user.getImage());
+		dto.setName(user.getName());
+		dto.setSurname(user.getSurname());
+		if(connectionRepository.getByUserIdAndProvider(String.valueOf(id), "facebook") != null){
+			dto.setFacebookConnected(true);
+		}
+		if(connectionRepository.getByUserIdAndProvider(String.valueOf(id), "google") != null){
+			dto.setGoogleConnected(true);
+		}
+		return dto;
+	}
+
+	@Override
+	public void updateImage(final Image image) {
+		final User user = repository.getOne(AuthorizedUser.getCurrent().getId());
+
+		user.setImage(image);
 		repository.save(user);
 	}
 }

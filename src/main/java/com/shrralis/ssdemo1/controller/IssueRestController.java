@@ -1,10 +1,13 @@
 package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
+import com.shrralis.ssdemo1.service.interfaces.IImageService;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
+import com.shrralis.ssdemo1.service.interfaces.IIssueTypesService;
 import com.shrralis.ssdemo1.service.interfaces.IIssueVotesService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,21 +19,36 @@ import java.util.Map;
 @RequestMapping("/issues")
 public class IssueRestController {
 
-	private final IIssueService issueService;
-	private final IIssueVotesService issueVotesService;
 	private static final String LIKE = "likeVote";
 	private static final String DISLIKE = "dislikeVote";
 
+	private final IIssueService issueService;
+	private final IIssueVotesService issueVotesService;
+	private final IIssueTypesService issueTypesService;
+	private final IImageService imageService;
+
 	@Autowired
 	public IssueRestController(IIssueService issueService,
-							   IIssueVotesService issueVotesService) {
+	                           IIssueVotesService issueVotesService,
+	                           IIssueTypesService issueTypesService,
+	                           IImageService imageService) {
 		this.issueService = issueService;
+		this.issueTypesService = issueTypesService;
 		this.issueVotesService = issueVotesService;
+		this.imageService = imageService;
 	}
 
 	@GetMapping
-	public JsonResponse allIssues() {
-		return new JsonResponse(issueService.findAll());
+	public JsonResponse all(/*@PageableDefault(page=0,size=10,sort="title")Pageable pageable*/
+			@RequestParam(required = false, defaultValue = "0") int page,
+			@RequestParam(required = false, defaultValue = "10") int size
+	) {
+		return new JsonResponse(issueService.findAll(new PageRequest(page, size)));
+	}
+
+	@GetMapping("/types")
+	public JsonResponse allTypes() {
+		return new JsonResponse(issueTypesService.getAll());
 	}
 
 	@GetMapping("/{issueId}")
@@ -40,7 +58,8 @@ public class IssueRestController {
 
 	@GetMapping("/{issueId}/is-vote-exist")
 	public JsonResponse voteExists(@PathVariable("issueId") Integer issueId) {
-		Boolean vote = issueVotesService.getByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId).getVote();
+		Boolean vote = issueVotesService
+				.getByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId).getVote();
 		return new JsonResponse(vote);
 	}
 
@@ -65,6 +84,6 @@ public class IssueRestController {
 
 	@GetMapping(value = "/images/{issueId}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] issueImage(@PathVariable("issueId") Integer issueId) throws IOException {
-		return issueService.getImageInByte(issueId);
+		return imageService.getIssueImageInByte(issueId);
 	}
 }

@@ -53,7 +53,7 @@ public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 				.and()
 				.authorizeRequests()
 				.antMatchers("/auth/getCurrentSession", "/users/currentLang", "/issues**",
-						"/issues/*/votes", "/images/*", "/map**").permitAll()
+						/*"/issues/*//*votes",*/ "/images/*", "/map**", "/users/image/*").permitAll()
 				.antMatchers("/auth/logout", "/auth/update").authenticated()
 				.antMatchers("/issues/*/*", "/map/marker", "/map/issue", "/users/*")
 				.hasAnyRole(User.Type.ROLE_USER.getRole(), User.Type.ROLE_ADMIN.getRole())

@@ -12,7 +12,7 @@
           <md-card-header>{{ $t('label.admin_restrictions') }}</md-card-header>
 
           <md-card-content>
-            <md-button class="md-raised md-primary" v-if="user && user.type !== 'ADMIN'" @click="grantUser(true)">
+            <md-button class="md-raised md-primary" v-if="user && user.type !== 'ROLE_ADMIN'" @click="grantUser(true)">
               {{ $t('button.grant') }}
             </md-button>
 

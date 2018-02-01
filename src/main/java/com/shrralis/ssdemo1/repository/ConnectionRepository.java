@@ -5,5 +5,5 @@ import com.shrralis.ssdemo1.entity.UserConnection;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConnectionRepository extends JpaRepository<UserConnection, String> {
-	UserConnection getByUserId(String userId);
+	UserConnection getByUserIdAndProvider(String userId, String provider);
 }

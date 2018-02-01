@@ -7,11 +7,22 @@
     <md-app-content>
       <div id="content">
         <div class="md-headline">
-          <md-avatar class="md-avatar-icon md-large md-accent">
-            <img src="https://vuematerial.io/assets/examples/avatar.png" alt="Avatar" v-if="user && user.image">
+          <span @mouseover="avatarHovered = true" @mouseleave="avatarHovered = false" @click="fileInputClick()">
+            <md-avatar class="md-avatar-icon md-large md-accent">
+              <transition-group name="fade" mode="out-in">
+                <img :src="getServerAddress() + '/users/image/' + (user && user.id)" alt="Avatar"
+                     v-show="!avatarHovered && user && user.image" id="avatar" key="img">
 
-            <md-ripple v-else>{{ user && user.initials }}</md-ripple>
-          </md-avatar>
+                <md-ripple v-show="!avatarHovered && user && !user.image" key="initials">
+                  {{ user && user.initials }}
+                </md-ripple>
+
+                <md-ripple v-show="avatarHovered" key="upl"><md-icon>file_upload</md-icon></md-ripple>
+              </transition-group>
+
+              <input id="fileInput" type="file" style="display:none" @change="updateImage($event)"/>
+            </md-avatar>
+          </span>
 
           <div id="display-name" v-if="!editMode">{{ user && (user.name + ' ' + user.surname) }}</div>
 
@@ -83,9 +94,31 @@
 
           <span class="md-caption">{{ $t('label.social_accounts') }}</span>
 
-          <md-button disabled>Facebook {{ $t('label.linked-lowercase') }}</md-button>
+          <md-button disabled v-if="user.facebookConnected">
+            fb connected
+          </md-button>
 
-          <md-button disabled>Google {{ $t('label.linked-lowercase') }}</md-button>
+          <form v-else :action="getServerAddress() + '/signin/facebook'" method="post">
+            <button type="submit" class="btn btn-block btn-social btn-facebook"
+                    style="margin: 4px; width: calc(100% - 8px); color: #fff">
+              <span class="fa fa-facebook"></span>
+
+              {{ $t('button.connect_fb') }}
+            </button>
+          </form>
+
+          <md-button disabled v-if="user.googleConnected">
+            g+ connected
+          </md-button>
+
+          <form v-else :action="getServerAddress() + '/signin/google'" method="post">
+            <button type="submit" class="btn btn-block btn-social btn-google"
+                    style="margin: 4px; width: calc(100% - 8px); color: #fff">
+              <span class="fa fa-google"></span>
+
+              {{ $t('button.connect_gp') }}
+            </button>
+          </form>
         </div>
       </div>
     </md-app-content>

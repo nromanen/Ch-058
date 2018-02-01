@@ -1,28 +1,40 @@
 <div id="admin-issues-page">
+  <div id="buttons">
+    <md-button class="md-dense md-raised md-primary" :disabled="page === 0" @click="load(--page)">
+      {{ $t('button.prev') }}
+    </md-button>
+
+    <md-button class="md-dense md-raised md-primary" :disabled="page === totalPages - 1 || totalPages === 0"
+               @click="load(++page)">
+      {{ $t('button.next') }}
+    </md-button>
+  </div>
+
   <md-table v-model="searched" md-sort="id" md-card>
-	<md-table-toolbar>
-	  <h1 class="md-title">{{ $t('label.issues') }}</h1>
+    <md-table-toolbar>
+      <h1 class="md-title">{{ $t('label.issues') }}</h1>
 
-	  <md-field md-clearable class="md-toolbar-section-end">
-		<md-input :placeholder="$t('label.search')" v-model="searchString" @input="searchOnTable" />
-	  </md-field>
-	</md-table-toolbar>
+      <md-field md-clearable class="md-toolbar-section-end">
+        <md-input :placeholder="$t('label.search')" v-model="searchString" @input="searchOnTable" />
+      </md-field>
+    </md-table-toolbar>
 
-	<md-table-empty-state :md-label="$t('label.no_issues_found')"></md-table-empty-state>
+    <md-table-empty-state :md-label="$t('label.no_issues_found')"></md-table-empty-state>
 
-	<md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single" @md-selected="onSelect">
-	  <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
-	  <md-table-cell :md-label="$t('label.title')" md-sort-by="title">{{ item.title }}</md-table-cell>
-	  <md-table-cell :md-label="$t('label.text')" md-sort-by="text">{{ item.text }}</md-table-cell>
-	  <md-table-cell :md-label="$t('label.author')" md-sort-by="author">{{ item.author.login }}</md-table-cell>
-	  <md-table-cell :md-label="$t('label.created')" md-sort-by="created_at">
-		{{ item.createdAt.dayOfMonth }}.{{ item.createdAt.monthValue }}.{{ item.createdAt.year }},
-		{{ item.createdAt.hour }}:{{ item.createdAt.minute }}:{{ item.createdAt.second }}
-	  </md-table-cell>
-	  <md-table-cell :md-label="$t('label.closed')" md-sort-by="type">
-		{{ item.closed ? $t('label.yes') : $t('label.no') }}
-	  </md-table-cell>
-	</md-table-row>
+    <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single" @md-selected="onSelect">
+      <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.title')" md-sort-by="title">{{ item.title }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.text')" md-sort-by="text">{{ item.text }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.author')" md-sort-by="author">{{ item.author.login }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.created')">
+        {{ item.createdAt.dayOfMonth }}/{{ item.createdAt.monthValue }}/{{ item.createdAt.year }}
+        {{ item.createdAt.hour }}:{{ item.createdAt.minute }}
+      </md-table-cell>
+      <md-table-cell :md-label="$t('label.type')" md-sort-by="type">{{ item.type.name }}</md-table-cell>
+      <md-table-cell :md-label="$t('label.closed')" md-sort-by="type">
+        {{ item.closed ? $t('label.yes') : $t('label.no') }}
+      </md-table-cell>
+    </md-table-row>
   </md-table>
 
   <admin-issue-actions-dialog ref="aIssueActionsDialog"></admin-issue-actions-dialog>

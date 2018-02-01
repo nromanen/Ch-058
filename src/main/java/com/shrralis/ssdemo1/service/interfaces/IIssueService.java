@@ -1,17 +1,17 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
+import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
-import com.shrralis.ssdemo1.exception.BadFieldFormatException;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface IIssueService {
 
-	Issue saveIssue(MapDataDTO dto, MultipartFile image) throws BadFieldFormatException;
+	Issue saveIssue(MapDataDTO dto, Image image);
 
 	Issue getById(Integer id);
 
@@ -19,21 +19,17 @@ public interface IIssueService {
 
 	Issue findById(Integer id) throws AbstractCitizenException;
 
-	List<Issue> findTitleOrTextContaining(String title, String text);
+	Page<Issue> findByTitleOrText(String title, String text, Pageable pageable);
 
-	List<Issue> findAuthorId(Integer id);
+	Page<Issue> findAuthorId(Integer id, Pageable pageable);
 
-	List<Issue> findAll();
+	Page<Issue> findAll(Pageable pageable);
 
-	void deleteById(Integer id);
+	Integer deleteById(Integer id) throws AbstractCitizenException;
 
-	void setStatus(Boolean flag, Integer id);
+	Integer setStatus(Boolean flag, Integer id) throws AbstractCitizenException;
 
-	List<Issue> findClosedTrue();
+	Page<Issue> findClosedTrue(Pageable pageable);
 
-	List<Issue> findClosedFalse();
-
-	byte[] getImageInByte(Integer issueId) throws IOException;
-
-	byte[] getImageInByte(String src) throws BadFieldFormatException;
+	Page<Issue> findClosedFalse(Pageable pageable);
 }
