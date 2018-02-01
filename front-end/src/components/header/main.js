@@ -2,6 +2,7 @@ import Vue from 'vue';
 import {getLocalUser, resetLocalUser} from "../../router";
 import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../_sys/json-errors";
 import {getCurrentLang, switchLang} from "../../i18n";
+import {getServerAddress} from "../../main";
 
 export default {
   name: "Header",
@@ -15,6 +16,7 @@ export default {
   }),
   created: function () {
     this.showBack = this.$parent.$parent.$parent.$parent.showBack;
+
     if (getLocalUser()) {
       Vue.http.get('auth/getCurrentSession')
         .then(
@@ -24,7 +26,24 @@ export default {
             if (!json.errors) {
               if (json.data[0].logged_in) {
                 this.user = json.data[0];
-                this.login = json.data[0].login;
+
+                Vue.http.get('users/' + getLocalUser().id)
+                  .then(
+                    response => {
+                      let json = response.body;
+
+                      if (!json.errors) {
+                        if (json.data[0]) {
+                          this.user.initials = json.data[0].name.charAt(0) + json.data[0].surname.charAt(0);
+                          this.user.image = json.data[0].image;
+                        }
+                      } else if (json.errors.length) {
+                        this.snackBarText = getErrorMessage(json.errors[0]);
+                      } else {
+                        this.snackBarText = getErrorMessage(UNEXPECTED);
+                      }
+                    }
+                  );
               }
             } else if (json.errors.length) {
               switch (json.errors[0].errno) {
@@ -70,7 +89,7 @@ export default {
           let json = response.body;
 
           if (!json.errors && json.data[0].logged_in === false) {
-            this.login = null;
+            this.user = null;
 
             resetLocalUser();
           } else if (json.errors.length) {
@@ -118,6 +137,9 @@ export default {
     },
     getLocalUser() {
       return getLocalUser();
+    },
+    getServerAddress() {
+      return getServerAddress();
     }
   }
 }

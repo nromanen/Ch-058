@@ -13,7 +13,7 @@
                 <img :src="getServerAddress() + '/users/image/' + (user && user.id)" alt="Avatar"
                      v-show="!avatarHovered && user && user.image" id="avatar" key="img">
 
-                <md-ripple v-show="!avatarHovered && (!user || !user.image)" key="initials">
+                <md-ripple v-show="!avatarHovered && user && !user.image" key="initials">
                   {{ user && user.initials }}
                 </md-ripple>
 
