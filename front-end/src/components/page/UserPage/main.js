@@ -110,6 +110,50 @@ export default {
         });
       }
     },
+    updateImage(event) {
+      this.sending = true;
+      let formData = new FormData();
+
+      formData.append('image', event.target.files[0]);
+      this.$http.put('users/image', formData).then(response => {
+        let json = response.body;
+
+        if (!json.errors) {
+          location.reload();
+        } else if (json.errors.length) {
+          switch (json.errors[0].errno) {
+            case ACCESS_DENIED:
+              this.$router.push('/403');
+              break;
+            default:
+              this.error = getErrorMessage(json.errors[0]);
+
+              break;
+          }
+        }
+
+        this.sending = false;
+      }, error => {
+        let json = error.body;
+
+        switch (error.status) {
+          case 500:
+            this.error = getErrorMessage(json.errors[0]);
+
+            break;
+          case 403:
+          case 404:
+            this.$router.push('/' + error.status);
+            break;
+        }
+
+        if (!this.error) {
+          this.error = 'HTTP error (' + error.status + ': ' + error.statusText + ')';
+        }
+
+        this.sending = false;
+      });
+    },
     validateCredentials() {
       this.$v.$touch();
       return !this.$v.$invalid;
@@ -128,6 +172,9 @@ export default {
     },
     getServerAddress() {
       return getServerAddress();
+    },
+    fileInputClick() {
+      document.getElementById('fileInput').click();
     }
   }
 };

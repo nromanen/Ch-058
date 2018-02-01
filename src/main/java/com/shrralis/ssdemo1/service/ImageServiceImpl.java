@@ -10,6 +10,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,18 +51,21 @@ public class ImageServiceImpl implements IImageService {
 	}
 
 	@Override
+	@ReadOnlyProperty
 	public byte[] getIssueImageInByte(int issueId) throws IOException {
 		return getImageBytes(System.getProperty(CATALINA_HOME_NAME) + File.separator
 				+ issuesRepository.findOne(issueId).getImage().getSrc());
 	}
 
 	@Override
+	@ReadOnlyProperty
 	public byte[] getUserImageInByte(int userId) throws IOException {
 		return getImageBytes(System.getProperty(CATALINA_HOME_NAME) + File.separator
 				+ usersRepository.findOne(userId).getImage().getSrc());
 	}
 
 	@Override
+	@ReadOnlyProperty
 	public byte[] getImageBySrcInByte(String src) throws BadFieldFormatException {
 		try {
 			Path path = Paths.get(System.getProperty(CATALINA_HOME_NAME) + File.separator + src);
@@ -73,6 +77,7 @@ public class ImageServiceImpl implements IImageService {
 	}
 
 	@Override
+	@ReadOnlyProperty
 	public Image parseImage(MultipartFile file) throws BadFieldFormatException {
 		try {
 			byte[] blob = file.getBytes();

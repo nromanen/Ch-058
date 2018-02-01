@@ -13,6 +13,8 @@
 package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.EditUserDTO;
+import com.shrralis.ssdemo1.exception.BadFieldFormatException;
+import com.shrralis.ssdemo1.exception.IllegalParameterException;
 import com.shrralis.ssdemo1.security.model.AuthorizedUser;
 import com.shrralis.ssdemo1.service.interfaces.IImageService;
 import com.shrralis.ssdemo1.service.interfaces.IUserService;
@@ -20,6 +22,7 @@ import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,5 +70,15 @@ public class UsersRestController {
 	@GetMapping(value = "/image/{userId}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] userImage(@PathVariable("userId") int userId) throws IOException {
 		return imageService.getUserImageInByte(userId);
+	}
+
+	@PutMapping("/image")
+	public JsonResponse issue(@RequestParam("image") MultipartFile image)
+			throws IllegalParameterException, BadFieldFormatException {
+		if (image == null) {
+			throw new IllegalParameterException("image");
+		}
+		service.updateImage(imageService.parseImage(image));
+		return new JsonResponse(service.getUser(AuthorizedUser.getCurrent().getId()));
 	}
 }

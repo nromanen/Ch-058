@@ -13,6 +13,7 @@
 package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.dto.EditUserDTO;
+import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.exception.EntityNotExistException;
@@ -86,11 +87,19 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public void edit(EditUserDTO dto) {
+	public void edit(final EditUserDTO dto) {
 		final User user = repository.findOne(AuthorizedUser.getCurrent().getId());
 
 		user.setName(dto.getName());
 		user.setSurname(dto.getSurname());
+		repository.save(user);
+	}
+
+	@Override
+	public void updateImage(final Image image) {
+		final User user = repository.getOne(AuthorizedUser.getCurrent().getId());
+
+		user.setImage(image);
 		repository.save(user);
 	}
 }

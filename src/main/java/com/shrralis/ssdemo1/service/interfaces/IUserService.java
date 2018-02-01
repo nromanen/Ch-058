@@ -1,6 +1,7 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
 import com.shrralis.ssdemo1.dto.EditUserDTO;
+import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 
@@ -31,4 +32,6 @@ public interface IUserService {
 	List<User> findByType(User.Type type);
 
 	void edit(EditUserDTO dto);
+
+	void updateImage(Image image);
 }
