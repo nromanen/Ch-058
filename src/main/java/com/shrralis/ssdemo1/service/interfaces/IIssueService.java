@@ -1,17 +1,18 @@
 package com.shrralis.ssdemo1.service.interfaces;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
-import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
+import com.shrralis.ssdemo1.exception.BadFieldFormatException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface IIssueService {
 
-	Issue saveIssue(MapDataDTO dto, Image image);
+	Issue saveIssue(MapDataDTO dto, MultipartFile image) throws BadFieldFormatException;
 
 	Issue getById(Integer id);
 

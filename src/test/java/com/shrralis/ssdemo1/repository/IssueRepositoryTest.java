@@ -81,7 +81,6 @@ public class IssueRepositoryTest extends TestCase {
 	@Ignore
 	@Test
 	public void testFindById() throws Exception {
-
 		Optional<Issue> issue = repository.findById(1);
 		assertNotNull(issue);
 	}

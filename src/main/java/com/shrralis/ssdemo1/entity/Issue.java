@@ -71,7 +71,7 @@ public class Issue implements Identifiable<Integer> {
 	private String text;
 
 	@NotNull
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, targetEntity = Image.class)
 	@JoinColumn(name = IMG_COLUMN_NAME)
 	private Image image;
 

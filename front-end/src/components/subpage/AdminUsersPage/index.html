@@ -28,7 +28,7 @@
       <md-table-cell :md-label="$t('label.first_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
       <md-table-cell :md-label="$t('label.last_name')" md-sort-by="surname">{{ item.surname }}</md-table-cell>
       <md-table-cell :md-label="$t('label.type')" md-sort-by="type">{{ $t('type.' + item.type) }}</md-table-cell>
-      <md-table-cell :md-label="$t('label.auth_block')" md-sort-by="title">
+      <md-table-cell :md-label="$t('label.auth_block')">
         {{ item.failed_auth_count >= 5 ? $t('label.yes') : $t('label.no') }}
       </md-table-cell>
     </md-table-row>

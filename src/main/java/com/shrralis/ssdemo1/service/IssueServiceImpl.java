@@ -1,16 +1,17 @@
 package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.dto.MapDataDTO;
-import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.Issue;
 import com.shrralis.ssdemo1.entity.MapMarker;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
+import com.shrralis.ssdemo1.exception.BadFieldFormatException;
 import com.shrralis.ssdemo1.exception.EntityNotExistException;
 import com.shrralis.ssdemo1.repository.IssueTypesRepository;
 import com.shrralis.ssdemo1.repository.IssuesRepository;
 import com.shrralis.ssdemo1.repository.MapMarkersRepository;
 import com.shrralis.ssdemo1.repository.UsersRepository;
+import com.shrralis.ssdemo1.service.interfaces.IImageService;
 import com.shrralis.ssdemo1.service.interfaces.IIssueService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,16 +35,19 @@ public class IssueServiceImpl implements IIssueService {
 	private final MapMarkersRepository mapMarkersRepository;
 	private final UsersRepository usersRepository;
 	private final IssueTypesRepository issueTypesRepository;
+	private final IImageService imageService;
 
 	@Autowired
 	public IssueServiceImpl(IssuesRepository issuesRepository,
-							MapMarkersRepository mapMarkersRepository,
-							UsersRepository usersRepository,
-							IssueTypesRepository issueTypesRepository) {
+	                        MapMarkersRepository mapMarkersRepository,
+	                        UsersRepository usersRepository,
+	                        IssueTypesRepository issueTypesRepository,
+	                        IImageService imageService) {
 		this.issuesRepository = issuesRepository;
 		this.mapMarkersRepository = mapMarkersRepository;
 		this.usersRepository = usersRepository;
 		this.issueTypesRepository = issueTypesRepository;
+		this.imageService = imageService;
 	}
 
 	@Override
@@ -51,7 +56,7 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
 	@Override
-	public Issue saveIssue(MapDataDTO dto, Image image) {
+	public Issue saveIssue(MapDataDTO dto, MultipartFile image) throws BadFieldFormatException {
 		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
 		User user = usersRepository.findOne(getCurrent().getId());
 		boolean closed = !dto.getTypeName().equals(OPENED_TYPE);
@@ -62,7 +67,7 @@ public class IssueServiceImpl implements IIssueService {
 				.setTitle(dto.getTitle())
 				.setText(dto.getDesc())
 				.setAuthor(user)
-				.setImage(image)
+				.setImage(imageService.parseImage(image))
 				.setType(type)
 				.setClosed(closed)
 				.setCreatedAt(LocalDateTime.now())
