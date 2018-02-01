@@ -13,8 +13,8 @@
 package com.shrralis.ssdemo1.service;
 
 import com.shrralis.ssdemo1.dto.EditUserDTO;
-import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.dto.UserProfileDTO;
+import com.shrralis.ssdemo1.entity.Image;
 import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.exception.EntityNotExistException;
@@ -35,61 +35,61 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements IUserService {
 
-	private final UsersRepository usersRepository;
+	private final UsersRepository repository;
 	private final ConnectionRepository connectionRepository;
 
 	@Autowired
-	public UserServiceImpl(UsersRepository usersRepository, ConnectionRepository connectionRepository) {
-		this.usersRepository = usersRepository;
+	public UserServiceImpl(UsersRepository repository, ConnectionRepository connectionRepository) {
+		this.repository = repository;
 		this.connectionRepository = connectionRepository;
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public List<User> getAllUsers() {
-		return usersRepository.findAll();
+		return repository.findAll();
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public User getUser(int id) {
-		return usersRepository.getOne(id);
+		return repository.getOne(id);
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public User findById(Integer id) throws AbstractCitizenException {
-		return usersRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.USER));
+		return repository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.USER));
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public User findByLogin(String login) throws AbstractCitizenException {
-		return usersRepository.findByLogin(login).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.USER));
+		return repository.findByLogin(login).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.USER));
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public Page<User> findByLoginOrEmail(String login, String email, Pageable pageable) {
-		return usersRepository.findByLoginContainingOrEmailContainingAllIgnoreCase(login, email, pageable);
+		return repository.findByLoginContainingOrEmailContainingAllIgnoreCase(login, email, pageable);
 	}
 
 	@Override
 	public User setStatus(User.Type type, Integer id) {
-		usersRepository.setStatus(type, id);
-		return usersRepository.getOne(id);
+		repository.setStatus(type, id);
+		return repository.getOne(id);
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public Page<User> findByType(User.Type type, Pageable pageable) {
-		return usersRepository.findByType(type, pageable);
+		return repository.findByType(type, pageable);
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public Page<User> findAll(Pageable pageable) {
-		return usersRepository.findAll(pageable);
+		return repository.findAll(pageable);
 	}
 
 //	@Override
@@ -99,17 +99,17 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public void edit(final EditUserDTO dto) {
-		final User user = usersRepository.findOne(AuthorizedUser.getCurrent().getId());
+		final User user = repository.findOne(AuthorizedUser.getCurrent().getId());
 
 		user.setName(dto.getName());
 		user.setSurname(dto.getSurname());
-		usersRepository.save(user);
+		repository.save(user);
 	}
 
 	@Override
 	public UserProfileDTO getUserProfile(int id) {
 		UserProfileDTO dto = new UserProfileDTO();
-		User user = usersRepository.findById(id).get();
+		User user = repository.findById(id).get();
 		dto.setId(id);
 		dto.setLogin(user.getLogin());
 		dto.setEmail(user.getEmail());

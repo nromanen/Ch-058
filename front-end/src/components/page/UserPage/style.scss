@@ -45,8 +45,14 @@ img {
   transition: opacity .3s ease;
 }
 
-.fade-enter, .fade-leave-to
-  /* .component-fade-leave-active below version 2.1.8 */
-{
+.fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+.btn {
+  height: 36px;
+}
+
+.btn:hover {
+  cursor: pointer;
 }

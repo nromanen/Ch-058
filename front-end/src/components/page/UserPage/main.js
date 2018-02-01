@@ -62,9 +62,10 @@ export default {
       }
 
       this.error = null;
-      this.sending = true;
 
       if (this.validateCredentials()) {
+        this.sending = true;
+
         this.$http.put('users/edit', this.user).then(response => {
           let json = response.body;
 
