@@ -83,7 +83,7 @@ export default {
 	let _this = this;
 
 	if(getLocalUser() == null){
-    this.$router.push('403');
+    this.$router.push('/403');
 	  return;
 	}
 	var issueId = this.$route.params.issueId;
@@ -94,11 +94,11 @@ export default {
 	this.$http.get(this.issueId + '/' + this.userId + '/' + this.adminId + '/chat').then( data => {
 	  // var checkAccess = data.body.data[0];
 	  if ((getLocalUser().type != "ROLE_ADMIN")){// || (!checkAccess)) {
-      _this.$router.push('403');
+      _this.$router.push('/403');
 		return;
 	  }
 	}, error => {
-    _this.$router.push('403');
+    _this.$router.push('/403');
 	  return;
 	});
 
@@ -115,7 +115,7 @@ export default {
 		_this.showMessage(JSON.parse(greeting.body).data[0]);
 	  });
 	}, function () {
-    _this.$router.push('403');
+    _this.$router.push('/403');
 	})
   }
 }
