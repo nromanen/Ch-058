@@ -21,11 +21,6 @@
 	 - `db.url` - address to your created database (__create if you haven't yet__) for __back-end__;
 	 - `db.username` - login for the database, for __back-end__;
 	 - `db.password` - password for the database, for __back-end__;
-	 - `url` - the same as `db.url` but for _Liquibase_ (read below);
-	 - `username` - the same as `db.username` but for _Liquibase_;
-	 - `password` - the same as `db.password` but for _Liquibase_;
-	 - `referenceUsername` - the same as `db.username` but for _Liquibase_ (__for devs only__);
-	 - `referencePassword` - the same as `db.password` but for _Liquibase_ (__for devs only__);
 1) Build and deploy the __back-end__ _.war_-file:
 	```bash
 	# Generate our .war.

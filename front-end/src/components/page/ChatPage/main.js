@@ -78,7 +78,7 @@ export default {
 	this.issueId = this.$route.params.issueId;
 	this.userId = this.$route.params.userId;
 	if(getLocalUser() == null || getLocalUser().id != this.userId){
-	  this.$router.push('../../../error403');
+    this.$router.push('403');
 	}
 	console.log('started');
 	let _this = this;
@@ -96,7 +96,7 @@ export default {
 		_this.showMessage(JSON.parse(greeting.body).data[0]);
 	  });
 	}, function () {
-	  _this.$router.push('../../../error403');
+    _this.$router.push('403');
 	});
   }
 }
