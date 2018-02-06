@@ -23,15 +23,11 @@ public class MapDataDTO {
 	private Integer markerId;
 
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
-	@Size(
-			min = Issue.MIN_TITLE_LENGTH, max = Issue.MAX_TITLE_LENGTH,
-			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	@Size(min = Issue.MIN_TITLE_LENGTH, max = Issue.MAX_TITLE_LENGTH, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String title;
 
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
-	@Size(
-			min = Issue.MIN_TEXT_LENGTH, max = Issue.MAX_TEXT_LENGTH,
-			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
+	@Size(min = Issue.MIN_TEXT_LENGTH, max = Issue.MAX_TEXT_LENGTH, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String desc;
 
 	@NotNull(message = JsonError.Error.MISSING_FIELD_NAME)

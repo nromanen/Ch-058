@@ -21,6 +21,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,15 +35,15 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 	@Query(value = "SELECT type_id FROM issues WHERE map_marker_id = ?1", nativeQuery = true)
 	int[] getIssueTypeById(int id);
 
-	Page<Issue> findByTitleContainingOrTextContainingOrAuthor_loginContainingAllIgnoreCase(String title, String text, String author, Pageable pageable);
+	Page<Issue> findByTitleContainingOrTextContainingOrAuthor_LoginContainingAllIgnoreCase(String title, String text, String author, Pageable pageable);
 
 	Page<Issue> findByAuthor_Id(Integer id, Pageable pageable);
 
 	Integer deleteById(Integer id);
 
 	@Modifying
-	@Query("UPDATE Issue i SET i.closed = ?1 WHERE i.id = ?2")
-	Integer setStatus(Boolean closed, Integer id);
+	@Query("UPDATE Issue i SET i.closed = ?1, i.updatedAt = ?2 WHERE i.id = ?3")
+	Integer setStatus(Boolean closed, LocalDateTime updatedAt, Integer id);
 
 	Page<Issue> findByClosedTrue(Pageable pageable);
 

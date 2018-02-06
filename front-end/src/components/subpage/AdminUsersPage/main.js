@@ -20,7 +20,7 @@ export default {
     userType: null
   }),
   created: function() {
-    this.load(this.page);
+    this.load(this.page, this.size, this.sort);
   },
   methods: {
     load(page, size, sort) {
@@ -89,31 +89,35 @@ export default {
       let self = this;
 
       setTimeout(function () {
-        self.$http.get('admin/users/type/' + encodeURIComponent(self.userType), {
-          params: {
-            page: self.page,
-            size: 10,
-            sort: null
-          }
-        }).then(response => {
-          let json = response.body;
+        if (self.userType === 'ROLE_ALL') {
+          self.load(self.page, self.size, self.sort);
+        } else {
+          self.$http.get('admin/users/type/' + encodeURIComponent(self.userType), {
+            params: {
+              page: self.page,
+              size: 10,
+              sort: null
+            }
+          }).then(response => {
+            let json = response.body;
 
-          if (!json.errors) {
-            self.users = json.data;
-            self.searched = self.users;
-            self.totalPages = json.count / self.size;
-            self.totalPages = (self.totalPages - Math.floor(self.totalPages) ? (self.totalPages | 0) + 1 : self.totalPages | 0);
-            // } else if (json.errors.length) {
-            //   TODO: show error in snackBar
-            // console.log(JSON.stringify(json.errors));
-          } else {
-            // TODO: show Unexpected error in snackbar
-            console.log('UNEXPECTED');
-          }
-        }, error => {
-          // TODO: implement this shit, pls
-          console.log(JSON.stringify(error.body));
-        });
+            if (!json.errors) {
+              self.users = json.data;
+              self.searched = self.users;
+              self.totalPages = json.count / self.size;
+              self.totalPages = (self.totalPages - Math.floor(self.totalPages) ? (self.totalPages | 0) + 1 : self.totalPages | 0);
+              // } else if (json.errors.length) {
+              //   TODO: show error in snackBar
+              // console.log(JSON.stringify(json.errors));
+            } else {
+              // TODO: show Unexpected error in snackbar
+              console.log('UNEXPECTED');
+            }
+          }, error => {
+            // TODO: implement this shit, pls
+            console.log(JSON.stringify(error.body));
+          });
+        }
       }, 10);
     }
   }

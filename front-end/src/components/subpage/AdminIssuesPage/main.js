@@ -11,7 +11,7 @@ export default {
   data: () => ({
     page: 0,
     size: 10,
-    sort: 'id,asc',
+    sort: 'title,asc',
     totalPages: null,
     searchString: null,
     selected: null,

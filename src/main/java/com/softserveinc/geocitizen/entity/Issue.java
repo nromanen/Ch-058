@@ -12,8 +12,8 @@
 
 package com.softserveinc.geocitizen.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.softserveinc.geocitizen.entity.interfaces.Identifiable;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -77,6 +77,7 @@ public class Issue implements Identifiable<Integer> {
 	@NotNull
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = TYPE_COLUMN_NAME, nullable = false)
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private Type type;
 
 	@NotNull
@@ -85,14 +86,14 @@ public class Issue implements Identifiable<Integer> {
 
 	@NotNull
 	@Column(name = CREATED_AT_COLUMN_NAME, nullable = false)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "Europe/Kiev")
 	private LocalDateTime createdAt;
 
 	@NotNull
-	@DateTimeFormat
 	@Column(name = UPDATED_AT_COLUMN_NAME, nullable = false)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "Europe/Kiev")
 	private LocalDateTime updatedAt;
 
-	@Override
 	public Integer getId() {
 		return id;
 	}
@@ -210,8 +211,6 @@ public class Issue implements Identifiable<Integer> {
 		public void setId(Integer id) {
 			this.id = id;
 		}
-
-
 	}
 
 	public static final class Builder {

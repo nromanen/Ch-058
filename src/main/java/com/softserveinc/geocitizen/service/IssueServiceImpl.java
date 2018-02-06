@@ -88,7 +88,7 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public Page<Issue> findByTitleOrText(String title, String text, String author, Pageable pageable) {
-		return issuesRepository.findByTitleContainingOrTextContainingOrAuthor_loginContainingAllIgnoreCase(title, text, author, pageable);
+		return issuesRepository.findByTitleContainingOrTextContainingOrAuthor_LoginContainingAllIgnoreCase(title, text, author, pageable);
 	}
 
 	@Override
@@ -103,8 +103,7 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public Integer deleteById(Integer id) throws AbstractCitizenException {
-		Issue issue = issuesRepository.findById(id)
-				.orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
+		Issue issue = issuesRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
 		issuesRepository.delete(issue);
 		if (issuesRepository.countAllByMapMarker(issue.getMapMarker()) < 1) {
 			mapMarkersRepository.delete(issue.getMapMarker());
@@ -114,11 +113,9 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public Integer setStatus(Boolean flag, Integer id) throws AbstractCitizenException {
-		Issue issue = issuesRepository.findById(id).
-				orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
-
+		Issue issue = issuesRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
 		if (StringUtils.equalsIgnoreCase(issue.getType().getName(), "PROBLEM")) {
-			issuesRepository.setStatus(flag, id);
+			issuesRepository.setStatus(flag, LocalDateTime.now(), id);
 		}
 		return 0;
 	}
@@ -133,7 +130,6 @@ public class IssueServiceImpl implements IIssueService {
 
 	private Issue.Type getTypeByName(String type) {
 		Issue.Type issueType = issueTypesRepository.getByName(type);
-
 		if (issueType == null) {
 			issueType = new Issue.Type();
 			issueType.setName(type);

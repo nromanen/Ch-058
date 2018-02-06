@@ -44,7 +44,7 @@
     "password": "Пароль",
     "login": "Логин",
     "confirm_password": "Подтверждение пароля",
-    "email": "E-Mail",
+    "email": "Email",
     "first_name": "Имя",
     "last_name": "Фамилия",
     "recovery_token": "Восстановительный токен с E-Mail'а",
@@ -80,7 +80,7 @@
     "title": "Заголовок",
     "text": "Текст",
     "author": "Автор",
-    "created": "Создано",
+    "createdAt": "Создано",
     "closed": "Закрыто",
     "yes": "Да",
     "no": "Нет",
@@ -98,7 +98,7 @@
     "contact_info": "Контактная информация",
     "social_accounts": "Социальные сети",
     "linked-lowercase": "привязан",
-    "filter_by_type": "по типу"
+    "filter_by_type": "Тип"
   },
   "error": {
 	"required": "Обязательно",
@@ -138,6 +138,7 @@
     "ROLE_BANNED": "Заблокирован",
     "ROLE_USER": "Пользователь",
     "ROLE_ADMIN": "Администратор",
-    "ROLE_MASTER": "Йода"
+    "ROLE_MASTER": "Супер адміністратор",
+    "ROLE_ALL": "Все"
   }
 }

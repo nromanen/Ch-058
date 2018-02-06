@@ -25,11 +25,6 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-/**
- * @author softserveinc (https://t.me/Shrralis)
- * @version 1.0
- * Created 12/20/17 at 5:59 PM
- */
 @RestController
 @RequestMapping("/auth")
 public class AuthRestController {
@@ -42,8 +37,7 @@ public class AuthRestController {
 	}
 
 	@PostMapping("/requestRecoveryToken")
-	public JsonResponse generateRecoveryToken(@RequestParam(name = "login") String login, HttpServletRequest request)
-			throws AbstractCitizenException, MessagingException {
+	public JsonResponse generateRecoveryToken(@RequestParam(name = "login") String login, HttpServletRequest request) throws AbstractCitizenException, MessagingException {
 		return new JsonResponse(service.generateRecoveryToken(login, request.getRemoteAddr()));
 	}
 
@@ -58,8 +52,7 @@ public class AuthRestController {
 	}
 
 	@PostMapping("/signUp")
-	public JsonResponse signUp(@RequestBody @Valid RegisterUserDTO dto)
-			throws AbstractCitizenException, MessagingException {
+	public JsonResponse signUp(@RequestBody @Valid RegisterUserDTO dto) throws AbstractCitizenException, MessagingException {
 		return new JsonResponse(service.signUp(dto));
 	}
 

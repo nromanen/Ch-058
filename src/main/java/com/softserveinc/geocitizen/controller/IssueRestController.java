@@ -7,7 +7,6 @@ import com.softserveinc.geocitizen.service.interfaces.IIssueTypesService;
 import com.softserveinc.geocitizen.service.interfaces.IIssueVotesService;
 import com.softserveinc.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,14 +37,14 @@ public class IssueRestController {
 		this.imageService = imageService;
 	}
 
-	@GetMapping
-	public JsonResponse all(/*@PageableDefault(page=0,size=10,sort="title")Pageable pageable*/
-			@RequestParam(required = false, defaultValue = "0") int page,
-			@RequestParam(required = false, defaultValue = "10") int size
-	) {
-		return new JsonResponse(issueService.findAll(new PageRequest(page, size)));
-	}
-
+	//	@GetMapping
+//	public JsonResponse all(/*@PageableDefault(page=0,size=10,sort="title")Pageable pageable*/
+//			@RequestParam(required = false, defaultValue = "0") int page,
+//			@RequestParam(required = false, defaultValue = "10") int size
+//	) {
+//		return new JsonResponse(issueService.findAll(new PageRequest(page, size)));
+//	}
+//
 	@GetMapping("/types")
 	public JsonResponse allTypes() {
 		return new JsonResponse(issueTypesService.getAll());
@@ -57,25 +56,25 @@ public class IssueRestController {
 	}
 
 	@GetMapping("/{issueId}/is-vote-exist")
-	public JsonResponse voteExists(@PathVariable("issueId") Integer issueId) {
-		Boolean vote = issueVotesService
-				.getByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId).getVote();
-		return new JsonResponse(vote);
+	public JsonResponse voteExists(@PathVariable("issueId") int issueId) {
+		return new JsonResponse(issueVotesService.getByVoterIdAndIssueId(AuthorizedUser.getCurrent()
+				.getId(), issueId)
+				.getVote());
 	}
 
 	@DeleteMapping("/{issueId}/vote")
-	public void vote(@PathVariable("issueId") Integer issueId) {
+	public void vote(@PathVariable("issueId") int issueId) {
 		issueVotesService.deleteByVoterIdAndIssueId(AuthorizedUser.getCurrent().getId(), issueId);
 	}
 
 	@PostMapping("/{issueId}/{vote}")
-	public void vote(@PathVariable("issueId") Integer issueId,
-	                 @PathVariable("vote") Boolean vote) {
+	public void vote(@PathVariable("issueId") int issueId,
+	                 @PathVariable("vote") boolean vote) {
 		issueVotesService.insertIssueVote(issueId, AuthorizedUser.getCurrent().getId(), vote);
 	}
 
 	@GetMapping("/{issueId}/votes")
-	public JsonResponse calculateVotes(@PathVariable("issueId") Integer issueId) {
+	public JsonResponse calcVotes(@PathVariable("issueId") int issueId) {
 		Map<String, Long> map = new HashMap<>();
 		map.put(LIKE, issueVotesService.countByVoteAndIssue(true, issueId));
 		map.put(DISLIKE, issueVotesService.countByVoteAndIssue(false, issueId));
@@ -83,7 +82,7 @@ public class IssueRestController {
 	}
 
 	@GetMapping(value = "/images/{issueId}", produces = MediaType.IMAGE_JPEG_VALUE)
-	public byte[] issueImage(@PathVariable("issueId") Integer issueId) throws IOException {
+	public byte[] issueImage(@PathVariable("issueId") int issueId) throws IOException {
 		return imageService.getIssueImageInByte(issueId);
 	}
 }

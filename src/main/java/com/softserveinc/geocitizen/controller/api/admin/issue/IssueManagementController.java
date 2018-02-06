@@ -41,36 +41,47 @@ public class IssueManagementController {
 	}
 
 	@PutMapping("/{id}/{flag}")
-	public JsonResponse setStatusById(@PathVariable int id, @PathVariable boolean flag) throws AbstractCitizenException {
+	public JsonResponse setClosedStatusById(@PathVariable int id,
+	                                        @PathVariable boolean flag) throws AbstractCitizenException {
 		return new JsonResponse(issueService.setStatus(flag, id));
 	}
 
 	@GetMapping("/author/{id}")
-	public JsonResponse getAllByAuthorId(@PathVariable Integer id,
-	                                     @PageableDefault(page = 0, size = 10) Pageable pageable) {
-		return new JsonResponse(issueService.findAuthorId(id, pageable));
+	public JsonResponse getAllByAuthorId(@PathVariable int id,
+	                                     @PageableDefault(page = 0, size = 10, sort = "createdAt") Pageable pageable) {
+		Page<Issue> issues = issueService.findAuthorId(id, pageable);
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(issues.getContent())
+				.setCount(issues.getTotalElements())
+				.build();
 	}
 
 	@GetMapping("/search/{query}")
 	public JsonResponse getAllByTitleOrText(@PathVariable String query,
-	                                        @PageableDefault(page = 0, size = 10) Pageable pageable) {
-
+	                                        @PageableDefault(page = 0, size = 10, sort = "title") Pageable pageable) {
 		Page<Issue> issues = issueService.findByTitleOrText(query, query, query, pageable);
 		return JsonResponse.Builder.aJsonResponse()
 				.setData(issues.getContent())
 				.setCount(issues.getTotalElements())
 				.build();
-//		return new JsonResponse(issueService.findByTitleOrText(query, query, query, pageable));
 	}
 
 	@GetMapping("/opened")
-	public JsonResponse getAllByTypeOpen(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-		return new JsonResponse(issueService.findClosedFalse(pageable));
+	public JsonResponse getAllByTypeOpen(@PageableDefault(page = 0, size = 10, sort = "author") Pageable pageable) {
+		Page<Issue> issues = issueService.findClosedFalse(pageable);
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(issues.getContent())
+				.setCount(issues.getTotalElements())
+				.build();
 	}
 
 	@GetMapping("/closed")
-	public JsonResponse getAllByTypeClose(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-		return new JsonResponse(issueService.findClosedTrue(pageable));
+	public JsonResponse getAllByTypeClose(@PageableDefault(page = 0, size = 10, sort = "author") Pageable pageable) {
+		Page<Issue> issues = issueService.findClosedTrue(pageable);
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(issues.getContent())
+				.setCount(issues.getTotalElements())
+				.build();
 	}
 }
 

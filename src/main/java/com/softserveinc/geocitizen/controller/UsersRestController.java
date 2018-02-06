@@ -47,15 +47,15 @@ public class UsersRestController {
 		this.localeResolver = localeResolver;
 	}
 
-	@GetMapping
-	public JsonResponse allUsers() {
-		return new JsonResponse(service.getAllUsers());
-	}
-
-	@GetMapping("/{id}")
-	public JsonResponse user(@PathVariable int id) {
-		return new JsonResponse(service.getUser(id));
-	}
+//	@GetMapping
+//	public JsonResponse allUsers() {
+//		return new JsonResponse(service.getAllUsers());
+//	}
+//
+//	@GetMapping("/{id}")
+//	public JsonResponse user(@PathVariable int id) {
+//		return new JsonResponse(service.getUser(id));
+//	}
 
 	@GetMapping("/profile/{id}")
 	public JsonResponse userProfile(@PathVariable int id) {

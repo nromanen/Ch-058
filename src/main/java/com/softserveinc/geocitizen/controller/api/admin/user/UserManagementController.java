@@ -41,19 +41,24 @@ public class UserManagementController {
 	}
 
 	@GetMapping("/search/{query}")
-	public JsonResponse getByLoginOrEmail(@PathVariable String query,
-	                                      @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
-		return new JsonResponse(userService.findByLoginOrEmailOrNameOrSurname(query, query, query, query, pageable).getContent());
+	public JsonResponse getByLoginOrEmailOrNameOrSurname(@PathVariable String query,
+	                                                     @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
+		Page<User> users = userService.findByLoginOrEmailOrNameOrSurname(query, query, query, query, pageable);
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(users.getContent())
+				.setCount(users.getTotalElements())
+				.build();
 	}
 
 	@PutMapping("/{id}/{type}")
-	public JsonResponse setStatus(@PathVariable int id, @PathVariable String type) throws AbstractCitizenException {
+	public JsonResponse setUserStatus(@PathVariable int id,
+	                                  @PathVariable String type) throws AbstractCitizenException {
 		return new JsonResponse(userService.setStatus(User.Type.valueOf(type.toUpperCase()), id));
 	}
 
 	@GetMapping("/type/{type}")
-	public JsonResponse getByStatus(@PathVariable String type,
-	                                @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
+	public JsonResponse getUsersByStatus(@PathVariable String type,
+	                                     @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
 		Page<User> users = userService.findByType(User.Type.valueOf(type.toUpperCase()), pageable);
 		return JsonResponse.Builder.aJsonResponse()
 				.setData(users.getContent())

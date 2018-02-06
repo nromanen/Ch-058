@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +27,12 @@ public class ChatController {
 	private final IMessageService messageService;
 
 	@Autowired
-	public ChatController(INotificationService notificationService,
-	                      IMessageService messageService) {
+	public ChatController(INotificationService notificationService, IMessageService messageService) {
 		this.notificationService = notificationService;
 		this.messageService = messageService;
 	}
 
-	@Secured(ADMIN_ROLE)
+	//	@Secured(ADMIN_ROLE)
 	@RequestMapping("/{issueId}/{userId}/{adminId}/chat")
 	public JsonResponse checkAccess(@PathVariable("issueId") Long issueId,
 	                                @PathVariable("userId") Long userId,
@@ -42,27 +40,26 @@ public class ChatController {
 		return new JsonResponse(messageService.checkAccessForAdmin(issueId, userId, adminId));
 	}
 
-	@Secured({ USER_ROLE, ADMIN_ROLE })
+	//	@Secured({ USER_ROLE, ADMIN_ROLE })
 	@RequestMapping("/{issueId}/{userId}/chat")
-	public JsonResponse checkChatExist(@PathVariable("issueId") Long issueId, @PathVariable("userId") Long userId)
-			throws AccessDeniedException {
+	public JsonResponse checkChatExist(@PathVariable("issueId") Long issueId, @PathVariable("userId") Long userId) throws AccessDeniedException {
 		return new JsonResponse(messageService.checkChat(issueId, userId));
 	}
 
-	@Secured({ USER_ROLE, ADMIN_ROLE })
+	//	@Secured({ USER_ROLE, ADMIN_ROLE })
 	@RequestMapping("/message/all/{issueId}/{userId}")
 	public JsonResponse getMessages(@PathVariable("issueId") Long issueId,
 	                                @PathVariable("userId") Long userId) throws AccessDeniedException {
 		return new JsonResponse(messageService.getAllMessagesForChat(issueId, userId));
 	}
 
-	@Secured(ADMIN_ROLE)
+	//	@Secured(ADMIN_ROLE)
 	@RequestMapping("/chat/room/all/{adminId}")
 	public JsonResponse getChatRooms(@PathVariable("adminId") Long adminId) {
 		return new JsonResponse(messageService.getAllChatRooms(adminId));
 	}
 
-	@Secured(ADMIN_ROLE)
+	//	@Secured(ADMIN_ROLE)
 	@RequestMapping("/notification/all")
 	public JsonResponse getNotifications() {
 		return new JsonResponse(notificationService.getAllNotifications());
@@ -73,10 +70,8 @@ public class ChatController {
 	public JsonResponse messaging(Message input,
 	                              @DestinationVariable Long userId,
 	                              @DestinationVariable Long issueId) {
-
 		messageService.saveMessage(
-				FullMessage.messageBuilder(input, userId, issueId)
-		);
+				FullMessage.messageBuilder(input, userId, issueId));
 		return new JsonResponse(input);
 	}
 
