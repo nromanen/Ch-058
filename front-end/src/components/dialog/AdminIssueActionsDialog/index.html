@@ -17,6 +17,32 @@
         </md-list-item>
       </div>
 
+
+      <!--<div v-if="issue && issue.type.name.toLowerCase() === 'PROBLEM'.toLowerCase()">-->
+      <md-list-item id="hide" v-if="issue && !issue.hidden" @click="hideIssue(true)">
+        <md-icon>offline_pin</md-icon>
+
+        <span class="md-list-item-text">{{ $t('button.show_issue') }}</span>
+      </md-list-item>
+
+      <md-list-item id="show" v-else @click="hideIssue(false)">
+        <md-icon>highlight_off</md-icon>
+
+        <span class="md-list-item-text">{{ $t('button.hide_issue') }}</span>
+      </md-list-item>
+      <!--</div>-->
+
+
+
+
+
+
+
+
+
+
+
+
       <md-list-item id="delete" @click="deleteIssue()">
         <md-icon>delete_forever</md-icon>
 

@@ -41,9 +41,9 @@
       <md-table-cell :md-label="$t('label.createdAt')" md-sort-by="createdAt">{{ item.createdAt }}</md-table-cell>
       <md-table-cell :md-label="$t('label.updatedAt')" md-sort-by="updatedAt">{{ item.updatedAt }}</md-table-cell>
       <md-table-cell :md-label="$t('label.type')">{{ item.type.name }}</md-table-cell>
-      <md-table-cell :md-label="$t('label.closed')">
-        {{ item.closed ? $t('label.yes') : $t('label.no') }}
-      </md-table-cell>
+      <md-table-cell :md-label="$t('label.closed')" md-sort-by="closed">{{ item.closed }}</md-table-cell>
+      <!--{{ item.closed ? $t('label.yes') : $t('label.no') }}-->
+      <md-table-cell :md-label="$t('label.hidden')" md-sort-by="hidden">{{ item.hidden }}</md-table-cell>
     </md-table-row>
   </md-table>
 

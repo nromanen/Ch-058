@@ -22,7 +22,7 @@ public class UserManagementController {
 	}
 
 	@GetMapping
-	public JsonResponse getAll(@PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
+	public JsonResponse getAll(@PageableDefault(page = 0, size = 10, sort = "login") Pageable pageable) {
 		Page<User> users = userService.findAll(pageable);
 		return JsonResponse.Builder.aJsonResponse()
 				.setData(users.getContent())

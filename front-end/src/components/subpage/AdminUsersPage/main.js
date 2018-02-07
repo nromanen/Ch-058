@@ -11,7 +11,7 @@ export default {
   data: () => ({
     page: 0,
     size: 10,
-    sort: 'id,asc',
+    sort: 'login,asc',
     totalPages: null,
     searchString: null,
     selected: null,
@@ -61,8 +61,8 @@ export default {
       }
       this.$http.get('admin/users/search/' + encodeURIComponent(this.searchString), {
         params: {
-          page: this.page,
-          size: 10,
+          page: 0,
+          size: 100000,//FUUUUCK
           sort: null
         }
       }).then(response => {

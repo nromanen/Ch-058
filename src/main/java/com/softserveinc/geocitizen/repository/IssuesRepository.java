@@ -30,7 +30,7 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 
 	Optional<Issue> findById(int id);
 
-	List<Issue> findByMapMarker_Id(int mapMarkerId);
+	List<Issue> findByMapMarker_IdAndHiddenFalse(int mapMarkerId);
 
 	@Query(value = "SELECT type_id FROM issues WHERE map_marker_id = ?1", nativeQuery = true)
 	int[] getIssueTypeById(int id);
@@ -43,7 +43,11 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 
 	@Modifying
 	@Query("UPDATE Issue i SET i.closed = ?1, i.updatedAt = ?2 WHERE i.id = ?3")
-	Integer setStatus(Boolean closed, LocalDateTime updatedAt, Integer id);
+	Integer setClosedStatus(Boolean closed, LocalDateTime updatedAt, Integer id);
+
+	@Modifying
+	@Query("UPDATE Issue i SET i.hidden = ?1, i.updatedAt = ?2 WHERE i.id = ?3")
+	Integer setHiddenStatus(Boolean hidden, LocalDateTime updatedAt, Integer id);
 
 	Page<Issue> findByClosedTrue(Pageable pageable);
 

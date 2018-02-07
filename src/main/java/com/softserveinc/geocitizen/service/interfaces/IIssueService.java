@@ -28,7 +28,9 @@ public interface IIssueService {
 
 	Integer deleteById(Integer id) throws AbstractCitizenException;
 
-	Integer setStatus(Boolean flag, Integer id) throws AbstractCitizenException;
+	Integer toggleClosed(Integer id) throws AbstractCitizenException;
+
+	Integer toggleHidden(Integer id) throws AbstractCitizenException;
 
 	Page<Issue> findClosedTrue(Pageable pageable);
 

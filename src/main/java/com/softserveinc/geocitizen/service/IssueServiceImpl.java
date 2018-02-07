@@ -54,6 +54,7 @@ public class IssueServiceImpl implements IIssueService {
 	@Override
 	public Issue saveIssue(MapDataDTO dto, MultipartFile image) throws BadFieldFormatException {
 		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
+//		marker.setHidden(false);
 		User user = usersRepository.findOne(getCurrent().getId());
 		boolean closed = !dto.getTypeName().equals(OPENED_TYPE);
 		Issue.Type type = getTypeByName(dto.getTypeName());
@@ -66,6 +67,7 @@ public class IssueServiceImpl implements IIssueService {
 				.setImage(imageService.parseImage(image))
 				.setType(type)
 				.setClosed(closed)
+				.setHidden(false)
 				.setCreatedAt(LocalDateTime.now())
 				.setUpdatedAt(LocalDateTime.now())
 				.build());
@@ -78,7 +80,7 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public List<Issue> getAllIssueByMapMarker(int mapMarkerId) {
-		return issuesRepository.findByMapMarker_Id(mapMarkerId);
+		return issuesRepository.findByMapMarker_IdAndHiddenFalse(mapMarkerId);
 	}
 
 	@Override
@@ -112,10 +114,21 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
 	@Override
-	public Integer setStatus(Boolean flag, Integer id) throws AbstractCitizenException {
+	public Integer toggleClosed(Integer id) throws AbstractCitizenException {
 		Issue issue = issuesRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
 		if (StringUtils.equalsIgnoreCase(issue.getType().getName(), "PROBLEM")) {
-			issuesRepository.setStatus(flag, LocalDateTime.now(), id);
+			issuesRepository.setClosedStatus(!issue.isClosed(), LocalDateTime.now(), id);
+		}
+		return 0;
+	}
+
+	@Override
+	public Integer toggleHidden(Integer id) throws AbstractCitizenException {
+		Issue issue = issuesRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
+		Boolean hidden = issue.isHidden();
+		issuesRepository.setHiddenStatus(!hidden, LocalDateTime.now(), id);
+		if (issuesRepository.countAllByMapMarker(issue.getMapMarker()) == 1 || issuesRepository.countAllByMapMarker(issue.getMapMarker()) < 1) {
+			mapMarkersRepository.setHiddenStatus(!hidden, issue.getMapMarker().getId());
 		}
 		return 0;
 	}

@@ -41,7 +41,7 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 	public List<MarkerDTO> loadAllMarkers() {
 
 		List<MarkerDTO> list = new ArrayList<>();
-		List<MapMarker> markers = markerRepository.findAll();
+		List<MapMarker> markers = markerRepository.findAllByHiddenFalse();
 
 		for (MapMarker m : markers) {
 			MarkerDTO dto = new MarkerDTO(m.getLat(), m.getLng());

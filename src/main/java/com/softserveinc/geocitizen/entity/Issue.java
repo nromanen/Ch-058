@@ -35,6 +35,7 @@ public class Issue implements Identifiable<Integer> {
 	public static final String TEXT_COLUMN_NAME = "text";
 	public static final String TYPE_COLUMN_NAME = "type_id";
 	public static final String CLOSED_COLUMN_NAME = "closed";
+	public static final String HIDDEN_COLUMN_NAME = "hidden";
 	public static final String CREATED_AT_COLUMN_NAME = "created_at";
 	public static final String UPDATED_AT_COLUMN_NAME = "updated_at";
 	public static final int MAX_TITLE_LENGTH = 32;
@@ -82,16 +83,23 @@ public class Issue implements Identifiable<Integer> {
 
 	@NotNull
 	@Column(name = CLOSED_COLUMN_NAME, nullable = false)
+//	@org.hibernate.annotations.Type(type = "yes_no")
 	private Boolean closed;
 
 	@NotNull
+	@Column(name = HIDDEN_COLUMN_NAME, nullable = true)
+	private Boolean hidden;
+
+	@NotNull
 	@Column(name = CREATED_AT_COLUMN_NAME, nullable = false)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "Europe/Kiev")
+//	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Europe/Kiev", locale = "uk")
 	private LocalDateTime createdAt;
 
 	@NotNull
 	@Column(name = UPDATED_AT_COLUMN_NAME, nullable = false)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "Europe/Kiev")
+//	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Europe/Kiev", locale = "uk")
 	private LocalDateTime updatedAt;
 
 	public Integer getId() {
@@ -158,6 +166,14 @@ public class Issue implements Identifiable<Integer> {
 		this.closed = closed;
 	}
 
+	public Boolean isHidden() {
+		return hidden;
+	}
+
+	public void setHidden(Boolean hidden) {
+		this.hidden = hidden;
+	}
+
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -166,13 +182,14 @@ public class Issue implements Identifiable<Integer> {
 		this.createdAt = createdAt;
 	}
 
-	LocalDateTime getUpdatedAt() {
+	public LocalDateTime getUpdatedAt() {
 		return updatedAt;
 	}
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
 
 	@Entity
 	@Table(name = Type.TABLE_NAME)
@@ -262,6 +279,11 @@ public class Issue implements Identifiable<Integer> {
 
 		public Builder setClosed(boolean closed) {
 			issue.setClosed(closed);
+			return this;
+		}
+
+		public Builder setHidden(boolean hidden) {
+			issue.setHidden(hidden);
 			return this;
 		}
 
