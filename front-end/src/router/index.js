@@ -98,7 +98,7 @@ const router = new Router({
       path: '/admin',
       component: AdminPage,
       meta: {
-        requiresAdmin: true
+        // requiresAdmin: true
       },
       children: [
         {

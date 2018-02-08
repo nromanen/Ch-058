@@ -56,4 +56,6 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 	Page<Issue> findAll(Pageable pageable);
 
 	Integer countAllByMapMarker(MapMarker mapMarker);
+
+	Integer countAllByMapMarkerAndHiddenFalse(MapMarker mapMarker);
 }

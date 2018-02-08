@@ -29,6 +29,20 @@
         <span class="md-list-item-text">{{ $t('button.view_user_issues') }}</span>
       </md-list-item>
 
+
+      <md-list-item id="ban" v-if="user && user.type !== 'ROLE_BANNED'" @click="banUser(true)">
+        <md-icon>gavel</md-icon>
+
+        <span class="md-list-item-text">{{ $t('button.ban') }}</span>
+      </md-list-item>
+
+      <md-list-item id="unban" v-else @click="banUser(false)">
+        <md-icon>gavel</md-icon>
+
+        <span class="md-list-item-text">{{ $t('button.unban') }}</span>
+      </md-list-item>
+
+
       <md-list-item id="ban" v-if="user && user.type !== 'ROLE_BANNED'" @click="banUser(true)">
         <md-icon>gavel</md-icon>
 
