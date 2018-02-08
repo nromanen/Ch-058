@@ -1,6 +1,7 @@
 package com.softserveinc.geocitizen.controller;
 
 import com.softserveinc.geocitizen.configuration.AppConfig;
+import com.softserveinc.geocitizen.controller.api.UsersRestController;
 import com.softserveinc.geocitizen.entity.User;
 import com.softserveinc.geocitizen.service.UserServiceImpl;
 import org.junit.Before;

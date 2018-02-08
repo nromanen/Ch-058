@@ -92,7 +92,6 @@ public class AuthServiceImpl implements IAuthService {
 			}
 		}
 
-
 		if (tokensRepository.countNonExpiredByUser(user.getId()) > 2) {
 			throw new TooManyNonExpiredRecoveryTokensException(user.getLogin());
 		}

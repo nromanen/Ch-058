@@ -17,6 +17,7 @@ import com.softserveinc.geocitizen.dto.UserProfileDTO;
 import com.softserveinc.geocitizen.entity.Image;
 import com.softserveinc.geocitizen.entity.User;
 import com.softserveinc.geocitizen.exception.AbstractCitizenException;
+import com.softserveinc.geocitizen.exception.AccessDeniedException;
 import com.softserveinc.geocitizen.exception.EntityNotExistException;
 import com.softserveinc.geocitizen.repository.ConnectionRepository;
 import com.softserveinc.geocitizen.repository.UsersRepository;
@@ -35,84 +36,95 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements IUserService {
 
-	private final UsersRepository repository;
+	private final UsersRepository userRepository;
 	private final ConnectionRepository connectionRepository;
 
 	@Autowired
-	public UserServiceImpl(UsersRepository repository, ConnectionRepository connectionRepository) {
-		this.repository = repository;
+	public UserServiceImpl(UsersRepository userRepository, ConnectionRepository connectionRepository) {
+		this.userRepository = userRepository;
 		this.connectionRepository = connectionRepository;
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public List<User> getAllUsers() {
-		return repository.findAll();
+		return userRepository.findAll();
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public User getUser(int id) {
-		return repository.getOne(id);
+		return userRepository.getOne(id);
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public User findById(Integer id) throws AbstractCitizenException {
-		return repository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.USER));
+		return userRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.USER));
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public User findByLogin(String login) throws AbstractCitizenException {
-		return repository.findByLogin(login).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.USER));
+		return userRepository.findByLogin(login).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.USER));
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public Page<User> findByLoginOrEmailOrNameOrSurname(String login, String email, String name, String surname, Pageable pageable) {
-		return repository.findByLoginContainingOrEmailContainingOrNameContainingOrSurnameContainingAllIgnoreCase(login, email, name, surname, pageable);
+		return userRepository.findByLoginContainingOrEmailContainingOrNameContainingOrSurnameContainingAllIgnoreCase(login, email, name, surname, pageable);
 	}
 
 	@Override
-	public User setStatus(User.Type type, Integer id) {
-		repository.setStatus(type, id);
-		return repository.getOne(id);
+	public User setStatus(User.Type type, Integer id) throws AbstractCitizenException {
+		User user = userRepository.getOne(id);
+		boolean suicide = AuthorizedUser.getCurrent().getId() == user.getId();
+		User.Type curUserType = AuthorizedUser.getCurrent().getType();
+
+		if (!curUserType.equals(User.Type.ROLE_MASTER) && !curUserType.equals(User.Type.ROLE_ADMIN) && suicide) {
+			throw new AccessDeniedException();
+		}
+
+		if ((user.getType().equals(User.Type.ROLE_ADMIN) || user.getType().equals(User.Type.ROLE_MASTER))
+				&& !curUserType.equals(User.Type.ROLE_MASTER)) {
+			throw new AccessDeniedException();
+		}
+		user.setType(type);
+		userRepository.setStatus(type, id);
+		return user;
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public Page<User> findByType(User.Type type, Pageable pageable) {
-		return repository.findByType(type, pageable);
+		return userRepository.findByType(type, pageable);
 	}
 
 	@Override
 	@ReadOnlyProperty
 	public Page<User> findAll(Pageable pageable) {
-		return repository.findAll(pageable);
+		return userRepository.findAll(pageable);
 	}
 
 	@Override
 	public void edit(final EditUserDTO dto) {
-		final User user = repository.findOne(AuthorizedUser.getCurrent().getId());
-
+		final User user = userRepository.findOne(AuthorizedUser.getCurrent().getId());
 		user.setName(dto.getName());
 		user.setSurname(dto.getSurname());
-		repository.save(user);
+		userRepository.save(user);
 	}
 
 	@Override
 	public void updateImage(final Image image) {
-		final User user = repository.getOne(AuthorizedUser.getCurrent().getId());
-
+		final User user = userRepository.getOne(AuthorizedUser.getCurrent().getId());
 		user.setImage(image);
-		repository.save(user);
+		userRepository.save(user);
 	}
 
 	@Override
 	public UserProfileDTO getUserProfile(int id) {
 		UserProfileDTO dto = new UserProfileDTO();
-		User user = repository.findById(id).get();
+		User user = userRepository.findById(id).get();
 		dto.setId(id);
 		dto.setLogin(user.getLogin());
 		dto.setEmail(user.getEmail());

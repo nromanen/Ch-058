@@ -1,8 +1,14 @@
+import {getLocalUser} from "../../../router/index"
+
 export default {
   name: "admin-user-actions-dialog",
+  created: function () {
+    this.currentUser = getLocalUser();
+  },
   data: () => ({
     showDialog: false,
-    user: null
+    user: null,
+    currentUser: null
   }),
   methods: {
     show(user) {

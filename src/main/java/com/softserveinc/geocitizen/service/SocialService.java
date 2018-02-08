@@ -37,7 +37,6 @@ public class SocialService {
 			if (!StringUtils.contains(AuthorizedUser.getCurrent().getEmail(), userProfile.getEmail())) {
 				throw new CitizenBadCredentialsException(userProfile.getEmail());
 			}
-
 			user = usersRepository.findById(AuthorizedUser.getCurrent().getId()).get();
 		} else {
 			user = usersRepository.getByEmail(userProfile.getEmail());
@@ -83,7 +82,6 @@ public class SocialService {
 			if (!StringUtils.contains(AuthorizedUser.getCurrent().getEmail(), person.getAccountEmail())) {
 				throw new CitizenBadCredentialsException(person.getAccountEmail());
 			}
-
 			user = usersRepository.findById(AuthorizedUser.getCurrent().getId()).get();
 		} else {
 			user = usersRepository.getByEmail(person.getAccountEmail());
@@ -101,5 +99,4 @@ public class SocialService {
 		}
 		return user;
 	}
-
 }

@@ -41,15 +41,12 @@ public class IssueManagementController {
 	}
 
 	@PutMapping("/{id}/close")
-	public JsonResponse setClosedStatusById(@PathVariable int id
-			/*,
-	                                        @PathVariable boolean flag*/) throws AbstractCitizenException {
+	public JsonResponse setClosedStatusById(@PathVariable int id) throws AbstractCitizenException {
 		return new JsonResponse(issueService.toggleClosed(id));
 	}
 
 	@PutMapping("/{id}/hide")
-	public JsonResponse setHiddenStatusById(@PathVariable int id
-			/*@PathVariable boolean flag*/) throws AbstractCitizenException {
+	public JsonResponse setHiddenStatusById(@PathVariable int id) throws AbstractCitizenException {
 		return new JsonResponse(issueService.toggleHidden(id));
 	}
 

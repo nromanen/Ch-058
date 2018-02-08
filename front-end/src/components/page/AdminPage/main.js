@@ -1,5 +1,5 @@
 import {getLocalUser, resetLocalUser} from "../../../router";
-import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
+import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";
 import Vue from "vue";
 import {getCurrentLang, switchLang} from "../../../i18n";
 import {getServerAddress} from "../../../main";
@@ -73,27 +73,39 @@ export default {
           let json = response.body;
 
           if (!json.errors && json.data[0].logged_in === false) {
-            this.userEmail = null;
+            this.user = null;
 
             resetLocalUser();
+            this.$router.push('/');
           } else if (json.errors.length) {
-            this.snackBarText = getErrorMessage(json.errors[0]);
+            switch (json.errors[0].errno) {
+              case ACCESS_DENIED:
+                this.$router.push('/403');
+                break;
+              default:
+                this.error = getErrorMessage(json.errors[0]);
+
+                break;
+            }
           } else {
-            this.snackBarText = getErrorMessage(UNEXPECTED);
+            this.error = getErrorMessage(UNEXPECTED);
           }
         }, error => {
           switch (error.status) {
             case 400:
             case 500:
+              this.$router.push('/' + error.status);
+              break;
+            default:
               let json = error.body;
 
               if (json.errors) {
-                this.snackBarText = getErrorMessage(json.errors[0]);
+                this.error = getErrorMessage(json.errors[0]);
               }
           }
 
-          if (!this.snackBarText) {
-            this.snackBarText = 'HTTP error (' + error.status + ': ' + error.statusText + ')';
+          if (!this.error) {
+            this.error = 'HTTP error (' + error.status + ': ' + error.statusText + ')';
           }
         }
       )

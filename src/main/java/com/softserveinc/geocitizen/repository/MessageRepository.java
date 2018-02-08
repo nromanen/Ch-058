@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<FullMessage, Long> {
 
-	boolean existsByIssueIdAndUserId(Long issueId, Long userId);
+	boolean existsByIssueIdAndUserId(long issueId, long userId);
 
-	List<FullMessage> findAllByIssueIdAndUserId(Long issueId, Long userId);
+	List<FullMessage> findAllByIssueIdAndUserId(long issueId, long userId);
 
 	@Query(value = "SELECT * FROM (SELECT DISTINCT ON (issueid, userid) * FROM message WHERE authorid = ?1) AS chatrooms ORDER BY date DESC", nativeQuery = true)
-	List<FullMessage> findAllChatRooms(Long adminId);
+	List<FullMessage> findAllChatRooms(long adminId);
 
-	boolean existsByIssueIdAndUserIdAndAuthorId(Long issueId, Long userId, Long authorId);
+	boolean existsByIssueIdAndUserIdAndAuthorId(long issueId, long userId, long authorId);
 }

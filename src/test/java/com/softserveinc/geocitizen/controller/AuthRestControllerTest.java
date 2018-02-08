@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.softserveinc.geocitizen.configuration.AppConfig;
+import com.softserveinc.geocitizen.controller.api.AuthRestController;
 import com.softserveinc.geocitizen.dto.PasswordRecoveryDTO;
 import com.softserveinc.geocitizen.dto.RegisterUserDTO;
 import com.softserveinc.geocitizen.dto.RegisteredUserDTO;

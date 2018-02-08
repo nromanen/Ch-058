@@ -51,14 +51,9 @@ public class IssueServiceImpl implements IIssueService {
 		this.imageService = imageService;
 	}
 
-
-	// WHAT THE FUCK IS GOIN' ON?
-	//Caused by: org.postgresql.util.PSQLException: ERROR: duplicate key value violates unique constraint "unique_map_marker_lat_lng"
-	//  Detail: Key (lat, lng)=(48.2693980000000025, 25.9401880000000347) already exists.
 	@Override
 	public Issue saveIssue(MapDataDTO dto, MultipartFile image) throws BadFieldFormatException {
 		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
-//		marker.setHidden(false);
 		mapMarkersRepository.setHiddenStatus(false, dto.getMarkerId());
 		User user = usersRepository.findOne(getCurrent().getId());
 		boolean closed = !dto.getTypeName().equals(OPENED_TYPE);
@@ -132,19 +127,11 @@ public class IssueServiceImpl implements IIssueService {
 		Issue issue = issuesRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
 		Boolean hidden = issue.isHidden();
 		issuesRepository.setHiddenStatus(!hidden, LocalDateTime.now(), id);
-		if (!hidden == true && issuesRepository.countAllByMapMarkerAndHiddenFalse(issue.getMapMarker()) == 0) {
+		if (!hidden && issuesRepository.countAllByMapMarkerAndHiddenFalse(issue.getMapMarker()) == 0) {
 			mapMarkersRepository.setHiddenStatus(true, issue.getMapMarker().getId());
-		} else if (!hidden == false && issuesRepository.countAllByMapMarkerAndHiddenFalse(issue.getMapMarker()) == 1) {
+		} else if (hidden && issuesRepository.countAllByMapMarkerAndHiddenFalse(issue.getMapMarker()) == 1) {
 			mapMarkersRepository.setHiddenStatus(false, issue.getMapMarker().getId());
 		}
-
-//TRUE SHIT TRUE SHIT   TRUE SHIT   TRUE SHIT   TRUE SHIT   TRUE SHIT   TRUE SHIT
-//		if (!hidden == true && issuesRepository.countAllByMapMarkerAndHiddenFalse(issue.getMapMarker()) == 0) {
-//			mapMarkersRepository.setHiddenStatus(true, issue.getMapMarker().getId());
-//		}
-//		if (!hidden == false && issuesRepository.countAllByMapMarkerAndHiddenFalse(issue.getMapMarker()) == 1) {
-//			mapMarkersRepository.setHiddenStatus(false, issue.getMapMarker().getId());
-//		}
 		return 0;
 	}
 

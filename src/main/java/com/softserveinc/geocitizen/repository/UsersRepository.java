@@ -41,7 +41,7 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
 
 	@Modifying
 	@Query("UPDATE User u SET u.type = ?1 WHERE u.id = ?2")
-	void setStatus(User.Type userType, Integer id);
+	void setStatus(User.Type userType, int id);
 
 	Page<User> findByType(User.Type type, Pageable pageable);
 

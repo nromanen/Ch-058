@@ -26,12 +26,9 @@ public class UserConnectionServiceImpl implements ConnectionSignUp {
 
 	@Override
 	public String execute(Connection<?> connection) throws CitizenBadCredentialsException {
-
-
 		if (StringUtils.contains(connection.getProfileUrl(), "facebook")) {
 			return String.valueOf(usersRepository.save(service.facebookProfileExtract((Connection<Facebook>) connection)).getId());
 		}
-
 		return String.valueOf(usersRepository.save(service.googleProfileExtract((Connection<Google>) connection)).getId());
 	}
 }

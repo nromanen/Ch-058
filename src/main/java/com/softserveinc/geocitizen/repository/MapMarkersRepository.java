@@ -24,14 +24,14 @@ import java.util.Optional;
 @Repository
 public interface MapMarkersRepository extends JpaRepository<MapMarker, Integer> {
 
-	MapMarker getByLatAndLng(double lat, double lng);
+	MapMarker findByLatAndLng(double lat, double lng);
 
 	Optional<MapMarker> findById(int id);
 
-	//	List<Issue> findByIssue
 	@Modifying
 	@Query("UPDATE MapMarker m SET m.hidden = ?1 WHERE m.id = ?2")
-	Integer setHiddenStatus(Boolean hidden, Integer id);
+	Integer setHiddenStatus(boolean hidden, int id);
 
-	List<MapMarker> findAllByHiddenFalse();
+	@Query("SELECT m FROM MapMarker m WHERE m.hidden = false")
+	List<MapMarker> findByHiddenFalse();
 }

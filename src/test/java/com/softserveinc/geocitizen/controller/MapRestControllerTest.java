@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.softserveinc.geocitizen.configuration.AppConfig;
+import com.softserveinc.geocitizen.controller.api.MapRestController;
 import com.softserveinc.geocitizen.dto.MarkerDTO;
 import com.softserveinc.geocitizen.entity.MapMarker;
 import com.softserveinc.geocitizen.service.MapMarkersServiceImpl;

@@ -27,7 +27,8 @@
           {{ $t('button.view_profile') }}
         </md-menu-item>
 
-        <md-menu-item to="/admin" v-if="user.type === 'ROLE_ADMIN' || 'ROLE_MASTER'">{{ $t('label.admin_page') }}
+        <md-menu-item to="/admin" v-if="user.type === 'ROLE_ADMIN' || user.type === 'ROLE_MASTER'">{{
+          $t('label.admin_page') }}
         </md-menu-item>
 
         <md-menu-item @click="logout()">{{ $t('button.logout') }}</md-menu-item>
