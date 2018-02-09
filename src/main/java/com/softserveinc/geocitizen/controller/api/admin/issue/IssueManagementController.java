@@ -30,10 +30,10 @@ public class IssueManagementController {
 				.build();
 	}
 
-	@GetMapping("/{id}")
-	public JsonResponse getById(@PathVariable int id) throws AbstractCitizenException {
-		return new JsonResponse(issueService.findById(id));
-	}
+//	@GetMapping("/{id}")
+//	public JsonResponse getById(@PathVariable int id) throws AbstractCitizenException {
+//		return new JsonResponse(issueService.findById(id));
+//	}
 
 	@DeleteMapping("/{id}")
 	public JsonResponse deleteById(@PathVariable int id) throws AbstractCitizenException {
@@ -87,5 +87,34 @@ public class IssueManagementController {
 				.setCount(issues.getTotalElements())
 				.build();
 	}
+
+	@GetMapping("/visible")
+	public JsonResponse getAllByHiddenFalse(@PageableDefault(page = 0, size = 10, sort = "author") Pageable pageable) {
+		Page<Issue> issues = issueService.findByHiddenFalse(pageable);
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(issues.getContent())
+				.setCount(issues.getTotalElements())
+				.build();
+	}
+
+	@GetMapping("/hidden")
+	public JsonResponse getAllByHiddenTrue(@PageableDefault(page = 0, size = 10, sort = "author") Pageable pageable) {
+		Page<Issue> issues = issueService.findByHiddenTrue(pageable);
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(issues.getContent())
+				.setCount(issues.getTotalElements())
+				.build();
+	}
+
+	@GetMapping("/{type}")
+	public JsonResponse getAllByType(@PathVariable String type, @PageableDefault(page = 0, size = 10, sort = "author") Pageable pageable) {
+		Page<Issue> issues = issueService.findByType(type, pageable);
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(issues.getContent())
+				.setCount(issues.getTotalElements())
+				.build();
+	}
+
+
 }
 

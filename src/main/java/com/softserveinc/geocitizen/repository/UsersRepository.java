@@ -37,6 +37,8 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
 
 	Optional<User> findById(int id);
 
+	//	@Query("SELECT m FROM MapMarker m WHERE m.hidden = false")
+//	@Query("SELECT u FROM User u WHERE u.login LIKE ?1 OR u.email LIKE ?2 OR u.name LIKE ?3 OR u.surname LIKE ?4")
 	Page<User> findByLoginContainingOrEmailContainingOrNameContainingOrSurnameContainingAllIgnoreCase(String login, String email, String name, String surname, Pageable pageable);
 
 	@Modifying

@@ -143,6 +143,16 @@ public class IssueServiceImpl implements IIssueService {
 		return issuesRepository.findByClosedFalse(pageable);
 	}
 
+	@Override
+	public Page<Issue> findByHiddenTrue(Pageable pageable) {
+		return issuesRepository.findByHiddenTrue(pageable);
+	}
+
+	@Override
+	public Page<Issue> findByHiddenFalse(Pageable pageable) {
+		return issuesRepository.findByHiddenFalse(pageable);
+	}
+
 	private Issue.Type getTypeByName(String type) {
 		Issue.Type issueType = issueTypesRepository.getByName(type);
 		if (issueType == null) {
@@ -150,5 +160,9 @@ public class IssueServiceImpl implements IIssueService {
 			issueType.setName(type);
 		}
 		return issueType;
+	}
+
+	public Page<Issue> findByType(String type, Pageable pageable) {
+		return issuesRepository.findByType_Name(type, pageable);
 	}
 }

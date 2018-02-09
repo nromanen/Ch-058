@@ -145,6 +145,8 @@
     "ROLE_USER": "User",
     "ROLE_ADMIN": "Admin",
     "ROLE_MASTER": "Master",
-    "ROLE_ALL": "All"
+    "ALL": "All",
+    "OPENED": "Opened",
+    "CLOSED": "Closed"
   }
 }
