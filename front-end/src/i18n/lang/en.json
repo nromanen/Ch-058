@@ -147,6 +147,8 @@
     "ROLE_MASTER": "Master",
     "ALL": "All",
     "OPENED": "Opened",
-    "CLOSED": "Closed"
+    "CLOSED": "Closed",
+    "VISIBLE": "Visible",
+    "HIDDEN": "Hidden"
   }
 }

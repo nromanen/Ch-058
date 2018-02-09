@@ -9,7 +9,7 @@
         <span class="md-list-item-text">{{ $t('button.manage') }}</span>
 
         <md-card slot="md-expand"
-                 v-if="(user && user.type !== 'ROLE_BANNED' && currentUser && currentUser.type === 'ROLE_MASTER') && user.id !== currentUser.id">
+                 v-if="user && user.type !== 'ROLE_BANNED' && currentUser && currentUser.type === 'ROLE_MASTER' && user.id !== currentUser.id">
           <md-card-header>{{ $t('label.admin_restrictions') }}</md-card-header>
 
           <md-card-content>
@@ -32,7 +32,7 @@
 
 
       <div
-        v-if="(user && user.type !== 'ROLE_ADMIN' && user.type !== 'ROLE_MASTER' || (currentUser && currentUser.type === 'ROLE_MASTER')) && user.id !== currentUser.id">
+        v-if="user && (user.type !== 'ROLE_ADMIN' && user.type !== 'ROLE_MASTER' || (currentUser && currentUser.type === 'ROLE_MASTER')) && user.id !== currentUser.id">
         <md-list-item id="ban" v-if="user && user.type !== 'ROLE_BANNED'" @click="banUser(true)">
           <md-icon>gavel</md-icon>
 
