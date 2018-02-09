@@ -41,4 +41,6 @@ public interface IIssueService {
 	Page<Issue> findByHiddenFalse(Pageable pageable);
 
 	Page<Issue> findByType(String type, Pageable pageable);
+
+	Page<Issue> findByClosedAndHiddenAndType(boolean closed, boolean hidden, String type, Pageable pageable);
 }

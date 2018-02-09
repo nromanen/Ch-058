@@ -32,9 +32,9 @@ export default {
           this.searched = this.users;
           this.totalPages = json.count / this.size;
           this.totalPages = (this.totalPages - Math.floor(this.totalPages) ? (this.totalPages | 0) + 1 : this.totalPages | 0);
-          // } else if (json.errors.length) {
+        } else if (json.errors.length) {
           //   TODO: show error in snackBar
-          //   console.log(JSON.stringify(json.errors));
+          console.log(JSON.stringify(json.errors));
         } else {
           // TODO: show Unexpected error in snackbar
           console.log('UNEXPECTED');
@@ -73,9 +73,9 @@ export default {
           this.searched = this.users;
           this.totalPages = json.count / this.size;
           this.totalPages = (this.totalPages - Math.floor(this.totalPages) ? (this.totalPages | 0) + 1 : this.totalPages | 0);
-          // } else if (json.errors.length) {
+        } else if (json.errors.length) {
           //   TODO: show error in snackBar
-          // console.log(JSON.stringify(json.errors));
+          console.log(JSON.stringify(json.errors));
         } else {
           // TODO: show Unexpected error in snackbar
           console.log('UNEXPECTED');
@@ -106,9 +106,9 @@ export default {
               self.searched = self.users;
               self.totalPages = json.count / self.size;
               self.totalPages = (self.totalPages - Math.floor(self.totalPages) ? (self.totalPages | 0) + 1 : self.totalPages | 0);
-              // } else if (json.errors.length) {
+            } else if (json.errors.length) {
               //   TODO: show error in snackBar
-              // console.log(JSON.stringify(json.errors));
+              console.log(JSON.stringify(json.errors));
             } else {
               // TODO: show Unexpected error in snackbar
               console.log('UNEXPECTED');

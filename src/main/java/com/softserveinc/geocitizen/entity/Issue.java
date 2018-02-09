@@ -83,7 +83,6 @@ public class Issue implements Identifiable<Integer> {
 
 	@NotNull
 	@Column(name = CLOSED_COLUMN_NAME, nullable = false)
-//	@org.hibernate.annotations.Type(type = "yes_no")
 	private Boolean closed;
 
 	@NotNull
@@ -92,14 +91,12 @@ public class Issue implements Identifiable<Integer> {
 
 	@NotNull
 	@Column(name = CREATED_AT_COLUMN_NAME, nullable = false)
-//	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Europe/Kiev", locale = "uk")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm")
 	private LocalDateTime createdAt;
 
 	@NotNull
 	@Column(name = UPDATED_AT_COLUMN_NAME, nullable = false)
-//	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Europe/Kiev", locale = "uk")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm")
 	private LocalDateTime updatedAt;
 
 	public Integer getId() {

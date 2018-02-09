@@ -53,7 +53,7 @@ public class UserManagementController {
 	@PutMapping("/{id}/{type}")
 	public JsonResponse setUserStatus(@PathVariable int id,
 	                                  @PathVariable String type) throws AbstractCitizenException {
-		return new JsonResponse(userService.setStatus(User.Type.valueOf(type.toUpperCase()), id));
+		return new JsonResponse(userService.setUserStatus(User.Type.valueOf(type.toUpperCase()), id));
 	}
 
 	@GetMapping("/type/{type}")

@@ -28,7 +28,7 @@ public interface IUserService {
 
 	Page<User> findByLoginOrEmailOrNameOrSurname(String login, String email, String name, String surname, Pageable pageable);
 
-	User setStatus(User.Type userType, Integer id) throws AbstractCitizenException;
+	User setUserStatus(User.Type type, Integer id) throws AbstractCitizenException;
 
 	Page<User> findByType(User.Type type, Pageable pageable);
 

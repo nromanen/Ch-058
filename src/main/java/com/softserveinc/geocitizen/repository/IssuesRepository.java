@@ -66,4 +66,7 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 	Page<Issue> findByHiddenFalse(Pageable pageable);
 
 	Page<Issue> findByType_Name(String type, Pageable pageable);
+
+	@Query("SELECT i FROM Issue i WHERE i.closed = ?1 AND i.hidden = ?2 AND i.type.name = ?3")
+	Page<Issue> findByClosedAndHiddenAndType(boolean closed, boolean hidden, String type, Pageable pageable);
 }

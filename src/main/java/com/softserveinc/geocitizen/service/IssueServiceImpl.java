@@ -165,4 +165,9 @@ public class IssueServiceImpl implements IIssueService {
 	public Page<Issue> findByType(String type, Pageable pageable) {
 		return issuesRepository.findByType_Name(type, pageable);
 	}
+
+	@Override
+	public Page<Issue> findByClosedAndHiddenAndType(boolean closed, boolean hidden, String type, Pageable pageable) {
+		return issuesRepository.findByClosedAndHiddenAndType(closed, hidden, type, pageable);
+	}
 }
