@@ -89,7 +89,7 @@ export default {
       let self = this;
 
       setTimeout(function () {
-        if (self.userType === 'ROLE_ALL') {
+        if (self.userType === 'ALL') {
           self.load(self.page, self.size, self.sort);
         } else {
           self.$http.get('admin/users/type/' + encodeURIComponent(self.userType), {

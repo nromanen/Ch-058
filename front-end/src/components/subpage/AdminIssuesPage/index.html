@@ -18,17 +18,33 @@
         <md-input :placeholder="$t('label.search')" v-model.trim="searchString" @input="search"/>
       </md-field>
 
-      <!--TODO: maybe some time-->
-      <!--<md-field id="type-filter" md-clearable>
+
+      <md-field id="type-filter" md-clearable>
         <label for="type-filter-select">{{ $t('label.filter_by_type') }}</label>
 
         <md-select id="type-filter-select" v-model="issueType" :placeholder="$t('label.filter_by_type')"
                    @md-selected="filterByType()">
-          <md-option v-for="type of types" :key="type.id" :value="type.name">
-            {{ $t('label.issue_type_' + type.name.toLowerCase()) }}
-          </md-option>
+          <md-option value="ALL">{{ $t('type.ALL') }}</md-option>
+          <md-option value="opened">{{ $t('type.OPENED') }}</md-option>
+          <md-option value="closed">{{ $t('type.CLOSED') }}</md-option>
+          <md-option value="visible">{{ $t('type.VISIBLE') }}</md-option>
+          <md-option value="hidden">{{ $t('type.HIDDEN') }}</md-option>
+          <md-option value="PROBLEM">{{ $t('label.issue_type_problem') }}</md-option>
+          <md-option value="INFO">{{ $t('label.issue_type_info') }}</md-option>
+          <md-option value="FEEDBACK">{{ $t('label.issue_type_feedback') }}</md-option>
         </md-select>
-      </md-field>-->
+      </md-field>
+      <!--TODO: maybe some time-->
+      <!--<md-field id="type-filter" md-clearable>-->
+      <!--<label for="type-filter-select">{{ $t('label.filter_by_type') }}</label>-->
+
+      <!--<md-select id="type-filter-select" v-model="issueType" :placeholder="$t('label.filter_by_type')"-->
+      <!--@md-selected="filterByType()">-->
+      <!--<md-option v-for="type of types" :key="type.id" :value="type.name">-->
+      <!--{{ $t('label.issue_type_' + type.name.toLowerCase()) }}-->
+      <!--</md-option>-->
+      <!--</md-select>-->
+      <!--</md-field>-->
     </md-table-toolbar>
 
     <md-table-empty-state :md-label="$t('label.no_issues_found')"></md-table-empty-state>

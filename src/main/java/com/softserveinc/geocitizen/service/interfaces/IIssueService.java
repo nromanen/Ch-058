@@ -35,4 +35,10 @@ public interface IIssueService {
 	Page<Issue> findClosedTrue(Pageable pageable);
 
 	Page<Issue> findClosedFalse(Pageable pageable);
+
+	Page<Issue> findByHiddenTrue(Pageable pageable);
+
+	Page<Issue> findByHiddenFalse(Pageable pageable);
+
+	Page<Issue> findByType(String type, Pageable pageable);
 }

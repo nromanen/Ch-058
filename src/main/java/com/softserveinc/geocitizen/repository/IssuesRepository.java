@@ -49,8 +49,10 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 	@Query("UPDATE Issue i SET i.hidden = ?1, i.updatedAt = ?2 WHERE i.id = ?3")
 	Integer setHiddenStatus(boolean hidden, LocalDateTime updatedAt, int id);
 
+	@Query("SELECT i FROM Issue i WHERE i.closed = TRUE AND i.type = 1")
 	Page<Issue> findByClosedTrue(Pageable pageable);
 
+	@Query("SELECT i FROM Issue i WHERE i.closed = FALSE AND i.type = 1")
 	Page<Issue> findByClosedFalse(Pageable pageable);
 
 	Page<Issue> findAll(Pageable pageable);
@@ -58,4 +60,10 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
 	Integer countAllByMapMarker(MapMarker mapMarker);
 
 	Integer countAllByMapMarkerAndHiddenFalse(MapMarker mapMarker);
+
+	Page<Issue> findByHiddenTrue(Pageable pageable);
+
+	Page<Issue> findByHiddenFalse(Pageable pageable);
+
+	Page<Issue> findByType_Name(String type, Pageable pageable);
 }

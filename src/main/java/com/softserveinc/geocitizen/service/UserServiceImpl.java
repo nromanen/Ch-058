@@ -77,22 +77,46 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User setStatus(User.Type type, Integer id) throws AbstractCitizenException {
-		User user = userRepository.getOne(id);
-		boolean suicide = AuthorizedUser.getCurrent().getId() == user.getId();
-		User.Type curUserType = AuthorizedUser.getCurrent().getType();
+		User dbuser = userRepository.getOne(id);
 
-		if (!curUserType.equals(User.Type.ROLE_MASTER) && !curUserType.equals(User.Type.ROLE_ADMIN) && suicide) {
+
+		User.Type dbUserType = dbuser.getType();
+		User.Type crUserType = AuthorizedUser.getCurrent().getType();
+		User.Type master = User.Type.ROLE_MASTER;
+		User.Type admin = User.Type.ROLE_ADMIN;
+
+		Boolean suicide = AuthorizedUser.getCurrent().getId() == dbuser.getId();
+		Boolean homicide = AuthorizedUser.getCurrent().getType() == dbUserType;
+		Boolean patricide = type == master;
+		Boolean sacrifice = type == dbUserType;
+		Boolean regicide = type == crUserType;
+
+		if (homicide || suicide || patricide || sacrifice || regicide) {
+			throw new AccessDeniedException();
+		} else if (crUserType == master) {
+			dbuser.setType(type);
+			userRepository.setStatus(type, id);
+		} else if (crUserType == admin && dbUserType != master) {
+			dbuser.setType(type);
+			userRepository.setStatus(type, id);
+		} else {
 			throw new AccessDeniedException();
 		}
-
-		if ((user.getType().equals(User.Type.ROLE_ADMIN) || user.getType().equals(User.Type.ROLE_MASTER))
-				&& !curUserType.equals(User.Type.ROLE_MASTER)) {
-			throw new AccessDeniedException();
-		}
-		user.setType(type);
-		userRepository.setStatus(type, id);
-		return user;
+		return dbuser;
 	}
+
+//		User.Type curUserType = AuthorizedUser.getCurrent().getType();
+//
+//		if (!curUserType.equals(User.Type.ROLE_MASTER) && !curUserType.equals(User.Type.ROLE_ADMIN) || suicide) {
+//			throw new AccessDeniedException();
+//		} else if ((user.getType().equals(User.Type.ROLE_ADMIN) || user.getType().equals(User.Type.ROLE_MASTER))
+//				&& !curUserType.equals(User.Type.ROLE_MASTER)) {
+//			throw new AccessDeniedException();
+//		}
+//		user.setType(type);
+//		userRepository.setStatus(type, id);
+//		return user;
+//	}
 
 	@Override
 	@ReadOnlyProperty
