@@ -23,9 +23,9 @@ export default {
           if (!json.errors) {
             this.$parent.users[this.$parent.users.indexOf(this.user)].type = (ban ? 'ROLE_BANNED' : 'ROLE_USER');
             this.$parent.searched = this.$parent.users;
-            // } else if (json.errors.length) {
+          } else if (json.errors.length) {
             // TODO: show error in snackBar
-            // console.log(JSON.stringify(json.errors));
+            console.log(JSON.stringify(json.errors));
           } else {
             // TODO: show Unexpected error in snackbar
             console.log('UNEXPECTED');
@@ -42,9 +42,9 @@ export default {
           if (!json.errors) {
             this.$parent.users[this.$parent.users.indexOf(this.user)].type = (grant ? 'ROLE_ADMIN' : 'ROLE_USER');
             this.$parent.searched = this.$parent.users;
-            // } else if (json.errors.length) {
+          } else if (json.errors.length) {
             // TODO: show error in snackBar
-            // console.log(JSON.stringify(json.errors));
+            console.log(JSON.stringify(json.errors));
           } else {
             // TODO: show Unexpected error in snackbar
             console.log('UNEXPECTED');

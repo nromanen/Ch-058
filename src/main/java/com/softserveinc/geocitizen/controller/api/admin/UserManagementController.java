@@ -1,4 +1,4 @@
-package com.softserveinc.geocitizen.controller.api.admin.user;
+package com.softserveinc.geocitizen.controller.api.admin;
 
 import com.softserveinc.geocitizen.entity.User;
 import com.softserveinc.geocitizen.exception.AbstractCitizenException;
