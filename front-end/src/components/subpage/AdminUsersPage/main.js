@@ -17,11 +17,8 @@ export default {
     selected: null,
     searched: [],
     users: [],
-    userType: null
+    userType: 'ALL'
   }),
-  created: function() {
-    this.load(this.page, this.size, this.sort);
-  },
   methods: {
     load(page, size, sort) {
       Vue.http.get('admin/users/', {params: {page: page, size: size, sort: sort}}).then(response => {

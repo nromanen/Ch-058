@@ -110,12 +110,12 @@ public class IssueManagementController {
 				.build();
 	}
 
-//	@GetMapping("/{closed}/{hidden}/{type}")
-//	public JsonResponse getByClosedAndHiddenAndType(@PathVariable boolean closed, @PathVariable boolean hidden, @PathVariable String type, @PageableDefault(page = 0, size = 10, sort = "author") Pageable pageable) {
-//		Page<Issue> issues = issueService.findByClosedAndHiddenAndType(closed, hidden, type, pageable);
-//		return JsonResponse.Builder.aJsonResponse()
-//				.setData(issues.getContent())
-//				.setCount(issues.getTotalElements())
-//				.build();
-//	}
+	@GetMapping("/{closed}/{hidden}/{type}")
+	public JsonResponse getByClosedAndHiddenAndType(@PathVariable boolean closed, @PathVariable boolean hidden, @PathVariable String type, @PageableDefault(page = 0, size = 10, sort = "author") Pageable pageable) {
+		Page<Issue> issues = issueService.findByClosedAndHiddenAndType(closed, hidden, type, pageable);
+		return JsonResponse.Builder.aJsonResponse()
+				.setData(issues.getContent())
+				.setCount(issues.getTotalElements())
+				.build();
+	}
 }

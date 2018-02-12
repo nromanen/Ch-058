@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -163,7 +164,17 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
 	public Page<Issue> findByType(String type, Pageable pageable) {
-		return issuesRepository.findByType_Name(type, pageable);
+		Issue.Type issueType = issueTypesRepository.getByName(type);
+
+		if (issueType == null) {
+			throw new EntityNotFoundException();
+		}
+		return issuesRepository.findByType(issueType, pageable);
+	}
+
+	@Override
+	public Page<Issue> findByClosedAndHiddenAndType(boolean closed, boolean hidden, String type, Pageable pageable) {
+		return issuesRepository.findByClosedAndHiddenAndType(closed, hidden, type, pageable);
 	}
 
 	@Override

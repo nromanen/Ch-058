@@ -16,7 +16,8 @@ export default {
     searchString: null,
     selected: null,
     searched: [],
-    issues: []
+    issues: [],
+    issueType: 'ALL'
   }),
   props: ['user'],
   created: function() {
@@ -24,8 +25,6 @@ export default {
       this.searchString = this.$route.params.user;
 
       this.search();
-    } else {
-      this.load(this.page);
     }
   },
   methods: {

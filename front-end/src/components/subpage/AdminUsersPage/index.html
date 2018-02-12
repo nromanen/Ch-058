@@ -34,7 +34,7 @@
 
     <md-table-empty-state :md-label="$t('label.no_users_found')"></md-table-empty-state>
 
-    <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single" @md-selected="onSelect">
+    <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single" @click="onSelect(item)">
       <md-table-cell :md-label="$t('label.login')" md-sort-by="login">{{ item.login }}</md-table-cell>
       <md-table-cell :md-label="$t('label.email')" md-sort-by="email">{{ item.email }}</md-table-cell>
       <md-table-cell :md-label="$t('label.first_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
