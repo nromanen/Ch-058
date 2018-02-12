@@ -11,12 +11,13 @@ export default {
   data: () => ({
     page: 0,
     size: 10,
-    sort: 'id,asc',
+    sort: 'title,asc',
     totalPages: null,
     searchString: null,
     selected: null,
     searched: [],
-    issues: []
+    issues: [],
+    issueType: 'ALL'
   }),
   props: ['user'],
   created: function() {
@@ -24,8 +25,6 @@ export default {
       this.searchString = this.$route.params.user;
 
       this.search();
-    } else {
-      this.load(this.page);
     }
   },
   methods: {
@@ -38,9 +37,9 @@ export default {
           this.searched = this.issues;
           this.totalPages = json.count / this.size;
           this.totalPages = (this.totalPages - Math.floor(this.totalPages) ? (this.totalPages | 0) + 1 : this.totalPages | 0);
-          // } else if (json.errors.length) {
+        } else if (json.errors.length) {
           //   TODO: show error in snackBar
-          // console.log(JSON.stringify(json.errors));
+          console.log(JSON.stringify(json.errors));
         } else {
           // TODO: show Unexpected error in snackbar
           console.log('UNEXPECTED');
@@ -76,9 +75,9 @@ export default {
           this.searched = this.issues;
           this.totalPages = json.count / this.size;
           this.totalPages = (this.totalPages - Math.floor(this.totalPages) ? (this.totalPages | 0) + 1 : this.totalPages | 0);
-          // } else if (json.errors.length) {
+        } else if (json.errors.length) {
           //   TODO: show error in snackBar
-          // console.log(JSON.stringify(json.errors));
+          console.log(JSON.stringify(json.errors));
         } else {
           // TODO: show Unexpected error in snackbar
           console.log('UNEXPECTED');
@@ -87,6 +86,42 @@ export default {
         // TODO: implement this shit, pls
         console.log(JSON.stringify(error.body));
       });
-    }, 500)
+    }, 500),
+    filterByType() {
+      let self = this;
+
+      setTimeout(function () {
+        if (self.issueType === 'ALL') {
+          self.load(self.page, self.size, self.sort);
+        } else {
+          self.$http.get('admin/issues/' + encodeURIComponent(self.issueType), {
+            params: {
+              page: self.page,
+              size: 10,
+              sort: null
+            }
+          }).then(response => {
+            let json = response.body;
+
+            if (!json.errors) {
+              self.issues = json.data;
+              self.searched = self.issues;
+              self.totalPages = json.count / self.size;
+              self.totalPages = (self.totalPages - Math.floor(self.totalPages) ? (self.totalPages | 0) + 1 : self.totalPages | 0);
+            } else if (json.errors.length) {
+              //   TODO: show error in snackBar
+              console.log(JSON.stringify(json.errors));
+            } else {
+              // TODO: show Unexpected error in snackbar
+              console.log('UNEXPECTED');
+            }
+          }, error => {
+            // TODO: implement this shit, pls
+            console.log(JSON.stringify(error.body));
+          });
+        }
+      }, 10);
+    }
   }
 }
+

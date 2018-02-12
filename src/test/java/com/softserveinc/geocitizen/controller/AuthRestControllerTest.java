@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.softserveinc.geocitizen.configuration.AppConfig;
+import com.softserveinc.geocitizen.controller.api.AuthRestController;
 import com.softserveinc.geocitizen.dto.PasswordRecoveryDTO;
 import com.softserveinc.geocitizen.dto.RegisterUserDTO;
 import com.softserveinc.geocitizen.dto.RegisteredUserDTO;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { AppConfig.class })
+@ContextConfiguration(classes = {AppConfig.class})
 @WebAppConfiguration
 public class AuthRestControllerTest {
 

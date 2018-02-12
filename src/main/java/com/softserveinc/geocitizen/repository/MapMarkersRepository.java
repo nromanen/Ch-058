@@ -14,14 +14,24 @@ package com.softserveinc.geocitizen.repository;
 
 import com.softserveinc.geocitizen.entity.MapMarker;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface MapMarkersRepository extends JpaRepository<MapMarker, Integer> {
 
-	MapMarker getByLatAndLng(double lat, double lng);
+	MapMarker findByLatAndLng(double lat, double lng);
 
 	Optional<MapMarker> findById(int id);
+
+	@Modifying
+	@Query("UPDATE MapMarker m SET m.hidden = ?1 WHERE m.id = ?2")
+	Integer setHiddenStatus(boolean hidden, int id);
+
+	@Query("SELECT m FROM MapMarker m WHERE m.hidden = false")
+	List<MapMarker> findByHiddenFalse();
 }

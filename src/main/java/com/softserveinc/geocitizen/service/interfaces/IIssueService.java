@@ -28,9 +28,19 @@ public interface IIssueService {
 
 	Integer deleteById(Integer id) throws AbstractCitizenException;
 
-	Integer setStatus(Boolean flag, Integer id) throws AbstractCitizenException;
+	Integer toggleClosed(Integer id) throws AbstractCitizenException;
+
+	Integer toggleHidden(Integer id) throws AbstractCitizenException;
 
 	Page<Issue> findClosedTrue(Pageable pageable);
 
 	Page<Issue> findClosedFalse(Pageable pageable);
+
+	Page<Issue> findByHiddenTrue(Pageable pageable);
+
+	Page<Issue> findByHiddenFalse(Pageable pageable);
+
+	Page<Issue> findByType(String type, Pageable pageable);
+
+	Page<Issue> findByClosedAndHiddenAndType(boolean closed, boolean hidden, String type, Pageable pageable);
 }

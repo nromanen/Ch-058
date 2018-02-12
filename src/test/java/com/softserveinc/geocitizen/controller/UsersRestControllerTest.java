@@ -1,6 +1,7 @@
 package com.softserveinc.geocitizen.controller;
 
 import com.softserveinc.geocitizen.configuration.AppConfig;
+import com.softserveinc.geocitizen.controller.api.UsersRestController;
 import com.softserveinc.geocitizen.entity.User;
 import com.softserveinc.geocitizen.service.UserServiceImpl;
 import org.junit.Before;
@@ -27,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { AppConfig.class })
+@ContextConfiguration(classes = {AppConfig.class})
 @WebAppConfiguration
 public class UsersRestControllerTest {
 

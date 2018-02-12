@@ -28,7 +28,6 @@ public class SpringSecuritySignInAdapter implements SignInAdapter {
 		if (AuthorizedUser.getCurrent() != null && !StringUtils.contains(connection.fetchUserProfile().getEmail(), AuthorizedUser.getCurrent().getEmail())) {
 			throw new CitizenBadCredentialsException("Email doesn't match with yours");
 		}
-
 		User user = this.userDetailsService.getUser(Integer.parseInt(localUserId));
 		AuthorizedUser authorizedUser = new AuthorizedUser(user, UserDetailsServiceImpl.getAuthorities(user));
 

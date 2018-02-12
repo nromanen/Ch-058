@@ -27,9 +27,9 @@ public interface IssuesVotesRepository extends JpaRepository<IssueVote, IssueVot
 
 	void deleteAllByVoter_IdAndIssue_Id(int voterId, int issueId);
 
-	long countByVoteAndIssue_Id(Boolean vote, int issueId);
+	long countByVoteAndIssue_Id(boolean vote, int issueId);
 
 	@Modifying
 	@Query(value = "INSERT INTO issues_votes(issue_id, voter_id, vote) VALUES(?1, ?2, ?3)", nativeQuery = true)
-	void insertLikeOrDislike(Integer issueId, Integer voterId, Boolean vote);
+	void insertLikeOrDislike(int issueId, int voterId, boolean vote);
 }

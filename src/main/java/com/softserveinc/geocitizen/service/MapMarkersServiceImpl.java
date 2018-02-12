@@ -39,17 +39,16 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 
 	@Override
 	public List<MarkerDTO> loadAllMarkers() {
-
 		List<MarkerDTO> list = new ArrayList<>();
-		List<MapMarker> markers = markerRepository.findAll();
-
+		List<MapMarker> markers = markerRepository.findByHiddenFalse();
 		for (MapMarker m : markers) {
 			MarkerDTO dto = new MarkerDTO(m.getLat(), m.getLng());
-			int[] types = issuesRepository.getIssueTypeById(m.getId());
-
+			int[] types = issuesRepository.getIssueTypeByIdAndHiddenFalse(m.getId());
 			if (types.length == 1) {
 				dto.setType(types[0]);
-			} else dto.setType(MULTIPLE);
+			} else {
+				dto.setType(MULTIPLE);
+			}
 			list.add(dto);
 		}
 		return list;
@@ -57,11 +56,18 @@ public class MapMarkersServiceImpl implements IMapMarkersService {
 
 	@Override
 	public MapMarker getMarker(double lat, double lng) {
-		return markerRepository.getByLatAndLng(lat, lng);
+		return markerRepository.findByLatAndLng(lat, lng);
 	}
 
 	@Override
 	public MapMarker saveMarker(MapMarker marker) {
-		return markerRepository.save(marker);
+		final MapMarker existingMarker = markerRepository.findByLatAndLng(marker.getLat(), marker.getLng());
+		if (existingMarker == null) {
+			return markerRepository.save(marker);
+		}
+		if (existingMarker.isHidden()) {
+			existingMarker.setHidden(false);
+		}
+		return markerRepository.save(existingMarker);
 	}
 }

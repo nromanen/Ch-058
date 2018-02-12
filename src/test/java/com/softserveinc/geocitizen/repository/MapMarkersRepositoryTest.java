@@ -36,7 +36,7 @@ public class MapMarkersRepositoryTest extends TestCase {
 	@Test
 	public void testGetByLatAndLng() throws Exception {
 
-		MapMarker marker = repository.getByLatAndLng(testMarker.getLat(), testMarker.getLng());
+		MapMarker marker = repository.findByLatAndLng(testMarker.getLat(), testMarker.getLng());
 		assertNotNull(marker);
 	}
 

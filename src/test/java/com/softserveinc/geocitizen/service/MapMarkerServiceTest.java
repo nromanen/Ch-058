@@ -39,7 +39,7 @@ public class MapMarkerServiceTest {
 		testMarker.setId(1);
 		testMarker.setLat(1.0);
 		testMarker.setLng(2.0);
-		when(repository.getByLatAndLng(1.0, 2.0)).thenReturn(testMarker);
+		when(repository.findByLatAndLng(1.0, 2.0)).thenReturn(testMarker);
 		MapMarker result = service.getMarker(1.0, 2.0);
 		assertNotNull(result);
 	}

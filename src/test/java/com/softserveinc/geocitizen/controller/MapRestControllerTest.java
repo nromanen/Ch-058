@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.softserveinc.geocitizen.configuration.AppConfig;
+import com.softserveinc.geocitizen.controller.api.MapRestController;
 import com.softserveinc.geocitizen.dto.MarkerDTO;
 import com.softserveinc.geocitizen.entity.MapMarker;
 import com.softserveinc.geocitizen.service.MapMarkersServiceImpl;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { AppConfig.class })
+@ContextConfiguration(classes = {AppConfig.class})
 @WebAppConfiguration
 public class MapRestControllerTest {
 

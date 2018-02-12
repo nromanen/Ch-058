@@ -194,7 +194,7 @@ router.beforeEach((to, from, next) => {
     Vue.http.get('auth/getCurrentSession').then(response => {
       let json = response.body
 
-      if (!json.errors && json.data[0].type === 'ROLE_ADMIN') {
+      if (!json.errors && (json.data[0].type === 'ROLE_ADMIN' || json.data[0].type === 'ROLE_MASTER')) {
         next()
       } else {
         next({
@@ -206,7 +206,12 @@ router.beforeEach((to, from, next) => {
       }
     }, error => {
       console.log(error)
-      next()
+      next({
+        path: '/',
+        query: {
+          redirect: to.fullPath
+        }
+      })
     })
   } else {
     next()

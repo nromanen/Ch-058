@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class IssueServiceImpl implements IIssueService {
 	@Override
 	public Issue saveIssue(MapDataDTO dto, MultipartFile image) throws BadFieldFormatException {
 		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
+		mapMarkersRepository.setHiddenStatus(false, dto.getMarkerId());
 		User user = usersRepository.findOne(getCurrent().getId());
 		boolean closed = !dto.getTypeName().equals(OPENED_TYPE);
 		Issue.Type type = getTypeByName(dto.getTypeName());
@@ -66,6 +68,7 @@ public class IssueServiceImpl implements IIssueService {
 				.setImage(imageService.parseImage(image))
 				.setType(type)
 				.setClosed(closed)
+				.setHidden(false)
 				.setCreatedAt(LocalDateTime.now())
 				.setUpdatedAt(LocalDateTime.now())
 				.build());
@@ -78,7 +81,7 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public List<Issue> getAllIssueByMapMarker(int mapMarkerId) {
-		return issuesRepository.findByMapMarker_Id(mapMarkerId);
+		return issuesRepository.findByMapMarker_IdAndHiddenFalse(mapMarkerId);
 	}
 
 	@Override
@@ -88,7 +91,7 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public Page<Issue> findByTitleOrText(String title, String text, String author, Pageable pageable) {
-		return issuesRepository.findByTitleContainingOrTextContainingOrAuthor_loginContainingAllIgnoreCase(title, text, author, pageable);
+		return issuesRepository.findByTitleContainingOrTextContainingOrAuthor_LoginContainingAllIgnoreCase(title, text, author, pageable);
 	}
 
 	@Override
@@ -103,8 +106,7 @@ public class IssueServiceImpl implements IIssueService {
 
 	@Override
 	public Integer deleteById(Integer id) throws AbstractCitizenException {
-		Issue issue = issuesRepository.findById(id)
-				.orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
+		Issue issue = issuesRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
 		issuesRepository.delete(issue);
 		if (issuesRepository.countAllByMapMarker(issue.getMapMarker()) < 1) {
 			mapMarkersRepository.delete(issue.getMapMarker());
@@ -113,12 +115,23 @@ public class IssueServiceImpl implements IIssueService {
 	}
 
 	@Override
-	public Integer setStatus(Boolean flag, Integer id) throws AbstractCitizenException {
-		Issue issue = issuesRepository.findById(id).
-				orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
-
+	public Integer toggleClosed(Integer id) throws AbstractCitizenException {
+		Issue issue = issuesRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
 		if (StringUtils.equalsIgnoreCase(issue.getType().getName(), "PROBLEM")) {
-			issuesRepository.setStatus(flag, id);
+			issuesRepository.setClosedStatus(!issue.isClosed(), LocalDateTime.now(), id);
+		}
+		return 0;
+	}
+
+	@Override
+	public Integer toggleHidden(Integer id) throws AbstractCitizenException {
+		Issue issue = issuesRepository.findById(id).orElseThrow(() -> new EntityNotExistException(EntityNotExistException.Entity.ISSUE));
+		Boolean hidden = issue.isHidden();
+		issuesRepository.setHiddenStatus(!hidden, LocalDateTime.now(), id);
+		if (!hidden && issuesRepository.countAllByMapMarkerAndHiddenFalse(issue.getMapMarker()) == 0) {
+			mapMarkersRepository.setHiddenStatus(true, issue.getMapMarker().getId());
+		} else if (hidden && issuesRepository.countAllByMapMarkerAndHiddenFalse(issue.getMapMarker()) == 1) {
+			mapMarkersRepository.setHiddenStatus(false, issue.getMapMarker().getId());
 		}
 		return 0;
 	}
@@ -131,13 +144,36 @@ public class IssueServiceImpl implements IIssueService {
 		return issuesRepository.findByClosedFalse(pageable);
 	}
 
+	@Override
+	public Page<Issue> findByHiddenTrue(Pageable pageable) {
+		return issuesRepository.findByHiddenTrue(pageable);
+	}
+
+	@Override
+	public Page<Issue> findByHiddenFalse(Pageable pageable) {
+		return issuesRepository.findByHiddenFalse(pageable);
+	}
+
 	private Issue.Type getTypeByName(String type) {
 		Issue.Type issueType = issueTypesRepository.getByName(type);
-
 		if (issueType == null) {
 			issueType = new Issue.Type();
 			issueType.setName(type);
 		}
 		return issueType;
+	}
+
+	public Page<Issue> findByType(String type, Pageable pageable) {
+		Issue.Type issueType = issueTypesRepository.getByName(type);
+
+		if (issueType == null) {
+			throw new EntityNotFoundException();
+		}
+		return issuesRepository.findByType(issueType, pageable);
+	}
+
+	@Override
+	public Page<Issue> findByClosedAndHiddenAndType(boolean closed, boolean hidden, String type, Pageable pageable) {
+		return issuesRepository.findByClosedAndHiddenAndType(closed, hidden, type, pageable);
 	}
 }

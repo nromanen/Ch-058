@@ -14,6 +14,8 @@
     "close": "Закрыть",
     "open": "Открыть",
     "close_issue": "Закрыть проблему",
+    "hide_issue": "Скрыть проблему",
+    "show_issue": "Показать проблему",
     "open_issue": "Открыть проблему",
     "manage": "Управлять",
     "grant": "Предоставить",
@@ -44,7 +46,7 @@
     "password": "Пароль",
     "login": "Логин",
     "confirm_password": "Подтверждение пароля",
-    "email": "E-Mail",
+    "email": "Email",
     "first_name": "Имя",
     "last_name": "Фамилия",
     "recovery_token": "Восстановительный токен с E-Mail'а",
@@ -80,8 +82,10 @@
     "title": "Заголовок",
     "text": "Текст",
     "author": "Автор",
-    "created": "Создано",
+    "createdAt": "Создано",
+    "updatedAt": "Обновлено",
     "closed": "Закрыто",
+    "hidden": "Скрыто",
     "yes": "Да",
     "no": "Нет",
     "search": "Поиск",
@@ -98,7 +102,7 @@
     "contact_info": "Контактная информация",
     "social_accounts": "Социальные сети",
     "linked-lowercase": "привязан",
-    "filter_by_type": "по типу"
+    "filter_by_type": "Тип"
   },
   "error": {
 	"required": "Обязательно",
@@ -138,6 +142,11 @@
     "ROLE_BANNED": "Заблокирован",
     "ROLE_USER": "Пользователь",
     "ROLE_ADMIN": "Администратор",
-    "ROLE_MASTER": "Йода"
+    "ROLE_MASTER": "Мастер",
+    "ALL": "Все",
+    "OPENED": "Открытые",
+    "CLOSED": "Закрытые",
+    "VISIBLE": "Видимые",
+    "HIDDEN": "Скрытые"
   }
 }

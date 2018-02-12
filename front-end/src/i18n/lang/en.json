@@ -16,8 +16,11 @@
     "create_issue": "Create",
     "back": "Back",
     "close": "Close",
+    "hide": "Hide",
     "open": "Open",
     "close_issue": "Close issue",
+    "hide_issue": "Hide issue",
+    "show_issue": "Show issue",
     "open_issue": "Open issue",
     "manage": "Manage",
     "grant": "Grant",
@@ -45,7 +48,7 @@
     "password": "Password",
     "login": "Login",
     "confirm_password": "Confirm password",
-    "email": "E-Mail",
+    "email": "Email",
     "first_name": "First name",
     "last_name": "Last name",
     "recovery_token": "Recovery token from E-Mail",
@@ -65,7 +68,7 @@
     "input_location": "Enter a location",
     "establishments": "Establishments",
     "addresses": "Addresses",
-    "admin_page": "Admin page",
+    "admin_page": "Administration",
     "navigation": "Navigation",
     "users_management": "Users management",
     "issues_management": "Issues management",
@@ -75,8 +78,10 @@
     "title": "Title",
     "text": "Text",
     "author": "Author",
-    "created": "Created",
+    "createdAt": "Created",
+    "updatedAt": "Updated",
     "closed": "Closed",
+    "hidden": "Hidden",
     "yes": "Yes",
     "no": "No",
     "search": "Search",
@@ -99,7 +104,7 @@
     "contact_info": "Contact information",
     "social_accounts": "Social accounts",
     "linked-lowercase": "linked",
-    "filter_by_type": "by type"
+    "filter_by_type": "Type"
   },
   "error": {
     "required": "Required",
@@ -139,6 +144,11 @@
     "ROLE_BANNED": "Banned",
     "ROLE_USER": "User",
     "ROLE_ADMIN": "Admin",
-    "ROLE_MASTER": "Joda"
+    "ROLE_MASTER": "Master",
+    "ALL": "All",
+    "OPENED": "Opened",
+    "CLOSED": "Closed",
+    "VISIBLE": "Visible",
+    "HIDDEN": "Hidden"
   }
 }

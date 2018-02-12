@@ -18,6 +18,8 @@
     "close": "Закрити",
     "open": "Відкрити",
     "close_issue": "Закрити проблему",
+    "hide_issue": "Приховати проблему",
+    "show_issue": "Показувати проблему",
     "open_issue": "Відкрити проблему",
     "manage": "Керувати",
     "grant": "Надати",
@@ -44,7 +46,7 @@
     "password": "Пароль",
     "login": "Логін",
     "confirm_password": "Підтвердження пароля",
-    "email": "E-Mail",
+    "email": "Email",
     "first_name": "Ім'я",
     "last_name": "Прізвище",
     "recovery_token": "Відновлювальний токен з E-Mail'у",
@@ -80,8 +82,10 @@
     "title": "Заголовок",
     "text": "Текст",
     "author": "Автор",
-    "created": "Створено",
+    "createdAt": "Створено",
+    "updatedAt": "Оновлено",
     "closed": "Закрито",
+    "hidden": "Приховано",
     "yes": "Так",
     "no": "Ні",
     "search": "Пошук",
@@ -98,7 +102,7 @@
     "contact_info": "Контактна інформація",
     "social_accounts": "Соціальні мережі",
     "linked-lowercase": "прив'язаний",
-    "filter_by_type": "по типу"
+    "filter_by_type": "Тип"
   },
   "error": {
     "required": "Обов'язково",
@@ -138,6 +142,11 @@
     "ROLE_BANNED": "Заблокований",
     "ROLE_USER": "Користувач",
     "ROLE_ADMIN": "Адміністратор",
-    "ROLE_MASTER": "Йода"
+    "ROLE_MASTER": "Мастер",
+    "ALL": "Всі",
+    "OPENED": "Відкриті",
+    "CLOSED": "Закриті",
+    "VISIBLE": "Видимі",
+    "HIDDEN": "Сховані"
   }
 }

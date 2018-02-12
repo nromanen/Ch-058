@@ -24,14 +24,6 @@ import static com.softserveinc.geocitizen.entity.User.*;
 import static com.softserveinc.tools.model.JsonError.Error.BAD_FIELD_FORMAT_NAME;
 import static com.softserveinc.tools.model.JsonError.Error.MISSING_FIELD_NAME;
 
-/**
- * A DTO that is received and contains information
- * that is necessary for creating new account
- *
- * @author softserveinc (https://t.me/Shrralis)
- * @version 1.0
- * Created 12/21/17 at 5:38 PM
- */
 public class RegisterUserDTO implements Serializable {
 
 	@NotBlank(message = MISSING_FIELD_NAME)

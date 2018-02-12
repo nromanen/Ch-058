@@ -87,7 +87,7 @@ public class IssueRepositoryTest extends TestCase {
 	@Test
 	public void testGetIssueTypeById() throws Exception {
 
-		int[] result = repository.getIssueTypeById(testMarker.getId());
+		int[] result = repository.getIssueTypeByIdAndHiddenFalse(testMarker.getId());
 		assertEquals(result.length, 1);
 	}
 }

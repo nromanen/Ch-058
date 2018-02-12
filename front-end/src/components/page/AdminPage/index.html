@@ -1,9 +1,9 @@
 <div id="admin-index">
   <md-app md-mode="reveal">
     <md-app-toolbar class="md-primary">
-      <md-button class="md-icon-button" @click="menuVisible = !menuVisible">
-        <md-icon>menu</md-icon>
-      </md-button>
+      <!--<md-button class="md-icon-button" @click="menuVisible = !menuVisible">-->
+      <!--<md-icon>menu</md-icon>-->
+      <!--</md-button>-->
 
       <span class="md-title">{{ $t('label.admin_page') }}</span>
 
@@ -59,43 +59,29 @@
       </div>
     </md-app-toolbar>
 
-    <md-app-drawer :md-active.sync="menuVisible">
+    <md-app-drawer md-permanent="card">
       <md-toolbar class="md-transparent" md-elevation="0">{{ $t('label.navigation') }}</md-toolbar>
 
       <md-list>
         <md-list-item @click="menuVisible = false" to="/">
           <md-icon>home</md-icon>
-
           <span class="md-list-item-text">{{ $t('button.home') }}</span>
         </md-list-item>
 
-        <md-divider></md-divider>
         <md-subheader>{{ $t('label.management') }}</md-subheader>
-        <md-divider></md-divider>
-
         <md-list-item @click="menuVisible = false" to="/admin/users">
           <md-icon>person</md-icon>
-
           <span class="md-list-item-text">{{ $t('label.users') }}</span>
-
         </md-list-item>
-
         <md-list-item @click="menuVisible = false" to="/admin/issues">
           <md-icon>place</md-icon>
-
           <span class="md-list-item-text">{{ $t('label.issues') }}</span>
         </md-list-item>
-
-        <md-divider></md-divider>
         <md-subheader>{{ $t('label.other') }}</md-subheader>
-        <md-divider></md-divider>
-
         <md-list-item @click="menuVisible = false" to="/admin/notification">
           <md-icon>notifications</md-icon>
-
           <span class="md-list-item-text">{{ $t('label.notifications') }}</span>
         </md-list-item>
-
         <md-list-item @click="menuVisible = false" to="/admin/messages">
           <md-icon>message</md-icon>
 

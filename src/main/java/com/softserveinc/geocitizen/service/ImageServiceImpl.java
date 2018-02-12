@@ -69,7 +69,6 @@ public class ImageServiceImpl implements IImageService {
 	public byte[] getImageBySrcInByte(String src) throws BadFieldFormatException {
 		try {
 			Path path = Paths.get(System.getProperty(CATALINA_HOME_NAME) + File.separator + src);
-
 			return Files.readAllBytes(path);
 		} catch (IOException e) {
 			throw new BadFieldFormatException(e.getMessage());
@@ -80,7 +79,6 @@ public class ImageServiceImpl implements IImageService {
 	public Image parseImage(MultipartFile file) throws BadFieldFormatException {
 		try {
 			byte[] blob = file.getBytes();
-
 			Image duplicateImage = repository.getByHash(DigestUtils.md5Hex(blob));
 
 			if (duplicateImage != null && Arrays.equals(blob, getImageBySrcInByte(duplicateImage.getSrc()))) {

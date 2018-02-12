@@ -27,6 +27,7 @@ public class MapMarker implements Identifiable<Integer> {
 	public static final String ID_COLUMN_NAME = "id";
 	public static final String LAT_COLUMN_NAME = "lat";
 	public static final String LNG_COLUMN_NAME = "lng";
+	public static final String HIDDEN_COLUMN_NAME = "hidden";
 
 	@Id
 	@NotNull
@@ -42,6 +43,10 @@ public class MapMarker implements Identifiable<Integer> {
 	@NotNull
 	@Column(name = LNG_COLUMN_NAME, nullable = false)
 	private Double lng;
+
+	@NotNull
+	@Column(name = HIDDEN_COLUMN_NAME, nullable = true)
+	private Boolean hidden = false;
 
 	public Integer getId() {
 		return id;
@@ -65,5 +70,13 @@ public class MapMarker implements Identifiable<Integer> {
 
 	public void setLng(Double lng) {
 		this.lng = lng;
+	}
+
+	public Boolean isHidden() {
+		return hidden;
+	}
+
+	public void setHidden(Boolean hidden) {
+		this.hidden = hidden;
 	}
 }

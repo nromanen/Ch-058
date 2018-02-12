@@ -97,10 +97,19 @@ databaseChangeLog:
         - column:
             constraints:
               nullable: false
+            defaultValueBoolean: false
+            name: hidden
+            type: BOOLEAN
+        - column:
+            constraints:
+              nullable: false
             defaultValueComputed: now()
             name: created_at
             type: TIMESTAMP(6) WITHOUT TIME ZONE
         - column:
+            constraints:
+              nullable: false
+            defaultValueComputed: now()
             name: updated_at
             type: TIMESTAMP(6) WITHOUT TIME ZONE
         tableName: issues
@@ -150,6 +159,12 @@ databaseChangeLog:
               nullable: false
             name: lng
             type: FLOAT8
+        - column:
+            constraints:
+              nullable: false
+            defaultValueBoolean: false
+            name: hidden
+            type: BOOLEAN
         tableName: map_markers
 - changeSet:
     id: 1516657572581-6
