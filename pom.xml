@@ -219,6 +219,7 @@
         </dependency>
 
         <!--Spring social-->
+        <!--Spring social-->
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-core</artifactId>
