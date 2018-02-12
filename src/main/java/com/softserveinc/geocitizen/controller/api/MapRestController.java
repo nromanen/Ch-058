@@ -55,7 +55,7 @@ public class MapRestController {
 	}
 
 	@PostMapping("/issue")
-	public JsonResponse issue(@RequestParam("file") MultipartFile image,
+	public JsonResponse issue(@RequestParam(value = "file", required = false) MultipartFile image,
 	                          @Valid @ModelAttribute MapDataDTO dto) throws AbstractCitizenException {
 		if (image == null) {
 			throw new IllegalParameterException("file");

@@ -1,6 +1,7 @@
 import {maxLength, minLength, required} from 'vuelidate/lib/validators'
 import {getLocalUser} from "../../router/index"
 
+
 export default {
   name: 'Map',
   data: ()=> ({

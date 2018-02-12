@@ -73,6 +73,4 @@ public class AuthRestController {
 	public JsonResponse updateUser(@RequestBody @Valid RegisterUserDTO user) throws AbstractCitizenException {
 		return new JsonResponse(service.update(user));
 	}
-
-
 }
