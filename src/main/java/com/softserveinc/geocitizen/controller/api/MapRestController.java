@@ -13,13 +13,11 @@ package com.softserveinc.geocitizen.controller.api;
 import com.softserveinc.geocitizen.dto.MapDataDTO;
 import com.softserveinc.geocitizen.entity.MapMarker;
 import com.softserveinc.geocitizen.exception.AbstractCitizenException;
-import com.softserveinc.geocitizen.exception.IllegalParameterException;
 import com.softserveinc.geocitizen.service.interfaces.IIssueService;
 import com.softserveinc.geocitizen.service.interfaces.IMapMarkersService;
 import com.softserveinc.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -54,13 +52,20 @@ public class MapRestController {
 		return new JsonResponse(markerService.saveMarker(marker));
 	}
 
+//	@PostMapping("/issue")
+//	public JsonResponse issue(@RequestParam(value = "file", required = false) MultipartFile image,
+//	                          @Valid @ModelAttribute MapDataDTO dto) throws AbstractCitizenException {
+//		if (image == null) {
+//			throw new IllegalParameterException("file");
+//		}
+//		return new JsonResponse(issueService.saveIssue(dto, image));
+//	}
+
 	@PostMapping("/issue")
-	public JsonResponse issue(@RequestParam(value = "file", required = false) MultipartFile image,
-	                          @Valid @ModelAttribute MapDataDTO dto) throws AbstractCitizenException {
-		if (image == null) {
-			throw new IllegalParameterException("file");
-		}
-		return new JsonResponse(issueService.saveIssue(dto, image));
+	public JsonResponse issue(
+//			@RequestParam(value = "file", required = false) MultipartFile image,
+			@Valid @RequestBody MapDataDTO dto) throws AbstractCitizenException {
+		return new JsonResponse(issueService.saveIssue(dto));
 	}
 
 	@GetMapping("/issues/mapMarker/{mapMarkerId}")

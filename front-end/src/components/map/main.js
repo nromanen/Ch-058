@@ -408,13 +408,9 @@ export default {
       let type = this.form.type;
       let formData = new FormData();
 
-      formData.append('title', title);
-      formData.append('desc', desc);
-      formData.append('typeName', type);
       formData.append('file', document.getElementById("uploadImage").files[0]);
 
       if (window.isPlaced) {
-        formData.append('markerId', window.id);
         this.setMarkerType(window.marker, '4');
         this.map.setCenter(window.marker.getPosition());
 
@@ -425,7 +421,18 @@ export default {
           infoWindow.close();
         }, 2000);
 
-        this.$http.post('map/issue', formData).then((response) => {});
+        // http://localhost:8080/citizen/map/issue?markerId=1&title=хуйхуйхуйх&desc=йцукенйцукен&typeName=INFO
+
+
+        this.$http.post('map/issue', {
+          markerId: window.id,
+          title: title,
+          desc: desc,
+          typeName: type
+        }).then((response) => {
+          this.$http.put('issues/' + response.body.data[0].id, formData).then((response) => {
+          });
+        });
       } else {
         let marker = new google.maps.Marker({
             map: this.map,
@@ -454,8 +461,16 @@ export default {
             lat: window.lat,
             lng: window.lng
           }).then((response) => {
-            formData.append('markerId', response.body.data[0].id);
-            this.$http.post('map/issue', formData).then((response) => {});
+            this.$http.post('map/issue', {
+              markerId: response.body.data[0].id,
+              title: title,
+              desc: desc,
+              typeName: type
+            }).then((response) => {
+                this.$http.put('issues/' + response.body.data[0].id, formData).then((response) => {
+                });
+              }
+            );
           });
       }
       this.clearForm();

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -85,5 +86,11 @@ public class IssueRestController {
 	@GetMapping(value = "/images/{issueId}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] issueImage(@PathVariable("issueId") Integer issueId) throws IOException {
 		return imageService.getIssueImageInByte(issueId);
+	}
+
+	@PutMapping(value = "/{issueId}", params = "file != null")
+	public JsonResponse uploadImage(@PathVariable("issueId") Integer issueId,
+	                                @RequestParam(value = "file") MultipartFile image) {
+		return issueService.setImage(image);
 	}
 }

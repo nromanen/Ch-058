@@ -19,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -52,8 +51,30 @@ public class IssueServiceImpl implements IIssueService {
 		this.imageService = imageService;
 	}
 
+//	@Override
+//	public Issue saveIssue(MapDataDTO dto, MultipartFile image) throws BadFieldFormatException {
+//		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
+//		mapMarkersRepository.setHiddenStatus(false, dto.getMarkerId());
+//		User user = usersRepository.findOne(getCurrent().getId());
+//		boolean closed = !dto.getTypeName().equals(OPENED_TYPE);
+//		Issue.Type type = getTypeByName(dto.getTypeName());
+//
+//		return issuesRepository.save(Issue.Builder.anIssue()
+//				.setMapMarker(marker)
+//				.setTitle(dto.getTitle())
+//				.setText(dto.getDesc())
+//				.setAuthor(user)
+//				.setImage(imageService.parseImage(image))
+//				.setType(type)
+//				.setClosed(closed)
+//				.setHidden(false)
+//				.setCreatedAt(LocalDateTime.now())
+//				.setUpdatedAt(LocalDateTime.now())
+//				.build());
+//	}
+
 	@Override
-	public Issue saveIssue(MapDataDTO dto, MultipartFile image) throws BadFieldFormatException {
+	public Issue saveIssue(MapDataDTO dto) throws BadFieldFormatException {
 		MapMarker marker = mapMarkersRepository.findOne(dto.getMarkerId());
 		mapMarkersRepository.setHiddenStatus(false, dto.getMarkerId());
 		User user = usersRepository.findOne(getCurrent().getId());
@@ -65,7 +86,6 @@ public class IssueServiceImpl implements IIssueService {
 				.setTitle(dto.getTitle())
 				.setText(dto.getDesc())
 				.setAuthor(user)
-				.setImage(imageService.parseImage(image))
 				.setType(type)
 				.setClosed(closed)
 				.setHidden(false)

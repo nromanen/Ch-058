@@ -18,7 +18,6 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import static com.softserveinc.geocitizen.entity.Image.TABLE_NAME;
@@ -42,26 +41,26 @@ public class Image implements Identifiable<Integer> {
 	public static final int MIN_HASH_LENGTH = MAX_HASH_LENGTH;
 
 	@Id
-	@NotNull
+//	@NotNull
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "images_seq_gen")
 	@SequenceGenerator(name = "images_seq_gen", sequenceName = "images_id_seq", allocationSize = 1)
-	@Column(name = ID_COLUMN_NAME, nullable = false, unique = true)
+	@Column(name = ID_COLUMN_NAME/*, nullable = false*/, unique = true)
 	private Integer id;
 
-	@NotNull
+	//	@NotNull
 	@Enumerated(EnumType.STRING)
 	@org.hibernate.annotations.Type(type = "image_type")
-	@Column(name = TYPE_COLUMN_NAME, nullable = false)
+	@Column(name = TYPE_COLUMN_NAME/*, nullable = false*/)
 	private Type type = Type.ISSUE;
 
 	@NotBlank
 	@Size(min = MIN_SRC_LENGTH, max = MAX_SRC_LENGTH)
-	@Column(name = SRC_COLUMN_NAME, nullable = false, length = MAX_SRC_LENGTH)
+	@Column(name = SRC_COLUMN_NAME/*, nullable = false*/, length = MAX_SRC_LENGTH)
 	private String src;
 
 	@NotBlank
 	@Size(min = MIN_HASH_LENGTH, max = MAX_HASH_LENGTH)
-	@Column(name = HASH_COLUMN_NAME, nullable = false, length = MAX_HASH_LENGTH)
+	@Column(name = HASH_COLUMN_NAME/*, nullable = false*/, length = MAX_HASH_LENGTH)
 	private String hash;
 
 	@Override

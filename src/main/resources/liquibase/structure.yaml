@@ -81,6 +81,8 @@ databaseChangeLog:
             name: text
             type: VARCHAR(2048)
         - column:
+            constraints:
+              nullable: true
             name: image_id
             type: INT
         - column:
