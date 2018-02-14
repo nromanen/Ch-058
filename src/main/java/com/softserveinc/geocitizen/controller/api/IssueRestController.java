@@ -1,5 +1,6 @@
 package com.softserveinc.geocitizen.controller.api;
 
+import com.softserveinc.geocitizen.exception.BadFieldFormatException;
 import com.softserveinc.geocitizen.security.model.AuthorizedUser;
 import com.softserveinc.geocitizen.service.interfaces.IImageService;
 import com.softserveinc.geocitizen.service.interfaces.IIssueService;
@@ -90,7 +91,7 @@ public class IssueRestController {
 
 	@PutMapping(value = "/{issueId}", params = "file != null")
 	public JsonResponse uploadImage(@PathVariable("issueId") Integer issueId,
-	                                @RequestParam(value = "file") MultipartFile image) {
-		return issueService.setImage(image);
+	                                @RequestParam(value = "file") MultipartFile image) throws BadFieldFormatException {
+		return new JsonResponse(issueService.setImage(issueId, image));
 	}
 }

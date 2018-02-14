@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -72,6 +73,13 @@ public class IssueServiceImpl implements IIssueService {
 //				.setUpdatedAt(LocalDateTime.now())
 //				.build());
 //	}
+
+	@Override
+	public Issue setImage(Integer id, MultipartFile image) throws BadFieldFormatException {
+		Issue issue = issuesRepository.getOne(id);
+		issue.setImage(imageService.parseImage(image));
+		return issuesRepository.save(issue);
+	}
 
 	@Override
 	public Issue saveIssue(MapDataDTO dto) throws BadFieldFormatException {

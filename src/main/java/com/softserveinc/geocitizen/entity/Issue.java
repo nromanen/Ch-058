@@ -17,7 +17,6 @@ import com.softserveinc.geocitizen.entity.interfaces.Identifiable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -72,8 +71,8 @@ public class Issue implements Identifiable<Integer> {
 	private String text;
 
 	//	@NotNull
-	@Null
-	@javax.annotation.Nullable
+//	@Null
+//	@javax.annotation.Nullable
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = IMG_COLUMN_NAME, nullable = true)
 	private Image image;
