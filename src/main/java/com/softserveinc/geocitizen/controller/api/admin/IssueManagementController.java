@@ -11,7 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/issues")
+@RequestMapping("api/admin/issues")
 public class IssueManagementController {
 
 	private final IIssueService issueService;

@@ -31,7 +31,7 @@ import javax.validation.Valid;
  * Created 12/20/17 at 5:59 PM
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
 public class AuthRestController {
 
 	private final IAuthService service;

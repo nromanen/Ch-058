@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/map")
+@RequestMapping("api/map")
 public class MapRestController {
 
 	private final IMapMarkersService markerService;

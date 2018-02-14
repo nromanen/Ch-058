@@ -111,8 +111,8 @@
     "min_1_char": "Must have at least 1 character",
     "min_4_char": "Must have at least 4 characters",
     "min_8_char": "Must have at least 8 characters",
-    "max_16_char": "Can contain maximum 16 characters",
-    "max_32_char": "Can contain maximum 32 characters",
+    "max_16_char": "Can contain max 16 characters",
+    "max_32_char": "Can contain max 32 characters",
     "not_login_or_email": "Can contain only A-z, 0-9 and _ - or be valid E-Mail",
     "not_login": "Can contain only A-z, 0-9 and _ -",
     "not_password": "Must contain uppercase, lowercase, 0-9 and special character",
@@ -128,7 +128,7 @@
     "desc_long": "Description cannot be longer than 2048 characters",
     "req_type": "Please, choose the type",
     "req_image": "Please, attach an image",
-    "page_not_found": "Page you looked for is not found",
+    "page_not_found": "Page you're looking for is not found",
     "forbidden": "Forbidden. Access denied to this resource"
   },
   "message": {
