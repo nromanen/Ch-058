@@ -22,19 +22,22 @@
           </div>
           <div id="child" class="content">
             <a @click="like">
-              <img v-if="isLiked" src="../../../assets/like_active.png" v-my-tooltip.bottom-center="$t('label.cancel_like')"
+              <img v-if="isLiked" src="./static/like_active.png" v-my-tooltip.bottom-center="$t('label.cancel_like')"
                    height="32"
                    width="32"/>
-              <img v-if="!isLiked" src="../../../assets/like_not_active.png" v-my-tooltip.bottom-center="$t('label.add_like')" height="32"
+              <img v-if="!isLiked" src="./static/like_not_active.png" v-my-tooltip.bottom-center="$t('label.add_like')"
+                   height="32"
                    width="32"/>
             </a>
             {{countLike}}
 
             <a @click="dislike()">
-              <img v-if="!isUnliked" src="../../../assets/dislike_not_active.png" v-my-tooltip.bottom-center="$t('label.add_dislike')"
+              <img v-if="!isUnliked" src="./static/dislike_not_active.png"
+                   v-my-tooltip.bottom-center="$t('label.add_dislike')"
                    height="32"
                    width="32"/>
-              <img v-if="isUnliked" src="../../../assets/dislike_active.png" v-my-tooltip.bottom-center="$t('label.cancel_dislike')"
+              <img v-if="isUnliked" src="./static/dislike_active.png"
+                   v-my-tooltip.bottom-center="$t('label.cancel_dislike')"
                    height="32" width="32"/>
             </a>
             {{countDislike}}

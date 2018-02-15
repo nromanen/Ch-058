@@ -2,10 +2,7 @@ import {getLocalUser} from "../../../router";
 import {validationMixin} from "vuelidate";
 import {maxLength, minLength, required} from "vuelidate/lib/validators/index";
 import {
-  MAX_NAME_LENGTH,
-  MAX_SURNAME_LENGTH,
-  MIN_NAME_LENGTH,
-  MIN_SURNAME_LENGTH,
+  MAX_NAME_LENGTH, MAX_SURNAME_LENGTH, MIN_NAME_LENGTH, MIN_SURNAME_LENGTH,
   NameValidator
 } from "../../../_validator";
 import {ACCESS_DENIED, getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";

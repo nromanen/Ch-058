@@ -16,7 +16,6 @@ export default {
   components: {
     chatPage
   },
-  computed: {},
   methods: {
     answer: function (userId, issueId) {
       this.stompClient.send("/app/connect/accept", {},
@@ -45,7 +44,6 @@ export default {
     }
   },
   created: function () {
-    console.log('started');
     this.login = getLocalUser().login;
     let _this = this;
 
@@ -54,10 +52,8 @@ export default {
     this.stompClient = stompClient;
 
     stompClient.connect({}, function (frame) {
-      console.log('Connected: ' + frame);
       stompClient.subscribe('/checkTopic/broadcast', function (input) {
         var user = JSON.parse(input.body).data[0];
-        console.log(user);
         if (user.text == "Accept" || user.text == "Cancel notification") {
           var index = -1;
           for (var i = 0; i < _this.users.length; i++) {
@@ -68,10 +64,7 @@ export default {
           }
           _this.users.splice(index, 1);
           _this.$parent.$parent.$parent.$parent.amount = _this.users.length;
-          console.log(index);
-          console.log('removed');
-        }
-        else if (user.text == "Notification timed out") {
+        } else if (user.text == "Notification timed out") {
           var issueId = user.issueId;
           var userId = user.userId;
           var index = -1;
@@ -82,11 +75,9 @@ export default {
             }
           }
           _this.users[i].waiting = false;
-        }
-        else if (user.text == "Delete") {
+        } else if (user.text == "Delete") {
           console.log('deleted');
-        }
-        else {
+        } else {
           var user = JSON.parse(input.body).data[0];
           console.log(user);
           _this.users.push(user);
@@ -94,7 +85,7 @@ export default {
           console.log('received notification !');
         }
       });
-    })
+    });
 
     this.$http.get('notification/all').then(data => {
       console.log(data.body.data);

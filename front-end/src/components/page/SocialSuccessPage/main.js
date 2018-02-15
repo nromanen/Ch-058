@@ -2,14 +2,8 @@ import Vue from 'vue';
 import {email, maxLength, minLength, required, sameAs} from "vuelidate/lib/validators/";
 import {validationMixin} from "vuelidate";
 import {
-  LoginValidator,
-  MAX_LOGIN_LENGTH,
-  MAX_NAME_LENGTH,
-  MAX_SURNAME_LENGTH,
-  MIN_LOGIN_LENGTH,
-  MIN_NAME_LENGTH,
-  MIN_SURNAME_LENGTH,
-  NameValidator
+  LoginValidator, MAX_LOGIN_LENGTH, MAX_NAME_LENGTH, MAX_SURNAME_LENGTH, MIN_LOGIN_LENGTH, MIN_NAME_LENGTH,
+  MIN_SURNAME_LENGTH, NameValidator
 } from "../../../_validator/";
 import {getLocalUser, resetLocalUser} from "../../../router/";
 import {getErrorMessage, UNEXPECTED} from "../../../_sys/json-errors";

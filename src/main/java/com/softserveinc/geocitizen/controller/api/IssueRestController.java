@@ -8,6 +8,7 @@ import com.softserveinc.geocitizen.service.interfaces.IIssueTypesService;
 import com.softserveinc.geocitizen.service.interfaces.IIssueVotesService;
 import com.softserveinc.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,13 +40,13 @@ public class IssueRestController {
 		this.imageService = imageService;
 	}
 
-//	@GetMapping
-//	public JsonResponse all(/*@PageableDefault(page=0,size=10,sort="title")Pageable pageable*/
-//			@RequestParam(required = false, defaultValue = "0") int page,
-//			@RequestParam(required = false, defaultValue = "10") int size
-//	) {
-//		return new JsonResponse(issueService.findAll(new PageRequest(page, size)));
-//	}
+	@GetMapping
+	public JsonResponse all(/*@PageableDefault(page=0,size=10,sort="title")Pageable pageable*/
+			@RequestParam(required = false, defaultValue = "0") int page,
+			@RequestParam(required = false, defaultValue = "10") int size
+	) {
+		return new JsonResponse(issueService.findAll(new PageRequest(page, size)));
+	}
 
 	@GetMapping("/types")
 	public JsonResponse allTypes() {

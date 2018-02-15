@@ -91,19 +91,19 @@
             <div class="logo">
               <div v-if="issue.typeId===1">
                 <div style="text-align: center">
-                  <img src="../../assets/caution-large.png" width="50px" height="50px">
+                  <img src="./static/caution-large.png" width="50px" height="50px">
                 </div>
                 <div style="text-align: center">{{ $t('label.issue_type_problem') }}</div>
               </div>
               <div v-else-if="issue.typeId===2">
                 <div style="text-align: center">
-                  <img src="../../assets/info-large.png" width="50px" height="50px">
+                  <img src="./static/info-large.png" width="50px" height="50px">
                 </div>
                 <div style="text-align: center">{{ $t('label.issue_type_info') }}</div>
               </div>
               <div v-else-if="issue.typeId===3">
                 <div style="text-align: center">
-                  <img src="../../assets/feedback-large.png" width="50px" height="50px">
+                  <img src="./static/feedback-large.png" width="50px" height="50px">
                 </div>
                 <div style="text-align: center">{{ $t('label.issue_type_feedback') }}</div>
               </div>

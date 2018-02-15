@@ -7,8 +7,6 @@ import com.softserveinc.geocitizen.exception.AccessDeniedException;
 import com.softserveinc.geocitizen.service.interfaces.IMessageService;
 import com.softserveinc.geocitizen.service.interfaces.INotificationService;
 import com.softserveinc.tools.model.JsonResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -20,9 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChatController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
-	private final String ADMIN_ROLE = "ROLE_ADMIN";
-	private final String USER_ROLE = "ROLE_USER";
 	private final INotificationService notificationService;
 	private final IMessageService messageService;
 
@@ -33,7 +28,7 @@ public class ChatController {
 	}
 
 	//	@Secured(ADMIN_ROLE)
-	@RequestMapping("/{issueId}/{userId}/{adminId}/chat")
+	@RequestMapping("/api/{issueId}/{userId}/{adminId}/chat")
 	public JsonResponse checkAccess(@PathVariable("issueId") Long issueId,
 	                                @PathVariable("userId") Long userId,
 	                                @PathVariable("adminId") Long adminId) throws AccessDeniedException {
@@ -41,33 +36,33 @@ public class ChatController {
 	}
 
 	//	@Secured({USER_ROLE, ADMIN_ROLE})
-	@RequestMapping("/{issueId}/{userId}/chat")
+	@RequestMapping("/api/{issueId}/{userId}/chat")
 	public JsonResponse checkChatExist(@PathVariable("issueId") Long issueId, @PathVariable("userId") Long userId)
 			throws AccessDeniedException {
 		return new JsonResponse(messageService.checkChat(issueId, userId));
 	}
 
 	//	@Secured({USER_ROLE, ADMIN_ROLE})
-	@RequestMapping("/message/all/{issueId}/{userId}")
+	@RequestMapping("/api/message/all/{issueId}/{userId}")
 	public JsonResponse getMessages(@PathVariable("issueId") Long issueId,
 	                                @PathVariable("userId") Long userId) throws AccessDeniedException {
 		return new JsonResponse(messageService.getAllMessagesForChat(issueId, userId));
 	}
 
 	//	@Secured(ADMIN_ROLE)
-	@RequestMapping("/chat/room/all/{adminId}")
+	@RequestMapping("/api/chat/room/all/{adminId}")
 	public JsonResponse getChatRooms(@PathVariable("adminId") Long adminId) {
 		return new JsonResponse(messageService.getAllChatRooms(adminId));
 	}
 
 	//	@Secured(ADMIN_ROLE)
-	@RequestMapping("/notification/all")
+	@RequestMapping("/api/notification/all")
 	public JsonResponse getNotifications() {
 		return new JsonResponse(notificationService.getAllNotifications());
 	}
 
-	@MessageMapping("/message/{issueId}/{userId}")
-	@SendTo("/topic/broadcast/{issueId}/{userId}")
+	@MessageMapping("/api/message/{issueId}/{userId}")
+	@SendTo("/api/topic/broadcast/{issueId}/{userId}")
 	public JsonResponse messaging(Message input,
 	                              @DestinationVariable Long userId,
 	                              @DestinationVariable Long issueId) {
@@ -75,22 +70,22 @@ public class ChatController {
 		return new JsonResponse(input);
 	}
 
-	@MessageMapping("/connect/wait")
-	@SendTo("/checkTopic/broadcast")
+	@MessageMapping("/api/connect/wait")
+	@SendTo("/api/checkTopic/broadcast")
 	public JsonResponse notificationWait(Notification notification) {
 		notificationService.setWaiting(notification);
 		return new JsonResponse(notification);
 	}
 
-	@MessageMapping({"/connect/cancelNotification", "/connect/accept", "/connect/delete"})
-	@SendTo("/checkTopic/broadcast")
+	@MessageMapping({"/api/connect/cancelNotification", "/api/connect/accept", "/api/connect/delete"})
+	@SendTo("/api/checkTopic/broadcast")
 	public JsonResponse notificationDelete(Notification notification) {
 		notificationService.removeNotification(notification);
 		return new JsonResponse(notification);
 	}
 
-	@MessageMapping("/connect/alert")
-	@SendTo("/checkTopic/broadcast")
+	@MessageMapping("/api/connect/alert")
+	@SendTo("/api/checkTopic/broadcast")
 	public JsonResponse notificationAdd(Notification notification) {
 		notificationService.addNotification(notification);
 		return new JsonResponse(notification);

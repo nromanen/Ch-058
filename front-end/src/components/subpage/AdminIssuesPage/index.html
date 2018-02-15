@@ -24,8 +24,8 @@
         <md-select id="type-filter-select" v-model="issueType" :placeholder="$t('label.filter_by_type')"
                    @md-selected="filterByType()">
           <md-option value="ALL">{{ $t('type.ALL') }}</md-option>
-          <md-option value="opened">{{ $t('type.OPENED') }}</md-option>
-          <md-option value="closed">{{ $t('type.CLOSED') }}</md-option>
+          <md-option value="opened">{{ $t('type.OPENEDPROBLEM') }}</md-option>
+          <md-option value="closed">{{ $t('type.CLOSEDPROBLEM') }}</md-option>
           <md-option value="visible">{{ $t('type.VISIBLE') }}</md-option>
           <md-option value="hidden">{{ $t('type.HIDDEN') }}</md-option>
         </md-select>

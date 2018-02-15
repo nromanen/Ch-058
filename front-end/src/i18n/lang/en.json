@@ -149,6 +149,8 @@
     "OPENED": "Opened",
     "CLOSED": "Closed",
     "VISIBLE": "Visible",
-    "HIDDEN": "Hidden"
+    "HIDDEN": "Hidden",
+    "OPENEDPROBLEM": "Opened problems",
+    "CLOSEDPROBLEM": "Closed problems"
   }
 }

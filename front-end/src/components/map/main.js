@@ -485,15 +485,20 @@ export default {
       let url;
 
       switch(type) {
-        case 'PROBLEM': url = '/src/assets/caution.png';
+        case 'PROBLEM':
+          url = './static/caution.png';
           break;
-        case 'INFO': url = '/src/assets/info.png';
+        case 'INFO':
+          url = './static/info.png';
           break;
-        case 'FEEDBACK': url ='/src/assets/feedback.png';
+        case 'FEEDBACK':
+          url = './static/feedback.png';
           break;
-        case '4': url ='/src/assets/multiple.png';
+        case '4':
+          url = './static/multiple.png';
           break;
-        case '5': url ='/src/assets/select.png';
+        case '5':
+          url = './static/select.png';
           break;
         default: url = ''
       }

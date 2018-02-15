@@ -69,7 +69,7 @@ public class SecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 				.failureHandler(authFailureHandler)
 				.and()
 				.logout()
-				.logoutUrl("/auth/logout")
+				.logoutUrl("/api/auth/logout")
 				.invalidateHttpSession(true)
 				.logoutSuccessHandler(logoutSuccessHandler)
 				.deleteCookies("JSESSIONID", "XSRF-TOKEN", "locale-cookie")

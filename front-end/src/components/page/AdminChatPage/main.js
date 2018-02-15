@@ -80,42 +80,42 @@ export default {
 	}
   },
   created: function () {
-	let _this = this;
+    let _this = this;
 
-	if(getLocalUser() == null){
-    this.$router.push('/403');
-	  return;
-	}
-	var issueId = this.$route.params.issueId;
-	var userId = this.$route.params.userId;
-	this.issueId = issueId;
-	this.userId = userId;
-	this.adminId = getLocalUser().id;
-	this.$http.get(this.issueId + '/' + this.userId + '/' + this.adminId + '/chat').then( data => {
-	  // var checkAccess = data.body.data[0];
-	  if ((getLocalUser().type != "ROLE_ADMIN")){// || (!checkAccess)) {
+    if (getLocalUser() == null) {
+      this.$router.push('/403');
+      return;
+    }
+    var issueId = this.$route.params.issueId;
+    var userId = this.$route.params.userId;
+    this.issueId = issueId;
+    this.userId = userId;
+    this.adminId = getLocalUser().id;
+    this.$http.get(this.issueId + '/' + this.userId + '/' + this.adminId + '/chat').then(data => {
+      // var checkAccess = data.body.data[0];
+      if ((getLocalUser().type != "ROLE_ADMIN")) {// || (!checkAccess)) {
+        _this.$router.push('/403');
+        return;
+      }
+    }, error => {
       _this.$router.push('/403');
-		return;
-	  }
-	}, error => {
-    _this.$router.push('/403');
-	  return;
-	});
+      return;
+    });
 
-	_this.getAllMessages();
+    _this.getAllMessages();
 
-	var socket = new SockJS(getServerAddress() + "/chat");
-	var stompClient = Stomp.over(socket);
-	this.stompClient = stompClient;
+    var socket = new SockJS(getServerAddress() + "/chat");
+    var stompClient = Stomp.over(socket);
+    this.stompClient = stompClient;
 
-	stompClient.connect({}, function (frame) {
-	  console.log('Connected: ' + frame);
-	  stompClient.subscribe('/topic/broadcast' + '/' + _this.issueId + '/' + _this.userId, function (greeting) {
-		console.log(greeting);
-		_this.showMessage(JSON.parse(greeting.body).data[0]);
-	  });
-	}, function () {
-    _this.$router.push('/403');
-	})
+    stompClient.connect({}, function (frame) {
+      console.log('Connected: ' + frame);
+      stompClient.subscribe('/topic/broadcast' + '/' + _this.issueId + '/' + _this.userId, function (greeting) {
+        console.log(greeting);
+        _this.showMessage(JSON.parse(greeting.body).data[0]);
+      });
+    }, function () {
+      _this.$router.push('/403');
+    });
   }
 }
