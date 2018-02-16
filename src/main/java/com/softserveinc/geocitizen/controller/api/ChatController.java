@@ -28,7 +28,7 @@ public class ChatController {
 	}
 
 	//	@Secured(ADMIN_ROLE)
-	@RequestMapping("/api/{issueId}/{userId}/{adminId}/chat")
+	@RequestMapping("/{issueId}/{userId}/{adminId}/chat")
 	public JsonResponse checkAccess(@PathVariable("issueId") Long issueId,
 	                                @PathVariable("userId") Long userId,
 	                                @PathVariable("adminId") Long adminId) throws AccessDeniedException {
@@ -36,33 +36,33 @@ public class ChatController {
 	}
 
 	//	@Secured({USER_ROLE, ADMIN_ROLE})
-	@RequestMapping("/api/{issueId}/{userId}/chat")
+	@RequestMapping("/{issueId}/{userId}/chat")
 	public JsonResponse checkChatExist(@PathVariable("issueId") Long issueId, @PathVariable("userId") Long userId)
 			throws AccessDeniedException {
 		return new JsonResponse(messageService.checkChat(issueId, userId));
 	}
 
 	//	@Secured({USER_ROLE, ADMIN_ROLE})
-	@RequestMapping("/api/message/all/{issueId}/{userId}")
+	@RequestMapping("/message/all/{issueId}/{userId}")
 	public JsonResponse getMessages(@PathVariable("issueId") Long issueId,
 	                                @PathVariable("userId") Long userId) throws AccessDeniedException {
 		return new JsonResponse(messageService.getAllMessagesForChat(issueId, userId));
 	}
 
 	//	@Secured(ADMIN_ROLE)
-	@RequestMapping("/api/chat/room/all/{adminId}")
+	@RequestMapping("/chat/room/all/{adminId}")
 	public JsonResponse getChatRooms(@PathVariable("adminId") Long adminId) {
 		return new JsonResponse(messageService.getAllChatRooms(adminId));
 	}
 
 	//	@Secured(ADMIN_ROLE)
-	@RequestMapping("/api/notification/all")
+	@RequestMapping("/notification/all")
 	public JsonResponse getNotifications() {
 		return new JsonResponse(notificationService.getAllNotifications());
 	}
 
-	@MessageMapping("/api/message/{issueId}/{userId}")
-	@SendTo("/api/topic/broadcast/{issueId}/{userId}")
+	@MessageMapping("/message/{issueId}/{userId}")
+	@SendTo("/topic/broadcast/{issueId}/{userId}")
 	public JsonResponse messaging(Message input,
 	                              @DestinationVariable Long userId,
 	                              @DestinationVariable Long issueId) {
@@ -70,22 +70,22 @@ public class ChatController {
 		return new JsonResponse(input);
 	}
 
-	@MessageMapping("/api/connect/wait")
-	@SendTo("/api/checkTopic/broadcast")
+	@MessageMapping("/connect/wait")
+	@SendTo("/checkTopic/broadcast")
 	public JsonResponse notificationWait(Notification notification) {
 		notificationService.setWaiting(notification);
 		return new JsonResponse(notification);
 	}
 
-	@MessageMapping({"/api/connect/cancelNotification", "/api/connect/accept", "/api/connect/delete"})
-	@SendTo("/api/checkTopic/broadcast")
+	@MessageMapping({"/connect/cancelNotification", "/connect/accept", "/connect/delete"})
+	@SendTo("/checkTopic/broadcast")
 	public JsonResponse notificationDelete(Notification notification) {
 		notificationService.removeNotification(notification);
 		return new JsonResponse(notification);
 	}
 
-	@MessageMapping("/api/connect/alert")
-	@SendTo("/api/checkTopic/broadcast")
+	@MessageMapping("/connect/alert")
+	@SendTo("/checkTopic/broadcast")
 	public JsonResponse notificationAdd(Notification notification) {
 		notificationService.addNotification(notification);
 		return new JsonResponse(notification);

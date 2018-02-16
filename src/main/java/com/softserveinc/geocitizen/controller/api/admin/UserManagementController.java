@@ -11,7 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/admin/users")
+@RequestMapping("/admin/users")
 public class UserManagementController {
 
 	private final IUserService userService;

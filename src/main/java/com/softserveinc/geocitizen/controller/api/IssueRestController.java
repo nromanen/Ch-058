@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/issues")
+@RequestMapping("/issues")
 public class IssueRestController {
 
 	private static final String LIKE = "likeVote";

@@ -31,7 +31,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("/users")
 public class UsersRestController {
 
 	private final IUserService service;

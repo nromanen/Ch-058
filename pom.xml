@@ -11,10 +11,10 @@
   ~ Copyright (c) 2017 by softserveinc (Yaroslav Zhyravov).
   -->
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
 	<groupId>com.softserveinc</groupId>
 	<artifactId>geo-citizen</artifactId>
 	<version>1.0.5-SNAPSHOT</version>
@@ -547,7 +547,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.3</version>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -557,7 +557,7 @@
                                 <artifactItem>
                                     <groupId>com.github.jsimone</groupId>
                                     <artifactId>webapp-runner</artifactId>
-                                    <version>8.5.23.0</version>
+                                    <version>8.5.27.0</version>
                                     <destFileName>webapp-runner.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
