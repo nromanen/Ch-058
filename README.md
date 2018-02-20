@@ -21,8 +21,10 @@ to generate the production build you have to
  - in [`~/Ch-058/src/main/webapp/index.html`](https://git.io/vAR9l) put dots on lines
                                    - ([github](https://git.io/vARrw)) after `<link href=` 
                                    - ([github](https://git.io/vARr5)) after `<script type=text/javascript src=`        
-- then repeat 3rd step of `build and deploy`      
-___other___
+- then repeat 3rd step of `build and deploy`  
+
+# 
+    
 [swagger](http://localhost:8080/citizen/swagger-ui.html)
 
 [heroku](https://geocitizen.herokuapp.com)  
