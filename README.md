@@ -1,68 +1,45 @@
-# Ch-058, Geo Citizen
-### Getting started
-1) First of all, clone the repository with `git clone`.
-1) Go to the directory with cloned repository (`cd` or something).
-1) Switch to the branch `dev` with next commands:
+# ch-058, geocitizen
+###build and deploy (ubuntu16, git2, maven3, tomcat9)
+1) `git clone https://github.com/nromanen/Ch-058.git; cd Ch-058`
+1) `mvn install -Dmaven.test.skip && mv target/citizen.war /usr/share/tomcat9/webapps/`
+1) [geocitizen](http://localhost:8080/citizen/)
+1) THE END
+###config   
+1) config file [GiHub](git.io/vA4Sw)
+	you might want to edit following properties
+	 * `front.url` - url where front will be deployed to (for redirecting use `#` at the url's end)
+     * `front-end.url` - same as `front.url` but w/o `#`
+	 * `db.url` - uri to db (__you need to create one manually if you haven't done it yet__)
+	 * `db.username` and `db.password` - db credentials
+
+1) start tomcat
 	```bash
-	# checkout the branch
-	git checkout dev
-	# fetch last commits
-	git fetch && git pull
-	```
-	Now you have the latest version of working project code.
-1) Config everything you need:
-	```bash
-	# Edit with nano or any other text processor
-	nano ./src/main/resources/application.properties
-	```
-	There are the properties, below are described just that you have to know:
-	 - `front.url` - url address where _front-end_ will be deployed (_for redirecting to, __with `#` at the end___);
-     - `front-end.url` - the same as `front.url` but __without `#` at the end__;
-	 - `db.url` - address to your created database (__create if you haven't yet__) for __back-end__;
-	 - `db.username` - login for the database, for __back-end__;
-	 - `db.password` - password for the database, for __back-end__;
-1) Build and deploy the __back-end__ _.war_-file:
-	```bash
-	# Generate our .war.
-	mvn install
-	# Optional: if you have test errors, then use the next instead of above:
-	mvn install -Dmaven.test.skip=true
-	# Move generated WAR into your Tomcat webapps directory
-	# (/usr/share/tomcat9/webapps/ in my case)
-	mv ./target/citizen.war /usr/share/tomcat9/webapps/
-	```
-1) Run your _Tomcat_ with the _.war_.
-	```bash
-	# The next is just my case
+	#e.g.
 	/usr/share/tomcat9/bin/startup.sh
 	```
-1) Set the __back-end__ URL-address for our __front-end__:
+1) set the backend url for frontend
 	```bash
-	# Edit the main.js file with nano or any other text processor
-	nano ./front-end/src/main.js
+	vim ~/front-end/src/main.js
 	```
-	Find the line with `export const backEndUrl = 'http://...'` and replace it with your address from _Tomcat_.
-	The result will be `http://localhost:8080/citizen` in my case.
-1) Install __front-end__ dependencies:
+	on the line ([GitHub](git.io/vA49U)) `export const backEndUrl =` and replace  url with tomcat's address
+	(in my case url is `'http://localhost:8080/citizen'`)
+1) install frontend dependencies
 	```bash
-	# Go to front-end directory
-	cd ./front-end
-	# Run downloading and installing
+	#run in the frontend directory
 	npm install
 	```
-	### Note about the next warning:
+	___nevermind following warning___
     ```bash
-    npm WARN The package vue-material is included as both a dev and production dependency.
+    npm WARN The package vue-material is included as both a dev and production dependency
     ```
-    That warning is O.K., just never mind.
-1) Run __front-end__:
+1) start frontend
 	```bash
-	# Starting Vue.js
 	npm run dev
 	```
-	After successful starting you will see the URL-address of your __front-end__.
-	
-1) If you'd like to check REST API documentation, follow this link:
- 
-    `http://localhost:8080/citizen/swagger-ui.html`
+	after successful execution of prev step you'll see frontend url
+###other
+[swagger](http://localhost:8080/citizen/swagger-ui.html)
+
+[heroku](https://geocitizen.herokuapp.com)  
+  
 

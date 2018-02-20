@@ -4,6 +4,7 @@ import com.softserveinc.geocitizen.configuration.TestDatabaseConfig;
 import com.softserveinc.geocitizen.entity.User;
 import junit.framework.TestCase;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import javax.transaction.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestDatabaseConfig.class })
 @WebAppConfiguration

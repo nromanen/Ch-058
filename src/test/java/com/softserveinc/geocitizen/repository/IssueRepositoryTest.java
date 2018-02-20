@@ -19,6 +19,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestDatabaseConfig.class })
 @WebAppConfiguration
@@ -76,14 +77,12 @@ public class IssueRepositoryTest extends TestCase {
 		repository.save(testIssue);
 	}
 
-	@Ignore
 	@Test
 	public void testFindById() throws Exception {
 		Optional<Issue> issue = repository.findById(1);
 		assertNotNull(issue);
 	}
 
-	@Ignore
 	@Test
 	public void testGetIssueTypeById() throws Exception {
 

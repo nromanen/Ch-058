@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.when;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { AppConfig.class })
 @WebAppConfiguration

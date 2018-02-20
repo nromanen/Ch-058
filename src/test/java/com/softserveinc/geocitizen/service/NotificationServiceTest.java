@@ -4,6 +4,7 @@ import com.softserveinc.geocitizen.configuration.AppConfig;
 import com.softserveinc.geocitizen.entity.Notification;
 import com.softserveinc.geocitizen.repository.NotificationRepository;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,6 +17,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.when;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { AppConfig.class })
 @WebAppConfiguration

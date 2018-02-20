@@ -4,6 +4,7 @@ import com.softserveinc.geocitizen.configuration.AppConfig;
 import com.softserveinc.geocitizen.entity.User;
 import com.softserveinc.geocitizen.repository.UsersRepository;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -17,6 +18,7 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static org.mockito.Mockito.when;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { AppConfig.class })
 @WebAppConfiguration
