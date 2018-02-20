@@ -2,12 +2,12 @@
 
 ___build and deploy (ubuntu16, git2, maven3, tomcat9)___
 
+1) `git clone https://github.com/nromanen/Ch-058.git; cd Ch-058`
 1) in config file [`~/Ch-058/src/main/resources/application.properties`](https://git.io/vA4Sw)
 	you might want to edit following properties
 	 * [`front.url`](https://git.io/vARyB) - front url
 	 * [`db.url`](https://git.io/vARyu) - db uri (__db must be created manually__)
 	 * [`db.username`](https://git.io/vARyo) & [`db.password`](https://git.io/vARyK) - db credentials
-1) `git clone https://github.com/nromanen/Ch-058.git; cd Ch-058`
 1) `mvn install && mv target/citizen.war /usr/share/tomcat9/webapps/ && /usr/share/tomcat9/bin/startup.sh`
 1) e.g. <http://localhost:8080/citizen/>
 
