@@ -1,5 +1,7 @@
 ###ch-058, geocitizen
+
 ###build and deploy (ubuntu16, git2, maven3, tomcat9)
+
 1) in config file ([gihub](git.io/vA4Sw))
 	you might want to edit following properties
 	 * `front.url` - where front'll be deployed 
