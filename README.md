@@ -18,9 +18,9 @@ you have to cd to `~/Ch-058/front-end` dir and run `npm run dev` after successfu
 to generate the production build you have to
  - replace url with tomcat's url (e.g. `'http://localhost:8080/citizen'`) in [`~/Ch-058/front-end/src/main.js`](git.io/vA49U)) 
  - run `npm run build`, move all files from `~/Ch-058/front-end/dist` to `~/Ch-058/src/main/webapp`
-1) in [`~/Ch-058/src/main/webapp/index.html`](https://git.io/vAR9l) put dots on lines
-                                   - after [`<link href=`](https://git.io/vARrw) 
-                                   - [`<script type=text/javascript src=`](https://git.io/vARr5) after         
+ - in [`~/Ch-058/src/main/webapp/index.html`](https://git.io/vAR9l) put dots on lines
+                                   1. [`<link href=`](https://git.io/vARrw) 
+                                   2. [`<script type=text/javascript src=`](https://git.io/vARr5) after         
 - then repeat 3rd step of `build and deploy`  
 
 # 
