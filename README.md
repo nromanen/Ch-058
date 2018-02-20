@@ -2,7 +2,7 @@
 
 ___build and deploy (ubuntu16, git2, maven3, tomcat9)___
 
-1) in config file `~/Ch-058/src/main/resources/application.properties` ([gihub](https://git.io/vA4Sw))
+1) in config file [`~/Ch-058/src/main/resources/application.properties`](https://git.io/vA4Sw)
 	you might want to edit following properties
 	 * [`front.url`](https://git.io/vARyB) - where front'll be deployed 
 	 * [`db.url`](https://git.io/vARyu) - uri to db (__you need to create one manually if you haven't done it yet__)
