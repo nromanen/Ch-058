@@ -1,6 +1,6 @@
 ###ch-058, geocitizen
 
-###build and deploy (ubuntu16, git2, maven3, tomcat9)
+___build and deploy (ubuntu16, git2, maven3, tomcat9)___
 
 1) in config file ([gihub](git.io/vA4Sw))
 	you might want to edit following properties
@@ -20,7 +20,7 @@ to generate the production build you have to
                                    - ([github](https://git.io/vARrw)) after `<link href=` 
                                    - ([github](https://git.io/vARr5)) after `<script type=text/javascript src=`        
 - then repeat 3rd step of `build and deploy`      
-###other
+___other___
 [swagger](http://localhost:8080/citizen/swagger-ui.html)
 
 [heroku](https://geocitizen.herokuapp.com)  
