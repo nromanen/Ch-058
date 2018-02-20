@@ -11,7 +11,7 @@ ___build and deploy (ubuntu16, git2, maven3, tomcat9)___
 1) `mvn install && mv target/citizen.war /usr/share/tomcat9/webapps/ && /usr/share/tomcat9/bin/startup.sh`
 1) e.g. <http://localhost:8080/citizen/>
 
-=================================================================================================================================
+# 
 
 if you want to make changes to frontend 
 you have to cd to `~/Ch-058/front-end` dir and run `npm run dev` after successful execution you'll see url.
