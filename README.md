@@ -4,12 +4,12 @@ ___build and deploy (ubuntu16, git2, maven3, tomcat9)___
 
 1) in config file `~/Ch-058/src/main/resources/application.properties` ([gihub](https://git.io/vA4Sw))
 	you might want to edit following properties
-	 * `front.url` - where front'll be deployed 
-	 * `db.url` - uri to db (__you need to create one manually if you haven't done it yet__)
-	 * `db.username` and `db.password` - db credentials
+	 * [`front.url`](https://git.io/vARyB) - where front'll be deployed 
+	 * [`db.url`](https://git.io/vARyu) - uri to db (__you need to create one manually if you haven't done it yet__)
+	 * [`db.username`](https://git.io/vARyo) and [`db.password`](https://git.io/vARyK) - db credentials
 1) `git clone https://github.com/nromanen/Ch-058.git; cd Ch-058`
 1) `mvn install && mv target/citizen.war /usr/share/tomcat9/webapps/ && /usr/share/tomcat9/bin/startup.sh`
-1) [geocitizen](http://localhost:8080/citizen/)
+1) e.g. <http://localhost:8080/citizen/>
 
 if you want to make changes to frontend 
 you have to cd to `~/Ch-058/front-end` dir and run `npm run dev` after successful execution you'll see url.
