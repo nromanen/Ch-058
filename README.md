@@ -2,7 +2,7 @@
 
 ___build and deploy (ubuntu16, git2, maven3, tomcat9)___
 
-1) in config file ([gihub](git.io/vA4Sw))
+1) in config file ([gihub](https://git.io/vA4Sw))
 	you might want to edit following properties
 	 * `front.url` - where front'll be deployed 
 	 * `db.url` - uri to db (__you need to create one manually if you haven't done it yet__)
