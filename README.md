@@ -16,9 +16,9 @@ ___build and deploy (ubuntu16, git2, maven3, tomcat9)___
 if you want to make changes to frontend 
 you have to cd to `~/Ch-058/front-end` dir and run `npm run dev` after successful execution you'll see url.
 to generate the production build you have to
- - change in `~/Ch-058/src/main/webapp/index.html`([GitHub](git.io/vA49U)) line `export const backEndUrl =` and replace url with tomcat's address (e.g. `'http://localhost:8080/citizen'`)
+ - replace url with tomcat's url ((e.g. `'http://localhost:8080/citizen'`)) in [`~/Ch-058/front-end/src/main.js`](git.io/vA49U)) 
  - run `npm run build`, move all files from `~/Ch-058/front-end/dist` to `~/Ch-058/src/main/webapp`
- - in `~/Ch-058/src/main/webapp/index.html` put dots on lines
+ - in [`~/Ch-058/src/main/webapp/index.html`](https://git.io/vAR9l) put dots on lines
                                    - ([github](https://git.io/vARrw)) after `<link href=` 
                                    - ([github](https://git.io/vARr5)) after `<script type=text/javascript src=`        
 - then repeat 3rd step of `build and deploy`      
