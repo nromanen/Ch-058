@@ -15,13 +15,13 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories("com.softserveinc.geocitizen.repository")
 public class MongoConfig {
 
-	public @Bean
-	MongoDbFactory mongoDbFactory() throws Exception {
+	@Bean
+	public MongoDbFactory mongoDbFactory() throws Exception {
 		return new SimpleMongoDbFactory(new MongoClient("localhost", 27017), "ss_demo_chat");
 	}
 
-	public @Bean
-	MongoTemplate mongoTemplate() throws Exception {
+	@Bean
+	public MongoTemplate mongoTemplate() throws Exception {
 		return new MongoTemplate(mongoDbFactory());
 	}
 }

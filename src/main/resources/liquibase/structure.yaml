@@ -202,6 +202,11 @@ databaseChangeLog:
               nullable: false
             name: authorid
             type: INT
+        - column:
+            constraints:
+              nullable: true
+            name: msgid
+            type: INT
         tableName: message
 - changeSet:
     id: 1516657572581-7

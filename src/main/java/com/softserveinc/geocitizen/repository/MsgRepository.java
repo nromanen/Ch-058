@@ -12,4 +12,6 @@ public interface MsgRepository extends MongoRepository<Msg, String> {
 	Msg findById(String id);
 
 	List<Msg> findAll();
+
+	Msg save(Msg msg);
 }

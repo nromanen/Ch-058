@@ -16,6 +16,7 @@ public class FullMessage {
 	private Long issueId;
 	private Long authorId;
 	private LocalDateTime date;
+	private Long msgid;
 
 	public FullMessage(Long id, String text) {
 		this.id = id;
@@ -33,6 +34,7 @@ public class FullMessage {
 		message.setUserId(userId);
 		message.setAuthorId(input.getAuthorId());
 		message.setDate(LocalDateTime.now());
+		message.setMsgId(input.getUserId());
 		return message;
 	}
 
@@ -82,5 +84,13 @@ public class FullMessage {
 
 	public void setAuthorId(Long authorId) {
 		this.authorId = authorId;
+	}
+
+	public Long getMsgid() {
+		return msgid;
+	}
+
+	public void setMsgId(Long msgid) {
+		this.msgid = msgid;
 	}
 }

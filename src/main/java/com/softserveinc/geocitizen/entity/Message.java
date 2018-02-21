@@ -7,7 +7,6 @@ public class Message {
 	private Long userId;
 	private Long authorId;
 
-
 	public Message() {
 		this.text = "default";
 	}

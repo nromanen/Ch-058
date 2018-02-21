@@ -9,4 +9,6 @@ public interface IMsgService {
 	Msg findById(String id);
 
 	List<Msg> findAll();
+
+	Msg save(String id, String text);
 }

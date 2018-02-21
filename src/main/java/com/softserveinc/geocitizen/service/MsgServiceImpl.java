@@ -31,4 +31,9 @@ public class MsgServiceImpl implements IMsgService {
 	public List<Msg> findAll() {
 		return msgRepository.findAll();
 	}
+
+	@Override
+	public Msg save(String id, String text) {
+		return msgRepository.save(new Msg(id, text));
+	}
 }
