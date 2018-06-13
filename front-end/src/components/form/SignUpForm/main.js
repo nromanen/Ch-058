@@ -19,6 +19,7 @@ export default {
       surname: null,
     },
     sending: false,
+    type: [],
     errors: null,
     showSnackBar: false
   }),
@@ -77,7 +78,8 @@ export default {
           email: this.form.email,
           password: this.form.password,
           name: this.form.name,
-          surname: this.form.surname
+          surname: this.form.surname,
+          type: this.type
         }).then(
         response => {
           let json = response.body;

@@ -14,15 +14,16 @@ package com.shrralis.ssdemo1.controller;
 
 import com.shrralis.ssdemo1.dto.PasswordRecoveryDTO;
 import com.shrralis.ssdemo1.dto.RegisterUserDTO;
-import com.shrralis.ssdemo1.entity.User;
 import com.shrralis.ssdemo1.exception.AbstractCitizenException;
 import com.shrralis.ssdemo1.service.interfaces.IAuthService;
 import com.shrralis.tools.model.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -39,12 +40,6 @@ public class AuthRestController {
 	@Autowired
 	public AuthRestController(IAuthService service) {
 		this.service = service;
-	}
-
-	@PostMapping("/requestRecoveryToken")
-	public JsonResponse generateRecoveryToken(@RequestParam(name = "login") String login, HttpServletRequest request)
-			throws AbstractCitizenException, MessagingException {
-		return new JsonResponse(service.generateRecoveryToken(login, request.getRemoteAddr()));
 	}
 
 	@GetMapping("/getCurrentSession")

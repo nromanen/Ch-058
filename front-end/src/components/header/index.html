@@ -3,7 +3,7 @@
     <md-button class="md-icon-button" @click="backToMap" v-if="showBack">
       <md-icon>arrow_back</md-icon>
     </md-button>
-    <span class="md-title">{{$t('label.projectTitle')}}</span>
+    <span class="md-title">Облік успішності студентів ЧНУ</span>
   </div>
 
   <div class="md-toolbar-section-end">
@@ -16,28 +16,6 @@
 
       <md-menu-content>
         <md-menu-item @click="logout()">{{ $t('button.logout') }}</md-menu-item>
-      </md-menu-content>
-    </md-menu>
-
-    <md-menu md-size="auto" md-align-trigger>
-      <md-button class="md-icon-button" md-menu-trigger>
-        <md-icon>more_vert</md-icon>
-      </md-button>
-
-      <md-menu-content>
-        <md-menu-item>
-          <md-menu md-size="auto" md-align-trigger>
-            <md-button md-menu-trigger>{{ $t('button.choose_lang') }}</md-button>
-
-            <md-menu-content>
-              <md-menu-item :class="getLangClass('en')" @click="switchLang('en')">EN</md-menu-item>
-
-              <md-menu-item :class="getLangClass('ru')" @click="switchLang('ru')">RU</md-menu-item>
-
-              <md-menu-item :class="getLangClass('uk')" @click="switchLang('uk')">UA</md-menu-item>
-            </md-menu-content>
-          </md-menu>
-        </md-menu-item>
       </md-menu-content>
     </md-menu>
   </div>

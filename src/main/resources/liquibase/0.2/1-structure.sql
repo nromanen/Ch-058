@@ -35,7 +35,7 @@ ALTER TABLE users
 
 --changeset shrralis:1513600434496-6
 ALTER TABLE issues_votes
-  ADD CONSTRAINT issues_votes_pkey PRIMARY KEY (issue_id, voter_id);
+  ADD CONSTRAINT issues_votes_pkey PRIMARY KEY (issue_id, voter_i d);
 
 --changeset shrralis:1513600434496-7
 ALTER TABLE issues

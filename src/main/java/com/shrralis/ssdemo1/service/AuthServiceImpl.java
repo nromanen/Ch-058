@@ -52,7 +52,7 @@ import java.util.Collections;
 @Transactional
 public class AuthServiceImpl implements IAuthService {
 
-	private final UsersRepository repository;
+	private final UsersRepository usersRepository;
 	private final RecoveryTokensRepository tokensRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final RegisteredUserMapper userToRegisteredUserDto;
@@ -67,7 +67,7 @@ public class AuthServiceImpl implements IAuthService {
 			RegisteredUserMapper userToRegisteredUserDto,
 			IMailCitizenService mailService,
 			AuthenticationTrustResolver authTrustResolver) {
-		this.repository = repository;
+		this.usersRepository = repository;
 		this.tokensRepository = tokensRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.userToRegisteredUserDto = userToRegisteredUserDto;
@@ -78,7 +78,7 @@ public class AuthServiceImpl implements IAuthService {
 	@Override
 	public String generateRecoveryToken(final String login, final String ip)
 			throws AbstractCitizenException, MessagingException {
-		final User user = repository.getByLogin(login);
+		final User user = usersRepository.getByLogin(login);
 
 		if (user == null) {
 			throw new EntityNotExistException(EntityNotExistException.Entity.USER, "login");
@@ -119,33 +119,46 @@ public class AuthServiceImpl implements IAuthService {
 	@Override
 	public RegisteredUserDTO recoverPassword(final PasswordRecoveryDTO dto) throws AbstractCitizenException {
 		final RecoveryToken token = tokensRepository.getByToken(dto.getToken());
-		final User user = repository.getByLogin(dto.getLogin());
+		final User user = usersRepository.getByLogin(dto.getLogin());
 
 		checkDataForPasswordRecovering(token, user);
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
-		user.setFailedAuthCount(0);
-		repository.save(user);
+		usersRepository.save(user);
 		tokensRepository.delete(token);
 		return userToRegisteredUserDto.userToRegisteredUserDto(user);
 	}
 
 	@Override
 	public RegisteredUserDTO signUp(final RegisterUserDTO user) throws AbstractCitizenException {
-		if (repository.getByLogin(user.getLogin()) != null) {
+		if (usersRepository.getByLogin(user.getLogin()) != null) {
 			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "login");
 		}
 
-		if (repository.getByEmail(user.getEmail()) != null) {
+		if (usersRepository.getByEmail(user.getEmail()) != null) {
 			throw new EntityNotUniqueException(EntityNotUniqueException.Entity.USER, "email");
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-		final User savedUser = repository.save(User.Builder.anUser()
+		User.Type type = User.Type.USER;
+
+		if (user.getType().isEmpty()) {
+			type = User.Type.USER;
+		} else if (user.getType().contains("teahcer") && user.getType().contains("demployee")) {
+			type = User.Type.TEACHERANDEMPLOYEE;
+		} else {
+			if (user.getType().contains("teacher")) {
+				type = User.Type.TEACHER;
+			} else {
+				type = User.Type.DEMPLOYEE;
+			}
+		}
+		final User savedUser = usersRepository.save(User.Builder.anUser()
 				.setLogin(user.getLogin())
 				.setEmail(user.getEmail())
 				.setPassword(user.getPassword())
 				.setName(user.getName())
 				.setSurname(user.getSurname())
+				.setType(type)
 				.build());
 
 		return userToRegisteredUserDto.userToRegisteredUserDto(savedUser);
@@ -153,17 +166,18 @@ public class AuthServiceImpl implements IAuthService {
 
 	@Override
 	public RegisteredUserDTO update(final RegisterUserDTO user) {
-		final User savedUser = repository.getByEmail(user.getEmail());
+		final User savedUser = usersRepository.getByEmail(user.getEmail());
 		savedUser.setName(user.getName());
 		savedUser.setSurname(user.getSurname());
 		savedUser.setPassword(passwordEncoder.encode(user.getPassword()));
 		savedUser.setLogin(user.getLogin());
-		repository.save(savedUser);
-		AuthorizedUser authorizedUser = new AuthorizedUser(savedUser, UserDetailsServiceImpl.getAuthorities(savedUser));;
+		usersRepository.save(savedUser);
+		AuthorizedUser authorizedUser = new AuthorizedUser(savedUser, UserDetailsServiceImpl.getAuthorities(savedUser));
+		;
 		SecurityContextHolder.getContext().setAuthentication(
 				new UsernamePasswordAuthenticationToken(
 						authorizedUser, null, Collections.singleton(
-								new SimpleGrantedAuthority("ROLE_" + savedUser.getType().toString()))));
+						new SimpleGrantedAuthority("ROLE_" + savedUser.getType().toString()))));
 
 		return userToRegisteredUserDto.userToRegisteredUserDto(savedUser);
 	}

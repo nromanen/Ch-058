@@ -43,7 +43,6 @@ public class UsersRestController {
 		return new JsonResponse(service.getAllUsers());
 	}
 
-	@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 	@RequestMapping("/get/{id}")
 	public JsonResponse getUserInfo(@PathVariable int id) {
 		return new JsonResponse(service.getUser(id));

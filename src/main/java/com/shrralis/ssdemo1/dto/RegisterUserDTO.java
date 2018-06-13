@@ -21,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A DTO that is received and contains information
@@ -47,7 +48,6 @@ public class RegisterUserDTO implements Serializable {
 	private String email;
 
 	@NotBlank(message = JsonError.Error.MISSING_FIELD_NAME)
-	@Pattern(regexp = User.PASS_PATTERN, message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	@Size(
 			min = User.MIN_PASSWORD_LENGTH, max = User.MAX_PASSWORD_LENGTH,
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
@@ -66,6 +66,8 @@ public class RegisterUserDTO implements Serializable {
 			min = User.MIN_SURNAME_LENGTH, max = User.MAX_SURNAME_LENGTH,
 			message = JsonError.Error.BAD_FIELD_FORMAT_NAME)
 	private String surname;
+
+	private List<String> type;
 
     public String getLogin() {
 	    return StringUtils.trim(login);
@@ -106,4 +108,12 @@ public class RegisterUserDTO implements Serializable {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+	public List<String> getType() {
+		return type;
+	}
+
+	public void setType(List<String> type) {
+		this.type = type;
+	}
 }

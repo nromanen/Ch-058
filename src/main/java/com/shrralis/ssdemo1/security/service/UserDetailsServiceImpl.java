@@ -67,7 +67,6 @@ public class UserDetailsServiceImpl implements ICitizenUserDetailsService {
 	public void increaseUserFailedAttempts(final UserDetails userDetails) {
 		User user = usersRepository.getByLogin(userDetails.getUsername());
 
-		user.setFailedAuthCount(user.getFailedAuthCount() + 1);
 		usersRepository.save(user);
 	}
 
@@ -75,7 +74,6 @@ public class UserDetailsServiceImpl implements ICitizenUserDetailsService {
 	public void resetUserFailedAttempts(final UserDetails userDetails) {
 		User user = usersRepository.getByLogin(userDetails.getUsername());
 
-		user.setFailedAuthCount(0);
 		usersRepository.save(user);
 	}
 

@@ -98,6 +98,11 @@
             </md-field>
           </div>
 
+          <div>
+            <md-checkbox v-model="type" value="teacher">Я викладач</md-checkbox>
+            <md-checkbox v-model="type" value="demployee">Я працівник кафедри</md-checkbox>
+          </div>
+
           <md-chip class="md-accent" v-for="err in errors" :key="err">{{ err }}</md-chip>
         </div>
       </md-card-content>

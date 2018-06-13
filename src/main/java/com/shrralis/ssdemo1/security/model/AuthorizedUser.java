@@ -40,7 +40,6 @@ public class AuthorizedUser extends User {
 		id = user.getId();
 		email = user.getEmail();
 		type = user.getType();
-		failedAuthCount = user.getFailedAuthCount();
 	}
 
 	public static AuthorizedUser getCurrent() {
